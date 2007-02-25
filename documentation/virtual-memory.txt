@@ -1,0 +1,42 @@
+virtual-memory.txt ($Id$)
+==================
+
+Layout of the linear address-space for a task
+=============================================
+
+ Start           | Length      | Description
+-----------------+-------------+-------------
+ 4K              | 4K          | Process pagedirectory.
+ 8K              | 4K          | Exception TSS:es.
+ 32K             | 8K          | Temporary mapped data.
+ 40K             | 4K          | Kernel TSS.
+ 44K             | 4K          | GDT/IDT.
+ 1M              | ?           | Kernel code and data.
+ 3M              | 1M          | Process code and data. Used by process_create.
+ 4M              | 28M         | Process' low-level memory allocation
+                 |             | structures.
+ 32M             | 4M          | Process' pagetables.
+ 36M             | 4M          | Process data. Parameters and other info.
+ 40M             | SIZE_GLOBAL | Global data area. Hifi-eslöf, ports, etc...
+ 40M+SIZE_GLOBAL | ?           | Free (process data and code).
+ -64M            | 64M         | Stack (bottom page is PL0).
+
+
+Format of the global memory space
+=================================
+
+ Offset | Length            | Description
+--------+-------------------+-------------
+ 0M     | 40M               | hifi-eslöf structures.
+ 40M    | The rest          | Kernel data.
+
+
+Note
+====
+
+There is also shared memory, which is a window in a process' address
+space mapping the same physical pages as mapped in another
+process. Through this space, the processes can communicate. This is
+used when large datastructures is to be transfered between
+processes. An ordinary mailbox is often used to synchronize the
+transfers.

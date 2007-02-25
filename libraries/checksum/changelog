@@ -1,0 +1,12 @@
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* md5.c (checksum_md5): New function that does all the real work
+	in one sweep.
+
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* md5.c: New file, adopted from FreeBSD, which in turn adopted the
+	reference implementation from RFC 1321...
+
+	* Started writing this change log.
+

@@ -1,0 +1,18 @@
+README ($Id$)
+======
+
+This is the chaos libraries. They are required to compile the servers,
+and eventually to compile virtually any chaos program.
+
+They are *not* licensed under the GPL, but under the Lesser General
+Public License (LGPL), since we want people to be able to write
+non-GPL:ed free software for chaos (for example, BSD-licensed
+programs). This also makes it possible to develop proprietary software
+for chaos, which we do not encourage people to do, but nevertheless
+accept *if* they choose to do so. Please see the file COPYING for more
+information about this.
+
+(You can read more about the licensing of chaos on
+http://www.chaosdev.org/legal.shtml)
+
+-- Per Lundberg <plundis@chaosdev.org>  Fri, 21 Jul 2000 18:52:00 +0200

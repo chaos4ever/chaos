@@ -1,0 +1,269 @@
+<!DOCTYPE Article PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+
+<article>
+
+<artheader>
+
+<title>A New File System</title>
+<author>
+  <firstname>Mats</firstname>
+  <surname>Giefvert</surname>
+</author>
+<pubdate>$Id$</pubdate>
+
+</artheader>
+
+<sect1>
+<title>Differences vs. present-day file systems</title>
+
+<para>
+Present-day file systems are stone-age systems, developed and
+introduced with Unix, that have served their purpose well for a long
+time, but need to be replaced with a new file system that possesses a
+certain number of advantages.
+</para>
+
+<para>
+Some of the design issues where this new file system differs compared
+to the old one are these:
+</para>
+
+<para>
+
+<itemizedlist>
+
+<listitem>
+<para>
+File extensions are replaced with object type
+ID's. Microsoft Word documents are no longer identified by their .doc
+ending, but rather with a unique type ID.  Applications registers as
+type ID handlers.
+</para>
+</listitem>
+
+<listitem>
+<para>
+The differences between files and directories are
+skipped. These old concepts are replaced with objects. Objects can
+contain data, and can also be a container of other objects.
+</para>
+</listitem>
+
+<listitem>
+<para>
+Applications are self-contained objects that register and
+unregister automatically in a computer system.
+</para>
+</listitem>
+
+<listitem>
+<para>
+A hierarchical attribute structure can be applied to
+objects, allowing an efficient document storage and retrieval
+system.
+</para>
+</listitem>
+
+</itemizedlist>
+</para>
+
+<para>
+Each of the differences is explained in detail below.
+</para>
+</sect1>
+
+<sect1>
+<title>Object type ID:s</title>
+
+<para>
+The file extension is skipped. They can be retained if desired to, but
+have no system-wide meaning. Applications or executables are no longer
+marked .exe or with a +x attribute, but rather with an application
+object type which the system knows and treats like
+executables. Documents are identified by their type ID as well;
+applications become handlers of the type ID:s. Whenever a user wished
+to interact with a document, the system starts the registered document
+handler knonw by its type ID.
+</para>
+</sect1>
+
+<sect1>
+<title>Objects and containers</title>
+
+<para>
+Instead of having a sharp distinction between directories and files,
+they are both merged into the concept of objects. Objects contain
+data, other objects, or a combination of both. They can represent
+directories, and they can represent files as well. A directory becomes
+an object with no internal data - a "pure container". A file becomes
+an object that contains no other objects. There can also be
+combinations, where a file contains both internal data and other
+objects as well.
+</para>
+
+<para>
+This can be illustrated by the following practical examples.
+</para>
+
+<para>
+A user creates a directory called "Documents". He sees the directory
+as any old operating system would represent it; but behind the scenes,
+what happens is that an object is created with a special type ID
+recognized by the system, called Folder. The system is the handler for
+objects of that type, and knows that folders should not contain any
+data in themselves; they are pure containers and only contain other
+objects. Should the system desire so, however, it will be able to
+place internal data in the object. This allows the system with a
+convenient place to store folder-specific information, like
+appearance, sorting, icons etc.
+</para>
+
+<para>
+In this Document folder, he creates a Microsoft Word document. He sees
+it as a plain old document, but the system has behind the scenes
+created yet another document, this time with the Microsoft Word
+Document type ID. This object, like any other object, has the
+capability to contain both data and other objects. It has, therefore,
+the functionality of both a file and a directory. When the user
+double-clicks on the file, Microsoft Word, which is the registered
+document handler, fires up and displays the document on the
+screen. When the user subsequentyl writes text into the document, it
+is stored inside the internal object data. If the user at this time
+wished to drag-and-rop an Excel sheet into the document, the Word
+application would do that happily without any thought about it. Behind
+the scenes, the object would start acting like a directory as well,
+placing either the Excel sheet within the Word object, or a link to
+the Excel sheet, much like you would have placed that document/link
+inside a directory. You would therefore be able to take that object,
+embedded in the Word document, and from the file system viewer itself
+remove it from the Word document and place it as a self-contained
+sheet in the Documents folder without any problem whatsoever.
+</para>
+
+<para>
+Let's also look at the concept of an application. An application is
+also an object, completely self-contained, in that all its dependent
+"files" reside inside the application as sub-objects. Therefore, it is
+extremely easy to move an application from one place to another; all
+that the user would have to do is to move the object to a new
+location. The executable code is stored within the object itself; it's
+needed files are stored as embedded objects in that container. Shared
+files, like Dynamic Link Libraries, or Shared Libraries, can be
+represented as links inside of the application object. Instead of
+storing a library as an embedded object file (still fully visible with
+the file system viewer), it could store a link to the library. This
+would allow th euser in no time to decide wether all the required
+libraries were installed on his computer or not. The user would also,
+if such functionality were to be built into the system, be able to
+replace a library inside an application, embedded or linked
+(i.e. static versus shared), at will, and would be able to make an
+application fully self-contained without shared libraries at all.
+</para>
+
+<para>
+It is worth noting that links in this content should be a special
+case; not objects, but pointer to objects, much like symbolic links in
+Unix They should be freely movable, and should be able to point to
+nonexisting objects - required in the case where an application
+contains a link to a shared library and the library does not exist;
+but if the user installs the library the link should automatically
+work, since both the library is installed, and the link points to a
+predefined location.
+</para>
+</sect1>
+
+<sect1>
+<title>Self-registering applications</title>
+
+<para>
+The operating system should know automatically which applications are
+installed and thus automatically determine the relationship between
+applications and document ID:s. Suppose, for instance, that a user has
+an object of the Microsoft Project[1] type, but unfortunately, he
+doesn't have Microsoft Project installed.  He knows, however, that his
+co-worker's computer at the office has Microsoft Project installed. At
+this point, this analogy starts breeaking copyright laws, but let's
+ignore that for the sake for the argument, and if you see any BSA
+agents, please warn me quickly. He goes into his friend's computer,
+and drags the Microsoft Project application object over to his
+Applications folder. As soon as it is copied, the operating system
+realizes that it is, indeed, an application object, and since the
+Applications folder is a place where the system knows active
+applications are stored (this functionaly could be built into the
+Applications folder object's type handler), the system scans the
+Microsoft Project application object and automatically registers it as
+an object type handler for the type ID:s found in the application. The
+user can now, without any further action, use his Microsoft Project
+document object by double-clicking on it. When the BSA sues the
+company a few days later, the system administrator drags the Microsoft
+Project application object into the trashbin, and the operating system
+automatically removes Microsoft Project as the type ID handler for the
+previously installed type ID:s.
+</para>
+</sect1>
+
+<sect1>
+<title>Hierarchical attribute lists</title>
+
+<para>
+The normal organization of user documents into directories function
+well, but is sometimes not good enough. The ability to assign a number
+of organizational attributes to a document enables the user to quickly
+store a document and just as quickly locate it a again.
+</para>
+
+<para>
+Let's suppose that the user has a very important document that is
+related to a meeting about a project called "Internet Banking". He
+wishes the document to possess the two attributes Internet Banking and
+Very Important. He couldn't store it in a directory called important
+because it belongs to the Internet Banking project; likewise, he
+couldn't just store it without cretain problems in a directory named
+after the project; because how would he know that that particular
+document was very important? If he wanted a list over very important
+documents, he'd have to go through the entire file system and review
+every document to know it's importance. and what if he simply wanted a
+list over every document that was business-related? All those
+questions rely hevaily on the organization of the directories
+involved; if the directory structure is insufficient, it has to be
+remade later on, with all the hassle it might produce. If the
+situation evolves to include multiple users, the problems have only
+begun.
+</para>
+
+<para>
+The assignment of attributes solves this. Individual files can be
+marked with certain attributes, in order to let the system search for
+them and find them efficiently. The attribbutes themselves would be
+organized hierarchically; that is, the attribute Internet Bankning
+would be located as a sub-attribute of the more general attribute
+Projects, or Business. A simple search for, say, Business, would then
+reveal all documents marked with the attribute Business, or any of
+it's sub-attributes, for instance Internet Banking. The search could
+of course be expaneded; the user might want to search for all Word
+document written in the last five days, that belong to any of the
+business-related projects, except all documents of low importance or
+documents written by Todd, a person at the office which everybody
+hates.
+</para>
+</sect1>
+
+<sect1>
+<title>Additional features...</title>
+
+<para>
+There is much to be said about additional features, like roaming
+profiles over networks, private user viewspace, collaboration issues
+with attribute trees and access control lists on all levels. But we
+leave those as an excercise to the reader.
+</para>
+
+<para>
+[1] At this point I must comment on all the Microsoft objects so
+far. I am not endorsing Microsoft products, nor will I ever do so, I'm
+just noticing that there are a lot of Microsoft docuemtns around and I
+figure that they are the most likely document object to be dealt with.
+<para>
+</sect1>
+
+</article>

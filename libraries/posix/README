@@ -1,0 +1,24 @@
+README ($Id$)
+======
+
+This is the POSIX compatible library. The idea is to be 100%
+compatible, if possible (Of course, this is difficult due to the
+differences between the POSIX and chaos designs).
+
+Note that no ISO, BSD or SysV functions are to be put here. They are
+in separate libraries (well, right now, that's only true for ISO, but
+you're very well welcome to write a BSD and a SysV emulation library
+if you feel so inclined).
+
+One file per function is reasonable in most cases, but if there are
+several similar ones, they can be put into separate files.
+
+Please note that this library is provided for COMPATIBILITY PURPOSES
+ONLY. NO DEVELOPMENT OF NEW CHAOS PROGRAMS SHOULD USE THIS
+LIBRARY. This can not really be emphasized enough -- we treat this a a
+deprecated library. A lot of bugs are inherent to the lack of good
+design, so please don't try to fix things. Of course, there may be
+bugs in our design (but they should be few; much of this is borrowed
+from other, well-tested systems).
+
+-- Per Lundberg <plundis@chaosdev.org>  Thu, 31 Aug 2000 22:22:36 +0200

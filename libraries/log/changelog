@@ -1,0 +1,9 @@
+2000-08-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* types.h (log_structure_type): Changed the name of class to
+	log_class.
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* log.c: Changed initialize to initialise.
+

@@ -1,0 +1,1056 @@
+<?xml version="1.0"?>
+<fot>
+<a name="0"/>
+<a name="1"/>
+<a name="2"/>
+<text>The chaos Coding Standards</text>
+<a name="3"/>
+<a name="4"/>
+<a name="5"/>
+<text>Per</text>
+<a name="6"/>
+<text>Lundberg</text>
+<a name="7"/>
+<text>$Id$</text>
+<a name="8"/>
+<a name="9"/>
+<text>Introduction</text>
+<a name="10"/>
+<text>      This is The chaos Coding Standards. It is a guide in programming
+</text>
+<text>      for the chaos operating system. If you intend to submit your
+</text>
+<text>      code, please adhere to these standards. This will save both you
+</text>
+<text>      and us some unnecessary work reformatting and rewriting the
+</text>
+<text>      code.  It is very important to keep the same quality on all
+</text>
+<text>      code.
+</text>
+<text>    </text>
+<a name="11"/>
+<text>      The code formatting chapters in this publication is mostly
+</text>
+<text>      C-related, but some of them can be used for other languages too.
+</text>
+<text>    </text>
+<a name="12"/>
+<a name="13"/>
+<text>Language choice</text>
+<a name="14"/>
+<text>      Choosing the right language for a project is very important. If
+</text>
+<text>      you make a bad choice, it may render the program unusable for
+</text>
+<text>      some, or all, of its users. For example, if you choose a
+</text>
+<text>      language where a free interpreter/compiler is not available, few
+</text>
+<text>      people will be able to use it. So please, choose a language
+</text>
+<text>      which is usable. Another important aspect is to choose a
+</text>
+<text>      language as suitable for the project as possible. For example,
+</text>
+<text>      storm, the chaos kernel, is written in a C and assembly
+</text>
+<text>      combination. This is because those were the most suitable
+</text>
+<text>      languages - C is quite low-level, which is good for a kernel, and
+</text>
+<text>      assembly is almost necessary to use. But those considerations
+</text>
+<text>      may vary depending on your project type. For example, the
+</text>
+<text>      </text>
+<a name="15"/>
+<text>cAPS</text>
+<text> (chaos Advanced Packaging System) system
+</text>
+<text>      is written in a combination of C and Perl, since we found those
+</text>
+<text>      languages to be most suitable.
+</text>
+<text>   </text>
+<a name="16"/>
+<text>      If you do not think you will be able to do the project all by
+</text>
+<text>      yourself, try using a language that is widely accepted (C, C++
+</text>
+<text>      and Perl are three good examples). Avoid using &quot;smaller&quot;
+</text>
+<text>      languages like Objective C or Haskell if possible.
+</text>
+<text>    </text>
+<a name="17"/>
+<a name="18"/>
+<text>License choice</text>
+<a name="19"/>
+<text>      chaos is a free operating system, as defined by the FSF, and as
+</text>
+<text>      such, all parts of it must be free. However, they do not have to
+</text>
+<text>      be GPL, even though we encourage people to release their work
+</text>
+<text>      under this license. This is the list of acceptable licenses for
+</text>
+<text>      chaos:
+</text>
+<text>
+</text>
+<text>      </text>
+<a name="20"/>
+<a name="21"/>
+<a name="22"/>
+<text>            </text>
+<a name="23"/>
+<text>GNU GPL (General public license)</text>
+<text> is
+</text>
+<text>            our preferred license for all code we write
+</text>
+<text>            </text>
+<a name="24"/>
+<text>except</text>
+<text> for the system
+</text>
+<text>            libraries. This is necessary to make licensing of chaos
+</text>
+<text>            programs under other free licenses possible. Use this
+</text>
+<text>            license if possible.
+</text>
+<text>          </text>
+<a name="25"/>
+<a name="26"/>
+<text>            </text>
+<a name="27"/>
+<text>GNU LGPL (Lesser General Public
+</text>
+<text>            License)</text>
+<text> permits linkage between your work and
+</text>
+<text>            proprietary (closed-source, non-free) programs. We only
+</text>
+<text>            use this license for the system libraries. It is
+</text>
+<text>            deprecated for everything else.
+</text>
+<text>          </text>
+<a name="28"/>
+<a name="29"/>
+<text>            </text>
+<a name="30"/>
+<text>BSD</text>
+<text> is the Berkeley Software
+</text>
+<text>            Distribution license. We do not use it, but you may use it
+</text>
+<text>            </text>
+<a name="31"/>
+<text>if</text>
+<text>, and only if, you remove the
+</text>
+<text>            advertising clause. We do not recommend using this license
+</text>
+<text>            anyway, since it is not a copyleft and thus does not</text>
+<text>
+</text>
+<text>            protect your freedom in a way we prefer, but we will
+</text>
+<text>            nevertheless accept if you decide to do so.
+</text>
+<text>          </text>
+<a name="32"/>
+<a name="33"/>
+<text>            </text>
+<a name="34"/>
+<text>The Artistic license</text>
+<text> is the license
+</text>
+<text>            used by Perl. We do not encourage its usage except for
+</text>
+<text>            Perl-related things; in such cases, please follow the Perl
+</text>
+<text>            example and dual-license your code under both the Artistic
+</text>
+<text>            license and the GNU GPL.
+</text>
+<text>          </text>
+<a name="35"/>
+<a name="36"/>
+<text>	    The GNU FDL (Free Documentation License) is a pretty new
+</text>
+<text>	    license from the Free Software Foundation. It is intended
+</text>
+<text>	    for documentation, and should be used for that.
+</text>
+<text>	  </text>
+<text>
+</text>
+<text>    </text>
+<a name="37"/>
+<text>      You do not need to give over the rights to your code to
+</text>
+<text>      us. Licensing it under one of those licenses is probably enough,
+</text>
+<text>      but be careful if you have signed a contract with your employer
+</text>
+<text>      stating they own everything you write. If so, you can not
+</text>
+<text>      legally license the code under GPL yourself. You must get
+</text>
+<text>      permission from your employer to do so. Please be careful with
+</text>
+<text>      these issues so neither you or we get into legal trouble.
+</text>
+<text>    </text>
+<a name="38"/>
+<a name="39"/>
+<text>Compiler flags</text>
+<a name="40"/>
+<text>      The chaos build system, autochaos, automatically uses our
+</text>
+<text>      standard C flags, so there is little need to duplicate them
+</text>
+<text>      here. What our flags do is try to eliminate the pitfalls of the
+</text>
+<text>      C programming language (there are quite a few). The only really
+</text>
+<text>      important flag is -Werror, which turns all warnings into
+</text>
+<text>      errors. We believe this should have been the default in gcc. A
+</text>
+<text>      warning is nothing to take lightly. And really, if you do not
+</text>
+<text>      care about the warning, why don't you turn it off?
+</text>
+<text>    </text>
+<a name="41"/>
+<a name="42"/>
+<text>Symbol names</text>
+<a name="43"/>
+<text>      All symbol names should be in lower-case only. The only
+</text>
+<text>      exception to this is acronyms like VGA, GDT, IDT etc, where you
+</text>
+<text>      could put the acronym in uppercase if you would like. Separate
+</text>
+<text>      logic words with underscores, like this: screen_base_address.
+</text>
+<text>    </text>
+<a name="44"/>
+<text>      It is very important to be consequent when naming your
+</text>
+<text>      functions, variables and such. Do not abbreviate names. It only
+</text>
+<text>      makes it harder to figure out what a function or variable is
+</text>
+<text>      used for. Symbol names must </text>
+<a name="45"/>
+<text>always</text>
+<text> be
+</text>
+<text>      descriptive. One-name variables are neat for the lazy, but is a
+</text>
+<text>      no-no. Try to name your counter variables index (if you are
+</text>
+<text>      operating on a one-dimensional list), x and y (if a
+</text>
+<text>      two-dimensional structure), x, y and z, and so on. In short, try
+</text>
+<text>      to be as descriptive as possible. It is tempting at times to
+</text>
+<text>      call your variables i, j, k and such, but this just makes the
+</text>
+<text>      program more difficult for other people to get into.
+</text>
+<text>    </text>
+<a name="46"/>
+<text>      All global symbols should have their file name prepended to
+</text>
+<text>      them. Thus, all the symbols exported from the file
+</text>
+<text>      </text>
+<a name="47"/>
+<text>port.c</text>
+<text> should be named port_*. When doing a
+</text>
+<text>      library, it is okay to split it up into smaller files and still
+</text>
+<text>      have the functions named foo_bar. (if the library name is foo)
+</text>
+<text>    </text>
+<a name="48"/>
+<a name="49"/>
+<text>Functions</text>
+<a name="50"/>
+<text>      The usage of functions is standard in all structured
+</text>
+<text>      programming. You should try to keep your functions as long as
+</text>
+<text>      suitable. We do not give a specific limit, but try to split your
+</text>
+<text>      code in natural functions. For example, if your program is
+</text>
+<text>      reading and processing lines from a file, and the </text>
+<text>processing is
+</text>
+<text>      more than a few statements of code, put it in a separate
+</text>
+<text>      function. This is not really difficult when you get used to it.
+</text>
+<text>    </text>
+<a name="51"/>
+<text>      Always put a comment before the function declaration where you
+</text>
+<text>      state what it does. It is also desirable that you document the
+</text>
+<text>      input and return variables if it is not implicit.
+</text>
+<text>    </text>
+<a name="52"/>
+<text>      A typical function declaration can look like this:
+</text>
+<text>    </text>
+<a name="53"/>
+<text>      /* Initialise the page allocation system. */
+</text>
+<text>      
+</text>
+<text>      void page_init (void)
+</text>
+<text>      {
+</text>
+<text>        [...]
+</text>
+<text>      }
+</text>
+<text>    </text>
+<a name="54"/>
+<text>      As you see, we do not put the function name in the leftmost
+</text>
+<text>      column. There is no reason to do so. It just makes the code look
+</text>
+<text>      ugly.
+</text>
+<text>    </text>
+<a name="55"/>
+<text>      Also, if the function types and names do not fit on one line,
+</text>
+<text>      write it like this:
+</text>
+<text>    </text>
+<a name="56"/>
+<text>      extern inline return_type system_call_thread_control
+</text>
+<text>        (process_id_type process_id, u32 class, u32 parameter)
+</text>
+<text>    </text>
+<a name="57"/>
+<a name="58"/>
+<text>Comments</text>
+<a name="59"/>
+<text>      Code without comments is like an operating system without
+</text>
+<text>      applications -- it is not very usable. Try to comment your code
+</text>
+<text>      as much as suitable to understand it for a reasonably
+</text>
+<text>      experienced programmer. A good idea is to let someone else look
+</text>
+<text>      at your code and see where she gets stuck.
+</text>
+<text>    </text>
+<a name="60"/>
+<text>      Always put comments on their own line, with a blank line above
+</text>
+<text>      and below. Do not put comments at the end of the line, after the
+</text>
+<text>      code; it just makes everything messy.
+</text>
+<text>    </text>
+<a name="61"/>
+<text>      When commenting a statement, put the comment above the
+</text>
+<text>      statement, like this:
+</text>
+<text>    </text>
+<a name="62"/>
+<text>      /* Check if we are ready yet. */
+</text>
+<text>
+</text>
+<text>      if (finished ())
+</text>
+<text>      {
+</text>
+<text>        return;
+</text>
+<text>      }
+</text>
+<text>      </text>
+<a name="63"/>
+<text>      Some people like C++ comments. We prefer to only use them for
+</text>
+<text>      temporary commenting away code, so that they can not get
+</text>
+<text>      mistaken for being real comments.
+</text>
+<text>    </text>
+<a name="64"/>
+<a name="65"/>
+<text>Indentation</text>
+<a name="66"/>
+<text>      The indentation level should be two spaces. Do not use
+</text>
+<text>      tabs. When starting a new block, the braces should be on their own line
+</text>
+<text>      at the same level of indentation as the previous line, like this:
+</text>
+<text>    </text>
+<a name="67"/>
+<text>      if (age &gt; LEGAL_AGE)
+</text>
+<text>      {
+</text>
+<text>        print_age (age);
+</text>
+<text>      }
+</text>
+<text>    </text>
+<a name="68"/>
+<a name="69"/>
+<text>Inline assembly</text>
+<a name="70"/>
+<text>      Inline assembly is a twin-edged sword. It can make
+</text>
+<text>      computing-intensive programs a lot speedier, at the cost of
+</text>
+<text>      making the source more difficult to get into. Generally, only
+</text>
+<text>      use it if the speed gain is significant, or in the kernel and
+</text>
+<text>      other places where things might be impossible to do without
+</text>
+<text>      it. In general user programs there is little need for it, but
+</text>
+<text>      occasionally, it might be okay. The thumb rule is to start by
+</text>
+<text>      optimising the algorithms. If that is not enough, try to profile
+</text>
+<text>      your code and see where the most time is spent, and rewrite
+</text>
+<text>      those parts in assembly. If the gain is more than a few percent,
+</text>
+<text>      inline assembly is okay.
+</text>
+<text>    </text>
+<a name="71"/>
+<text>      If you for one reason or another have to use inline assembly, do
+</text>
+<text>      it like this:
+</text>
+<text>    </text>
+<a name="72"/>
+<text>      asm volatile
+</text>
+<text>      (&quot;\
+</text>
+<text>        pushl %2
+</text>
+<text>        pushl %3
+</text>
+<text>        pushl %4
+</text>
+<text>        lcall %5, $0
+</text>
+<text>      &quot;
+</text>
+<text>      : &quot;=a&quot; (return_value), &quot;=g&quot; (*buffer)
+</text>
+<text>      : &quot;g&quot; (buffer), &quot;g&quot; </text>
+<text>(parameter), &quot;g&quot; (class),
+</text>
+<text>        &quot;n&quot; (SYSTEM_CALL_KERNELFS_ENTRY_READ &lt;&lt; 3));
+</text>
+<text>    </text>
+<a name="73"/>
+<text>      Do not write long blocks of uncommented inline assembly, but
+</text>
+<text>      keep it into functional blocks separated with blank lines and
+</text>
+<text>      comments, so it is easier to get into the code.
+</text>
+<text>    </text>
+<a name="74"/>
+<a name="75"/>
+<text>Miscellaneous</text>
+<a name="76"/>
+<text>      Here you will find stuff that did not fit into one of the
+</text>
+<text>      previous chapters:
+</text>
+<text>
+</text>
+<text>      </text>
+<a name="77"/>
+<a name="78"/>
+<a name="79"/>
+<text>            When writing if-statements, always use braces to indicate
+</text>
+<text>            a block, even for one-line statements where it is not
+</text>
+<text>            required. Like this:
+</text>
+<text>          </text>
+<a name="80"/>
+<text>            if (age &gt; LEGAL_AGE)
+</text>
+<text>            {
+</text>
+<text>              print_age (age);
+</text>
+<text>            }
+</text>
+<text>            else
+</text>
+<text>            {
+</text>
+<text>              return;
+</text>
+<text>            }
+</text>
+<text>          </text>
+<a name="81"/>
+<a name="82"/>
+<text>            When writing switch statements, always use braces in the
+</text>
+<text>            case blocks. Like this:
+</text>
+<text>          </text>
+<a name="83"/>
+<text>            switch (key)
+</text>
+<text>            {
+</text>
+<text>              case ESCAPE:
+</text>
+<text>              {
+</text>
+<text>                return;
+</text>
+<text>              }
+</text>
+<text>            }
+</text>
+<text>          </text>
+<a name="84"/>
+<a name="85"/>
+<text>            When writing conditional statements, never use the fact
+</text>
+<text>            that non-zero is TRUE. You can only do this on
+</text>
+<text>            booleans. If something is not a boolean, you must compare
+</text>
+<text>            it with a number. Like this:
+</text>
+<text>          </text>
+<a name="86"/>
+<text>            if (get_age () != 0)
+</text>
+<text>            {
+</text>
+<text>              do_something ();
+</text>
+<text>            }
+</text>
+<text>          </text>
+<a name="87"/>
+<text>            This makes things much clearer. The lack of real booleans
+</text>
+<text>            in C is showing, but using this fact makes your programs
+</text>
+<text>            very ugly.
+</text>
+<text>          </text>
+<a name="88"/>
+<a name="89"/>
+<text>	    When declaring external functions (in library header files
+</text>
+<text>	    and elsewhere), always write like this:
+</text>
+<text>	  </text>
+<a name="90"/>
+<text>	    extern my_function (void);
+</text>
+<text>	  </text>
+<a name="91"/>
+<text>	    The extern attribute is not mandatory in gcc, but use it
+</text>
+<text>	    anyway since it makes it very clear what we are talking about.
+</text>
+<text>	  </text>
+<text>
+</text>
+<text>    </text>
+<a name="92"/>
+<a name="93"/>
+<text>Whitespace</text>
+<a name="94"/>
+<text>      A lot of programmers tend to forget how important whitespace is
+</text>
+<text>      to write good code. A good example of this can be found in the
+</text>
+<text>      Linux source code, but unfortunately, the practice is rather
+</text>
+<text>      common (especially in the Unix world). In chaos, we use as much
+</text>
+<text>      whitespace as is practical. Always use whitespace between
+</text>
+<text>      function names and parentheses, after commas, semicolons and
+</text>
+<text>      other places. Separate blocks of code with blank lines and
+</text>
+<text>      comments.
+</text>
+<text>    </text>
+<a name="95"/>
+<a name="96"/>
+<text>Documentation</text>
+<a name="97"/>
+<text>      Documentation is essential for a program to succeed. All
+</text>
+<text>      documentation should be written in English (but may also be
+</text>
+<text>      translated to other languages if desirable). The standard format
+</text>
+<text>      for documentation in chaos is SGML using the DocBook DTD. You
+</text>
+<text>      can find more information about this DTD on
+</text>
+<text>      the </text>
+<a name="98"/>
+<text>DocBook Web Site</text>
+<text>.
+</text>
+<text>    </text>
+<a name="99"/>
+<a name="100"/>
+<text>Examples</text>
+<a name="101"/>
+<a name="102"/>
+<text>A C example</text>
+<a name="103"/>
+<text>/* $Id$ */
+</text>
+<text>/* Abstract: Semaphores for the kernel. */
+</text>
+<text>
+</text>
+<text>/* Copyright 1999-2000 chaos development. */
+</text>
+<text>
+</text>
+<text>/* This program is free software; you can redistribute it and/or
+</text>
+<text>   modify it under the terms of the GNU </text>
+<text>General Public License as
+</text>
+<text>   published by the Free Software Foundation; either version 2 of the
+</text>
+<text>   License, or (at your option) any later version.
+</text>
+<text>
+</text>
+<text>   This program is distributed in the hope that it will be useful, but
+</text>
+<text>   WITHOUT ANY WARRANTY; without even the implied warranty of
+</text>
+<text>   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+</text>
+<text>   General Public License for more details.
+</text>
+<text>
+</text>
+<text>   You should have received a copy of the GNU General Public License
+</text>
+<text>   along with this program; if not, write to the Free Software
+</text>
+<text>   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+</text>
+<text>   USA */
+</text>
+<text>
+</text>
+<text>#include </text>
+<text>&lt;</text>
+<text>storm/i386/error_numbers.h</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>#include </text>
+<text>&lt;</text>
+<text>storm/i386/semaphore.h</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>#include </text>
+<text>&lt;</text>
+<text>storm/i386/thread.h</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>#include </text>
+<text>&lt;</text>
+<text>storm/i386/types.h</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>#include </text>
+<text>&lt;</text>
+<text>storm/state.h</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>
+</text>
+<text>/* Semaphore lock variable. 1 if none is accessing the semaphores, 0
+</text>
+<text>   if someone is. */
+</text>
+<text>
+</text>
+<text>static kernel_mutex_type semaphore_mutex = 1;
+</text>
+<text>
+</text>
+<text>error_type semaphore_wait (kernel_semaphore_type *semaphore)
+</text>
+<text>{
+</text>
+<text>  spin_lock (semaphore_mutex);
+</text>
+<text>
+</text>
+<text>  if (*semaphore </text>
+<text>&lt;</text>
+<text>= 0)
+</text>
+<text>  {
+</text>
+<text>    spin_unlock (semaphore_mutex);
+</text>
+<text>    thread_block_semaphore (STATE_SEMAPHORE, semaphore);
+</text>
+<text>    return ERROR_UNKNOWN;
+</text>
+<text>  }
+</text>
+<text>  else
+</text>
+<text>  {
+</text>
+<text>    (*semaphore)--;
+</text>
+<text>    spin_unlock (semaphore_mutex);
+</text>
+<text>  }
+</text>
+<text>  
+</text>
+<text>  return ERROR_UNKNOWN;
+</text>
+<text>}
+</text>
+<text>
+</text>
+<text>/* Release the lock around the given semaphore. */
+</text>
+<text>
+</text>
+<text>error_type semaphore_signal (kernel_semaphore_type *semaphore)
+</text>
+<text>{
+</text>
+<text>  spin_lock (semaphore_mutex);
+</text>
+<text>
+</text>
+<text>  if (thread_unblock_semaphore (semaphore) == ERROR_NO_THREAD_UNBLOCKED)
+</text>
+<text>  {
+</text>
+<text>    (*semaphore)++;
+</text>
+<text>  }
+</text>
+<text>
+</text>
+<text>  spin_unlock (semaphore_mutex);
+</text>
+<text>
+</text>
+<text>  return ERROR_UNKNOWN;
+</text>
+<text>}
+</text>
+<text>      </text>
+<a name="104"/>
+<a name="105"/>
+<text>A Perl example</text>
+<a name="106"/>
+<text>#!/usr/bin/perl -w
+</text>
+<text>
+</text>
+<text># $Id$
+</text>
+<text>
+</text>
+<text># Abstract: Program for building chaos packages.
+</text>
+<text># Author: Per Lundberg </text>
+<text>&lt;</text>
+<text>plundis@chaosdev.org</text>
+<text>&gt;</text>
+<text>
+</text>
+<text>
+</text>
+<text>use chaos::cAPS;
+</text>
+<text>use strict;
+</text>
+<text>
+</text>
+<text>my $CONFIGFILE;
+</text>
+<text>
+</text>
+<text># Abstract: Clean things up.
+</text>
+<text>
+</text>
+<text>sub cleanup
+</text>
+<text>{
+</text>
+<text>  close (CONFIGFILE);
+</text>
+<text>}
+</text>
+<text>
+</text>
+<text>my $cAPS = new chaos::cAPS ('/mnt/chaos/system/caps');
+</text>
+<text>my %config_keyword = $cAPS-&gt;config_keyword_get ();
+</text>
+<text>my %config;
+</text>
+<text>
+</text>
+<text># All mandatory keywords are stored in this list.
+</text>
+<text>
+</text>
+<text>my @mandatory_keyword = ('name', 'type', 'version', 'description' );
+</text>
+<text>
+</text>
+<text>open (CONFIGFILE, '</text>
+<text>&lt;</text>
+<text>chaos/config') or die &quot;Couldn't open chaos/config.\n&quot;;
+</text>
+<text>
+</text>
+<text># This is the main config file parser loop. Neat, isn't it? :) This
+</text>
+<text># used to be written in flex/bison, and was rather complex and
+</text>
+<text># difficult to get into. But now...
+</text>
+<text>
+</text>
+<text>while (</text>
+<text>&lt;</text>
+<text>CONFIGFILE</text>
+<text>&gt;</text>
+<text>)
+</text>
+<text>{
+</text>
+<text>  chop;
+</text>
+<text>  ($_, my $dummy) = split ('#');
+</text>
+<text>  (my $key, my $value) = /^([\w\-]+)\s*=\s*\&quot;([^\&quot;]*)\&quot;/;
+</text>
+<text>
+</text>
+<text>  if (!$key || !$value)
+</text>
+<text>  {
+</text>
+<text>    print (&quot;Syntax error in config file: $_.\n&quot;);
+</text>
+<text>    exit;
+</text>
+<text>  }
+</text>
+<text>  
+</text>
+<text>  my $flag = 1;
+</text>
+<text>
+</text>
+<text>  foreach my $config_key (keys %config_keyword)
+</text>
+<text>  {
+</text>
+<text>    if ($config_keyword{$config_key} eq $key)
+</text>
+<text>    {
+</text>
+<text>      $config{$key} = $value;
+</text>
+<text>      $flag = 0;
+</text>
+<text>    }
+</text>
+<text>  }
+</text>
+<text>  if ($flag == 1)
+</text>
+<text>  {
+</text>
+<text>    print (&quot;Bad keyword '$key' in config file. Aborting.\n&quot;);
+</text>
+<text>    exit 1;
+</text>
+<text>  }
+</text>
+<text>}
+</text>
+<text>
+</text>
+<text># It's time to start some serious business. But first, we check that
+</text>
+<text># all mandatory keywords have been specified.
+</text>
+<text>
+</text>
+<text>foreach my $keyword (@mandatory_keyword)
+</text>
+<text>{
+</text>
+<text>  if (!$config{$keyword})
+</text>
+<text>  {
+</text>
+<text>    print (&quot;Mandatory keyword $keyword missing from config file.\n&quot;);
+</text>
+<text>    exit 1;
+</text>
+<text>  }
+</text>
+<text>}
+</text>
+<text>
+</text>
+<text># All things clear? Great! Now we check if the package directory
+</text>
+<text># exists.
+</text>
+<text>
+</text>
+<text># ..chaos/$config{name}
+</text>
+<text>
+</text>
+<text># Clean things up.
+</text>
+<text>
+</text>
+<text>cleanup ();
+</text>
+<text>      </text>
+<a name="107"/>
+<a name="108"/>
+<text>Emacs settings for chaos indentation</text>
+<a name="109"/>
+<text>      This is our .emacs settings for chaos indentation style for C
+</text>
+<text>      code. It makes writing compliant code much easier.
+</text>
+<text>    </text>
+<a name="110"/>
+<text>      
+</text>
+<text>      ;; chaos indentation style
+</text>
+<text>      
+</text>
+<text>      (defconst chaos-c-style 
+</text>
+<text>       '(
+</text>
+<text>         (c-basic-offset . 2)
+</text>
+<text>         (c-comment-only-line-offset . (0 . 0))
+</text>
+<text>         (c-comment-continuation-stars . &quot;&quot;)
+</text>
+<text>         (c-hanging-comment-ender-p . t)
+</text>
+<text>         (c-offsets-alist . (
+</text>
+<text>           (statement-block-intro . +)
+</text>
+<text>           (knr-argdecl-intro . +)
+</text>
+<text>           (substatement-open . 0)
+</text>
+<text>           (label . 0)
+</text>
+<text>           (statement-cont . +)
+</text>
+<text>           (case-label . 2)
+</text>
+<text>         )
+</text>
+<text>        )
+</text>
+<text>       )
+</text>
+<text>       &quot;chaos&quot;
+</text>
+<text>      )
+</text>
+<text>      
+</text>
+<text>      (defun chaos-c-mode-common-hook ()
+</text>
+<text>      
+</text>
+<text>      ;; add my personal style and set it for the current buffer
+</text>
+<text>      
+</text>
+<text>      (c-add-style &quot;chaos&quot; chaos-c-style t)
+</text>
+<text>      
+</text>
+<text>      ;; this will make sure spaces are used instead of tabs
+</text>
+<text>      
+</text>
+<text>      (setq indent-tabs-mode nil))
+</text>
+<text>      
+</text>
+<text>      (add-hook 'c-mode-common-hook 'chaos-c-mode-common-hook)
+</text>
+<text>    </text>
+</fot>

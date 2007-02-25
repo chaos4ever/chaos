@@ -1,0 +1,56 @@
+dnl $Id$
+dnl Autoconf script for the documentation.
+
+dnl Copyright 1999 chaos development.
+dnl Author: Per Lundberg <plundis@chaosdev.org>.
+
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+
+dnl You should have received a copy of the GNU General Public License
+dnl along with this program; if not, write to the Free Software
+dnl Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+AC_INIT
+AC_CONFIG_SRCDIR([coding-standards.sgml])
+AM_INIT_AUTOMAKE(documentation, 0.0.0)
+AC_PREFIX_DEFAULT(/mnt/chaos)
+
+dnl Check for the programs we need.
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_MAKE_SET
+
+AC_CHECK_PROG(makeinfo, makeinfo, makeinfo)
+
+[
+if [ x$makeinfo != xmakeinfo ]; then
+  echo -e "\nError: You must have makeinfo to compile the documentation. It can be found"
+  echo -e "at your favourite GNU mirror.\n"
+  exit 1
+fi
+]
+
+AC_CHECK_PROG(sgml2html, sgml2html, sgml2html)
+
+[
+if [ x$sgml2html != xsgml2html ]; then
+  echo -e "\nError: You must have sgml-tools to compile the documentation. It can be found"
+  echo -e "at http://pobox.com/~cg/sgmltools.\n"
+  exit 1
+fi
+]
+
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+
+

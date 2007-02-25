@@ -1,0 +1,18 @@
+2000-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* file.c (file_init): Changed the timeout of the
+	ipc_service_resolve call, since it is no longer needed with the
+	process parent unblocking.
+
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* file.c: Fixed an american typo.
+
+2000-07-19  Per Lundberg  <plundis@chaosdev.org>
+
+	* file.c (file_open): Fixed some of the semantics; a program who
+	wants to open a file shouldn't have to build up a data
+	structure. Thus, everything needed is now passed as arguments
+	instead.
+	(file_read): Likewise.
+

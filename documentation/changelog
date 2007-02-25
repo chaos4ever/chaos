@@ -1,0 +1,238 @@
+1999-10-19  Per Lundberg  <plundis@debian.org>
+
+	* servers/debugshell/debugshell.c (command): Removed some erroneous
+	entries.
+
+	* include/misc.h (delay): Added inline function used for doing delays
+	which is needed when accessing some ISA hardware..
+
+1999-10-08  Per Lundberg  <plundis@debian.org>
+
+	* storm/i386/process.c (process_vm_range_reserve): Created
+ 	process_vm_range_reserve, with equal functionality as
+ 	page_range_reserve, except that it reserved linear instead of
+	physical pages.
+
+	* storm/i386/elf.c (elf_execute): Now calls process_vm_range_reserve
+	to reserve it's memory space.
+	(elf_execute): Added a call to process_vm_init.
+	
+1999-10-03  Per Lundberg  <plundis@debian.org>
+
+	* include/port.h: Rewrote all the functions in a new and better style
+	inspired by Zack Weinberg.
+
+1999-10-01  Per Lundberg  <plundis@debian.org>
+
+	* storm/i386/message.c: Documented the message support better.
+	* storm/i386/message.c: Started implemented queuing of messages.
+
+1999-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* Makefile.am: New target 'install' for copying the GRUB menu file,
+	the servers and the kernel to the place specified by the --prefix
+	parameter to the configure script. The reason I did this was because
+	I needed it for the new netboot feature of GNU GRUB.
+
+1999-09-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* Lots, and *LOTS* of changes. We've finally made the memory
+	management work so that new tasks can be created. Since we changed
+	almost 100% of the memory management code, some bugs may still persist.
+
+1999-09-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* I've implemented a buddy system for memory allocation. So far a 
+	very limited implementation, but it will shortly support
+ 	deallocation and other nice stuff. :)
+
+1999-09-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* We haven't updated the changelog recently since we've been so
+	busy coding. Anyway, I've now created a little Perl script to
+	simplify management of the system calls. Now all files that are
+	dependant on the names and number of arguments of the system
+	calls are automatically created by this script (except for
+	syscall.h, since that would be quite difficult)
+	* Other things that has been done: MHz detection, PS/2 mouse support,
+	(non-working) serial support, a first development version of tornado
+	(pretty much just a joke right now) and probably some other stuff
+	I'm just forgetting about.
+
+1999-07-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* Me and eihrul (eihrul@chaosdev.org) has been doing a whole lot
+	lately. Not much concrete, but we've been discussing how thing should
+	and shouldn't work. As I'm writing, eihrul is implementing a first
+	attempt to a real IPC system (only events for now; see ipc.txt in
+	the documentation directory for the full specification). The full
+	IPC support will probably be done pretty soon. Crimson is coming
+	over to my place tomorrow for some major coding.
+	* We have also decided to move the VFS support into a server of it's
+	own, and to do some kind of exec server which will make using
+	different binary formats very easy.
+
+1999-07-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* Lot's of stuff has been fixed up, as usual. We've now got a fully
+	working VGA server, with support for 320x200x256, 80x50 and (broken?
+	It didn't work for me) 640x480x16 and 640x400x256 support. I've also
+	been redoing parts of the makefiles so that you can make a virtual
+	floppy even if your chaos source is located on an NFS drive.
+
+1999-06-25  Per Lundberg  <per.lundberg@chaosdev.org>
+
+	* We've now got a working printf() in the kernel, which makes the
+	source a whole lot easier to read. We also added an sprintf() call in
+	the server library.
+	* A server stub has been written to make writing of servers quite much
+	simpler, esp. if you're used to other systems.
+
+1999-06-18  Per Lundberg  <per.lundberg@chaosdev.org>
+
+        * We've had a little coding meeting to finish up stuff. The ELF support
+        is now much more complete and is able to load standard Linux linked
+        binaries.
+        * Process communication works perfectly now, so it's about time to
+        start code some servers and stuff.
+        * Interrupt handling is highly broken due to the paging implementation.
+        This is being worked on.
+
+1999-06-15  Henrik Hallin  <henrik.hallin@chaosdev.org> 
+
+        * Received the latest storm sourcecode from Plundis, who had been
+        rewriting parts of it to make the storm compatible with GRUB.
+        * storm now loads perfectly from GRUB and can also be gzipped.
+        * Servers are no longer held inside a kernelimage. They are instead
+        loaded with the module=xxx command from GRUB. The servers can also be
+        gzipped.
+        * Started finishing paging...
+
+1999-05-28  Henrik Hallin  <henrik.hallin@chaosdev.org>
+
+        * Wrote a simple rr scheduler, allowing processes to be put to sleep
+        and waked up in a simple way.
+        * Added event timers, so a process can put itself to sleep for a given
+        number of milliseconds.
+        * Started rewriting the whole memory layout, both physical and virtual.
+        * Started writing the IPC.
+
+1999-05-01  Henrik Hallin  <henrik.hallin@chaos-development.cx>
+
+	* Started implementing support for paging in storm. I set up basic
+        paging structures for the kernel during initialisation.
+        * Bochs seems a little buggy so chaos won't run under it anymore.
+        * Added cpuid code, to be able to detect the presence of for example
+        MMX in the cpu.
+        * Fixed some cosmetic things regarding the server startup sequence.
+        * Removed some junk from the chaos directories.
+        * Made some new homepages, to replace the existing one.
+        * Started writing a little on a scheduler.
+        * Rearranged the physical memory layout, making place for a page
+        directory and one page table for the kernel.
+       
+1999-04-18  Per Lundberg  <per.lundberg@chaos-development.cx>
+	
+	* The syscall for registering IRQ:s work almost perfectly now. For
+	some reason, the wrong data segment is being used, but I'm checking
+	it out right now and it'll probably work just fine later tonight.
+	The reason thing's are a little messy is the fact that we don't want
+	an interrupt handler to just go boom about everything and have
+	unlimited access to the computer; this is a basic design issue in
+	chaos (a program should not be able to crash the computer at all).
+	* syscall_register_port() works absolutely perfectly now.
+
+1999-04-10  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Gameland is over and we've come home. During the party we looked
+	at the syscalls a little and started rewriting the keyboard support
+	as a true server.
+	* I've also moved the kernel stack from 0x53000 to 0x13000, so that
+	it's right before the kernel code instead of right after (guess why)
+
+1999-03-27  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* ELF support is now working just fine, when using our custom LD
+ 	script. Regular binaries won't work until we've got paging up and
+	running.
+	* All of the kernel has been rewritten to use a flat DS descriptor
+	instead of the old style (small DS only for kernel memory). This
+	makes the kernel extremely much easier to write and let us remove a lot
+	of junk (all of the memio.asm)
+	* Some unneccessary comments have been removed to make the kernel
+ 	source tinier..
+	* Rewrote the old TODO file to changelog format, which is the
+	reason some of the older comments aren't really about what's done
+	but more about what's to be done. The reason I kept the old stuff
+	is (of course) for nostalgia. :)
+	
+1999-03-15  Henrik Hallin  <henrik.hallin@chaos-development.cx>
+
+	* We have not done so many important things on the storm lately, just
+	planning and thinking. But almost everything has been changed a little
+	in some way. The storm is going to be something completely different
+	from the kernel we once started writing on. We think that the storm is
+	going to fit in 64k easily, because of its lack of any drivers. All
+ 	memory I/O and stuff like that originally planned to be contained in
+	the microkernel is going to be removed and replaced with servers.
+	* We have started writing on the ELF support in the microkernel	so we
+	then can start writing the servers.
+	* The multitasking worked perfectly when we had the structures
+	statically set up. But now I have been rewriting the process functions
+	so that you can dynamically start and stop tasks. When the elf support
+	is finished we can combine these parts and the process support in the
+	kernel will be complete.
+	* Console functions are going to be removed, which will further reduce
+	the size of the storm.
+	* Added VESA videomode setup in the init code, so that you will be
+	able to run chaos in any VESA 2.0 compatible videomode. The idea is
+	that the init code will set up a video mode, using VBE 2.0 calls, for
+	example 1280x1024x16. This mode will then be used the whole time, with
+ 	no possibility to change the videomode later. The gui and the text
+	consoles will use the same mode all the time.
+
+1999-02-06  Henrik Hallin  <henrik.hallin@chaos-development.cx>
+
+	* The microkernel has been given a name: storm.
+	* The memory is slightly rearranged.
+	* IRQ / exception handling works well.
+	* Support for CPU halt/reboot.
+	* Loader works well and loads perfectly from a harddrive.
+	It should be rewritten though, to use int 0x13 extensions if
+	available.
+	* Physical memory page allocation almost works.
+	* Timer driven task switcher works, almost. :)
+	* Writing numbers doesn't seem to work at all. :(
+	* We have been thinking a *LOT* on the server architecture and storm
+	is going to be very small with a lot of servers running under it.
+
+1999-01-05  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Reprogram the timer circuit
+	* Finish (oh, well..) the keyboard handler and make it translate
+ 	scancodes to ASCII
+	* Make %d in _printf work
+
+1999-01-04  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Make interrupt and exception handling.
+
+1998-12-11  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Make the loading of the microkernel work. ;)
+
+1998-12-03  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Fix the PM initialization code to set things up correctly and
+	organize the memory in an elegant way.
+	* Actually switch to protected mode and do something to show that it
+	works out the way it should work.
+	* Continue writing the microkernel basic functionality (DMA, IRQ,
+	memory I/O and so on)
+  	
+1998-11-16  Per Lundberg  <per.lundberg@chaos-development.cx>
+
+	* Re-write loader.asm to use BIOS calls for writing text.
+	* Make a proper list of how things ought to work and microkernel
+ 	structures. Document the system call features of the microkernel.
+	* Start working on the microkernel.

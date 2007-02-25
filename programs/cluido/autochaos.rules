@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="cluido" version="0.1.0" type="program" license="GPL">
+    <library type="depend">checksum</library>
+    <library type="depend">console</library>
+    <library type="depend">execute_elf</library>
+    <library type="depend">file</library>
+    <library type="depend">ipc</library>
+    <library type="depend">log</library>
+    <library type="depend">math</library>
+    <library type="depend">memory</library>
+    <library type="depend">ipv4</library>
+    <library type="depend">pci</library>
+    <library type="depend">random</library>
+    <library type="depend">string</library>
+    <library type="depend">time</library>
+    <library type="depend">unicode</library>
+    <library type="depend">system</library>
+    <library type="depend">video</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+			
+    <source>cluido.c</source>
+    <source>command.c</source>
+    <source>init.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

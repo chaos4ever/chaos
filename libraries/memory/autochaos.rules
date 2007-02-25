@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="memory" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Sources. -->
+    
+    <source>memory.c</source>
+    <source>slab.c</source>
+    <header>copy.h</header>
+    <header>dynamic.h</header>
+    <header>functions.h</header>
+    <header>memory.h</header>
+    <header>return_values.h</header>
+    <header>set.h</header>
+    <header>slab.h</header>
+    <header>types.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

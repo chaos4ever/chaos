@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="sampleplay" version="0.0.1" type="program" license="GPL">
+    <library type="depend" name="ipc" />
+    <library type="depend" name="log" />
+    <library type="depend" name="string" />
+    <library type="depend" name="system" />
+    <library type="depend" name="console" />
+    <library type="depend" name="sound" />
+    <library type="depend" name="memory" last="true" />
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+
+    <source>sampleplay.c</source>
+    <source>wavefile.asm</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables:
+  mode: html
+End:
+
+-->

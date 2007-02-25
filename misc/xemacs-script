@@ -1,0 +1,228 @@
+;; -*- Mode: Emacs-Lisp -*-
+
+;; Abstract: Personal settings which aren't to be overwritten by M-x
+;; customize or whatever.
+
+;; Copyright 1999-2000 chaos development.
+
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of the
+;; License, or (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful, but
+;; WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;; General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program; if not, write to the Free Software
+;; Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+;; USA */
+
+;; Our own indentation style.
+
+(defconst chaos-c-style 
+  '(
+    (c-basic-offset . 2)
+    (c-comment-only-line-offset . (0 . 0))
+    (c-comment-continuation-stars . "")
+    (c-hanging-comment-ender-p . t)
+    (c-offsets-alist . (
+			(statement-block-intro . +)
+			(knr-argdecl-intro . +)
+			(substatement-open . 0)
+			(label . 0)
+			(statement-cont . +)
+			(case-label . 2)
+			)
+		     )
+    )
+ "chaos"
+)
+
+;; Customisable variables.
+
+(setq add-log-mailing-address "plundis@chaosdev.org")
+(setq user-mail-address add-log-mailing-address)
+(setq chaos-mail-address add-log-mailing-address)
+(setq copyright-holder "chaos development")
+(setq chaos-developer user-full-name)
+
+(setq bell-volume 0)
+
+(global-set-key "\M-i" 'info)
+(global-set-key "\M-c" 'copy-region-as-kill)
+(global-set-key "\M-r" 'load-file)
+(global-set-key "\M-t" 'toggle-read-only)
+(global-set-key "\C-t" 'tab-to-tab-stop)
+(global-set-key "\C-ci" 'indent-region)
+(global-set-key "\C-c\C-i" 'indent-region)
+
+(global-set-key "\M-og" 'insert-gpl)
+(global-set-key "\M-o\M-g" 'insert-gpl)
+(global-set-key "\M-ol" 'insert-lgpl)
+(global-set-key "\M-o\M-l" 'insert-lgpl)
+(global-set-key "\M-oa" 'insert-author)
+(global-set-key "\M-o\M-a" 'insert-author)
+(global-set-key "\M-oc" 'insert-contact-information)
+(global-set-key "\M-o\M-c" 'insert-contact-information)
+(global-set-key "\M-oi" 'insert-id)
+(global-set-key "\M-o\M-i" 'insert-id)
+(global-set-key "\M-oo" 'compile)
+(global-set-key "\M-oq" 'gnuserv-edit)
+(global-set-key "\M-o\M-o" 'compile)
+(global-set-key "\C-x\C-c" nil)
+(global-set-key 'button4 'down)
+(global-set-key 'button5 'up)
+
+(line-number-mode 1)			
+(column-number-mode 1)
+
+(set-fill-column 80)
+
+;; Functions.
+
+(defun up ()
+  "Scroll up"
+  (interactive)
+  (scroll-up 8)
+)
+
+(defun down ()
+  "Scroll down"
+  (interactive)
+  (scroll-down 8)
+)
+
+(defun get-year ()
+  "Insert the current year in the active buffer"
+  (or "2000")
+  )
+
+(defun insert-gpl ()
+  "Insert the copying information from the GPL at the start of the file"
+  (interactive)
+  (goto-line 1)
+
+  (insert "/* $Id$ */\n")
+  (insert "/* Abstract: */\n")
+  (insert "/* Author: " chaos-developer " <" chaos-mail-address "> */\n\n")
+
+  (insert "/* Copyright " (get-year) " " copyright-holder ". */\n\n")
+  
+  (insert "/* This program is free software; you can redistribute it and/or\n")
+  (insert "   modify it under the terms of the GNU General Public License as\n")
+  (insert "   published by the Free Software Foundation; either version 2 of the\n")
+  (insert "   License, or (at your option) any later version.\n\n")
+  
+  (insert "   This program is distributed in the hope that it will be useful, but\n")
+  (insert "   WITHOUT ANY WARRANTY; without even the implied warranty of\n")
+  (insert "   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n")
+  (insert "   General Public License for more details.\n\n")
+  
+  (insert "   You should have received a copy of the GNU General Public License\n")
+  (insert "   along with this program; if not, write to the Free Software\n")
+  (insert "   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n")
+  (insert "   USA. */\n")
+  
+  (goto-line 2)
+  (move-to-column 13)
+)
+
+(defun insert-lgpl
+  "Insert the copying information from the LGPL at the start of the file"
+  (interactive)
+  (goto-line 1)
+
+  (insert "/* $Id$ */\n")
+  (insert "/* Abstract: */\n")
+  (insert "/* Author: " chaos-developer " <" chaos-mail-address "> */\n\n")
+
+  (insert "/* Copyright " (get-year) " " copyright-holder ". */\n\n")
+
+  (insert "/* This library is free software; you can redistribute it and/or\n")
+  (insert "   modify it under the terms of the GNU Lesser General Public License\n")
+  (insert "   as published by the Free Software Foundation; either version 2 of\n")
+  (insert "   the License, or (at your option) any later version.\n\n")
+
+  (insert "   This library is distributed in the hope that it will be useful, but\n")
+  (insert "   WITHOUT ANY WARRANTY; without even the implied warranty of\n")
+  (insert "   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU\n")
+  (insert "   Lesser General Public License for more details.\n\n")
+  
+  (insert "   You should have received a copy of the GNU Lesser General Public\n")
+  (insert "   License along with this library; if not, write to the Free Software\n")
+  (insert "   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307\n")
+  (insert "   USA. */\n")
+
+  (goto-line 2)
+  (move-to-column 13)
+)
+
+(defun insert-author
+  "Insert a C comment with author information"
+  (interactive)
+  (insert "/* Author: ")
+  (insert-contact-information)
+  (insert " */\n")
+)
+
+(defun insert-contact-information
+  "Insert contact information (name <email>)"
+  (interactive)
+  (insert chaos-developer " <" chaos-mail-address ">")
+)
+
+;; Customizations for all modes in CC Mode.
+
+(defun chaos-c-mode-common-hook ()
+
+  ;; add my personal style and set it for the current buffer
+
+  (c-add-style "chaos" chaos-c-style t)
+
+  ;; this will make sure spaces are used instead of tabs
+
+  (setq indent-tabs-mode nil))
+
+(add-hook 'c-mode-common-hook 'chaos-c-mode-common-hook)
+(defun quit ()
+  (interactive)
+  (save-buffers-kill-emacs)
+)
+
+(add-hook 'changelog-mode-hook 'my-changelog-mode-hook)
+(defun my-changelog-mode-hook ()
+  (make-local-variable 'add-log-mailing-address)
+  (setq add-log-mailing-address \"plundis@chaosdev.org\"))
+
+(add-hook 'debian-changelog-mode-hook 'my-debian-changelog-mode-hook)
+(defun my-debian-changelog-mode-hook ()
+  (make-local-variable 'add-log-mailing-address)
+  (setq add-log-mailing-address \"plundis@debian.org\"))
+
+(defun insert-date-string ()
+  "Return RFC-822 format date string"
+  (let* ((dp "822-date")
+	 (cp (point))
+	 (ret (call-process "822-date" nil t))
+	 (np (point))
+	 (out nil))
+    (cond ((not (or (eq ret nil) (eq ret 0)))
+	   (setq out (buffer-substring-no-properties cp np))
+	   (delete-region cp np)
+	   (error (concat "error from " dp ": " out)))
+	  (t
+	   (backward-char)
+	   (or (looking-at "\n")
+	       (error (concat "error from " dp ": expected newline after date string")))
+	   (setq out (buffer-substring-no-properties cp (- np 1)))
+	   (delete-region cp np)
+	   out))))
+
+(defun insert-id ()
+  "Insert a nice Name <mail> date string"
+  (interactive)
+  (insert "-- " chaos-developer " <" chaos-mail-address ">  " 
+	  (insert-date-string)))

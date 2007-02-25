@@ -1,0 +1,7 @@
+TODO ($Id$)
+====
+
+* ipc: Support closing connections.  network: Support for binding
+* sockets, and also listening and sending data.  pci: Make it
+* work. Support finding of I/O ranges, etc, and also bus mastering
+  when we have shared memory proper in the kernel.

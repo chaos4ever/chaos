@@ -1,0 +1,50 @@
+<!DOCTYPE Book PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+
+<book>
+  <bookinfo>
+    <title>The autochaos Manual</title>
+    <authorgroup>
+      <author>
+        <firstname>Per</firstname>
+        <surname>Lundberg</surname>
+      </author>
+    </authorgroup>
+    <pubdate>$chaos: autochaos.sgml,v 1.3 2002/05/23 11:23:20 per Exp $</pubdate>
+  </bookinfo>
+
+  <preface>
+    <title>Introduction</title>
+
+    <para>
+      Welcome. This is autochaos, the building tool for chaos. If you
+      have been using GNU autoconf/automake, you might think you know
+      pretty well what this is about, but think again -- you are most
+      certainly mistaken. autochaos has almost <emph>entirely</emph>
+      different goals than those of the GNU tools, in a similar way
+      that chaos strives to do something pretty different from GNU.
+    </para>
+
+    <para>
+      The first thing you are likely to run into is the ability to
+      configure the system. They are rather minimal -- unlike
+      autoconf/automake, which supports almost anything, we have tried
+      to keep autochaos minimalistic and clean. It is almost
+      <emph>only</emph> suitable when developing stuff for the chaos
+      operating system. If you have any nice ideas about how to make
+      this suitable for multi-platform things too, without breaking
+      the cleanness in the design, please contact us.
+      (staff@chaosdev.org)
+    </para>
+  </preface>
+
+  <chapter>
+    <title>The autochaos.rules</title>
+    
+    <para>
+      Each autochaos package must have an autochaos.rules file. It is
+      what basically defines what the package is composed of. It is,
+      like most everything in chaos is, or will be, a standard XML
+      file. It can look like this:
+    </para>
+  
+    TODO

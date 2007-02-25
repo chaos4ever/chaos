@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="storm" version="0.5.0" type="kernel" license="GPL">
+    <include>../include</include>
+    <include>..</include>
+    <include-base>include/storm</include-base>
+    <extra-cflags>-fomit-frame-pointer -ffreestanding</extra-cflags>
+    <option name="release" description="Compile for release (no debugging)" default="FALSE" />
+  
+    <!-- Subdirectories. -->
+        
+    <directory name="ia32" type="source">
+      <source>cluster.c</source>
+      <source>cpuid.c</source>
+      <source>debug.c</source>
+      <source>dispatch.c</source>
+      <source>dma.c</source>
+      <source>elf.c</source>
+      <source>gdt.c</source>
+      <source>idt.c</source>
+      <source>init.c</source>
+      <source>irq.c</source>
+      <source>irq_handlers.S</source>
+      <source>limits.c</source>
+      <source>main.c</source>
+      <source>memory.c</source>
+      <source>memory_global.c</source>
+      <source>memory_physical.c</source>
+      <source>memory_virtual.c</source>
+      <source>multiboot.c</source>
+      <source>mutex.c</source>
+      <source>port.c</source>
+      <source>process.c</source>
+      <source>schedule.c</source>
+      <source>string.c</source>
+      <source>system_calls-auto.c</source>
+      <source>system_calls.c</source>
+      <source>thread.c</source>
+      <source>time.c</source>
+      <source>timer.c</source>
+      <source>trap.c</source>
+      <source>wrapper.c</source>
+    </directory>
+
+    <directory name="generic" type="source">
+      <source>arguments.c</source>
+      <source>avl.c</source>
+      <source>avl_debug.c</source>
+      <source>avl_rotate.c</source>
+      <source>avl_update.c</source>
+      <source>avl_delete.c</source>
+      <source>debug.c</source>
+      <source>idle.c</source>
+      <source>init.c</source>
+      <source>kernelfs.c</source>
+      <source>log.c</source>
+      <source>mailbox.c</source>
+      <source>memory.c</source>
+      <source>service.c</source>
+      <source>slab.c</source>
+      <source>system_call.c</source>
+      <source>tag.c</source>
+      <source>time.c</source>
+    </directory>
+
+    <directory name="include" type="mixed">
+    </directory>
+
+    <directory name="include/storm" type="headers">
+      <header>defines.h</header>
+      <header>dma.h</header>
+      <header>return_values.h</header>
+      <header>kernelfs.h</header>
+      <header>limits.h</header>
+      <header>mailbox.h</header>
+      <header>process.h</header>
+      <header>thread.h</header>
+      <header>types.h</header>
+      <header>service.h</header>
+      <header>state.h</header>
+      <header>storm.h</header>
+      <header>system_calls.h</header>
+      <header>tag.h</header>
+    </directory>
+
+    <directory name="include/storm/ia32" type="headers">
+      <header>cluster.h</header>
+      <header>cpu.h</header>
+      <header>cpuid.h</header>
+      <header>debug.h</header>
+      <header>defines.h</header>
+      <header>descriptor.h</header>
+      <header>dma.h</header>
+      <header>flags.h</header>
+      <header>gdt.h</header>
+      <header>idt.h</header>
+      <header>irq.h</header>
+      <header>memory.h</header>
+      <header>memory_virtual.h</header>
+      <header>mutex.h</header>
+      <header>port.h</header>
+      <header>string.h</header>
+      <header>system_calls.h</header>
+      <header>thread.h</header>
+      <header>timer.h</header>
+      <header>trap.h</header>
+      <header>tss.h</header>
+      <header>types.h</header>
+      <header>wrapper.h</header>
+    </directory>
+
+    <directory name="include/storm/generic" type="headers">
+      <header>arguments.h</header>
+      <header>avl.h</header>
+      <header>avl_debug.h</header>
+      <header>avl_rotate.h</header>
+      <header>avl_update.h</header>
+      <header>avl_delete.h</header>
+      <header>bit.h</header>
+      <header>capability.h</header>
+      <header>cpu.h</header>
+      <header>dataarea.h</header>
+      <header>debug.h</header>
+      <header>defines.h</header>
+      <header>dispatch.h</header>
+      <header>elf.h</header>
+      <header>idle.h</header>
+      <header>init.h</header>
+      <header>irq.h</header>
+      <header>kernelfs.h</header>
+      <header>log.h</header>
+      <header>limits.h</header>
+      <header>mailbox.h</header>
+      <header>memory.h</header>
+      <header>multiboot.h</header>
+      <header>mutex.h</header>
+      <header>memory_global.h</header>
+      <header>memory_physical.h</header>
+      <header>memory_virtual.h</header>
+      <header>port.h</header>
+      <header>process.h</header>
+      <header>return_values.h</header>
+      <header>service.h</header>
+      <header>slab.h</header>
+      <header>string.h</header>
+      <header>system_call.h</header>
+      <header>tag.h</header>
+      <header>thread.h</header>
+      <header>time.h</header>
+      <header>types.h</header>
+    </directory>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

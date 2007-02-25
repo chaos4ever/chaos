@@ -1,0 +1,956 @@
+#!/usr/bin/perl -w
+
+# $chaos: autochaos,v 1.8 2002/05/23 11:23:20 per Exp $
+
+# Abstract: Program for generating configure scripts.
+# Author: Per Lundberg <plundis@chaosdev.org>
+
+# Copyright 2000 chaos development.
+
+use strict;
+use English;
+use XML::Simple;
+
+# TODO: use FileHandle;
+# TODO: Things are starting to feel a little kludgy. I don't know what
+# to do. Perhaps create a couple of modules for doing the nasty stuff? 
+# No, we should have template files instead of having everything
+# hardcoded. That will be good. CGI::FastTemplate.
+
+# Constants.
+
+my $input_file = "autochaos.rules";
+my $configure_file = "configure";
+my $template_file = "makefile.template";
+my @required = ( 'name', 'version', 'license' );
+my $chaos_root = "/";
+my $PACKAGE = "autochaos";
+my $VERSION = "0.2.1";
+my @allowed = ( 
+	       {
+		'name' => 'type',
+		'values' => [ 'kernel', 'library', 'server', 'program' ],
+		'error' => 'The specified package type was unknown/invalid'
+	       },
+	       {
+		'name' => 'license',
+		'values' => [ 'CPL', 'GPL', 'LGPL', 'BSD', 'Artistic', 'PD',
+			      'Custom' ],
+		'error' => 'The specified license was unknown/invalid.'
+	       }
+	      );
+
+my $CFLAGS = '-Wall -W -Wshadow -Wpointer-arith -Waggregate-return \\\
+-Wstrict-prototypes -Wredundant-decls -Winline -Wmissing-prototypes \\\
+-Werror -Wcast-align -Wbad-function-cast -Wsign-compare \\\
+-Wmissing-declarations -Wmissing-noreturns -pipe \\\
+-Wnested-externs -O3 -fno-builtin -funsigned-char -g';
+
+my $LDFLAGS_NORMAL = '\$(PREFIX)/data/programming/c/startup/startup.o \\\
+-nostdlib -Wl,-T,\$(PREFIX)/data/programming/linker/chaos.ld -lgcc';
+
+my $LDFLAGS_KERNEL = '-nostdlib -Wl,-T,current-arch/kernel.ld -lgcc';
+
+# Variables.
+
+my $targets = undef;
+my @all_objects = ();
+
+# Parse the arguments.
+
+foreach my $argument (@ARGV)
+{
+  if ($argument eq '-v' or
+      $argument eq '--version')
+  {
+    print ("$PACKAGE $VERSION\n");
+    exit;
+  }
+  elsif ($argument eq '-h' or
+         $argument eq '--help')
+  {
+    printf "Usage: %s [-h | --help ] [ -v | --version ] [ --install-prefix PREFIX ]\n",
+    $PROGRAM_NAME;
+    exit;
+  }
+  else
+  {
+    $input_file = $argument;
+  }
+}
+
+# Parse the input file.
+
+my $parser = new XML::Simple;
+my $config = $parser->XMLin ($input_file, keyattr => [ 'name' ], 
+                             searchpath => [ '.' ],
+			     forcearray => [ 'makefile', 'library',
+					     'source', 'header', 'include',
+					     'directory', 'option' ]);
+					     
+# Make sure the required components are available.
+
+foreach my $required (@required)
+{
+  unless ($config->{'package'}->{$required})
+  {
+    print ("The required element '$required' was not found in the input file.\n");
+    exit 1;
+  }
+}
+
+my $package = $config->{'package'}->{'name'};
+my $target = $package;
+my $version = $config->{'package'}->{'version'};
+
+# Check that some variables have allowed values.
+
+foreach my $allowed (@allowed)
+{
+  my $matched = undef;
+  foreach my $value (@{ $allowed->{'values'} })
+  {
+    if ($value eq $config->{'package'}->{$allowed->{'name'}})
+    {
+      $matched = $value;
+      last;
+    }
+  }
+
+  my $value = $matched;
+
+  unless ($value)
+  {
+    print $allowed->{'error'}, " (",
+          $config->{'package'}->{$allowed->{'name'}}, ")\n";
+    exit 1;
+  }
+}
+
+# Do some more magic.
+
+my $type = $config->{'package'}->{'type'};
+
+if ($type eq 'library')
+{
+  $target = "library_$target.a";
+}
+
+if ($config->{'package'}->{'extra-cflags'})
+{
+  $CFLAGS .= " " . $config->{'package'}->{'extra-cflags'};
+}
+
+# Now, check if this is a multi-directory package.
+
+my @directory = ();
+my @makefile = ();
+my %sub_directory = ();
+
+if ($config->{'package'}->{'directory'})
+{
+  foreach my $key (keys %{ $config->{'package'}->{'directory'} })
+  {
+    my %hash = ();
+
+    $hash{'path'} = $key;
+    $hash{'type'} = $config->{'package'}->{'directory'}->{$key}->{'type'};
+
+    if ($hash{'type'} eq 'headers')
+    {
+      $hash{'headers'} = $config->{'package'}->{'directory'}->{$key}->{'header'};
+    }
+    elsif ($hash{'type'} eq 'source')
+    {
+      $hash{'source'} = $config->{'package'}->{'directory'}->{$key}->{'source'};
+    }
+
+    my @path = split ("/", $key);
+    
+    my $where = \%sub_directory;
+    foreach my $element (@path)
+    {
+      my %hash = ();
+
+      unless ($where->{$element})
+      {
+        $where->{$element} = \%hash;
+        $where = \%hash;
+      }
+      else
+      {
+	$where = $where->{$element};
+      }
+    }
+    $hash{'sub_directory'} = $where;
+
+    push (@directory, \%hash);
+  }
+}
+
+my %hash = ();
+
+$hash{'path'} = ".";
+$hash{'type'} = 'multi';
+if ($config->{'package'}->{'header'})
+{
+  $hash{'headers'} = $config->{'package'}->{'header'};
+}
+
+if ($config->{'package'}->{'source'})
+{
+  $hash{'source'} = $config->{'package'}->{'source'};
+}
+
+$hash{'sub_directory'} = \%sub_directory;
+
+push (@directory, \%hash);
+
+# Okay, we've got what we want. Generate the configure script.
+
+my $CONFIG;
+open (CONFIG, '>' . $configure_file) or
+  die ("Could not open $configure_file for writing.\n");
+
+# Start the perl script.
+
+print (CONFIG <<END);
+#! /usr/bin/perl -w
+
+# Abstract: Script for configuring this package.
+
+# Copyright 2000 chaos development. This script is in the public domain.
+
+# Please note that this script was automatically generated by
+# autochaos $VERSION. It should not be modified. Do the changes you
+# want in autochaos instead.
+
+use strict;
+use POSIX;
+
+my \$chaos_root = "$chaos_root";
+my \@libraries = ();
+my \@headers = ();
+my \@sources = ();
+my \@objects = ();
+my \@deps = ();
+my \$MAKEFILE;
+my \$TEMPLATE;
+my \$root_dir = getcwd ();
+my \%options = 
+(
+END
+
+foreach my $option (keys %{ $config->{'package'}->{'option'} })
+{
+  print (CONFIG "  '$option' => '$config->{'package'}->{'option'}->{$option}->{'default'}',\n");
+}
+
+# Print some status.
+
+print (CONFIG <<END);
+);
+
+my \$install_prefix_flag = 0;
+
+foreach my \$argument (\@ARGV)
+{
+  if (\$install_prefix_flag eq 1)
+  {
+    \$chaos_root = \$argument;
+    \$install_prefix_flag = 0;
+  }
+  else
+  {
+    if (\$argument eq '--install-prefix')
+    {
+      \$install_prefix_flag = 1;
+    }
+    elsif (\$argument =~ m/--enable-.*\$/)
+    {
+      (my \$option) = (\$argument =~ m/--enable-(.*)\$/);
+
+      if (\$options{\$option})
+      {
+        \$options{\$option} = 'TRUE';
+      }
+      else
+      {
+        print "Unrecognised command line option.\\n";
+        exit 1;
+      }
+    }
+    elsif (\$argument =~ m/--disable-.*\$/)
+    {
+      (my \$option) = (\$argument =~ m/--disable-(.*)\$/);
+
+      if (\$options{\$option})
+      {
+        \$options{\$option} = 'FALSE';
+      }
+      else
+      {
+        print "Unrecognised command line option.\\n";
+        exit 1;
+      }
+    }
+    else
+    {
+      print "Unrecognised command line option.\\n";
+      exit 1;
+    }
+  }
+}
+
+if (\$install_prefix_flag eq 1)
+{
+  print "Malformed --install-prefix command option. Value missing.\\n";
+  exit 1;
+}
+
+print "\\n  Configuring $type: $package...\\n\\n";
+
+END
+
+# Now, check if we can find the chaos root.
+
+print (CONFIG <<END);
+print ("Using chaos root... (\$chaos_root)\\n");
+
+END
+
+# Now, make sure the required and/or wanted libraries exists.
+
+my $last = undef;
+foreach my $library ($config->{'package'}->{'library'})
+{
+  foreach my $data (@{ $library })
+  {
+    if ($data->{'type'} eq 'depend')
+    {
+      print (CONFIG <<END);
+print ("Checking for $data->{'content'} library... ");
+if (-f "\$chaos_root/data/programming/libraries/static/library_$data->{'content'}.a")
+{
+  print ("found.\\n");
+
+  push (\@libraries, "$data->{'content'}");
+}
+else
+{
+  print ("not found.\\n");
+  print ("\\nError: $data->{'content'} is a required library. Please check your configuration.\\n\\n");
+  exit 1;
+}
+
+END
+    }
+  }
+}
+
+# Now, add a test for checking whether autochaos exists or not.
+
+print (CONFIG <<END);
+
+my \$all_arguments = "";
+foreach my \$argument (\@ARGV)
+{
+  \$all_arguments .= \$argument . " ";
+}
+
+print ("Checking for autochaos... ");
+my \$autochaos = `autochaos --version 2> /dev/null`;
+
+my \$has_autochaos;
+unless (\$autochaos)
+{
+  print ("not found.\\n");
+  \$has_autochaos = undef;
+}
+else
+{
+  (my \$version) = (\$autochaos =~ m/ ([\\d\\.]+)\$/);
+  print ("found (version \$version).\\n");
+  \$has_autochaos = \$version;
+}
+
+END
+
+# Well, that's about it. Time to write to our output files, isn't it? 
+# We don't waste energy trying to "cache" the results of our tests
+# like autoconf does; since we're so much faster, it's not really a
+# big problem.
+
+foreach my $directory (@directory)
+{
+  my $makefile = $directory->{'path'} . "/makefile";
+
+  if ($makefile eq "./makefile")
+  {
+    $targets = $target;
+  }
+  else
+  {
+    $targets = '\$(OBJECTS)';
+  }
+
+  print (CONFIG <<END);
+
+
+\@headers = (
+END
+
+# Which local headers will we use? All headers must be listed to get
+# included in the package. Also, if this is a library or kernel, this
+# will make 'make install' install them.
+
+  foreach my $header (@{ $directory->{'headers'} })
+  {
+    print (CONFIG "'$header',\n");
+  }
+
+print (CONFIG ");\n");
+
+# Now, generate a list of all the sources in this directory.
+
+print (CONFIG <<END);
+
+\@sources = (
+END
+
+  foreach my $source (@{ $directory->{'source'} })
+  {
+    print (CONFIG "'$source',\n");
+  }
+
+print (CONFIG ");\n");
+
+# Try to be clever and find out which objects this package will
+# generate, in each directory.
+
+  print CONFIG "\@objects = (";
+  foreach my $source (@{ $directory->{'source'} })
+  {
+    (my $object) = $source =~ m/(.*)\..*$/;
+    $object .= ".o";
+    
+    print (CONFIG "'$object',\n");
+    push (@all_objects, $directory->{'path'} . "/$object");
+  }
+
+  print (CONFIG ");\n");
+
+# Also, find out which dependency files to include.
+
+  print CONFIG "\@deps = (";
+
+  foreach my $source (@{ $directory->{'source'} })
+  {
+    (my $dep) = $source =~ m/(.*)\..*$/;
+    $dep .= ".dep";
+    
+    print (CONFIG "'$dep',\n");
+  }
+
+  print (CONFIG ");\n");
+
+  print (CONFIG <<END);
+  print "Writing $makefile...\n";
+  open (MAKEFILE, '>' . "$makefile") or
+    die ("Could not write to $makefile: \$!\\n");
+ 
+# Write the default rules we want.
+
+  print (MAKEFILE <<STOP);
+# This makefile was generated by autochaos $VERSION. Please do not
+# tamper with it unless you are very certain about what you are doing.
+
+ALL_ARGUMENTS = \$all_arguments
+
+PREFIX = \$chaos_root
+PACKAGE = $package
+
+# Compiler flags.
+
+CFLAGS = $CFLAGS \\\$(EXTRA_CFLAGS) \\\$(DEFINES)
+
+INCLUDES = \\\\
+STOP
+END
+
+  foreach my $include (@{ $config->{'package'}->{'include'} })
+  {
+    print (CONFIG <<END);
+  print MAKEFILE "-I$include \\\\\\\n";
+END
+  }
+
+print (CONFIG <<END);
+print (MAKEFILE <<STOP);
+-I. -I\\\$(PREFIX)/data/programming/c/headers
+STOP
+END
+
+  if (keys %{ $directory->{'sub_directory'} } > 0)
+  {
+    print (CONFIG <<END);
+  print MAKEFILE "\\\nSUB_DIRECTORIES =";
+END
+
+    foreach my $sub_directory (keys %{ $directory->{'sub_directory'} })
+    {
+      print (CONFIG <<END);
+  print MAKEFILE " \\\\\\\n$sub_directory";
+END
+    }
+  }
+
+  if (scalar @all_objects > 0)
+  {
+    print (CONFIG <<END);
+    print MAKEFILE "\nALL_OBJECTS =";
+END
+    foreach my $object (@all_objects)
+    {
+      print (CONFIG <<END);
+      print MAKEFILE " \\\\\\\n$object";
+END
+    }
+    print (CONFIG <<END);
+    print MAKEFILE "\n";
+END
+  }
+
+print (CONFIG <<END);
+print (MAKEFILE <<STOP);
+
+STATIC_LIBRARY_PATH = \\\$(PREFIX)/data/programming/libraries/static
+
+# Ideally, this would be -lwhatever, but we have not started patching
+# the GNU tools yet...
+
+STOP
+
+  print (MAKEFILE "LIBS = ");
+  foreach my \$library (\@libraries)
+  {
+    print MAKEFILE "\\\\\\\n\\\$(STATIC_LIBRARY_PATH)/library_\$library.a ";
+  }
+
+  if (scalar \@objects > 0)
+  {
+    print MAKEFILE "\\n\\nOBJECTS = ";
+    foreach my \$object (\@objects)
+    {
+      print MAKEFILE " \\\\\\\n\$object";
+    }
+    print MAKEFILE "\\\n";
+  }
+
+  if (scalar \@headers > 0)
+  {
+    print MAKEFILE "\\n\\nHEADERS = ";
+    foreach my \$header (\@headers)
+    {
+      print MAKEFILE " \\\\\\\n\$header";
+    }
+    print MAKEFILE "\\\n";
+  }
+
+  if (scalar \@sources > 0)
+  {
+    print MAKEFILE "\\n\\nSOURCES = ";
+    foreach my \$source (\@sources)
+    {
+      print MAKEFILE " \\\\\\\n\$source";
+    }
+    print MAKEFILE "\\\n";
+    
+  }
+
+END
+
+  my $header_path = '\\$(PREFIX)/data/programming/c/headers/\\$(PACKAGE)/' . $directory->{'path'};
+  
+  if ($config->{'package'}->{'include-base'})
+  {
+    $header_path =~ s/$config->{'package'}->{'include-base'}//;
+  }
+
+  print (CONFIG <<END);
+  print (MAKEFILE <<STOP);
+
+HEADER_PATH = $header_path
+
+# TODO: Those should be overridable.
+
+CC = gcc
+NASM = nasm
+AR = ar
+RANLIB = ranlib
+GZIP = gzip -f
+
+%.o: %.c
+\t\\\@echo Compiling \\\$<...
+\t\\\@\\\$(CC) -o \\\$(\@) \\\$(CFLAGS) \\\$(INCLUDES) \\\$(DEFS) -c \\\$<
+\t\\\@\\\$(CC) -M \\\$< \\\$(CFLAGS) \\\$(INCLUDES) \\\$(DEFS) > \\\$(*F).dep
+
+%.o: %.S
+\t\\\@echo Compiling \\\$<...
+\t\\\@\\\$(CC) -o \\\$(\@) \\\$(CFLAGS) \\\$(INCLUDES) \\\$(DEFS) -c \\\$<
+\t\\\@\\\$(CC) -M \\\$< \\\$(CFLAGS) \\\$(INCLUDES) \\\$(DEFS) > \\\$(*F).dep
+
+%.o: %.asm
+\t\\\$(NASM) -o \\\$(\@) \\\$< -f elf
+
+.PHONY: splash all clean install package-source package-check package
+
+STOP
+ 
+  {
+    my \$target = "$targets" if (scalar \@objects);
+
+    unless (\$target)
+    {
+      \$target = "";
+    }
+
+    print (MAKEFILE <<STOP);
+all: splash makefile \$target
+STOP
+END
+  if (keys %{ $directory->{'sub_directory'} } > 0)
+  {
+   print (CONFIG <<END);
+     print (MAKEFILE <<STOP);
+\t\\\@for sub_directory in \\\$(SUB_DIRECTORIES) ; do (cd \\\$\\\$sub_directory && echo -e "\\\\n  Compiling directory: \\\$\\\$sub_directory\\\\n" && \\\$(MAKE)) || exit ; done
+STOP
+END
+  }
+
+  print (CONFIG <<END);
+
+  }
+    if (!(scalar \@objects) && '$targets' ne '\\\$(OBJECTS)')
+    {
+  print (MAKEFILE <<STOP);
+	\\\@\\\$(MAKE) $targets
+STOP
+    }
+END
+
+  # Now, generate a 'clean' target.
+
+  print (CONFIG <<END);
+  print (MAKEFILE <<STOP);
+
+clean:
+STOP
+END
+  if (keys %{ $directory->{'sub_directory'} } > 0)
+  {
+    print (CONFIG <<END);
+    print (MAKEFILE <<STOP);
+\t\\\@for sub_directory in \\\$(SUB_DIRECTORIES) ; do (cd \\\$\\\$sub_directory && \\\$(MAKE) clean) || exit ; done
+STOP
+END
+  }
+
+  if ($makefile eq "./makefile")
+  {  
+    print (CONFIG <<END);
+    print MAKEFILE "\trm -f $target\n";
+END
+  }
+
+  print (CONFIG <<END);
+  if (scalar \@objects > 0)
+  {
+    print MAKEFILE "\trm -f \\\$(OBJECTS)\n";
+  }
+END
+
+  print (CONFIG <<END);
+  print (MAKEFILE <<STOP);
+\trm -f \*.dep
+\t-\\\$(MAKE) clean-local
+STOP
+END
+
+# If this is the top-level makefile, put some extra fluff in it to
+# make it automatically regenerate the stuff that's automatically
+# generated (makefile, configure)
+
+   if ($makefile eq "./makefile")
+   {
+     print (CONFIG <<END);
+
+# FIXME: Pass all parameters to the configure script at this
+# point. Also, make sure the make process is restarted. (fork?)
+
+# FIXME: Support conditional gzipping.
+     print (MAKEFILE <<STOP);
+makefile: configure
+\t\@./configure
+
+splash:
+\t\\\@echo -e "\\\\n  Compiling $type: $package...\\\\n"
+
+STOP
+
+   if (\$has_autochaos)
+   {
+     print (MAKEFILE <<STOP);
+configure: autochaos.rules
+\t\\\@autochaos
+
+STOP
+   }
+END
+   }
+   else
+   {
+     print (CONFIG <<END);
+     print MAKEFILE "splash:\n\n";
+END
+   }
+
+   if ($type eq 'program')
+   {
+     print (CONFIG <<END);
+     print (MAKEFILE <<STOP);
+
+LDFLAGS = $LDFLAGS_NORMAL \\\$(EXTRA_LDFLAGS)
+
+$target: \\\$(OBJECTS)
+\t\\\@echo "Linking..."
+\t\\\@\\\$(CC) -o \\\$(\\\@) \\\$(OBJECTS) \\\$(LIBS) \\\$(LDFLAGS)
+
+install: all
+\t\\\@echo "Installing..."
+\t\\\@mkdir -p \\\$(PREFIX)/programs/$target
+\t\\\@cp $target \\\$(PREFIX)/programs/$target/$target
+\t\\\@strip -R .note -R .comment -R .eh_frame \\\$(PREFIX)/programs/$target/$target
+\t\\\@\\\$(GZIP) \\\$(PREFIX)/programs/$target/$target # > \\\$(PREFIX)/programs/$target/$target.gz
+STOP
+END
+   }
+   elsif ($type eq 'server')
+   {
+     print (CONFIG <<END);
+     print (MAKEFILE <<STOP);
+
+LDFLAGS = $LDFLAGS_NORMAL \\\$(EXTRA_LDFLAGS)
+
+$target: \\\$(OBJECTS)
+\t\\\@echo "Linking..."
+\t\\\@\\\$(CC) -o \\\$(\\\@) \\\$(OBJECTS) \\\$(LIBS) \\\$(LDFLAGS)
+
+install: all
+\t\\\@echo "Installing..."
+\t\\\@mkdir -p \\\$(PREFIX)/system/servers
+\t\\\@cp $target \\\$(PREFIX)/system/servers
+\t\\\@strip -R .note -R .comment -R .eh_frame \\\$(PREFIX)/system/servers/$target
+\t\\\@\\\$(GZIP) \\\$(PREFIX)/system/servers/$target # > \\\$(PREFIX)/system/servers/$target.gz
+STOP
+END
+   }
+   elsif ($type eq 'library')
+   {
+     print (CONFIG <<END);
+     print (MAKEFILE <<STOP);
+
+LDFLAGS = $LDFLAGS_NORMAL \\\$(EXTRA_LDFLAGS)
+
+$target: \\\$(OBJECTS)
+\t\\\@echo "Creating library..."
+\t\\\@\\\$(AR) cru \\\$(\\\@) \\\$(OBJECTS)
+\t\\\@\\\$(RANLIB) \\\$(\\\@)
+
+install: all
+\t\\\@echo "Installing..."
+\t\\\@mkdir -p \\\$(PREFIX)/data/programming/libraries/static
+\t\\\@cp $target \\\$(PREFIX)/data/programming/libraries/static
+\t\\\@mkdir -p \\\$(PREFIX)/data/programming/c/headers/\\\$(PACKAGE)
+\t\\\@for header in \\\$(HEADERS) ; do cp \\\$\\\$header \\\$(PREFIX)/data/programming/c/headers/\\\$(PACKAGE) ; done
+STOP
+END
+   }
+  elsif ($type eq 'kernel')
+  {
+     print (CONFIG <<END);
+     print (MAKEFILE <<STOP);
+
+LDFLAGS = $LDFLAGS_KERNEL \\\$(EXTRA_LDFLAGS)
+
+$target: \\\$(OBJECTS) \\\$(ALL_OBJECTS)
+\t\\\@echo "Linking..."
+\t\\\@\\\$(CC) -o \\\$(\\\@) \\\$(OBJECTS) \\\$(ALL_OBJECTS) \\\$(LIBS) \\\$(LDFLAGS)
+
+install: all
+STOP
+END
+
+  if (keys %{ $directory->{'sub_directory'} } > 0)
+  {
+    print (CONFIG <<END);
+    print (MAKEFILE <<STOP);
+\t\\\@for sub_directory in \\\$(SUB_DIRECTORIES) ; do (cd \\\$\\\$sub_directory && \\\$(MAKE) install) || exit ; done
+STOP
+END
+
+    if ($makefile eq './makefile')
+    {
+   print (CONFIG <<END);
+  print (MAKEFILE <<STOP);
+\tmkdir -p \\\$(PREFIX)/system/kernel
+\tcp $target \\\$(PREFIX)/system/kernel
+\tstrip -R .note -R .comment -R .eh_frame \\\$(PREFIX)/system/kernel/$target
+\t\\\$(GZIP) \\\$(PREFIX)/system/kernel/$target # > \\\$(PREFIX)/system/kernel/$target.gz
+STOP
+END
+    }
+
+    print (CONFIG <<END);
+
+    if (scalar \@headers > 0)
+    {
+      print (MAKEFILE <<STOP);
+\tmkdir -p \\\$(HEADER_PATH)
+\tfor header in \\\$(HEADERS) ; do cp \\\$\\\$header \\\$(HEADER_PATH) ; done
+STOP
+    }
+END
+    } 
+  }
+
+# Write a rule for doing source packages.
+
+  print (CONFIG <<END);
+  print (MAKEFILE "\\n");
+
+  print (MAKEFILE <<STOP);
+package-source:
+STOP
+END
+  if (keys %{ $directory->{'sub_directory'} } > 0)
+  {
+    print (CONFIG <<END);
+    print (MAKEFILE <<STOP);
+\t\\\@for sub_directory in \\\$(SUB_DIRECTORIES) ; do (cd \\\$\\\$sub_directory && \\\$(MAKE) package-source) || exit ; done
+STOP
+END
+  }
+print (CONFIG <<END);
+print (MAKEFILE <<STOP);
+\tmkdir -p \$root_dir/package-source/$directory->{'path'}
+STOP
+END
+
+  if ($makefile eq './makefile')
+  {
+    print (CONFIG <<END);
+    print (MAKEFILE <<STOP);
+\t-cp -f autochaos.rules changelog configure COPYING README AUTHORS TODO INSTALL \$root_dir/package-source/$directory->{'path'}
+STOP
+END
+  }
+
+print (CONFIG <<END);  
+
+  print (MAKEFILE <<STOP);
+\t-cp -f makefile.template \\\$(EXTRA_FILES) \$root_dir/package-source/$directory->{'path'}
+STOP
+     
+    if (scalar \@headers > 0)
+    {
+      print (MAKEFILE <<STOP);
+\tfor header in \\\$(HEADERS) ; do cp \\\$\\\$header \$root_dir/package-source/$directory->{'path'} || exit ; done
+STOP
+    }
+
+    if (scalar \@sources > 0)
+    {
+      print (MAKEFILE <<STOP);
+\tfor source in \\\$(SOURCES) ; do cp \\\$\\\$source \$root_dir/package-source/$directory->{'path'} || exit ; done
+STOP
+    }
+
+  print (MAKEFILE <<STOP);
+package-check: package-source
+	     cd package-source && ./configure \\\$(ALL_ARGUMENTS) && \\\$(MAKE) && \\\$(MAKE) clean
+	     find package-source -name makefile -exec rm {} ';'
+	     rm package-source/config.h
+STOP
+
+  print (MAKEFILE <<STOP);
+package: package-check
+\trm -rf $package-$version
+\tmv package-source $package-$version
+\ttar cvIf $package-$version.tar.bz2 $package-$version
+	     
+STOP
+
+  # Include automatically generated dependencies.
+
+  if (scalar \@deps > 0)
+  {
+    foreach my \$dep (\@deps)
+    {
+      print (MAKEFILE "-include \$dep\\n");
+    }
+  }
+
+  print (MAKEFILE "\\n");
+
+  if (open (TEMPLATE, "$directory->{'path'}" . "/$template_file"))
+  {
+    while (<TEMPLATE>)
+    {
+      my \$row = \$_;
+
+      print (MAKEFILE \$row);
+    }
+  }
+  close (MAKEFILE);
+
+END
+}
+
+print (CONFIG <<END);
+
+  # Now, also write to the config.h
+
+  print "Writing config.h...\\\n";
+  my \$CONFIG;
+  open (CONFIG, '>config.h');
+  print (CONFIG <<STOP);
+/* Automatically generated by autochaos $VERSION. Not intended to be
+   hand edited. */
+
+#ifndef __CONFIG_H__
+#define __CONFIG_H__
+
+#define PACKAGE_NAME "$package"
+#define PACKAGE_VERSION "$version"
+
+STOP
+
+  foreach my \$option (keys \%options)
+  {
+    print (CONFIG "#define OPTION_" . uc (\$option) . " \$options{\$option}\\n");
+  }
+
+  foreach my \$library (\@libraries)
+  {
+    print (CONFIG "#include <\$library/\$library.h>\\n");
+  }
+
+  print (CONFIG "\\n#endif /* !__CONFIG_H__ */");
+
+  close (CONFIG);
+END
+
+close (CONFIG);
+chmod (0755, $configure_file) or
+  die ("Could not set executable permission on $configure_file: $!\n");

@@ -1,0 +1,111 @@
+I. IPC primitives
+
+   The following proposed IPC mechanism supplies two different primitives: messages and events.
+Both of the primitives conform to similar interfaces (they are sent and received) with the exception of
+the semantics of how they are actually sent. The first part of this proposal describes the "send" and
+"receive" semantics of messages followed by events and then continues to outline some useful or somewhat
+necessary extensions to these concepts.
+
+II. Messages
+
+   Messages are an unbuffered, synchronous form of IPC. At the interface level, they are strings
+of data with associated lengths up to some fixed size. This data is copied directly from the sender's
+message buffer to the receiver's buffer which imposes their synchronous restriction that both
+the sender and receiver must be blocked until one acknowledges the other. The implementation would
+possibly work as follows:
+
+   * N + 1 page table entries would be reserved for IPC in each address space to accomodate 
+     messages up to N pages long (the extra entry is to handle messages not aligned on pages).
+     These pages would always be marked supervisor and read-write.
+
+   * The sender attempts to send a message to some arbitrary receiver. If the receiver is not 
+     in a RECEIVE_BLOCKED state induced by attempting to receive a message, the sender enters 
+     a SEND_BLOCKED state until the receiver actually tries to receive a message.
+   
+   * The receiver attempt to receive a message from some arbitrary sender. If there are no qualifying
+     senders in a SEND_BLOCKED state, the receiver enters a RECEIVE_BLOCKED state subject to the above
+     conditions until a message is sent from a qualifying sender.
+  
+   * Once either a receiver in a RECEIVE_BLOCKED state is sent a message from a qualifying sender
+     or a sender in a SEND_BLOCKED state has its message received by the specified sender, the receiver's
+     message buffer is mapped into the pages reserved for message IPC in the sender's address space.
+     The message is then read out of the sender's buffer and into the mapped pages, obeying 
+     any length restrictions the receiver specified. A special optimization case exists for 
+     messages <= 8 bytes of data where the message can be copied solely in 2 registers
+     and avoid this mapping completely.
+
+   * Both receiver and sender are finally unblocked.
+
+  What happens after the receiver and sender are unblocked is somewhat tricky. Various microkernels
+such as QNX switch to the receiver process and allow it to process the request. However, QNX's 
+interface makes "send" a complex operation that first sends a message then receives a reply in addition
+to its "receive" and "reply" operations. If the sender is allowed to continue instead, it can immediately
+execute an appropriate receive operation which will give up it's control, therefor achieving the same
+level of functionality without a third operation. This could have slight performance hindrances, but
+I cannot see glaring ones at this time. This would take combining two simple system calls to achieve
+the functionality of QNX's single third, but reduces the number of system calls exported as well 
+as possibly simplifying implementation. Yet, since mapped pages requires invalidating parts of the TLB,
+it could be more speed economical to schedule the receiver upon completion, preventing needless 
+redumping. Such would require composite IPC operations to be supplied to prevent switching and
+the complications of adding them would need to be assessed before considering scheduling
+the receiver.
+
+III. Events
+
+   Events are a buffered, asynchronous form of IPC. At the interface level, an event is simply two
+double words - the first usually being the class of the event and the second being some other parameter.
+This relation is not enforced in any manner and events can simply be used for buffered quad word messages 
+if desired. The implementation would possibly work as follows:
+
+    * Every process would have a FIFO buffer storing a fixed number of events. Since events are only
+      8 bytes (two dwords), this shouldn't be a problem, and buffers don't need to be extremely large.
+      Their length could even possibly be configurable in which case a buffer wouldn't be needed
+      unless events were used at all. 
+   
+    * The sender attempts to send an event to some arbitrary receiver. If the receiver is not in
+      a RECEIVE_BLOCKED state induced by attempting to receive a message, the event is placed
+      into the FIFO buffer, otherwise the event is placed into the receiver's event buffer directly.
+      In either case, the sender is NOT blocked. 
+
+    * The receiver attempts to retrieve an event from some arbitrary sender. If there is no qualifying
+      event in the FIFO buffer, the receiver is RECEIVE_BLOCKED. As discussed above, the receiver is 
+      unblocked when a qualifying event is sent.
+
+  Deciding which thread is scheduled next is again tricky. Look to the previous discussion under "Messages"
+for considerations.
+
+IV. Blocking
+
+   As outlined above, a process can be in a RECEIVE_BLOCKED state with regard to events and in either a 
+RECEIVE_BLOCKED state or a SEND_BLOCKED state with regard to messages. Blocking indefinitely, however,
+is not always appropriate. To remedy this, one can implement a system call interrupt timer on a per-call
+basis or a per-thread basis.
+   In a per-call scheme, a timer is supplied or not supplied (to block indefinitely) as a parameter
+to the IPC operation. The snag here is that every system call must process the timer argument that
+wants to allow for blocked states to be interrupted.
+   In a per-thread scheme, a timer is maintained in every thread and is reset and enabled whenever a process
+enters a blocked state as a result of a system call. A system call would be supplied to set the reset
+value for this timer. The snag with this scheme is that a sequence of calls which vary widely
+in timer values would require many calls to set the value of this timer and a set of IPC calls might
+need to be supported which simply return failure (i.e. "try_send", "try_receive") instead of blocking if 
+the sender/receiver is not ready without resorting to an API call to set the timer reset value to 0. 
+Having a separate call to set the timer makes it more convenient for complex timer values of more than one 
+parameter, however.
+   Beyond message passing operations, two explicitly blocking operations are also required. Firstly,
+a system call that blocks until either either an event or message is sent and returns some value
+to determine which or error is needed. Lastly, there need be a call to block indefinitely which
+can only be interrupted by a timer. The functionality of these could conceivably be combined into a
+single call which blocks until any form of IPC is sent from a specified process. Then, a process
+could simply wait for IPC from itself.
+
+V. Miscellaneous Considerations
+
+   * Since messages are sent to processes and not individual threads, many threads within a process
+     can wait on many messages and many events at once. This could, however, prove hindering if a server
+     wants to fork off a thread to handle a request. In such cases, providing facilities for managing
+     IPC ports might be useful so that threads can share or not share ports as they please. Message ports
+     do, however, add some amount of complexity and are, most likely, not even needed.
+   
+   * Later performance requirements could demand composite IPC operations like 'call' and 'service'
+     that combine send and receive operations and vice versa. This remains to be seen, however.
+

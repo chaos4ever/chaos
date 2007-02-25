@@ -1,0 +1,38 @@
+README ($Id$)
+======
+
+Welcome! This is storm, the chaos kernel. It is nice that you want to
+find out what this is all about. We hope you won't be too
+disappointed, even though it is work in progress (implying the fact
+that some features may remain to be seen). However, most of it is
+working just like a charm, and we are working as hard as we can on the
+rest of the system. Check out our web site for more information about
+what we're up to.
+
+If something seems to be wrong (we're mainly talking about compilation
+stuff here; we know the kernel has some unresolved issues elsewhere),
+please don't hesitate to contact us. More information about this
+below.
+
+Anyway, this directory contains one directory for each CPU family
+storm has been ported to. For now, only ia32 is available (This is not
+because we dislike other architectures, but because we didn't have any
+other hardware available to program for. You are very welcome to port
+the kernel to a new platform. Please send E-mail to
+chaos-devel@lists.chaosdev.org and we will help you around as good as
+we can)
+
+Other than that, don't be afraid to generally hack around. The source
+code has been kept as readable as possible, we hope. Still, things may
+be unclear. Especially things we've added recently might be somewhat
+undocumented. Please don't be afraid to ask us if something seems
+strange, weird or just plain broken.
+
+If you feel like helping us out, the kernel may, or may not be the
+best thing you can do, depending on your skills and/or personal
+preferences.  In the future, there will probably be a task list on our
+web. For now, join our mailing list and ask what can be done. More
+information about the mailing lists can be found at our web:
+http://www.chaosdev.org/
+
+-- Per Lundberg <plundis@chaosdev.org>  Sun, 22 Oct 2000 17:13:54 +0200

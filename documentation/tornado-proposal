@@ -1,0 +1,86 @@
+tornado proposal version 0.2. copyright 1999 chaos development.
+
+ introduction
+--------------
+
+tornado is an graphical user interface (gui) written for the operating
+system chaos. it uses the mechanisms provided by the microkernel storm
+for interprocess communication and threadhandling. it is/should be
+developed with the keywords flexibility and modularity in mind.
+tornado is a ordinary user process, not a server.
+
+
+ initialisation of tornado
+---------------------------
+
+* open the /config/tornado/configuration file.
+* try to find the default videomode (many modes may be listed and switched
+  between later). could be overridden by a parameter.
+  XXX: create a protocol for the graphicsserver to allow it to return
+  all available modes.
+* send a message to the console-server requesting a screen with the mode.
+* find the mouse-device in the configuration-file. could be overridden by
+  a parameter.
+* start a thread to handle the mouse.
+  XXX: this means telling the mouse server (determined by it's servicefile)
+  to send mouse updates to this thread. but how do we specify which
+  thread it is?
+* start a thread to handle the keyboard.
+* register tornado as a receiver of both mouse-events and keyboard-events to
+  the selected servers.
+* start a thread that does the syscall_message_receive and handles messages on
+  arrival. these events can be from the programs running under tornado
+  or from other processes wanting to communicate for some
+  reason. signals are also
+  handled by this thread.
+* execute the programs listed in /config/tornado/startup-programs.
+* put one of the started programs in focus (determined from the configuration
+  file).
+* kill the tornado main/startup thread.
+
+
+ libraries
+-----------
+
+tornado is dynamically linked to shared libraries. these are, for
+example:
+
+* window
+* menu
+* language
+* button
+* font
+* etc...
+
+these libraries contains functions for drawing and managing windows,
+dialog-boxes, menus and stuff like that. they are of course replacable
+during runtime of tornado.
+
+all tornado programs will be linked to the library_tornado
+library. this library is responsible for registering objects to
+tornado in terms of sending a message to tornado. the tornado
+mouse-handling thread checks these objects when receiving a
+mouse-click or other action from the mouse. if it founds an object at
+the current mouse-position, it sends the program a message containing
+which object was clicked. all keypresses tornado receives is also sent
+to the program in focus. some keypresses/combinations is interpreted
+by tornado as described in the configuration. an example is for
+example alt+tab which can be used to change program in focus.
+
+
+ objects
+---------
+
+tornado provides all necessary objects needed for all programs. These are:
+
+type (what is specified on registration)
+
+* button (name, size, position and text)
+* textbox
+
+ epilogue
+----------
+
+This is just a proposal, and nothing is decided yet. Lets keep up the
+discussion and find problems, if they exist, before they prove to
+exist the hard way.

@@ -1,0 +1,59 @@
+**** NOTE: This text is just a draft written in poor english, Don't take
+it as the words of either chaos development team or me =) **
+
+Author: Jonas Tärnström  <njt@home.se>
+
+The basic concepts of the chaos graphics library are portability and
+modularity. If a program is written for the chaos graphics library it
+should run on any platform. Even thoose without graphics hardware.
+
+The chaos graphics library defines 3 native types. The native types
+represents a "standard" format for images, colors and color channels. In
+the time of writing 32-bit (w/ alpha channel) seemce to be "more than
+anyone possibly could want" (Bill Gates, 1981). So I made it the standard
+color type. Additionally every native color has it's own luminance value
+whitch can be usefull for 1 channel video modes.
+
+The basic and bottom type is the native_channel_t, currently it's just an
+unsigned 8-bit. After that comes the native_color_t. Whitch is constructed
+by native_channel_t (one for red, green, blue, alpha and luminance).
+
+Images are described by the native_image_t.
+
+Native types are only to exist in initialization of an application and
+should always be converted to local types to avoid low performance and
+unsessary memory usage.
+
+Local types are local to each graphics library extender and MUST only be
+used that way.
+
+The region type defines a surface somewhere (probably in primary buffer)
+and are only for copying and filling very fast. The region functions
+are good examples of functions that could be hardware accelerated with
+most "modern" graphics adapters (like mach64, mga or NV)
+
+-------------------------------------------------------------------------
+
+Some example code:
+
+(Put pixel on screen)
+
+native_color_t myNativeColor;
+local_color_t  myLocalColor;
+
+graphics_start (320, 200, 8, TRUE);
+graphics_rgba  (128, 50, 32, 255, &myNativeColor);
+graphics_color_native_local(myNativeColor, &myLocalColor);
+graphics_pixel_put (graphics_width / 2, graphics_height / 2, myLocalColor);
+
+(Copy region on screen)
+
+region_t myRegionDest = { 100, 100, 150, 150 };
+region_t myRegionSrc  = { 130, 130, 180, 180 };
+
+graphics_region_copy (myRegionDest, myRegionSrc);
+
+
+
+
+

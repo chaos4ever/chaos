@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="mutex" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Sources. -->
+    
+    <source>mutex.c</source>
+    <header>mutex.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

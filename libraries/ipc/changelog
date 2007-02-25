@@ -1,0 +1,41 @@
+2000-09-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipv4.h (ipv4_interface_type): New field: 'identification'.
+
+2000-08-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* log.h (ipc_log_print_type): Changed the name of 'class' to
+	log_class.
+
+2000-08-14  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipc.c (ipc_service_resolve ): Changed number_of_mailbox_ids to
+	be of a pointer type.
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* video.h (VIDEO_FONT_SET): New define.
+
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipc.c (ipc_connection_close): New function.
+
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipc.c (ipc_receive): Added a parameter 'buffer_size', which is
+	updated when the buffer is reallocated.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipv4.h: Added some new preliminary message classes for reading
+	and writing to network sockets.
+
+	* return_values.h: Added some new return values. Changed
+	IPC_RETURN_PARAMETER_INVALID to IPC_RETURN_INVALID_ARGUMENT, to
+	encompass a well-standardised return value naming scheme.
+
+	* ipc.c (ipc_send): New function.
+	(ipc_receive): New function.
+
+	* Started writing this change log.
+

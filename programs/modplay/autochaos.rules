@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="modplay" version="0.0.1" type="program" license="GPL">
+    <library type="depend">log</library>
+    <library type="depend">string</library>
+    <library type="depend">console</library>
+    <library type="depend">sound</library>
+    <library type="depend">ipc</library>
+    <library type="depend">system</library>
+    <library type="depend">memory</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+
+    <source>modplay.c</source>
+    <source>modfile.asm</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables:
+  mode: html
+End:
+
+-->

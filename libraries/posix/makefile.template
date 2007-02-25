@@ -1,0 +1,8 @@
+EXTRA_CFLAGS=-Wno-aggregate-return
+
+.PHONY: cross-install
+
+cross-install: all
+	mkdir -p /usr/local/i386-chaosdev-storm-chaos/include/sys
+	for header in $(HEADERS) ; do cp $$header /usr/local/i386-chaosdev-storm-chaos/include/sys ; done
+

@@ -1,0 +1,153 @@
+
+$Id$
+
+
+ Introduction
+==============
+
+Written by Henrik Hallin <hal@chaosdev.org>. Please send comments,
+either to me or chaos-devel@lists.chaosdev.org, thank you.
+
+
+ 1. General
+============
+
+cluido has a very advanced system used for autocompleting files and
+directories, and if that wasn't enough, cluido even autocompletes
+parameters sent to programs. This of course also applies to builtin commands.
+
+Every program in chaos has, and I say _has_, a file associated with
+it, telling cluido (and other chaos components) the allowed syntax of
+the parameter string. The standard way of passing parameters in chaos
+is on the form "--key <value[, value, ...]>". The reason for the
+double '-' characters is to allow key-names like '--10'.
+
+Examples:
+
+--names Kalle, Berra, "Hans JO Walldner", "Greta G"
+--verbose
+--age 20
+
+A program might take several values without any keys at all as
+input. In that case, it is the order of the values which is used to
+separate them.
+
+Examples:
+
+copy filen.text //ramdisk/users/hal/slask
+
+
+ 2. The file
+=============
+
+To determine the allowed syntax of a program, cluido checks a special
+file associated with the program. If the program is
+/programs/quake/quakeworld-client, there _must_ be a file called
+/programs/quake/quakeworld-client.command_syntax or similar (not yet
+specified). The syntax of this file is as follows:
+
+
+# Sample parameter syntax file for cluido and other chaos components.
+# Copyright (c) 2000 chaos development.
+
+<program name="copy">
+    <key name="verbose" type="bool">
+    <key name="names" type="string" allow_multiple="true">
+    <key name="age" type="integer">
+    <argument type="file" mandatory="true">
+    <argument type="directory_entry" mandatory="true">
+</program>
+
+# End of file...
+
+
+This will allow, for example:
+
+"copy --age 45 igelkott .."
+but not
+"copy --age Apa igelkott ..".
+
+"copy --names 45, Ullar, "Kalle P" --verbose pik /"
+but not
+"copy --names 45, Ullar, "Kalle P" --verbose pik / ..".
+
+"copy hej.text --verbose /slask --age 42"
+but not
+"copy hej.text --verbose --age /slask 42".
+
+Pressing enter on illegal lines will not cause cluido to take the line
+and execute the program, but will instead give a nice and descriptive
+error message. If enter was pressed on the line
+
+"copy hej.text --verbose --age /slask 42"
+
+cluido would say "Error: value of key 'age' is not of type integer." 
+and nothing would happen, leaving the line unchanged for you to fix
+it. cluido is also going to place the cursor right where the error
+occured for maximum effectivity.
+
+
+ 3. File completion
+====================
+
+  <key name="target-file" type="file">
+
+will let you, once you've entered "--target-file" (which will be
+auto-completable once you've typed the first character after --)
+auto-complete a file-name. If the file-name entered is not a valid
+file, cluido will act as described in the previous chapter. The error
+message will be something like "Error: File specified file does not
+exist.".
+
+
+ Appendix A. Allowed keywords
+==============================
+
+The file describing the rules for autocompletion is built up using
+these keywords:
+
+The file starts with the <program> tag. Keys allowed in this tag:
+
+  "name": Value of this one is a string telling the name of the
+  program who's rules we are defining.
+
+Inside the <program> tag, there are two kinds of tags: <key> and
+<argument> tags. Let's start with the <key> tag:
+
+  "name": Value of this one is a string. setting name="age" will
+  enable cluido to accept and control the parameter --age.
+
+  "type": Also a string, describing the type of the value for this
+  key. May be one of the following:
+
+    "string": A string. If the string is several words, '"' is used to
+    enclose the string.
+
+    "integer": A number.
+
+    "bool": No value is passed to this key. There is just the key.
+
+    "file": A file.
+
+    "directory: A directory.
+
+    "directory_entry": Either a file or a directory.
+
+  "allow_multiple": Can be either "true" or "false". If allow_multiple
+  is set to "true", cluido will accept a list of the specified type as
+  value to this key. Default is "false".
+
+  "mandatory": Either "true" or "false". If this is set to "true" and
+  the key is not correctly entered as a parameter to the program,
+  execution is not allowed. Default is "false".
+
+And now for the <argument> tag, who's functionality is described in a
+previous chapter:
+
+  type: Similar to the type key of the <key> tag.
+
+  mandatory: Same thing...
+
+
+ End
+=====

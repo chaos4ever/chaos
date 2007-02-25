@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="serial" version="0.0.5" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Sources. -->
+
+    <source>serial.c</source>
+    <header>defines.h</header>
+    <header>functions.h</header>
+    <header>return_values.h</header>
+    <header>serial.h</header>
+    <header>types.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

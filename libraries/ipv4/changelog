@@ -1,0 +1,33 @@
+2000-10-20  Per Lundberg  <plundis@chaosdev.org>
+
+	* ipv4.c (ipv4_address_to_string): New function.
+
+	* Renamed the library from network to ipv4.
+
+2000-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* network.c (network_init): Changed the timeout of the
+	ipc_service_resolve call, since it is no longer needed with the
+	process parent unblocking.
+
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* network.c (network_send): New function.
+	(network_connect): Likewise.
+
+2000-09-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* network.c (network_string_to_binary_ip_address): New function.
+
+2000-08-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* network.c: New file.
+	(network_get_host_name): New function.
+	(network_init): Likewise.
+
+2000-08-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* ethernet.h: Renamed some things to comply with our nomenclature.
+
+	* Started writing this changelog.
+

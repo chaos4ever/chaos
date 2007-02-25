@@ -1,0 +1,17 @@
+README ($Id$)
+======
+
+The initial ramdisk server is used to create a startup drive, on which
+the hard drive server and such things can be located. Also, it makes
+changing your root partition at run-time much easier -- just tell the
+system that //ramdisk should be mapped to /, and off you go.
+
+To get or put files to the ramdisk image, the best way is (IMO) to use
+mtools. It is readily available on most Linux distributions. Add a
+line like this to your mtools.conf:
+
+drive u: file="/home/luke/chaos/servers/initial_ramdisk/ramdisk.image" tracks=80 sectors=18 heads=2 mformat_only
+
+...and you will be able to access this device as u: with all the mtools.
+
+-- Per Lundberg <plundis@chaosdev.org>  Tue,  4 Jul 2000 15:25:27 +0200

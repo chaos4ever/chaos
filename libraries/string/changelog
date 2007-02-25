@@ -1,0 +1,9 @@
+2000-08-06  Per Lundberg  <plundis@chaosdev.org>
+
+	* string.c (string_print_va): Added support for uppercased hex
+	numbers, like 0xABCD (through the 'X' format specifier).
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* string.c: Changed initialize to initialise.
+

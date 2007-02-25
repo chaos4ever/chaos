@@ -1,0 +1,30 @@
+
+ Layout Of The GDT In storm
+---------------------------------------
+
+0    NULL descriptor
+1    Flat data (DS in the kernel)
+2    Kernel code (CS in the kernel)
+3    Kernel stack (SS in the kernel)
+4    Kernel TSS
+5-n  Syscalls
+n    TSS of first task
+n+1  LDT of first task
+...
+
+
+ NEW LAYOUT
+---------------------------------------
+
+0     NULL descriptor
+1     Kernel data (ds in the kernel)
+2     Kernel code (cs in the kernel)
+3     Reserved
+4     Linear code segment (used for processes)
+5     Linear data segment (used for processes)
+6     Reserved
+7     Process TSS1
+8     Process TSS2 
+9-15  Reserved
+16-47 Exception task gates
+48-n  Syscall call gates

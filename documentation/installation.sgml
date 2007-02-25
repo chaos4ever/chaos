@@ -1,0 +1,280 @@
+<!DOCTYPE Book PUBLIC "-//OASIS//DTD DocBook V3.1//EN">
+
+<book>
+  <bookinfo>
+    
+    <title>Installation of chaos</title>
+    <authorgroup>
+      <author>
+        <firstname>Per</firstname>
+        <surname>Lundberg</surname>
+      </author>
+    </authorgroup>
+    <pubdate>$Id$</pubdate>
+  </bookinfo>
+    
+  <preface>
+    <title>Introduction</title>
+       
+    <para>
+      chaos is, as you probably know, an operating system written
+      totally from scratch by a bunch of Swedish (and others)
+      hackers. Right now, we have not come as far as to write an
+      installation program, so getting chaos onto your computer is not
+      as straightforward as it could be. In this paper, you will be
+      able to get some information about the different methods of
+      setting things up. Hopefully, after reading this, you will find
+      setting chaos up pretty trivial. In any way, please do not
+      hesitate to mail staff@chaosdev.org if this information is wrong
+      in any way.
+    </para>
+
+    <para>
+      Now, as you will see, there are several methods of trying out
+      chaos. They have one chapter each, and are listed in order of
+      complexity.
+    </para>
+    
+  </preface>
+  
+  <chapter>
+    <title>Installing a floppy image</title>
+
+    <para>
+      Using a floppy image to try out chaos is very easy. All you have
+      to do is to download the floppy image (from our download page on
+      http://www.chaosdev.org, or via anonymous FTP from
+      ftp://ftp.chaosdev.org/chaos). Now, gunzip it if your web
+      browser did not do it auto-magically (Netscape Navigator does
+      that, and possible others too). If you do not have a program for
+      decompressing gz files, get one from
+      ftp://ftp.gnu.org/pub/gnu/gzip.
+    </para>
+
+    <para>
+      When you have decompressed the floppy image, get it onto a 1.44
+      3,5" floppy. If you are using DOS or Windows, get the
+      rawrite2.exe program from ftp://ftp.chaosdev.org/dosutils. Write
+      like this:
+    </para>
+
+    <screen>
+      rawrite2 -f floppy.img -d a:
+    </screen>
+
+    <para>
+      (Give the floppy image a letter within the 8.3 range to avoid
+      problems; rawrite is a DOS program with no support for long file
+      names.)
+    </para>
+
+    <para>
+      If you are using some kind of Unix (most probably Linux or some
+      of the BSD systems. Anything else is probably out of the scope
+      of this document, and if you are using such a system, you should
+      be skilled enough to do such things anyway), do like this:
+    </para>
+
+    <screen>
+      dd if=floppy.image of=/dev/fd0
+    </screen>
+
+    <para>
+      If using BSD-derived systems, you will need to use /dev/fd0c
+      instead. Anyway, that is all! Now, boot a computer with this
+      floppy, and something magic will (hopefully) appear. Much joy!
+    </para>
+  </chapter>
+
+  <chapter>
+    <title>Compiling the source</title>
+
+    <para>
+      Do you feel tired of waiting for us to update the floppy images,
+      or do you feel to do some chaos hacking? If so, compiling the
+      source is probably of interest. It is really not very
+      difficult. First, get the sources, and decompress them. Do
+      something like this:
+    </para>
+
+    <screen>
+      tar xvIf chaos_snapshot-20001224.tar.bz2
+    </screen>
+
+    <para>
+      (You must have a pretty recent GNU tar and a working bzip2 for
+      this to work. If you are using an older version of tar, you
+      might have to decompress the file manually first. Read the man
+      pages for your bzip2 and tar programs for more information.)
+    </para>
+
+    <para>
+      Now, go to the newly created chaos directory, and read the file
+      README.Linux. It will contain up-to-date instructions for
+      building the system.
+    </para>
+
+    <para>
+      If everything works out fine, your chaos root (/mnt/chaos is the
+      only possible choice right now -- sorry about that) will be
+      filled with new, fresh stuff. It is not really more difficult
+      than this.
+    </para>
+  </chapter>
+
+  <appendix>
+    <title>Net-booting</title>
+
+    <para>
+      The absolutely most elegant way to boot chaos, especially when
+      developing the system, is to use the net-boot feature of GNU
+      GRUB, our boot loader. It is a little tricky to get up, so we
+      provide some information for your pleasure.
+    </para>
+
+    <para>
+      This chapter will tell you how to get GNU GRUB with net-boot
+      installed on a floppy, but you should be able to do the same if
+      you want to install GNU GRUB on your hard drive. The reason we
+      are primarily focusing on doing a floppy is because it is
+      easier, and it will make most people happy. In the future, it is
+      very likely that we will extend this appendix to include
+      information about installating onto hard drives.
+    </para>
+
+    <para>
+      First, you must choose which method you want to use to configure
+      the IP address of the system you want to net-boot on (hereafter
+      referred to as the client). This is used to select which
+      software to install on the machine you want to boot from
+      (hereafter called the server). The methods available in GNU GRUB
+      right now are rarpd, bootp and DHCP. They all work pretty
+      similarly, so if you are unsure of which one to choose, just
+      pick anyone. If you happen to be on a network where a DHCP or
+      bootp server already exists, you can be a little tricky and
+      install a rarpd server, without risk of interfering with the
+      other server. (You can find all the software you need for this
+      at http://www.freshmeat.net/)
+    </para>
+
+    <para>
+      When you have got the IP configuration server up and running, it
+      is time to install a TFTP server. TFTP is an acronym for Trivial
+      File Transfer Protocol and is used by GNU GRUB to transfer the
+      kernel and servers from the boot server. You can find TFTP
+      servers at the same place as the rest of the software.
+    </para>
+
+    <para>
+      (I will not go into detail about how to configure the software
+      here, but I will just mention one thing I would like you to
+      avoid: GNU GRUB does not support "IP ranges" in the DHCP server
+      configuration. You must have a host entry for the machine in
+      question).
+    </para>
+
+    <para>
+      Okay, so you might have succeeded in getting rarpd/bootpd/dhcpd
+      and tftpd installed, but where do we go from here? This is
+      where it starts getting interesting. Unpack the GNU GRUB source,
+      change to the newly created directory and write like this:
+    </para>
+    
+    <screen>
+      ./configure --help | less
+    </screen>
+
+    <para>
+      Now, make sure your network adapter is supported by GRUB. If it
+      is, run configure again, with the correct parameter. For
+      example, like this:
+    </para>
+
+    <screen>
+      ./configure --enable-rtl8139
+    </screen>
+
+    <para>
+      Now, run the 'make', which will compile the GRUB stage1 and
+      stage2 files. For information about how to install the created
+      files, check the GNU GRUB documentation. Basically, format the
+      floppy (FAT or ext2 is just fine) and copy the stage1 and stage2
+      files there. Now, run the GRUB shell and write something like
+      this:
+    </para>
+
+    <screen>
+      install (fd0)/stage1 (fd0) (fd0)/stage2 (fd0)/menu
+    </screen>
+
+    <para>
+      Now, create a file on the floppy, called menu. It should look
+      like this:
+    </para>
+
+    <screen>
+      timeout = 1
+      title = Netboot
+      dhcp
+      configfile (nd)/mnt/chaos/config/grub/menu
+    </screen>
+
+    <para>
+      Substitute dhcp with bootp or rarp if you like. Now, boot with
+      this floppy, and it will (hopefully) configure its IP address
+      and load the second configuration file from the server.
+    </para>
+  </appendix>
+
+  <appendix>
+    <title>Example GNU GRUB menu file</title>
+    <para>
+      This is what I use on my net-boot server:
+    </para>
+
+    <screen>
+timeout = 2
+
+title Net-chaos
+root (nd)
+kernel /mnt/chaos/system/kernel/storm
+module /mnt/chaos/system/servers/keyboard
+module /mnt/chaos/system/servers/vga
+module /mnt/chaos/system/servers/console
+module /mnt/chaos/system/servers/log
+module /mnt/chaos/system/servers/cluido
+module /mnt/chaos/system/servers/cluido
+module /mnt/chaos/system/servers/cluido
+module /mnt/chaos/system/servers/cluido
+module /mnt/chaos/system/servers/initial_ramdisk
+module /mnt/chaos/system/servers/fat
+module /mnt/chaos/system/servers/virtual_file_system
+module /mnt/chaos/system/servers/pci
+module /mnt/chaos/system/servers/serial
+module /mnt/chaos/system/servers/boot
+module /mnt/chaos/system/servers/tornado
+    </screen>
+
+    <para>
+      This is what I use when booting chaos locally:
+    </para>
+
+    <screen>
+title chaos
+root (hd0,2)
+kernel /mnt/chaos/system/kernel/storm
+module /mnt/chaos/system/servers/keyboard
+module /mnt/chaos/system/servers/console
+module /mnt/chaos/system/servers/vga
+module /mnt/chaos/system/servers/cluido
+module /mnt/chaos/system/servers/log
+module /mnt/chaos/system/servers/idle
+module /mnt/chaos/system/servers/fat
+module /mnt/chaos/system/servers/initial_ramdisk
+module /mnt/chaos/system/servers/virtual_file_system
+module /mnt/chaos/system/servers/ipv4
+module /mnt/chaos/system/servers/3c509
+module /mnt/chaos/system/servers/boot
+    </screen>
+  </appendix>
+</book>

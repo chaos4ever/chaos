@@ -1,0 +1,274 @@
+@settitle The chaos Programming Reference Manual
+@node Top
+@top The chaos Programming Reference Manual
+
+$Id$
+
+Copyright 1999 chaos development. This document can be used under the
+terms of the GPL, version 2 or (at your option) any later version. But
+please, please use a different name in derivative works.
+
+Version 0.0.1. Please note that this is work in progress; don't treat
+this as a finished manual, for it is not.
+
+@menu
+* Introduction::                     What's all this about?
+* Chapter 1::                        The Kernel API
+* Chapter 2::                        The chaos Libraries
+* Chapter 3::                        Error numbers
+@end menu
+
+@node Introduction
+@chapter What's all this about?
+
+This is The chaos Programming Reference Manual. It describes how the
+Kernel API and the chaos Libraries (will) work. It is not a programming
+tutorial, but it will probably be pretty helpful for those of you who
+have been programming for other systems earlier. Since chaos is pretty
+different to what most of you likely are used to, we will focus on the
+differences; hence, knowledge of programming for (for example) Linux or
+other Unix systems will be desirable (but not required).
+
+This reference is split up into two parts: first, the kernel; then, the
+user libraries. The kernel interface shouldn't be used by most programs,
+but we felt like documenting it anyway, so that we won't forget how it
+works. The user libraries are very unfinished yet (only the console
+library has been written, actually). Please don't be afraid to help us
+if you like to.
+
+@node Chapter 1
+@chapter The Kernel API
+
+First, a very important thing to note. Our inline function in
+system/system_calls.h all push their input variables onto the
+stack. Thus, if you use local variables and pass them into the system
+calls, you must @emph{not} use -fomit-frame-pointer. It @emph{will}
+generate invalid code. Trust me on this; we spent quite some time on
+debugging this...
+
+The Kernel API consists of the following functions:
+
+@deffn Function dword syscall_read_timer (void)
+Reads the number of ticks since the system last was rebooted. The number
+of clock ticks... can not be determined right now. Wait for the
+kernelfs. But OTOH, this system call will probably be removed and
+replaced by an entry there...
+@end deffn
+
+@deffn Function void syscall_log (char *s)
+Prints a message to the logging facilities. Currently, it just prints it
+to the screen (prepending the server name and appending a newline), but
+a log server will be written shortly which will make this obsolete.
+@end deffn
+
+@deffn Function dword syscall_register_irq (dword irq, void (*b)(void))
+Register an IRQ handler for the given IRQ. This can only be done by a
+server.  It will enable the interrupt in the interrupt controller, and
+set up the interrupt as a separate task (it's like a hybrid-thread which
+never gets scheduled).
+@end deffn
+
+@deffn Function dword syscall_register_port (dword base, dword num)
+Registers a port range for usage by the server (not available to regular
+programs). Please note that by default, no port access is allowed, so if
+a server needs to probe a region, it must firt allocate it (and perhaps
+later deallocate it if neccessary)
+@end deffn
+
+@deffn Function dword syscall_mmap (pid_type pid, dword linear_page, dword physical_page, dword pages)
+This maps the physical pages specified at the linear page address given
+for the given pid. Right now, no security checks are done @emph{at all},
+so please be careful when using this call. This will be fixed as soon as
+we think it's neccessary.
+@end deffn
+
+@deffn Function thread_type syscall_thread (void)
+This creates a new thread for the current process. The returned value is
+the number of the thread in the old thread, and zero in the new thread.
+@end deffn
+
+@deffn Function error_type syscall_process_control (pid_type pid, dword class, dword parameter)
+This changes the state of a process. The classes are defined in
+process.h, and are as follows:
+@end deffn
+
+@deffn Class PROCESS_TERMINATE
+Tells the kernel to kill the process unconditionally.
+@end deffn
+
+@deffn Class PROCESS_SUSPEND
+Suspend a process until resumed by PROCESS_RESUME.
+@end deffn
+
+@deffn Class PROCESS_RESUME
+Resumes a process suspended with PROCESS_SUSPEND.
+@end deffn
+
+@deffn Class PROCESS_SLEEP
+Puts a process to sleep for a user specified amount of time.
+@end deffn
+
+@deffn Function error_type syscall_set_name (char *name)
+Sets the process name. This is used as a primitive form of name-space in
+conjunction with the next function.
+@end deffn
+
+@deffn Function pid_type syscall_get_pid_by_name (char *name)
+Returns the pid number of the process with the given name.
+@end deffn
+
+@node Chapter 2
+@chapter The chaos Libraries
+
+@menu
+* Section 2.1::                         Why not just POSIX?
+* Section 2.1.5::                       About return values
+* Section 2.2::                         The file library (library_file)
+* Section 2.3::                         The tornado library (library_tornado)
+* Section 2.4::                         The graphics library (library_graphics)
+* Section 2.5::                         The console I/O library (library_console)
+* Section 2.6::                         The network library (library_network)
+* Section 2.7::                         The memory library (library_memory)
+* Appendix A::                          ACL (Access Control Limits)
+@end menu
+
+@node Section 2.1
+@section Why not just POSIX?
+
+First, POSIX is not freely available. Thus, supporting it without paying
+money gets difficult. Second, POSIX doesn't really fit into the chaos
+philosophy. We don't like abbreviations, for example. Therefore, we decided
+to go our own way. However, to make porting of foreign programs easy in
+the beginning, we will also port a regular C library (probably glibc). It
+is to be clearly marked that using this library for new programs is strongly
+discouraged. Only use it if your program must be portable.
+
+@node Section 2.1.5
+@section About return values.
+
+In the chaos libraries, we @emph{always} use return_type for functions,
+except in the cases where the function can not fail. (Very seldom, but
+'random' is such an example. It is not dependant on any external factors)
+
+We do not use the errno approach at all, since it is very poor.
+
+@node Section 2.2
+@section The file library (library_file)
+
+@deffn Function file_handle_type file_open (u8 *@var{file})
+Opens the given file name and associates it with a file handle (which is used
+when communicating to the VFS server). If the file does not exist, an error
+will be returned.
+@end deffn
+
+@deffn Function error_type file_close (file_handle_type @var{file})
+Closes the given file handle.
+@end deffn
+
+@deffn Function error_type file_write (file_handle_type @var{file}, void *@var{data}, dword @var{size})
+Writes @var{size} bytes of the data block located at @var{data} to the file
+handle associated with @var{file}.
+@end deffn
+
+@deffn Function error_type file_read (file_handle_type @var{file}, void *@var{data}, dword @var{size})
+Reads up to @var{size} bytes to @var{data} from the file handle associated with
+@var{file}.
+@end deffn
+
+@deffn Function error_type file_create (u8 *@var{name})
+Creates a file with @var{name} as its full name (including path). Per default,
+the file will be unaccessible by everybody but the owner; this may later be
+changed by the @code{file_permissions_*} group of functions described later.
+@end deffn
+
+@deffn Function error_type file_permissions_delete_rule (u8 *@var{name}, acl_type @var{acl})
+Deletes an ACL rule to the given file. Returns an error if this can't be done.
+@end deffn
+
+@deffn Function error_type file_permissions_add_rule (u8 *@var{name}, acl_type @var{acl})
+Adds an ACL rule to the given file. Returns an error if this can't be done.
+@end deffn
+
+TODO: More ACL stuff, do error number stuff.
+
+@node Section 2.3
+@section The tornado library (library_tornado)
+
+@node Section 2.4
+@section The graphics library (library_graphics)
+
+@node Section 2.5
+@section The console I/O library (library_console)
+
+@deffn Function void console_print (u8 *@var{string})
+Prints @var{string} to the terminal owned by the program.
+@end deffn
+
+@deffn Function error_type console_print_formatted (u8 *@var{format_string}, ...)
+Prints @var{format_string}, replacing the type identifiers given
+with the parameters added to the function call. The syntax is identical to
+the ordinary ISO C @code{printf} function.
+@end deffn
+
+@deffn Function error_type console_clear (void)
+Clears the current console.
+@end deffn
+
+@deffn Function error_type console_cursor_move (int @var{x}, int @var{y})
+Move the cursor to the given position.
+@end deffn
+
+@deffn Function error_type console_cursor_get_position (int *@var{x}, int *@var{y})
+Get the current cursor position.
+@end deffn
+
+@deffn Function key_type console_key_wait (void)
+Waits for a keypress and returns its keycode. The key codes are in standard
+BIOS format. (????)
+@end deffn
+
+@deffn Function key_type console_key_check (void)
+Checks if a keypress has been made. If so, the key code is returned.
+Otherwise, KEY_ERROR is returned.
+@end deffn
+
+@node Section 2.6
+@section The network library (library_network)
+
+@deffn Function socket_type network_open (protocol_type @var{protocol}, void *@var{parameters})
+Opens a network socket of type @var{protocol}. Some network protocols require
+additional parameters; if so, those are passed in @var{parameters}.
+@end deffn
+
+@deffn Function error_type network_close (socket_type @var{socket})
+Closes the socket associated with @var{socket}.
+@end deffn
+
+@node Section 2.7
+@section The memory library (library_memory)
+
+@deffn Function void *memory_allocate (dword size)
+Allocates @var{size} bytes of contigous memory. If, for some very strange
+reason, no memory can be allocated, returns NULL. Otherwise, returns a
+pointer to the memory area.
+@end deffn
+
+@deffn Function error_type memory_deallocate (void *@var{block})
+Deallocates the memory block given in @var{block}. If the memory can't be
+deallocated, returns the error code ERROR_NO_MEMORY. Otherwise, returns
+SUCCESS.
+@end deffn
+
+@node Appendix A
+@section Access Control Limits
+
+TODO: Write about this.
+
+@node Chapter 3
+@chapter Error numbers
+
+@deffn Macro ERROR_NO_MEMORY
+No memory available.  The system cannot allocate more virtual memory because
+its capacity is full.
+@end deffn
+

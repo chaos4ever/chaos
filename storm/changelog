@@ -1,0 +1,707 @@
+2000-10-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* TODO: Moved some stuff around to match the current situation.
+
+	* generic/service.c (protocol_get): New function.
+	(protocol_exists): Removed function.
+
+	* ia32/system_calls.pl: New system call: service_protocol_get ().
+	Removed debug_print_simple ().
+
+	* README: Updated the information a little.
+	* autochaos.rules: Bumped the version to 0.5.0.
+
+2000-10-21  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/memory.c (memory_reserve): New system call.
+
+	* Made thread_delete () perform a process_parent_unblock () if the
+	last thread of a process is deleted. Also bumped the version
+	number to 0.4.9.
+
+2000-10-20  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/debug.c: New command: 'reboot'.
+
+2000-10-19  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/memory.c (memory_allocate): Implemented support for
+	non-cacheable allocates.
+
+2000-10-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/irq.c (irq_acknowledge): New system call.
+
+2000-10-15  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/system_calls.pl: New system call:
+	memory_get_physical_address.
+
+	* ia32/memory.c (memory_get_physical_address): New function.
+
+2000-10-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (thread_control): Added code for rebooting if you
+	kill the idle thread.
+
+2000-09-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/dma.c (dma_register): Added mutexing to the code.
+
+2000-09-21  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/dma.c (dma_init): Added code for setting up the data
+	structures correctly.
+
+	* include/storm/generic/debug.h (DEBUG): New macro.
+
+	* generic/debug.c: New command: 'quit'.
+
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/time.c (gregorian_to_chaos): Rewrote this function (it was
+	originally stolen from Linux). Now it works. ;-)
+ 
+	* ia32/system_calls.pl: Aded memory_deallocate () as a system
+	call.
+
+2000-09-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/service.c (service_get): Added some more checks for the
+	input arguments.
+
+	* generic/debug.c (debug_run): New function: minimal kernel-level
+	debugger.
+	(debug_line_parse): New function: Used for splitting the input
+	line in the kernel debugger into words.
+	(command_dump): New function.
+	(command_help): Likewise.
+	(command_sanity): Likewise.	
+
+	* Moved a lot of header files from include/storm/ia32 to
+	include/storm/generic. Now, most everything has two header
+	files. One in generic and one in ia32; the one in generic includes
+	the architecture specific stuff. This was done to ease future
+	porting efforts.
+	
+2000-09-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/kernelfs.h: New class KERNELFS_CLASS_TIME_READ.
+	(kernelfs_time_type): New data type.
+
+	* generic/service.c (service_get, service_create): Made those
+	functions take an extra argument, used for deciding how to match
+	servers.
+
+	* include/storm/generic/tag.h: New file.
+
+	* include/storm/tag.h: Likewise.
+
+	* generic/tag.c: Likewise.
+
+2000-08-31  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (thread_unlink_list): New function.
+
+2000-08-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* Removed the bintree code (which didn't work) and replaced it
+	with hash tables.
+
+2000-08-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (thread_unlink): Fixed Henrik's broken bintree
+	deletion.
+
+	* ia32/dispatch.c (dispatch_update): Added a check to make sure
+	mutex_spinlock is not locked during task switching.
+
+	* include/storm/kernelfs.h: Changed class to 'kernelfs_class'.
+
+	* include/storm/mailbox.h (message_parameter_type): Changed the
+	name of the 'class' member to message_class.
+
+2000-08-23  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/system_calls.pl (dma_register): Changed the number of input
+	arguments from 1 to 2 for this function.
+
+2000-08-19  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/ia32/timer.[ch]: Changed the event stuff to have
+	a timeslice' variable instead of decreasing the
+	'jiffies_left' each timeslice.
+
+	* include/storm/generic/debug.h (DEBUG_HALT): Made the macro print
+	KERNEL BUG.
+
+2000-08-18  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/process.c (process_find): New function.
+
+	* include/storm/ia32/tss.h (storm_tss_type): New field:
+	process_info.
+
+	* ia32/thread.c (thread_link_list): New function.
+
+	* include/storm/ia32/process.h (process_info_type): New data type.
+
+	* ia32/process.c (process_info_root): New variable.
+
+	* ia32/timer.c: Made the event handling use a linked list instead
+	of an array.
+
+	* include/storm/thread.h: New file. Moved a lot of the
+	enumerations from include/storm/process.h here, since they were
+	actually used from thread_control...
+
+2000-08-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/memory.c (memory_deallocate): Changed this function to take
+	a double pointer argument instead of a page number.
+
+2000-08-16  Henrik Hallin  <hal@chaosdev.org>
+
+	* Added the missing DMA files to the source tree and fixed some
+	compilation problems.
+
+2000-08-14  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (thread_create): Made the function create unique
+	copies of the lowest page table, so that threads are a little more
+	unique. (as of earlier, if one of them would create a new page
+	table, all would have it)
+
+	* include/storm/ia32/defines.h (BASE_PROCESS_PAGEDIRECTORY):
+	Renamed to BASE_PROCESS_PAGE_DIRECTORY.
+	(BASE_PROCESS_PAGETABLES): Renamed to BASE_PROCESS_PAGE_TABLES.
+
+2000-08-13  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (idle_tss_node): New variable.
+
+2000-08-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/dispatch.c (current_task): Removed an unused variable.
+
+	* ia32/process.c (number_of_processes): Removed an unused
+	variable.
+
+	* ia32/thread.c (thread_block_mailbox_send): Removed this function
+	since it was not being used.
+	(thread_block_mailbox_receive): Likewise.
+
+	* generic/mailbox.c (mailbox_receive): Added some sanity checks.
+
+	* include/storm/ia32/memory_virtual.h: Changed the prototype for
+	memory_virtual_map_other.
+
+	* ia32/memory_virtual.c (memory_virtual_map_other): Changed the
+	input parameter to be a pointer to a TSS instead of a task ID.
+
+	* include/storm/ia32/timer.h (event_timer_type): Changed the
+	variable 'task' to thread_id.
+
+	* include/storm/defines.h (TASK_ID_MAX): New define.
+
+	* ia32/thread.c (thread_destroy): Changed the argument from
+	task_id_type to storm_tss_type *.
+	(thread_block_user_mutex): Likewise.
+	(thread_block_kernel_mutex): Likewise.
+	(thread_unlink): New function.
+	(thread_link): Likewise.
+	(thread_block_mailbox_receive): Likewise.
+	(thread_block_mailbox_send): Likewise.
+
+	* ia32/irq.c (irq_free_all): Changed the argument from
+	task_id_type to thread_id_type.
+
+	* ia32/timer.c (timer_add_event): Likewise.
+
+	* include/storm/ia32/irq.h (irq_free_all): Likewise.
+
+	* ia32/port.c (port_range_free_all): Likewise.
+
+	* include/storm/ia32/irq.h (irq_type): Removed the task_id
+	variable from this data type, since it is no longer needed.
+
+	* ia32/dispatch.c (dispatch_init): New function.
+
+	* ia32/thread.c (tss_tree): New variable.
+	(tss_list): Likewise.
+	(thread_get_tss): New function.
+
+	* include/storm/ia32/tss.h (tss_tree_type): New data type.
+	(tss_list_type): New data type.
+
+	* ia32/process.c (tss): Removed this variable, since it is to be
+	replaced by a binary tree.
+	(kernel_tss): Moved this variable...
+	
+	* ia32/thread.c: ...here.
+
+	* ia32/thread.c (tss_array_mutex): Renamed to tss_thread_mutex.
+
+2000-08-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/port.c (port_init): Started reserving ports used by the
+	kernel.
+	(port_range_link): New function.
+	(port_range_register): Added support for making a short
+	description about what a port range is being used for.  specify a
+	short description about what the port range is used for. This
+	description can also be read out through KERNELFS_PORT_INFO.
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/main.c (main): Removed the check related to
+	STORM_ALIGNED_TSS_SIZE, as mentioned earlier.
+
+	* ia32/dispatch.c (dispatch_task_switcher): Added code for setting
+	current_tss->instruction_pointer on each task switch.
+
+	* include/storm/ia32/tss.h (STORM_ALIGNED_TSS_SIZE): Removed this
+	define, since it was no longer in use.
+	(storm_tss_type): Added a new field: instruction_pointer.
+
+	* include/storm/kernelfs.h (kernelfs_thread_info_verbose_type):
+	Re-added the 'instruction_pointer' field.
+
+	* ia32/memory.c (memory_allocate): Added a comment to clearify
+	some code.
+
+2000-08-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/trap.c (trap_page_fault): Removed some debug code.
+
+	* generic/kernelfs.c (kernelfs_entry_read): Added a rudimentary
+	range check in KERNELFS_CLASS_IRQ_INFO, which makes it bail out a
+	little earlier if the input data is bad.
+
+	* generic/mailbox.c (mailbox_receive): Re-added the check for the
+	thread ID, so that you can not do a receive on someone else's
+	mailbox. The reason I commented it out was a long story, but it
+	should really be there, due to several causes.
+
+2000-07-28  Per Lundberg  <plundis@chaosdev.org>
+
+	* makefile.template: Added an $Id: changelog,v 1.17 2000/07/30
+	20:34:41 plundis Exp $ tag. Also, made a 'clean' target that
+	removes the current-arch directory if present.
+
+	* ia32/system_calls.pl: Removed the (commented) cli/sti, since
+	they haven't been used for quite some time now.
+
+2000-07-27  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/kernelfs.h (kernelfs_thread_info_verbose_type):
+	Removed the 'instruction_pointer' field, since it didn't work
+	anyway...
+
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/limit.c: Added an 'Authors' comment.
+
+	* ia32/port.c (port_range_unregister): Finished this function (at
+	last...)
+
+	* ia32/thread.c (thread_destroy): Added some code for actually
+	freeing IRQs and ports, like it should be.
+
+	* generic/slab.c (slab_heap_index): Fixed a silly mistake which
+	made the system use more memory than needed at times.
+
+	* ia32/memory.c (memory_allocate): Added code for clearing the
+	allocated memory, for security reasons.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/makefile.template (all): Added a line for removing
+	the current-arch link if it exists, to avoid creating a link to
+	ia32 in the ia32 directory... (self-referencing links are Bad.)
+
+	* generic/mailbox.c (mailbox_send): Fixed a typo (IF instead of
+	If)
+
+2000-07-23  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed some stupidos which made kernel pretty much unbuildable.
+
+2000-07-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/return_values.h: Removed the stupid error codes I
+	added a little while ago. They should be put in a separate file
+	instead, to avoid using them from within storm (and thus bloating
+	the kernel binary a lot).
+
+	* include/storm/ia32/port.h: Added a prototypes for the
+	port_free_all function.
+
+	* include/storm/ia32/irq.h: Added a prototype for the irq_free_all
+	function.
+
+	* include/storm/ia32/port.h: Fixed a typo. Also, did some minor
+	cleanups of the file.
+	
+	* ia32/port.c (port_range_free_all): New function for freeing all
+	ports that belong to a given thread.
+
+	* include/storm/ia32/port.h (port_range_type): Made the port range
+	type a double linked list instead of a regular linked list.
+
+	* ia32/irq.c: Added mutexing for the IRQ code.
+	(irq_register): Made the function return an error value if the
+	requested IRQ level was already busy.
+	(irq_free_all): New function, for freeing all IRQ levels allocated
+	by the given task.
+
+	* generic/mailbox.c (mailbox_receive): Made the calculation of
+	free space in the mailbox include the size of
+	message_parameter_type and not just the data.
+	(mailbox_send): Likewise.
+
+	* INSTALL: Updated this file a little.
+
+	* generic/kernelfs.c (kernelfs_entry_read): Added a check if the
+	input data is NULL, and if so, abort silently.
+
+	* include/storm/kernelfs.h (kernelfs_port_info_type): New data
+	type.
+	(kernelfs_irq_info_type): New data type.
+
+	* ia32/irq.c (irq_register): Added a check for controlling the
+	input data.
+
+	* include/storm/ia32/irq.h (IRQ_LEVELS): New define.
+
+	* generic/kernelfs.c (kernelfs_entry_read): New kernelfs class:
+	KERNELFS_CLASS_PORT_AMOUNT.
+	(kernelfs_entry_read): New class: KERNELFS_CLASS_PORT_INFO.
+
+	* ia32/port.c (port_range_register): Added code for filling the
+	new fields in port_range_type described below.
+
+	* include/storm/ia32/port.h (process_id): Added to the
+	port_range_type struct.
+	(cluster_id): Likewise.
+	(thread_id): Likewise.
+
+	* ia32/dma.c: Cleaned up the code.
+
+	* include/storm/kernelfs.h: Added calls for reading information
+	about allocated I/O ports and IRQs.
+
+2000-07-19  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/init.c (init): Added code for reserving the global
+	memory.
+
+2000-07-18  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/defines.h (SIZE_PAGE): Moved this define here from
+	include/storm/ia32, since it is needed by regular programs.
+	(SIZE_IN_PAGES): Likewise.
+	(PAGE_ALIGN): Likewise.
+
+	* ia32/memory.c: Fixed memory allocation for processes. Yahoo!
+
+2000-07-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/init.c: New file. It contains a system call which is
+	used to set up the process virtual memory AVL tree.
+
+2000-07-14  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/process.c (process_create): Fixed a cosmetic bug. (two
+	newlines instead of one)
+
+2000-07-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/memory.c (memory_deallocate): Made this function not only
+	deallocate the virtual pages, but also the physical.
+
+	* ia32/memory_global.c: Deallocation now mostly works.
+
+2000-07-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/memory_global.c: Finished a first version of the slab
+	system. Allocation works, deallocation works soon. :-)
+
+2000-07-10  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/memory_global.c: Started reorganising stuff to use a slab
+	system instead of pure AVL, since it proved to give too much
+	overhead.
+
+2000-07-08  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/cpuid.c (cpuid_init): Fixed a typo; & had been replaced by
+	&&.
+
+2000-07-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/kernelfs.c (kernelfs_entry_read): Added a call for
+	getting the version of the kernel.
+
+2000-07-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/ia32/tss.h (storm_tss_type.capability): New field.
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/main.c (main): Changed initialize to initialise.
+	* ia32/memory_physical.c (memory_physical_init): Likewise.
+	* ia32/memory_virtual.c: Likewise.
+	* ia32/process.c: Likewise.
+	* ia32/system_calls.c: Likewise.
+	* ia32/timer.c: Likewise.
+	* ia32/cpuid.c: Likewise.
+	* ia32/init.c (_start): Likewise.
+
+2000-07-02  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/memory_virtual.c (memory_virtual_map_kernel): Removed the
+	no-longer-necessary parameter process_id from the function, and
+	changed all references.
+ 
+2000-06-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/types.h: New type: utf8_type.
+
+2000-06-15  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/cpuid.c (cpu_model): Added support for probing AMD Athlons.
+
+2000-06-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/ia32/tss.h (storm_tss_type): Removed
+	kernel_stack_pages since it is no longer necessary.
+
+2000-05-28  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/idle.c (idle): The kernel idle thread didn't seem to
+	work very well so I've disabled it for now.
+
+	* ia32/process.c (process_create): Fixed a bug which made
+	execution of binaries where the .data and .bss sections was not
+	right at each other.
+
+2000-05-14  Per Lundberg  <plundis@chaosdev.org>
+
+	* Re-implemented the idle thread, since we decided it would be
+	useful.
+
+2000-05-10  Per Lundberg  <plundis@chaosdev.org>
+
+	* Significant bug fixes. Support for blocking on mailbox_send
+	(even though it doesn't seem to be fully working). Better mutex
+	thread creation system and on the whole a lot more stable system.
+ 
+2000-04-27  Per Lundberg  <plundis@chaosdev.org>
+
+	* Removed the video mode code, since GRUB doesn't support it in
+	the official version yet, and won't for a while...
+
+2000-04-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* Removed the non-inlines memory_* functions, since they were a
+	pain in the arse to maintain, and didn't offer significant gain.
+
+2000-04-09  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/thread.c (thread_create): Fixed a fatal bug which made the
+	copying of the stack totally nonfunctional.
+
+2000-04-08  Per Lundberg  <plundis@chaosdev.org>
+
+	* ia32/storm.ld: Added a new section for init code that can be
+	discarded after boot-up.
+
+2000-04-01  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed the thread support. It seems to be mostly working
+	now... :-)
+
+2000-03-31  Per Lundberg  <plundis@chaosdev.org>
+
+	* Changed i386 to ia32 to make things nice when we port to ia64.
+
+2000-03-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed up the service system. Made the port allocation work as
+	far as giving the process access to the ports.
+
+2000-03-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* Oh, well. Since storm 0.4.0 is getting delayed, we've decided to
+	release the current code base as 0.3.99. This should be considered
+	some kind of beta.
+	
+2000-03-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/mailbox.c: Fixed the mailbox support.
+
+2000-03-21  Per Lundberg  <plundis@chaosdev.org>
+
+	* Finished the services (hopefully. ;)
+
+2000-03-19  Per Lundberg  <plundis@chaosdev.org>
+
+	* Started working on the services.
+
+	* Fixed the remaining bugs in the IRQ system. Everything seems to
+	work just about perfectly now.
+
+2000-03-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* Finished up the new IRQ system. Some bugs left to fix, though...
+
+	* Finished the mutex management.
+	
+2000-03-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* i386/string.c (string_to_number): New function for parsing
+	numbers in strings.
+
+	* i386/main.c: Added support for kernel arguments.
+
+	* include/storm/i386/limits.h: Renamed this...
+	* include/storm/i386/limit.h: ...to this.
+
+	* include/storm/i386/debug.h (DEBUG_HALT): New macro.
+	(DEBUG_MESSAGE): Likewise.
+
+2000-03-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* i386/cpu.c: Removed this file.	
+	
+	* i386/trap.c: Made page faults and other exceptions not lock up
+	the computer.
+
+	* i386/irq.c: Fixed FLIH in kernel to clean things up quite some.
+
+2000-03-10  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/i386/memory_virtual.h: Moved some flags to a
+	common bit field to greatly optimise things.
+
+2000-03-08  Per Lundberg  <plundis@chaosdev.org>
+
+	* i386/limit.c: New file.
+
+	* Fixed process startup.
+
+	* Started writing real IPC.
+
+2000-03-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* generic/debug.c (debug_print): Added support for %p.
+
+	* i386/memory_physical.c: Fixed a FIXME.
+
+2000-03-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* i386/dispatch.c (current_process_id): New variable.
+
+	* i386/main.c (main): Changed a hard-coded constant to a define
+	(PROCESS_ID_KERNEL).
+
+	* i386/cpuid.c: Changed 1 << 21 to FLAG_ID.
+
+	* include/storm/i386/flags.h: Added all standard flags to this
+	file.
+
+	* Changed some ugly names in the multi-boot header.
+	
+	* generic/debug.c: Changed screen to point to BASE_SCREEN instead
+	of a hard-coded value.
+
+	* Changed u8 to char everywhere when strings are used.
+	
+	* include/storm/i386/ctype.h: Removed this file.
+
+	* include/storm/i386/string-inlines.h: New file.
+
+	* include/storm/i386/memory-inlines.h: Likewise.
+
+	* include/storm/i386/string-prototypes.h: Likewise.
+
+	* include/storm/i386/memory-prototypes.h: Likewise.
+
+	* i386/string.c: Likewise.
+
+	* i386/memory.c: Likewise.
+	
+	* configure.in: Added a new switch, --enable-size, to enable size
+	optimisations.
+	(cflags): Added -fforce-addr, which should generate better code.
+
+        * Changed extern inline to static inline everywhere, since extern
+	inline is as far from the truth things can get.
+	
+	* TODO: Removed some fixed entries.
+
+	* include/storm/i386/bit.h (BIT): Renamed this define...
+	(BIT_VALUE): ...to this.
+
+	* i386/timer.c: Rewrote some ugly parts of this file to fix a
+	FIXME.
+
+	* configure.in (cflags): Removed -mrtd since the kernel wouldn't
+	boot with it enabled.
+
+2000-02-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* Released a well awaited snapshot.
+	
+2000-02-20  Per Lundberg  <plundis@chaosdev.org>
+
+	* include/storm/i386/cpuid.h (cpu_info_type): Added a zero-length
+	array, 'signature', to fake a union...
+
+	* generic/debug.c (debug_print): Fixed a typo.
+
+	* i386/kernelfs.c: Changed the references
+	from cpu to cpu_info.
+
+	* i386/main.c: Likewise.
+
+	* i386/memory_virtual.c: Likewise.
+	
+	* include/storm/i386/cpuid.h: Changed type of cpu_info from
+	cpu_info_type * to cpu_info_type.
+
+	* i386/cpuid.c: Removed two unused variables, cpu_parameters and
+	cpuid_conf.
+
+	* include/storm/i386/cpuid.h: Changed some names to whatever_type,
+	to conform to cCS.
+
+	* i386/cpuid.c (cpu_examine): Rewrote this function in C with some
+	inline assembly instead of pure assembly.
+	
+	* i386/cpuid.c: Moved all of cpu.S to this file.
+
+	* i386/cpuid.c (cpu): Renamed to cpu_info.
+
+	* i386/cpuid.c (cpu_model): Reformatted the formatting of this
+	structure a little.
+	(cpuid_init): Added support for Cyrix CPU:s.
+	(All over the file): Changed the name of cpu_misc to parsed_cpu.
+	
+	* i386/cpuid.c (cpu_halt): Moved this function.
+
+	* include/storm/i386/cpu.h (cpu_halt): ...to here.
+	
+	* i386/Makefile.am (EXTRA_DIST): Removed cpu.S.
+
+	* include/storm/i386/cpu.h: Removed a prototype for cpu_examine,
+	since this function is now static to cpuid.c
+
+	* i386/cpu.S: Removed this file.
+
+	* i386/main.c: Changed the references from cpu_misc to parsed_cpu.
+
+	* i386/kernelfs.c: Likewise.
+
+	* Started writing this change log.

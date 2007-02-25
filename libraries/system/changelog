@@ -1,0 +1,46 @@
+2000-10-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* system_calls.h: Removed system_call_memory_virtual_map ();
+	(system_call_memory_reserve): New function.
+	(system_call_service_protocol_get): New function.
+	(system_call_service_protocol_get_amount): New function.
+
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* system_calls.h (system_call_memory_deallocate): Fixed a bug
+	which made the system totally non-functional...
+
+2000-09-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* system_calls.h (dma_transfer_cancel): New function.
+	(system_call_dma_transfer): Likewise.
+	(system_call_dma_unregister ): Likewise.
+	(system_call_dma_register ): Likewise.
+
+2000-08-31  Per Lundberg  <plundis@chaosdev.org>
+
+	* system.c (system_exit): New function.
+
+2000-08-06  Per Lundberg  <plundis@chaosdev.org>
+
+	* functions.h (system_execute): Added a function prototype for the
+	aforementioned function.
+
+	* system.c (system_execute): Started creating a new function.
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* port.h (system_port_out_u8_pause): New function, inspired by
+	Linux.
+	(system_port_out_u16_pause): Likewise.
+	(system_port_out_u32_pause): Likewise.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* system.c (system_thread_name_set): New function.
+	(system_cluster_name_set): Likewise.
+	(system_process_name_set): Likewise.
+	(system_thread_create): Likewise.
+
+	* Started writing this change log.
+

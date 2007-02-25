@@ -1,0 +1,10 @@
+2000-07-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* unicode.c: Implemented (partial) support for converting single
+	characters and not only complete strings.
+
+2000-06-21  Per Lundberg  <plundis@chaosdev.org>
+
+	* unicode.c (B00011111): Fixed a typo; this value should be 0x3F,
+	not 0x1F.
+

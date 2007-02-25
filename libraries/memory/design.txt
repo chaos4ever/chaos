@@ -1,0 +1,15 @@
+$Id$
+
+Abstract: Memory library design overview.
+Author: Anders Ohrt <doa@chaosdev.org>
+
+All pages reside in a global heap, and are handed out by the kernel.
+
+The memory library uses the slab memory allocation system, extended
+with the hoard system. Each cluster of threads share a 'heap'
+containing one or more 'superblock'. Each superblock contains buffers
+which are what is handed out to the threads.
+
+Each heap has a double linked list of superblocks. One list per
+buffersize in the superblock. The list is ordered in order of
+fullness, with full superblocks first and empty lists at the end.

@@ -1,0 +1,8 @@
+# Local rules.
+
+ramdisk-auto.h: ramdisk.pl ramdisk.image
+	./ramdisk.pl ramdisk.image > $(@)
+
+ramdisk.o: ramdisk.image
+
+initial_ramdisk.o: ramdisk-auto.h

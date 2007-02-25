@@ -1,0 +1,17 @@
+2000-08-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* memory.c (memory_deallocate): Set the pointer to NULL upon exit.
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* memory.c: Implemented real mutexing instead of the old, silly
+	system.
+
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* slab.c (slab_heap_index): Fixed a silly mistake which made the
+	system use more memory than needed when allocating blocks between
+	512 and 1024 bytes. (it would always go for whole pages)
+
+	* Started writing this change log.
+

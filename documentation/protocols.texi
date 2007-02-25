@@ -1,0 +1,172 @@
+@settitle chaos Protocols
+@node Top
+@top Protocols
+
+$Id$
+
+
+@menu
+* Introduction::
+* Basics::
+* VFS::
+* Keyboard::
+* Console::
+* Graphics::
+@end menu
+
+
+@node Introduction
+@chapter Introduction
+
+This file tries to document all the standard protocols used in a chaos system. Since
+chaos evolves very quickly, it might at times be a little outdated. If you feel like there is so,
+please notify us. Also, much information will be unfinished, but we'll try to always keep this
+documention up to date, since developers of servers for chaos need the information contained
+in this document to write servers.
+
+
+@node Basics
+@chapter Basics
+
+All communications between processes are done by sending blocks of dwords
+containing the data via the kernel-functions for sending and receiving
+messages. The first dword in a command block is always a signed dword
+containing the command ID. If the protocol being used acknowledges the command
+it should do this by placing the command ID in the first dword of the returned
+message, or a negative value if there was an error. This is refered to as
+"Standard return" in this file. All string in the command block are padded out
+with zeroes to the next integral multiple of 4.
+
+
+@node VFS
+@chapter VFS
+
+All programs and servers in chaos accesses the filesystem hierarchy by
+communicating with the VFS-server. This is done by a few simple protocols:
+
+@table @strong
+@item Purpose
+@emph{Get detailed information about an entry in the hierarchy.}
+
+@item Call
+@table @strong
+@item 0
+@emph{VFS_GET_ENTRY}
+@item 1..n
+@emph{Path string (length dword padded)}
+@item n+1
+@emph{Entry number}
+@end table
+
+@item Return
+@table @strong
+@item 0
+@emph{Standard return}
+@item 1
+@emph{Length of filename in bytes}
+@item 2..n
+@emph{Filename string}
+@item n+1
+@emph{Filesize in bytes}
+@item n+2
+@emph{Type}
+@end table
+@end table
+
+
+@node Keyboard
+@chapter Keyboard
+
+If a program in chaos wants to take input from the keyboard, it sends a message
+to the keyboard server registering itself as a receiver of keypresses.
+
+
+@node Console
+@chapter Console
+
+If a program (non-tornado-native) wants to output anything, it first needs to request
+a virtual screen from the console-server. There is a few standard protocols for this:
+
+@table @strong
+@item CONSOLE_SCREEN_OPEN - Open a new screen with a specified mode
+
+@item Call
+@table @strong
+@item dword 0
+@emph{CONSOLE_SCREEN_OPEN}
+@item dword 1
+@emph{Mode (0 = text / 1 = graphic)}
+@item dword 2
+@emph{Width of screen (characters / pixels)}
+@item dword 3
+@emph{Height of screen (characters / pixels}
+@item dword 4
+@emph{BPP (bits per pixel)}
+@end table
+
+@item Return
+@table @strong
+@item dword 0
+@emph{Standard return}
+@item dword 1
+@emph{Linear pointer where program is allowed to map screen buffer}
+@item dword 2
+@emph{Physical pointer to screen buffer}
+@end table
+
+@end table
+
+
+@table @strong
+@item CONSOLE_CHANGE - Change active console
+
+@item Call
+@table @strong
+@item dword 0
+@emph{CONSOLE_CHANGE}
+@item dword 1
+@emph{Pid owning console to change to}
+@end table
+
+@item Return
+@table @strong
+@item dword 0
+@emph{Standard return}
+@end table
+
+@end table
+
+
+@node Graphics
+@chapter Graphics
+
+Although you'll have a server for each graphic-card, the will all use the same
+standard protocol to communicate. Constants are defined in graphics.h in the
+chaos-standard-headers package.
+
+@table @strong
+@item GRAPHICS_MODE_CHANGE - Change current videmode
+
+@item Call
+@table @strong
+@item dword 0
+@emph{GRAPHICS_MODE_CHANGE}
+@item dword 1
+@emph{Type of mode (0 = text / 1 = graphic) (textmode may not be supported on all cards / platforms)}
+@item dword 2
+@emph{Width of screen (characters / pixels)}
+@item dword 3
+@emph{Height of screen (characters / pixels)}
+@item dword 4
+@emph{BPP (bits per pixel)}
+@end table
+
+@item Return
+@table @strong
+@item dword 0
+@emph{Standard return}
+@item dword 1
+@emph{Physical pointer to framebuffer}
+@end table
+
+@end table

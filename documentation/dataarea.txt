@@ -1,0 +1,19 @@
+
+The storm data area is used to hold information collected in real mode to be
+used in protected mode later. This is the layout of the storm data area:
+
+
+(bytes)
+
+ offset    | length     | purpose
+-----------+------------+-----------------------------------------------------
+ 0         | 4          | linear pointer to the multiboot data area
+ 132       | 1          | type of display used (0 = text, 1 = graphic).
+ 133       | 2          | vertical resoultion (characters if display type = 0,
+           |            | or else pixels).
+ 135       | 2          | the same thing, but horizontal resoulution.
+ 137       | 512        | vesa info buffer (standard vesa supervga information
+           |            | buffer).
+
+The kernel data area is located at linear address 0x3000 and is one page big
+(4096 bytes).

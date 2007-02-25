@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="tornado" version="0.0.1" type="server" license="GPL">
+    <library type="depend" name="console" />
+    <library type="depend" name="ipc" />
+    <library type="depend" name="log" />
+    <library type="depend" name="memory" last="true" />
+    <library type="depend" name="string" />
+    <library type="depend" name="system" />
+    <library type="depend" name="video" />
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+
+    <source>tornado.c</source>
+    <header>font_8x8.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

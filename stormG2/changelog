@@ -1,0 +1,7 @@
+2000-11-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos.rules: New options: --enable-netbsd, --enable-openbsd,
+	--enable-freebsd.
+
+	* Started writing this changelog.
+

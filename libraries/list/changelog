@@ -1,0 +1,4 @@
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* Wrote a simple library to handle double-linked lists.
+

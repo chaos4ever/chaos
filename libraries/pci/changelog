@@ -1,0 +1,18 @@
+2000-10-15  Per Lundberg  <plundis@chaosdev.org>
+
+	* pci.c (pci_allocate_buffer): New function.
+
+2000-10-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* pci.c (pci_device_exists): New function.
+
+2000-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* pci.c (pci_init): Changed the timeout of the
+	ipc_service_resolve call, since it is no longer needed with the
+	process parent unblocking.
+
+2000-09-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* Created a new library.
+

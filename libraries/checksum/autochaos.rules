@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="checksum" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Source file and headers. -->
+
+    <source>crc32.c</source>
+    <source>md5.c</source>
+    <header>checksum.h</header>
+    <header>defines.h</header>
+    <header>functions.h</header>
+    <header>types.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

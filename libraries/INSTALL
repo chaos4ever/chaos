@@ -1,0 +1,21 @@
+INSTALL ($Id$)
+=======
+
+Right now, setting up the chaos system is not very easy. We are well
+aware of this, but we have been forced to oversee it for now -- if the
+code does not work, it is not of much use to be able to install it.
+
+Still, you should be able to do something like this:
+
+	make configure
+        make install
+
+(This will copy the compiled libraries to some different directories
+under the path you've chosen as prefix)
+
+Well, that should be it. If everything works out fine, you should be
+able to link chaos programs to those libraries. We hope to make the
+process of setting up chaos a lot easier in the future. For now, happy
+hacking!
+
+-- Per Lundberg <plundis@chaosdev.org>  Mon, 10 Apr 2000 08:50:54 +0200

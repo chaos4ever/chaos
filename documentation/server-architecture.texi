@@ -1,0 +1,114 @@
+@settitle The chaos Architecture
+@node Top
+@top The chaos Architecture
+
+The chaos Architecture
+
+$Id$
+
+Copyright 1999 chaos development
+
+@menu
+* Prologue::
+* The Microkernel::
+* Overview of the Server Architecture::
+* Client-Server Communication::
+@end menu
+
+@node Prologue
+@chapter Prologue
+
+In this document, we (chaos development) describe how the chaos system will
+work. All of this is not written yet, but most of the kernel is finished and
+we're starting slowly to write some basic servers. If you feel you want to
+help, please contact us. You will find contact information at our website,
+@url{http://www.chaosdev.org/}.
+
+@node The Microkernel
+@chapter The Microkernel
+
+chaos is a microkernelbased operating system. This means that as much as
+possible has been removed from the kernel. This design has several advantages
+to traditional monolithic systems (like Linux and *BSD). The most important
+(in our opinion, of course) is that it is easier to separate drivers from each
+other. If, for example, you suddenly feel like you need IPv6 support, support
+for this protocol can easily be added without the need of rebooting or even
+recompiling anything. Our opinion is that only programmers should need to have
+a compiler installed.
+
+Our microkernel, called @emph{storm}, contains only the following::
+
+@table @samp
+@item IRQ management
+@item Exception handling
+@item Task switching (commonly called multitasking, but that is not true in non-SMP systems)
+@item Process startup and stopping
+@item Thread support
+@item Advanced scheduler with support for priorities and threads
+@item DMA support (this is not written yet, please contact us if you want to volunteer)
+@item Interprocess communication (IPC)
+@item Memory and I/O-port protection
+@item Paging (virtual memory)
+@end table
+
+As you can see, there are no hardware drivers, no networking, no graphics
+code; hardly anything. This makes the kernel extremely small (~15K for the
+moment, in compressed format), but still features the things necessary to
+load other modules.
+
+@node Overview of the Server Architecture
+@chapter Overview of the Server Architecture
+
+A @dfn{server} in chaos terminology is what most other operating systems refer
+to as a @dfn{driver} or a @dfn{module}. The reason we call it @dfn{server} is
+simply because this is what it is; it is not just a bunch of code. The
+difference from most other systems is that a server isn't any more privileged
+than a regular user process (well, actually, it is, but it's not at all as
+privileged as the kernel, even though administratory rights are required to
+start a server). This means that a server cannot just read and write from the
+memory and/or I/O ports it wants as in traditional, older systems. In chaos,
+you have to first @dfn{register} the I/O port(s) and/or IRQ(s) you want the
+server to use, and @emph{then} you will be able to use it/them,
+@emph{if, and only if} the I/O port(s) and/or IRQ(s) was not used by a
+previously started server. This, in combination with the memory protection
+mechanisms chaos uses to separate all processes, makes it virtually impossible
+for a server to bring the computer down. This makes a chaos system stable and
+robust. And what's best of it all: it doesn't make the system noticeably
+slower than a regular, non-protected system!
+
+Technically speaking, this is accomplished by running all kernel code
+(syscalls and bootup initialization) in privilige level (PL) zero, servers and
+regular user processes in PL 3. This makes it impossible for an ordinary user
+process to access the hardware, and still allows the servers to use the
+port(s) and stuff it needs if it was able to allocate it. Several syscalls
+that are not available for ordinary user processes are available for the
+servers. The kernel separates servers from other processes by having an
+internal flag for every process indicating the process' type.
+
+@node Client-Server Communication
+@chapter Client-Server Communication
+
+All communication between servers and regular processes (referred to as
+@dfn{clients} in this chapter) is done by means of the
+syscall_message_send () and syscall_message_receive () system calls. The format
+of the data is highly standardized and follows these simple rules:
+
+Structure for IPC
+
+@table @samp
+@item 1 dword
+Command ID. This is the command ID, and is specific for each server. This is
+used by the server to decode the data passed.
+@item 1 dword
+Length of data in @emph{this} block. It should be noted that in one message,
+multiple command blocks can be put together in a single packet. This ensures
+high performance, since you do not have to do a system call for each
+operation. The server may then split the operations contained in one message
+and schedule the operations between processes in a fair way to prevent long
+wait-times for processes.
+@item data
+This is individual for each command ID the server takes and it's length is
+specified by the previous dword.
+@item ...
+Repeats until the length of the packet is reached.
+@end table

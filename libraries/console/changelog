@@ -1,0 +1,10 @@
+2000-07-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* defines.h: Fixed some american typos.
+
+2000-07-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* types.h: New header file.
+
+	* Fixed the package dependencies.
+

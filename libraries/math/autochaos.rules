@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="math" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Source file and headers. -->
+
+    <source>math.c</source>
+    <header>math.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="ipc" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Sources. -->
+
+    <source>ipc.c</source>
+    <header>block.h</header>
+    <header>console.h</header>
+    <header>defines.h</header>
+    <header>ethernet.h</header>
+    <header>file.h</header>
+    <header>functions.h</header>
+    <header>general.h</header>
+    <header>ipc.h</header>
+    <header>ipv4.h</header>
+    <header>keyboard.h</header>
+    <header>log.h</header>
+    <header>mouse.h</header>
+    <header>pci.h</header>
+    <header>protocols.h</header>
+    <header>return_values.h</header>
+    <header>serial.h</header>
+    <header>sound.h</header>
+    <header>types.h</header>
+    <header>video.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

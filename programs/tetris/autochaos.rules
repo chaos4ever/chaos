@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="tetris" version="0.0.1" type="program" license="GPL">
+    <library type="depend">console</library>
+    <library type="depend">ipc</library>
+    <library type="depend">random</library>
+    <library type="depend">system</library>
+    <library type="depend">string</library>
+    <library type="depend" last="true">memory</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+			
+    <source>main.c</source>
+    <source>tetris.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

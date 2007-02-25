@@ -1,0 +1,124 @@
+
+  proposal for the chaos configuration utility
+  copyright 1999 chaos development
+-----------------------------------
+
+
+the chaos configuration utility shall be used by every program running under
+chaos and is dependant on a configuration file. each program has to supply it's
+own template file. the chaos configuration utility uses this file to present
+to the user, a friendly, graphical interface to set and change the
+configuration of the program. the program may supply a configuration file as
+well, but that will not be neccessary as it can easily be created from the
+template file. every program-package MUST create a
+/config/<program_name>/template file. the configuration utility checks on
+startup all the directories in the /config directory and presents the found
+directories to the user to choose from, unless program-name was given as a
+parameter. after this step, the configuration program reads the template file
+and creates all the menus, buttons and textboxes needed.
+
+
+  the template format and datatypes
+-------------------------------------
+
+
+the main template-skeleton is built up by sections like this:
+
+section ("card settings")
+{
+  /* stuff here */
+}
+
+section ("ethernet firewalling")
+{
+  /* more stuff here */
+}
+
+the user first has to choose a section to edit. this is to add overview to the
+configuration files and categorize all the options for the user. the program
+stores two files, when using this template; card_settings and
+ethernet_firewalling. they are both located in /config/<program_name>
+
+each section is then built up by various datatypes with names and possible
+values:
+
+section ("card settings")
+{
+  integer io (0x280 to 0x360 step 0x10);
+  integer irq (3, 5, 9, 10, 11, 13);
+  check mac_assigned ("assign static ethernet address")
+  {
+    integer mac (0 to 0xFFFFFFFFFFFF);
+  }
+  select connection_type ("10baseT", "10Base2", "100baseTX");
+  text my_story ("write about your life, pal");
+}
+
+section ("ethernet firewalling")
+{
+  check ethernet_firewalling ("enable ethernet-level firewalling")
+  {
+    group policy
+    {
+      select type ("reject", "deny")
+      {
+        case ("reject")
+        {
+          integer mac (0 to 0xFFFFFFFFFFFF);
+          choice log;
+          textbox return_text ("send this text in the icmp-reject package");
+        }
+        case ("deny")
+        {
+          integer mac (0 to 0xFFFFFFFFFFFF);
+          choice log;
+        }
+      }
+    }
+  }
+}
+
+in this example, in the first section (card settings) you will have nine io
+addresses to choose from from a listbox, and similar with the irq. there will
+also be a checkbox (which can either be "on" or "off") and if it is checked/on,
+you will be able to fill in a textbox to assign a mac-address. this checkbox
+will only accept numbers between 0 and 0xFFFFFFFFFFFF. there will be a textbox
+for you to write about yourself too. this text has no limitations and can
+contain almost anything. the following is an example of a configuration file
+generated from this template:
+
+section ("card settings")
+{
+  io = 0x300;
+  irq = 10;
+  mac_assigned = TRUE;
+  mac = 0x4f035b8cd934;
+  connection_type = "10baseT";
+  my_story = "i was born, then i became l33t and finally i became a quaker...";
+}
+
+section ("ethernet firewalling")
+{
+  ethernet_firewalling = TRUE;
+  policy
+  {
+    type = "reject";
+    mac = 0x0472bd9c45ff;
+    log = FALSE;
+  }
+  policy
+  {
+    type = "reject";
+    mac = 0xfbc67d8200b0;
+    log = TRUE;
+  }
+  policy
+  {
+    type = "deny";
+    mac = 0x9c667bd3f67d;
+    log = FALSE;
+    return_text = "du suger!";
+  }
+}
+
+more datatypes will be added as there are needs for them...

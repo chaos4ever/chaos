@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="stormG2" version="0.0.1" type="kernel" license="GPL">
+    <include>../include</include>
+    <include>..</include>
+    <include-base>include/stormG2</include-base>
+    <extra-cflags>-fomit-frame-pointer -ffreestanding</extra-cflags>
+    <option description="Compile for release (no debugging)" default="FALSE">release</option>
+    <option description="NetBSD colours" default="FALSE">netbsd</option>
+    <option description="OpenBSD colours" default="FALSE">openbsd</option>
+    <option description="FreeBSD colours" default="FALSE">freebsd</option>
+  
+    <!-- Subdirectories. -->
+        
+    <directory name="ia32" type="source">
+      <source>init.c</source>
+      <source>cpu.c</source>
+      <source>debug.c</source>
+      <source>dispatch.c</source>
+      <source>exception.c</source>
+      <source>gdt.c</source>
+      <source>idt.c</source>
+      <source>main.c</source>
+      <source>memory_virtual.c</source>
+      <source>memory_physical.c</source>
+      <source>process.c</source>
+      <source>thread.c</source>
+    </directory>
+
+    <directory name="generic" type="source">
+      <source>id.c</source>
+      <source>list.c</source>
+      <source>memory_global.c</source>
+      <source>multiboot.c</source>
+      <source>slab.c</source>
+    </directory>
+
+    <directory name="include" type="mixed">
+    </directory>
+
+    <directory name="include/storm" type="headers">
+      <header>defines.h</header>
+    </directory>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

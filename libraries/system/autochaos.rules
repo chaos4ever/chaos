@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="system" version="0.0.1" type="library" license="LGPL">
+    <makefile>makefile</makefile>
+    <include>..</include>
+
+    <!-- Sources. -->
+    
+    <source>system.c</source>
+    <header>alignment.h</header>
+    <header>big_endian.h</header>
+    <header>bit.h</header>
+    <header>byte_order.h</header>
+    <header>endian.h</header>
+    <header>functions.h</header>
+    <header>little_endian.h</header>
+    <header>port.h</header>
+    <header>return_values.h</header>
+    <header>system.h</header>
+    <header>system_calls.h</header>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

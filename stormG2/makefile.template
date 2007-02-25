@@ -1,0 +1,12 @@
+# $Id$
+# Local rules.
+
+stormG2: current-arch
+
+# FIXME: Make this detect the architecture in some way.
+
+current-arch:
+	ln -sf ia32 current-arch
+
+clean-local:
+	rm -f current-arch

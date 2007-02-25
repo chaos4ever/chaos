@@ -1,0 +1,17 @@
+Physical Memory Map
+===================
+
+Offset | Length | Description
+-------+--------+--------------------
+     0 |     4K | GDT/IDT
+    4K |     4K | storm TSS
+    8K |     8K | storm stack
+   16K |     4K | Module names and parameters
+    1M |      ? | Kernel start
+
+Also, at 1.5 MB, the data structures for physical page allocation is
+located. It consists of a list and a bitmap. Don't think about how
+this works. This is the way the chaos operating system does it, and it
+works.
+
+(Thanks to Microsoft for this wording. We owe you!)

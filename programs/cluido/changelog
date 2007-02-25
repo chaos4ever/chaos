@@ -1,0 +1,85 @@
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c: New command: 'arp'.
+
+2000-09-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c: New command: 'sleep'.
+	(command_run): New command: 'run'.
+
+2000-09-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c: New command 'time'.
+
+2000-08-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* cluido.c (string_input): Started implementing some Emacs
+	compatible bindings. (mostly just for fun)
+
+2000-08-17  Henrik Hallin  <hal@chaosdev.org>
+
+	* cluido.c: Added some functions to simplify line edit. Also added
+	support for a command history list. Fixed line editing (cursor
+	moving, delete and backspace).
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c (command_top): Made this command print the instruction
+	pointer instead of the stack used, since I deemed it more useful
+	for debugging.
+	(command_font_set): New command for setting the VGA font.
+
+2000-08-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c (command_irq): Added a check of the return value in
+	the inner loop in this function.
+
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed some system_call uglyisms.
+
+2000-07-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* init.c (main): Fixed some american typos.
+
+	* command.c (command_irq): New command.
+	(command_port): New command.
+
+2000-07-16  Per Lundberg  <plundis@chaosdev.org>
+
+	* Removed the 'tetris' command, since it is going to be a real,
+	separate program.
+
+2000-07-07  Per Lundberg  <plundis@chaosdev.org>
+
+	* Moved from chaos/servers to chaos/programs, since it is no
+	longer really a server... (or actually, won't be for very long, so
+	we'd better start making the transition)
+
+2000-06-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* command.c (command): Added an alias for ls -> dir.
+
+2000-06-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* cluido.c (environment_get): New function for reading values from
+	the environment.
+
+	* command.c: Sorted all command functions. Renamed the 'tasks'
+	command to 'threads'. Added a command named 'kill' for killing
+	threads.
+
+2000-06-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* Added support for setting up the shell environment through the
+	following functions.
+	
+	* command.c (command_unset): New command.
+	(command_show): Likewise.
+	(command_set): Likewise.
+
+2000-05-01  Per Lundberg  <plundis@chaosdev.org>
+
+	* Made cludio work again after the huge reorganizations we've been
+	doing in everything lately.
+

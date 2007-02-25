@@ -1,0 +1,53 @@
+2000-07-28  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Added the 'make package-source' target, for building
+	a source package.
+
+2000-07-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Added support for adding auxiliary C compiler flags.
+
+2000-07-20  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Finished the kernel support. Now, building storm with
+	autochaos works just fine!
+
+2000-07-09  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Started working on multi-directory support. Still
+	lots of work to be done, though..
+
+2000-07-08  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos.sgml: Started writing some documentation.
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Added a function that makes config.h include all the
+	library header files that are required by the package.
+
+2000-06-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Added support for an <include> directive, for
+	specifying additional paths to be searched for include files.
+	Added support for automatic dependency management.
+
+2000-06-15  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Added support for libraries (generating static
+	archives, installing them and installing header files).  Added
+	support for checking if autochaos is installed or not (to prepare
+	for automatic regeneration of the configure script and
+	everything).
+
+2000-06-10  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos: Changed $input_file to "autochaos.rules", on request
+	by Henrik Hallin.
+
+2000-06-09  Per Lundberg  <plundis@chaosdev.org>
+
+	* Started doing some serious work. The XML parsing part is almost
+	complete. We now support checking the CPU type, and detecting
+	available libraries, and some more.
+

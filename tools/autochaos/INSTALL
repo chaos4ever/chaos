@@ -1,0 +1,18 @@
+INSTALL ($chaos: INSTALL,v 1.3 2002/05/23 11:23:20 per Exp $)
+=======
+
+Please note that autochaos is only required if you want to modify the
+build process; for example, adding new files, removing files,
+etcetera. Thus, many people will not need it. Of course, having it
+never hurts, and you never know when you will find some use for
+it. :-)
+
+It uses the following non-standard Perl module:
+
+  XML::Simple
+
+It can all be found at CPAN (http://www.cpan.org), the Comprehensive
+Perl Archive Network. For more information about this, see the above
+mentioned URL.
+
+-- Per Lundberg <plundis@chaosdev.org>  Tue, 13 Jun 2000 18:10:28 +0200
