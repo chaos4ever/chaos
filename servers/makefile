@@ -25,7 +25,7 @@ SUB_DIRECTORIES = network system file_system sound other video # block
 # Specify where you want make install to put the files in here. Remember to
 # do a make configure afterwards!
 
-PREFIX = /tftpboot
+PREFIX = /tftpboot/chaos
 
 
 .PHONY: all autochaos clean config install tags
