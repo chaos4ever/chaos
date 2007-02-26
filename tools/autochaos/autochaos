@@ -43,7 +43,7 @@ my @allowed = (
 my $CFLAGS = '-Wall -W -Wshadow -Wpointer-arith -Waggregate-return \\\
 -Wstrict-prototypes -Wredundant-decls -Winline -Wmissing-prototypes \\\
 -Werror -Wcast-align -Wbad-function-cast -Wsign-compare \\\
--Wmissing-declarations -Wmissing-noreturns -pipe \\\
+-Wmissing-declarations -Wmissing-noreturn -pipe \\\
 -Wnested-externs -O3 -fno-builtin -funsigned-char -g';
 
 my $LDFLAGS_NORMAL = '\$(PREFIX)/data/programming/c/startup/startup.o \\\
@@ -584,7 +584,7 @@ HEADER_PATH = $header_path
 
 # TODO: Those should be overridable.
 
-CC = gcc
+CC = gcc-2.95
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -946,7 +946,7 @@ STOP
     print (CONFIG "#include <\$library/\$library.h>\\n");
   }
 
-  print (CONFIG "\\n#endif /* !__CONFIG_H__ */");
+  print (CONFIG "\\n#endif /* !__CONFIG_H__ */\\n");
 
   close (CONFIG);
 END
