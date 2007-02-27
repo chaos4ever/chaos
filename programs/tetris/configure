@@ -11,7 +11,7 @@
 use strict;
 use POSIX;
 
-my $chaos_root = "/tftpboot/chaos";
+my $chaos_root = "/";
 my @libraries = ();
 my @headers = ();
 my @sources = ();
@@ -495,6 +495,6 @@ STOP
     print (CONFIG "#include <$library/$library.h>\n");
   }
 
-  print (CONFIG "\n#endif /* !__CONFIG_H__ */");
+  print (CONFIG "\n#endif /* !__CONFIG_H__ */\n");
 
   close (CONFIG);

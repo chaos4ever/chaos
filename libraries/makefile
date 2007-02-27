@@ -34,7 +34,7 @@ CFLAGS = -Wall -W -Wshadow -Wpointer-arith -Waggregate-return \
 -Wmissing-declarations -Wmissing-noreturns -pipe \
 -Wnested-externs -O3 -fno-builtin -funsigned-char -g
 
-INCLUDES = -I$(PREFIX)/data/programming/c/headers
+INCLUDES = -I. -I$(PREFIX)/data/programming/c/headers
 
 CC = gcc-2.95
 

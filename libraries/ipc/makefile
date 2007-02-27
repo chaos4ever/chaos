@@ -11,7 +11,7 @@ PACKAGE = ipc
 CFLAGS = -Wall -W -Wshadow -Wpointer-arith -Waggregate-return \
 -Wstrict-prototypes -Wredundant-decls -Winline -Wmissing-prototypes \
 -Werror -Wcast-align -Wbad-function-cast -Wsign-compare \
--Wmissing-declarations -Wmissing-noreturns -pipe \
+-Wmissing-declarations -Wmissing-noreturn -pipe \
 -Wnested-externs -O3 -fno-builtin -funsigned-char -g $(EXTRA_CFLAGS) $(DEFINES)
 
 INCLUDES = \
@@ -115,11 +115,11 @@ install: all
 	@for header in $(HEADERS) ; do cp $$header $(PREFIX)/data/programming/c/headers/$(PACKAGE) ; done
 
 package-source:
-	mkdir -p /home/per/Projects/Released/chaos-20001010/libraries/ipc/package-source/.
-	-cp -f autochaos.rules changelog configure COPYING README AUTHORS TODO INSTALL /home/per/Projects/Released/chaos-20001010/libraries/ipc/package-source/.
-	-cp -f makefile.template $(EXTRA_FILES) /home/per/Projects/Released/chaos-20001010/libraries/ipc/package-source/.
-	for header in $(HEADERS) ; do cp $$header /home/per/Projects/Released/chaos-20001010/libraries/ipc/package-source/. || exit ; done
-	for source in $(SOURCES) ; do cp $$source /home/per/Projects/Released/chaos-20001010/libraries/ipc/package-source/. || exit ; done
+	mkdir -p /home/per/Projects/Released/chaos-old/libraries/ipc/package-source/.
+	-cp -f autochaos.rules changelog configure COPYING README AUTHORS TODO INSTALL /home/per/Projects/Released/chaos-old/libraries/ipc/package-source/.
+	-cp -f makefile.template $(EXTRA_FILES) /home/per/Projects/Released/chaos-old/libraries/ipc/package-source/.
+	for header in $(HEADERS) ; do cp $$header /home/per/Projects/Released/chaos-old/libraries/ipc/package-source/. || exit ; done
+	for source in $(SOURCES) ; do cp $$source /home/per/Projects/Released/chaos-old/libraries/ipc/package-source/. || exit ; done
 package-check: package-source
 	     cd package-source && ./configure $(ALL_ARGUMENTS) && $(MAKE) && $(MAKE) clean
 	     find package-source -name makefile -exec rm {} ';'

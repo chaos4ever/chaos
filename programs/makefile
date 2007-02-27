@@ -25,7 +25,7 @@ PROGRAMS = cluido tetris # modplay tetris serialtest
 # Specify where you want make install to put the files in here. Remember to
 # do a make config afterwards!
 
-PREFIX = /mnt/chaos
+PREFIX = /tftpboot/chaos
 
 .PHONY: all autochaos clean config install tags
 
