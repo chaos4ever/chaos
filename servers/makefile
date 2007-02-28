@@ -20,7 +20,7 @@
 
 # List all the servers you want to compile here.
 
-SUB_DIRECTORIES = network system file_system sound other video # block
+SUB_DIRECTORIES = network system file_system sound other video block
 
 # Specify where you want make install to put the files in here. Remember to
 # do a make configure afterwards!
@@ -41,7 +41,7 @@ autochaos:
 
 configure:
 #	for e in $(SUB_DIRECTORIES) ; do cd $$e && ./configure --install-prefix $(PREFIX) || exit ; done
-	for e in $(SUB_DIRECTORIES) ; do (cd $$e && make configure && cd ..) || exit ; done
+	for e in $(SUB_DIRECTORIES) ; do (cd $$e && PREFIX=$(prefix) make configure && cd ..) || exit ; done
 
 install:
 	for e in $(SUB_DIRECTORIES) ; do $(MAKE) -C $$e install || exit clean ; done
