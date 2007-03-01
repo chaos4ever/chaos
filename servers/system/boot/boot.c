@@ -40,8 +40,7 @@ tag_type empty_tag =
 
 int main (void)
 {
-#if FALSE
-  virtual_file_system_mount_type mount;
+  file_mount_type mount;
   mailbox_id_type mailbox_id[10];
   ipc_structure_type vfs_structure;
   message_parameter_type message_parameter;
@@ -55,7 +54,6 @@ int main (void)
   process_id_type process_id;
   unsigned int bytes_read;
   unsigned int services = 10;
-#endif
 
   /* Set our name. */
 
@@ -68,7 +66,7 @@ int main (void)
     return -1;
   }
 
-#if FALSE
+  log_print (&log_structure, LOG_URGENCY_DEBUG, "beginning of boot");
 
   /* Mount the initial ramdisk as //ramdisk. To do this, we must first
      hook up a connection to the VFS service and resolve the first
@@ -106,10 +104,10 @@ int main (void)
 
   /* That's it. Send the message. */
 
-  message_parameter.protocol = IPC_PROTOCOL_VIRTUAL_FILE_SYSTEM;
-  message_parameter.message_class = IPC_VIRTUAL_FILE_SYSTEM_MOUNT;
+  message_parameter.protocol = IPC_PROTOCOL_FILE;
+  message_parameter.message_class = IPC_FILE_MOUNT_VOLUME;
   message_parameter.data = &mount;
-  message_parameter.length = sizeof (virtual_file_system_mount_type);
+  message_parameter.length = sizeof (file_mount_type);
   message_parameter.block = TRUE;
   ipc_send (vfs_structure.output_mailbox_id, &message_parameter);
 
@@ -236,11 +234,9 @@ int main (void)
     memory_deallocate ((void **) &buffer);
   }
 
-#endif
-
   system_call_process_parent_unblock ();
 
-  log_print (&log_structure, LOG_URGENCY_DEBUG, "surf");
+  log_print (&log_structure, LOG_URGENCY_DEBUG, "end of boot");
 
   return 0;
 }
