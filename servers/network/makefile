@@ -18,7 +18,8 @@
 ## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 ## USA.
 
-SERVERS = 3c509 loopback ipv4 3com-pci realtek-pci # tulip via-rhine
+SERVERS = 3c509 loopback ipv4 3com-pci realtek-pci # ne2000 tulip via-rhine
+PREFIX = /tftpboot/chaos
 
 .PHONY: all autochaos clean config install tags
 
@@ -32,7 +33,7 @@ autochaos:
 	for e in $(SERVERS) ; do cd $$e && pwd && autochaos || exit ; cd .. ; done
 
 configure:
-	for e in $(SERVERS) ; do cd $$e && ./configure --install-prefix /tftpboot || exit ; cd .. ; done
+	for e in $(SERVERS) ; do cd $$e && ./configure --install-prefix $(PREFIX) || exit ; cd .. ; done
 
 install:
 	for e in $(SERVERS) ; do $(MAKE) -C $$e install || exit clean ; done
