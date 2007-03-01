@@ -29,6 +29,7 @@
     <header>sound.h</header>
     <header>types.h</header>
     <header>video.h</header>
+    <header>virtual_file_system.h</header>
   </package>
 </autochaos>
 

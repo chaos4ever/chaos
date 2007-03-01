@@ -131,6 +131,10 @@ typedef struct
   /* The location where we want this volume to be mounted. */
 
   char location[MAX_PATH_NAME_LENGTH];
+
+  /* The mailbox of the block device server for this volume. */
+
+  mailbox_id_type mailbox_id;
 } file_mount_type;
 
 typedef struct

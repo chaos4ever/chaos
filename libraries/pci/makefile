@@ -88,8 +88,8 @@ LDFLAGS = $(PREFIX)/data/programming/c/startup/startup.o \
 
 library_pci.a: $(OBJECTS)
 	@echo "Creating library..."
-	$(AR) cru $(@) $(OBJECTS)
-	$(RANLIB) $(@)
+	@$(AR) cru $(@) $(OBJECTS)
+	@$(RANLIB) $(@)
 
 install: all
 	@echo "Installing..."

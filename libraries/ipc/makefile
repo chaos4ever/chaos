@@ -51,7 +51,8 @@ return_values.h \
 serial.h \
 sound.h \
 types.h \
-video.h
+video.h \
+virtual_file_system.h
 
 
 SOURCES =  \

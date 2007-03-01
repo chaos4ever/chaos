@@ -103,6 +103,10 @@ typedef struct
   /* The location where we want this volume to be mounted. */
 
   char location[MAX_PATH_NAME_LENGTH];
+  
+  /* The mailbox ID of the mailbox for talking to the block device server. */
+
+  mailbox_id_type mailbox_id;
 } virtual_file_system_mount_type;
 
 typedef struct

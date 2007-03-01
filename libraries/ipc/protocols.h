@@ -49,7 +49,7 @@ enum
   IPC_PROTOCOL_FILE,
   IPC_PROTOCOL_LOG,
   IPC_PROTOCOL_SERIAL,
-  IPC_PROTOCOL_SOUND
+  IPC_PROTOCOL_SOUND,
 };
 
 /* Ugly, but those rely on the previous defines... so we can't do in a

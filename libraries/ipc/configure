@@ -130,6 +130,7 @@ else
 'sound.h',
 'types.h',
 'video.h',
+'virtual_file_system.h',
 );
 
 @sources = (
