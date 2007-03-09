@@ -43,6 +43,10 @@ configure:
 
 install:
 	for e in $(PROGRAMS) ; do $(MAKE) -C $$e install || exit clean ; done
+	mount /mnt/chaos-ramdisk
+	install -s cluido/cluido /mnt/chaos-ramdisk/
+	install startup /mnt/chaos-ramdisk/config/servers/boot
+	umount /mnt/chaos-ramdisk
 
 tags:
 	for e in $(PROGRAMS) ; do cd $$e ; etags *.[ch] ; cd .. ; done

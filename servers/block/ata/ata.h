@@ -150,7 +150,7 @@ extern tag_type empty_tag;
 
 extern void handle_connection (mailbox_id_type reply_mailbox_id,
                                service_type *service);
-extern void handle_service (service_type *service);
+extern void handle_service (service_type *service) __attribute__ ((noreturn));
 
 extern bool ata_init_interface (interface_type *interface);
 

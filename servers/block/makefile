@@ -19,6 +19,7 @@
 ## USA.
 
 SERVERS = initial_ramdisk ata
+INSTALL_PREFIX = /tftpboot/chaos
 
 .PHONY: all autochaos clean config install tags
 
@@ -32,7 +33,7 @@ autochaos:
 	for e in $(SERVERS) ; do cd $$e && pwd && autochaos || exit ; cd .. ; done
 
 configure:
-	for e in $(SERVERS) ; do cd $$e && ./configure || exit ; cd .. ; done
+	for e in $(SERVERS) ; do cd $$e && ./configure --install-prefix $(INSTALL_PREFIX) || exit ; cd .. ; done
 
 install:
 	for e in $(SERVERS) ; do $(MAKE) -C $$e install || exit clean ; done
