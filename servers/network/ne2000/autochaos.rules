@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id$ -->
+
+<autochaos>
+  <package name="ne2000" version="0.0.1" type="server" license="GPL">
+    <library type="depend">log</library>
+    <library type="depend">ipc</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">memory</library>
+    <library type="depend">ipv4</library>
+    <makefile>makefile</makefile>
+    <source>ne2000.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->
