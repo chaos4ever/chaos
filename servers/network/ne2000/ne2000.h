@@ -40,7 +40,7 @@ typedef struct
   u8 irq;
   u8 status;
   u8 prom[32];
-  u8 mac[6];
+  u8 ethernet_address[6];
   u16 io;
   u32 num_interrupts;
   u32 num_dropped;

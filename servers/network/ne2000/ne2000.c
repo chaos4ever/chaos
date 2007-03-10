@@ -125,9 +125,8 @@ u8 ne_detect (device_type *n)
   for (i = 0;i < 16;i++)
     n->prom[i] = n->prom[i+i];
 
-  /* Put our phys addr in mac[] */
-  for (i = 0;i < 6;i++)
-    n->mac[i] = n->prom[i];
+  for (i = 0; i < 6; i++)
+    n->ethernet_address[i] = n->prom[i];
 
   log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "MAC address is %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x"
          " and signature [0x%x 0x%x]",
@@ -708,8 +707,148 @@ u16 hex2dec (u8 *s)
   return ret;
 }
 
+/* Open the ne2000 device. */
+
+static bool ne2000_open (device_type *device __attribute__ ((unused)))
+{
+  // FIXME
+  return TRUE;
+}
+
+/* Probe for an ne2000 compatible device. */
+
+static bool ne2000_probe (device_type *device __attribute__ ((unused)))
+{
+  // FIXME
+  return TRUE;
+}
+
+/* Handle an IPC connection request. */
+
+static void handle_connection (mailbox_id_type reply_mailbox_id, 
+                               device_type *device)
+{
+  message_parameter_type message_parameter;
+  ipc_structure_type ipc_structure;
+  bool done = FALSE;
+  unsigned int data_size = 1024;
+  u32 *data;
+
+  memory_allocate ((void **) &data, data_size);
+
+  /* Accept the connection. */ 
+
+  ipc_structure.output_mailbox_id = reply_mailbox_id;
+  ipc_connection_establish (&ipc_structure);
+
+  message_parameter.data = data;
+  message_parameter.block = TRUE;
+  message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
+
+  while (!done)
+  {
+    message_parameter.message_class = IPC_CLASS_NONE;
+    message_parameter.length = data_size;
+    
+    if (ipc_receive (ipc_structure.input_mailbox_id, &message_parameter,
+                     &data_size) !=
+        STORM_RETURN_SUCCESS)
+    {
+      continue;
+    }
+
+    switch (message_parameter.message_class)
+    {
+      case IPC_ETHERNET_REGISTER_TARGET:
+      {
+        /* FIXME: Check if the protocol is already registered */
+
+        device->target[device->number_of_targets].mailbox_id = 
+          ipc_structure.output_mailbox_id;
+        device->target[device->number_of_targets].protocol_type =
+          system_byte_swap_u16 (data[0]);
+        device->number_of_targets++;
+        break;
+      }
+
+#if FALSE
+      case IPC_ETHERNET_PACKET_SEND:
+      {
+        if (!etherlink3_start_transmit (data, message_parameter.length, device))
+        {
+          log_print (&log_structure, LOG_URGENCY_ERROR,
+                     "Failed to send an ethernet packet.");
+
+          /* FIXME: Do something. */
+        }
+
+        break;
+      }
+#endif
+
+      case IPC_ETHERNET_ADDRESS_GET:
+      {
+        memory_copy (data, &device->ethernet_address, 6);
+        message_parameter.length = 6;
+        system_call_mailbox_send (ipc_structure.output_mailbox_id,
+                                  &message_parameter);
+        break;
+      }
+
+      default:
+      {
+        log_print (&log_structure, LOG_URGENCY_ERROR,
+                   "Unknown IPC command received.");
+        break;
+      }
+    }
+  }
+}
+
+/* Handle this ethernet device. */
+
+static void handle_device (device_type *device)
+{
+  ipc_structure_type ipc_structure;
+
+  if (!ne2000_open (device))
+  {
+    log_print (&log_structure, LOG_URGENCY_EMERGENCY, 
+               "Couldn't open ethernet device.");
+    return;
+  }
+
+  /* Create the service. */
+
+  if (ipc_service_create ("ethernet", &ipc_structure, &empty_tag) !=
+      IPC_RETURN_SUCCESS)
+  {
+    log_print (&log_structure, LOG_URGENCY_EMERGENCY,
+               "Couldn't create ethernet service.");
+    return;
+  }
+
+  /* Main loop. */
+
+  system_call_thread_name_set ("Service handler");
+
+  while (TRUE)
+  {
+    mailbox_id_type reply_mailbox_id;
+
+    ipc_service_connection_wait (&ipc_structure);
+    reply_mailbox_id = ipc_structure.output_mailbox_id;
+
+    if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
+    {
+      system_call_thread_name_set ("Handling connection");
+      handle_connection (reply_mailbox_id, device);
+    }
+  }    
+}
+
 /* Main function. */
-// taken from 3c509 - much cleaner than "our own".
+
 int main (void)
 {
   bool found;
@@ -733,7 +872,7 @@ int main (void)
     device_type *device;
 
     memory_allocate ((void **) &device, sizeof (device_type));
-    found = FALSE; //etherlink3_probe (device);
+    found = ne2000_probe (device);
 
     if (!found)
     {
@@ -743,8 +882,7 @@ int main (void)
     {
       if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
       {
-        while (TRUE);
-        //        handle_device (device);
+        handle_device (device);
         return 0;
       }
     }
@@ -903,7 +1041,7 @@ int main(int argc, char *argv[])
         break;
 	
       case ETHERNET_ADDRESS_GET:
-        memcpy (&message[1], card->mac, 6);
+        memcpy (&message[1], card->ethernet_address, 6);
         log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "** Pid %ld requested ETHERNET_ADDRESS_GET", from);
         syscall_message_send (from, &message, 12);
 	break;
