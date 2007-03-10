@@ -7,8 +7,8 @@
 #define PACKAGE_NAME "ne2000"
 #define PACKAGE_VERSION "0.0.1"
 
-#include <ipc/ipc.h>
 #include <log/log.h>
+#include <ipc/ipc.h>
 #include <string/string.h>
 #include <system/system.h>
 #include <memory/memory.h>

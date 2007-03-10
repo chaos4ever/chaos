@@ -2,6 +2,7 @@
 /* Author: noah williamsson <tm@ns2.crw.se> */
 
 /* Copyright 1999-2000 chaos development. */
+/* Copyright 2007 chaos development. */
 
 /* This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -18,13 +19,23 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
    USA. */
 
-int debug = 0;
+const int debug = 1;
 
 /* 0: no debug at all
    1: normal debug
    2: debug everything */
 
-struct nic_struct
+/* FIXME: the target stuff should be replaced by a linked list */
+
+#define MAX_NUMBER_OF_TARGETS 10
+
+typedef struct
+{
+  u16 protocol_type;
+  mailbox_id_type mailbox_id;
+} target_type;
+
+typedef struct
 {
   u8 irq;
   u8 status;
@@ -33,8 +44,10 @@ struct nic_struct
   u16 io;
   u32 num_interrupts;
   u32 num_dropped;
-};
-typedef struct nic_struct NIC;
+
+  target_type target[MAX_NUMBER_OF_TARGETS];
+  int number_of_targets;
+} device_type;
 
 /* Packet header. */
 
@@ -111,9 +124,12 @@ struct tcphdr {
 #define MAX_INT_WORK 5 /* Maximum packets to handle at each intr. */
 #define MAX_USERS 10 /* Maximum users of the card */
 
+/* To avoid rewriting a lot of code... */
+#define outb(a,b) system_port_out_u8 (b, a)
+#define inb(a) system_port_in_u8 (a)
 
-#define outb(a,b) port_out_u8 (b, a)
-#define inb(a) port_in_u8 (a)
+/* FIXME: this should be placed in the ipv4 library or similar. */
+#define host_to_network_u16(a) system_byte_swap_u16(a)
 
 
 /* Message stuff */
@@ -128,7 +144,7 @@ struct tcphdr {
 #define NIC_UP          0x02    /* Interface is up */
 #define NIC_INT         0x04    /* We're processing an interrupt */
 #define NIC_DMA         0x08    /* We're doing dma xfers */
-#define NIC_BUSY	0x10	/* We're rsting the nic? */
+#define NIC_BUSY	0x10	/* We're resetting the nic? */
 #define NIC_INIT	0x20	/* We're initializing the card (debug) */
 
 
@@ -246,10 +262,10 @@ ne_program ne_preinit_program[] = {
   { 0x00, NE_R0_RBCR0 },		/* Clear the count regs. */
   { 0x00, NE_R0_RBCR1 },
   { 0x00, NE_R0_IMR },			/* Mask completion irq. */
-  { 0xff, NE_R0_ISR },			/* Ack all interrupts */
+  { 0xFF, NE_R0_ISR },			/* Ack all interrupts */
   { 0x20, NE_R0_RCR },			/* 0x20 == Set he monitor bit */
   { 0x02, NE_R0_TCR },			/* 0x02 == Internal loopback */
-  { 0x20, NE_R0_RBCR0 },		/* We should dma 32 bytes */
+  { 0x20, NE_R0_RBCR0 },		/* We should DMA 32 bytes */
   { 0x00, NE_R0_RBCR1 },
   { 0x00, NE_R0_RSAR0 },		/* DMA starting at 0x0000. */
   { 0x00, NE_R0_RSAR1 },
