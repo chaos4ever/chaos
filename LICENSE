@@ -6,6 +6,13 @@ switched over to the BSD license and as far as I know, all major
 copyright holders have agreed to this. If you hold the copyright to some
 of the code herein and are in disagreement to this, please notify me
 immediately! perlun@gmail.com)
+
+The following servers are to be treated as GPL code since they are
+based on/rewrites of code from the Linux kernel:
+* servers/system/pci
+* servers/network/3c509
+* servers/network/ne2000
+
 ---------------------------------------------------
 
 Copyright (c) 2000, 2006, 2007, chaos development.
