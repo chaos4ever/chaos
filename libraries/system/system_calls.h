@@ -114,7 +114,7 @@ static inline return_type system_call_irq_wait (unsigned int irq_number)
   return return_value;
 }
 
-/* Wait for an IRQ. */
+/* Acknowledge that an IRQ has been raised. */
 
 static inline return_type system_call_irq_acknowledge (unsigned int irq_number)
 {
@@ -576,7 +576,7 @@ static return_type system_call_service_protocol_get
   return return_value;
 }
 
-/* Fork (;) off a new process. */
+/* Fork ( ;) ) off a new process. */
 
 static inline return_type system_call_process_create (process_create_type *process_data)
 {

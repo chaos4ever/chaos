@@ -532,7 +532,7 @@ return_type thread_control (thread_id_type thread_id, unsigned int class,
       break;
     }     
 
-    /* Put a process to sleep. */
+    /* Put a thread to sleep. */
 
     case THREAD_SLEEP:
     {
