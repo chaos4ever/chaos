@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.4 2000/10/20 11:59:36 doa Exp $ -->
+
+<autochaos>
+  <package name="tulip" version="0.0.1" type="server" license="GPL">
+    <library type="depend">system</library>
+    <library type="depend">ipv4</library>
+    <library type="depend">memory</library>
+    <library type="depend">ipc</library>
+    <library type="depend">log</library>
+
+<!--
+    <library type="depend">pci</library>
+    <library type="depend">string</library>
+-->
+
+    <makefile>makefile</makefile>
+
+    <!-- Sources -->
+
+    <source>21142.c</source>
+    <source>eeprom.c</source>
+    <source>media.c</source>
+    <source>pnic.c</source>
+    <source>timer.c</source>
+    <source>tulip_core.c</source>
+    <source>interrupt.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

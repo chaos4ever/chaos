@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.4 2000/10/09 21:06:42 plundis Exp $ -->
+
+<autochaos>
+  <package name="boot" version="0.0.1" type="server" license="GPL">
+    <library type="depend">log</library>
+    <library type="depend">ipc</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">execute_elf</library>
+    <library type="depend">file</library>
+    <library type="depend">memory</library>
+    <makefile>makefile</makefile>
+    <source>boot.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

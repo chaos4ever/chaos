@@ -1,0 +1,20 @@
+README ($Id: README,v 1.1.1.1 2000/09/26 19:08:15 plundis Exp $)
+======
+
+When the PCI server is launched, it notifies that all devices in the
+system are new (since it hasn't used them before). It saves a list of
+all devices, and write this list to disk. It also stores all new
+devices in a list (the first time, those lists will be identical, but
+any other time, the new-list will only contain new devices that has
+been installed into the system).
+
+When the boot server has initialised stuff properly (mounted the
+ramdisk, etc), it sends a special message to the PCI server, to get
+the list of new devices (The list contains only the vendor and device
+IDs). It then checks in the database over PCI IDs and servers to know
+which server to start (if it is installed). Whenever a server package
+that provides hardware support for some PCI device is installed in the
+system, cAPS adds its list of supported devices to this list if it is
+not already there.
+
+FIXME: This is not really how it is to be...

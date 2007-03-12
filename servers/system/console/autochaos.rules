@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.3 2000/10/10 21:29:13 plundis Exp $ -->
+
+<autochaos>
+  <package name="console" version="0.0.2" type="server" license="GPL">
+    <library type="depend">ipc</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">video</library>
+    <library type="depend">unicode</library>
+    <library type="depend">memory</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+    
+    <source>connection.c</source>
+    <source>console.c</source>
+    <source>console_output.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

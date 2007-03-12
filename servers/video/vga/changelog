@@ -1,0 +1,16 @@
+2000-10-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* vga.c (handle_connection): Added support for the
+	IPC_VIDEO_PALETTE_SET message class.
+
+2000-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* Implemented support for the process parent unblocking system
+	call.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed some system_calls to use library wrappers instead.
+
+	* Started writing this changelog
+

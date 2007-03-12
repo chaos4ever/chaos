@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.2 2000/10/22 21:38:16 plundis Exp $ -->
+
+<autochaos>
+  <package name="servicefs" version="0.0.1" type="server" license="GPL">
+    <library type="depend">file</library>
+    <library type="depend">ipc</library>
+    <library type="depend">log</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">memory</library>
+    <library type="depend">time</library>
+    <makefile>makefile</makefile>
+
+      <!-- Sources -->
+
+    <source>servicefs.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

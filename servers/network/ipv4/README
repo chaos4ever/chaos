@@ -1,0 +1,10 @@
+README ($Id: README,v 1.1.1.1 2000/09/26 19:08:14 plundis Exp $)
+======
+
+This is the IPv4 server for chaos. It's currently pretty limited
+(depends on a DHCP server for parameter configuration, doesn't support
+routing, etc), but works okay anyway. If you think you've found a bug,
+please send mail (preferrable with a patch that fixes the problem) to
+the mail adress given below. Thanks.
+
+-- Per Lundberg <plundis@chaosdev.org>  Fri, 21 Jul 2000 18:52:49 +0200

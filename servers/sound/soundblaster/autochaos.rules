@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.2 2000/10/10 20:04:13 plundis Exp $ -->
+
+<autochaos>
+  <package name="soundblaster" version="0.0.1" type="server" license="GPL">
+    <library type="depend">ipc</library>
+    <library type="depend">log</library>
+    <library type="depend">sound</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">memory</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+    
+    <source>soundblaster.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

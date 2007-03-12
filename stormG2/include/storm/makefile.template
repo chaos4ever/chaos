@@ -1,0 +1,9 @@
+# $Id: makefile.template,v 1.1 2000/11/08 19:42:30 hal Exp $
+# Local rules.
+
+all:
+	rm -f current-arch
+	ln -sf ia32 current-arch
+
+clean-local:
+	rm -f current-arch

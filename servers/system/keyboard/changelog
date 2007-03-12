@@ -1,0 +1,43 @@
+2000-09-30  Per Lundberg  <plundis@chaosdev.org>
+
+	* Implemented support for the new parent blocking system.
+
+2000-08-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* keyboard.c (keyboard_handle_event): Fixed a bug in the
+	control/shift/alt handling.
+
+2000-08-23  Per Lundberg  <plundis@chaosdev.org>
+
+	* keyboard.c (keyboard_handle_event): Implemented proper support
+	for the control, shift and alt keys.
+
+2000-08-11  Per Lundberg  <plundis@chaosdev.org>
+
+	* keyboard.c: Made the server include simply config.h, which gets
+	all the other libraries and stuff.
+
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* Fixed some americanisations.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* All C files: Rewrote the server to use ipc and system library
+	functions instead of going right at the system calls.
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* init.c (main): Changed initialize to initialise.
+
+2000-04-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* Split the (huge) keyboard.c file into logical components. Now,
+	all the keyboard controller code is in controller.c, all the mouse
+	code is in mouse.c and all the keyboard specific stuff is in
+	keyboard.c
+	
+2000-03-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* First official version.
+

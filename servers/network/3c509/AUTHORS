@@ -1,0 +1,6 @@
+AUTHORS ($Id: AUTHORS,v 1.1.1.1 2000/09/26 19:08:14 plundis Exp $)
+=======
+The 3c509 server is based on the 3c509 server for Linux, written by
+Donald Becker. The porting was done by the following people:
+* Per Lundberg <plundis@chaosdev.org>
+* Henrik Hallin <hal@chaosdev.org>

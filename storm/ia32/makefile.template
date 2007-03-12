@@ -1,0 +1,8 @@
+# $Id: makefile.template,v 1.1.1.1 2000/09/26 19:08:16 plundis Exp $
+# Local rules
+
+wrapper.c system_calls-auto.c: system_calls.pl
+	@./system_calls.pl
+
+DEFINES="-DCREATOR=\"`whoami`@`hostname`\""
+EXTRA_FILES=system_calls.pl kernel.ld

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.4 2000/10/22 21:38:16 plundis Exp $ -->
+
+<autochaos>
+  <package name="vga" version="0.0.1" type="server" license="GPL">
+    <library type="depend">ipc</library>
+<!--    <library type="depend" name="log" /> -->
+    <library type="depend">system</library>
+    <library type="depend">memory</library>
+    <library type="depend">console</library>
+    <library type="depend">string</library>
+    <library type="depend">video</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources. -->
+    
+    <source>vga.c</source>
+    <source>vgalib.asm</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

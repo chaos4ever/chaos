@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<!-- $Id: autochaos.rules,v 1.2 2000/10/20 11:39:51 plundis Exp $ -->
+
+<autochaos>
+  <package name="realtek-pci" version="0.0.1" type="server" license="GPL">
+    <library type="depend">pci</library>
+    <library type="depend">ipc</library>
+    <library type="depend">log</library>
+    <library type="depend">string</library>
+    <library type="depend">system</library>
+    <library type="depend">ipv4</library>
+    <library type="depend">memory</library>
+    <makefile>makefile</makefile>
+
+    <!-- Sources -->
+
+    <source>realtek-pci.c</source>
+  </package>
+</autochaos>
+
+<!--
+
+Local Variables: 
+  mode: html
+End:
+
+-->

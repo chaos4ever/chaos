@@ -1,0 +1,11 @@
+2000-10-08  Per Lundberg  <plundis@chaosdev.org>
+
+	* autochaos.rules: Modified to support the new autochaos.
+
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* boot.c: Changed some calls to raw system_call functions to use
+	library wrappers.
+
+	* Started writing this change log.
+

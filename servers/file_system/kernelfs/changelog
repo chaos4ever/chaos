@@ -1,0 +1,5 @@
+2000-08-31  Per Lundberg  <plundis@chaosdev.org>
+
+	* Started writing the kernelfs server, which provides a file
+	system abstraction of some kernel data.
+

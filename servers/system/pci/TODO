@@ -1,0 +1,8 @@
+TODO ($Id: TODO,v 1.1.1.1 2000/09/26 19:08:15 plundis Exp $)
+====
+
+* We should split out the PCI device names and everything, so that it
+  is in a loadable file, which can be loaded by the PCI server on
+  demand. Having everything in core all the time is not a good way to
+  spend your systems memory, especially since most of the devices will
+  not be available anyway.

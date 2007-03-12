@@ -1,0 +1,4 @@
+# pci-id.c is automatically generated.
+
+pci-id.c: pci.h pci.pl pci.ids
+	./pci.pl

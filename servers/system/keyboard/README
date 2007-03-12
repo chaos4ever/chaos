@@ -1,0 +1,19 @@
+README ($Id: README,v 1.1.1.1 2000/09/26 19:08:15 plundis Exp $)
+======
+
+This is the keyboard server for use in a chaos system. Without it you
+will not be able to take input via your keyboard. When it starts it
+registers the port range 0x60-0x6F and IRQ 1. If one of these
+operations fails, the keyboard server aborts startup. If a problem
+like this occurs, it probably is because of another server already
+having registered the ports or the IRQ.
+
+If the startup was successful, the server then registers to the kernel
+a service of protocol "keyboard" (IPC_PROTOCOL_KEYBOARD). The kernel
+appends a number after this name, depending on how many other keyboard
+services registered. This way, your USB-keyboard and your standard
+keyboard servers both have to register a service of protocol
+"keyboard", but the first one will be /services/keyboard/0 and the
+second one will be /services/keyboard/1.
+
+-- Per Lundberg <plundis@chaosdev.org>  Sat,  8 Jul 2000 02:48:28 +0200

@@ -1,0 +1,7 @@
+README ($Id: README,v 1.2 2000/10/16 21:00:05 plundis Exp $)
+======
+
+This server is the hardware driver for the 3Com Etherlink III (3C509)
+network card. It should take a couple of parameters when started so it
+knows which IRQ to hook and which ports to communicate with. Right
+now, it probes everything as good as possible.

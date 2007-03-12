@@ -1,0 +1,23 @@
+2000-07-25  Per Lundberg  <plundis@chaosdev.org>
+
+	* fat.c: Changed some raw system_call functions to use library
+	functions instead.
+
+2000-07-15  Per Lundberg  <plundis@chaosdev.org>
+
+	* fat.c: Implemented (hopefully working) support for
+	subdirectories.
+
+2000-07-03  Per Lundberg  <plundis@chaosdev.org>
+
+	* fat/fat.h: Changed initialize to initialise.
+
+2000-03-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* Made it compile with the new kernel and libraries.
+
+1999-10-31  Per Lundberg  <plundis@chaosdev.org>
+
+	* Reorganized lots of things. Removed the configure script, created
+	configure.in files for each servers and created a new Makefile.
+

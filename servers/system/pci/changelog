@@ -1,0 +1,27 @@
+2000-10-14  Per Lundberg  <plundis@chaosdev.org>
+
+	* pci.c: Fixed a bug which made the code disable the ISA bridge in
+	some way... or something. It didn't work anyway, but now it does. :)
+
+2000-09-29  Per Lundberg  <plundis@chaosdev.org>
+
+	* Basically rewrote the PCI server from scratch, to support
+	multiple PCI buses (and thus AGP).
+
+2000-07-27  Per Lundberg  <plundis@chaosdev.org>
+
+	* TODO: New file.
+
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* pci.c: Fixed an american typo. Started working on making this
+	server something more than something to just print out a nice list
+	of available devices...
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* Rewrote to not use as many system_call functions directly, but
+	instead go via wrappers.
+
+	* Started writing this change log.
+

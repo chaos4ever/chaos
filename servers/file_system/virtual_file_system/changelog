@@ -1,0 +1,13 @@
+2000-07-22  Per Lundberg  <plundis@chaosdev.org>
+
+	* virtual_file_system.c (vfs_directory_entry_read): Added support
+	for reading directory listings of the kernel file system.
+
+2000-06-02  Per Lundberg  <plundis@chaosdev.org>
+
+	* Completed a first version of vfs_directory_entry_read (). Thus,
+	listing files in the VFS now mostly works.
+
+	* Renamed this server from vfs to virtual_file_system. Also
+	started writing this changelog.
+

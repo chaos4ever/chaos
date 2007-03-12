@@ -99,7 +99,12 @@ int main (void)
     return -1;
   }
 
-  mount.mailbox_id = mailbox_id[0];
+  /* Obviously this needs to be specified but the neccessary code at
+     the other end (virtual_file_system server) is not there so it
+     proved meaningless to add this yet... it just broke other code
+     from compiling. (because I added the field to the file_mount_type
+     structure) */
+  //mount.mailbox_id = mailbox_id[0];
   string_copy (mount.location, "ramdisk");
 
   /* That's it. Send the message. */

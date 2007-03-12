@@ -1,0 +1,74 @@
+2000-09-17  Per Lundberg  <plundis@chaosdev.org>
+
+	* socket.c (socket_receive): New function.
+
+	* udp.c (udp_packet_receive): Added support for buffering packets
+	that should be delivered in the system.
+
+	* packet.h: New file; defines incoming packets.
+
+	* arp.c (arp_get_entry): New function.
+	(arp_get_number_of_entries): Likewise.
+
+	* ipv4.c: Added support for turning on and off IP forwarding.
+
+	* socket.h: New file.
+
+	* socket.c: Likewise.
+
+2000-09-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* Implemented routing support (almost working...)
+
+	* arp.c (arp_who_has): New function.
+
+	* route.h: New file.
+
+	* forward.h: Likewise.
+
+	* forward.c: Likewise.
+
+	* route.c: Likewise.
+
+	* ipv4.c (interface_get_number): New function.
+	(interface_get_amount): Likewise.
+	(interface_get): Likewise.
+	(interface_add): Likewise.
+
+	* arp.c (arp_insert_entry): New function.
+	(arp_ip_to_ethernet_address): Likewise.
+	(arp_cache): New global.
+
+2000-08-05  Per Lundberg  <plundis@chaosdev.org>
+
+	* tcp.h (tcp_header_type): Cleaned up the names.
+
+	* ipv4.c (ipv4_checksum): Fixed a cruicial bug which made the
+	routine calculate bad checksums for stuff with an odd length.
+
+	* ipv4.h (ipv4_header_type): Cleaned up the names.
+
+2000-08-04  Per Lundberg  <plundis@chaosdev.org>
+
+	* dhcp.c (dhcp_assign): Added code for setting
+	message_parameter.protocol, since it was missing.
+
+	* dhcp.h (dhcp_message_type): Cleaned up the names.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* All C files: Converted from using raw system calls to using
+	ipc_send (), ipc_receive () and other nice, friendly functions.
+ 
+2000-07-21  Per Lundberg  <plundis@chaosdev.org>
+
+	* Started rewriting some parts of the server, so that it can
+	support multiple interfaces. Ideally, it would grab all ethernet
+	devices and do DHCP (or static address assignment) for them, but
+	right now it just uses the first one (if available) and also
+	creates a loopback device.
+ 
+2000-03-12  Per Lundberg  <plundis@chaosdev.org>
+
+	* Converted to the new kernel.
+

@@ -1,0 +1,11 @@
+2000-07-26  Per Lundberg  <plundis@chaosdev.org>
+
+	* serial.c: Fixed some american stupidos.
+
+2000-07-24  Per Lundberg  <plundis@chaosdev.org>
+
+	* Rewrote to use memory allocation and use less system_call
+	functions.
+
+	* Started writing this change log.
+
