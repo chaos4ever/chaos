@@ -95,7 +95,7 @@ struct iphdr {
         u16   check;
 	u32   saddr;
         u32   daddr;
-};
+} __attribute__ ((packed));
 
 
 struct tcphdr {
@@ -115,7 +115,7 @@ struct tcphdr {
         u16   window;
         u16   check;
         u16   urg_ptr;
-};
+} __attribute__ ((packed));
 
 
 

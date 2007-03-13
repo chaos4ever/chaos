@@ -36,7 +36,6 @@ tag_type empty_tag =
 
 log_structure_type log_structure;
 
-u8 ne_detect(device_type *);
 u8 ne_reset_chip(device_type *);
 void ne_init_chip(device_type *, u8);
 void ne_int_handler(device_type *);
@@ -48,116 +47,10 @@ u16 hex2dec(u8 *);
 
 //device_type card;
 u32 message[1024];
-u32 data_buffer[1024]; /* xxx - was 400 before.. */
+u32 data_buffer[1518]; /* xxx - was 400 before.. */
 struct ne_user_t users[MAX_USERS];
 u8 num_users = 0;
 
-
-u8 ne_detect (device_type *n)
-{
-  u8 chk = 0, x;
-  u32 i;
-
-  if (!n || !n->io || !n->irq)
-  {
-    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Invalid io(0x%x) address or irq(%d)", n->io, n->irq);
-    return ERROR;
-  }
-
-  if (system_call_port_range_register (n->io, 0x1F, PACKAGE_NAME))
-  {
-    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Cannot allocate 0x%x => 0x%x", n->io, n->io+0x1f);
-    return ERROR;
-  }
-
-  chk = system_port_in_u8 (n->io);
-  if (chk == 0xff) /* No card found */
-  {
-    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Nothing found on 0x%x", n->io);
-
-    /* FIXME: deallocate I/O space */
-    return ERROR;
-  }
-
-  /* Check if it really is a NE2k card */
-  outb (NE_NODMA + NE_PAGE1 + NE_STOP, n->io); /* Stop the card */
-  x = inb (n->io + NE_R0_CNTR0);
-  outb (0xff, n->io + NE_R0_CNTR0);
-  outb (NE_NODMA + NE_PAGE0, n->io);
-  inb (n->io + NE_R0_CNTR0); /* Clear the counter by reading */
-
-  if (inb (n->io + NE_R0_CNTR0) != 0) /* Ooops ;) */
-  {
-    outb (chk, n->io);
-    outb (chk, n->io + NE_R0_CNTR0);
-    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "Something, but not a NE2k card, found. Aborting");
-    return ERROR;
-  }
-
-  ne_reset_chip (n);
-
-  /* We don't ack _all_ interrupts in ne_reset_chip(),
-     so we do it here instead */
-  outb (0xff, n->io + NE_R0_ISR);
-
-
-  /* Init registers and shit */
-  for (i = 0;i < sizeof (ne_preinit_program)/sizeof (ne_program);i++)
-  {
-    outb (ne_preinit_program[i].value, n->io + ne_preinit_program[i].offset);
-  }
-
-  /* It's time to read the station address prom now */
-  for (i = 0, x = 0;i < 32;i += 2)
-  {
-    n->prom[i] = inb (n->io + NE_DATAPORT);
-    n->prom[i+1] = inb (n->io + NE_DATAPORT);
-    if (n->prom[i] != n->prom[i+1])
-      x = 1;
-  }
-
-  if (x) /* This isn't a 16 bit card */
-  {
-    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "Haha! Your card isn't supported. Get a 16 bit card");
-    return ERROR;
-  }
-
-  for (i = 0;i < 16;i++)
-    n->prom[i] = n->prom[i+i];
-
-  for (i = 0; i < 6; i++)
-    n->ethernet_address[i] = n->prom[i];
-
-  log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "MAC address is %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x"
-         " and signature [0x%x 0x%x]",
-         n->prom[0], n->prom[1], n->prom[2],
-         n->prom[3], n->prom[4], n->prom[5], 
-         n->prom[14], n->prom[15]);
-
-  outb (0x49, n->io + NE_R0_DCR); /* Set the card in word-wide mode */
-
-  /* Create a thread for the IRQ handler and set up an IRQ handler loop. */
-  if (system_call_thread_create () == SYSTEM_RETURN_THREAD_NEW) {
-    if (system_call_irq_register (n->irq, PACKAGE_NAME) != SYSTEM_RETURN_SUCCESS)
-    {
-      log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "$@!# Couldn't register irq %d :(", n->irq);
-      /* FIXME: Deallocate I/O space. */
-
-      return ERROR;
-    }
-
-    while (TRUE) {
-      system_call_irq_wait (n->irq);
-      ne_int_handler (n);
-    }
-  }
-
-  /* this code should probably wait here until the IRQ handler etc has
-     been setup... */
-  
-  ne_init_chip (n, 0);
-  return 0;
-}
 
 u8 ne_reset_chip (device_type *n)
 {
@@ -234,9 +127,9 @@ void ne_init_chip (device_type *n, u8 startp)
     outb (NE_DEF_RXCFG, n->io + NE_R0_RCR); /* ..and receive. */
     n->status |= NIC_UP;
   }
-  else
+  else {
     n->status |= NIC_DOWN;
-
+  }
 
   n->status &= ~NIC_INIT;
 }
@@ -244,134 +137,124 @@ void ne_init_chip (device_type *n, u8 startp)
 /* FIXME: rewrite this! */
 void ne_int_handler (device_type *card __attribute__ ((unused)))
 {
-  return;
-
-#if 0
   int sreg;
   u8 num_handled;
 
-  for (card->num_interrupts = 1;; card->num_interrupts++)
-  {
-    if (debug >= 2)
-      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Entering interrupt again");
-
-    if (card->status & NIC_INT)
-      log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- What, entering interrupt again???");
-
-    card->status |= NIC_INT;
-
-    /* Switch to page 0 */
-    outb (NE_NODMA + NE_PAGE0, card->io);
-
-    num_handled = 0;
-    while (!(card->status & NIC_BUSY) && 
-           (sreg = inb (card->io + NE_R0_ISR)) != 0 && 
-           num_handled++ < MAX_INT_WORK)
-    {
-//      sreg = inb (card->io+NE_R0_ISR);
-      if (debug == 2)
-        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x", sreg, inb(card->io + NE_R0_IMR));
+  card->num_interrupts++;
   
-      if (!(card->status & NIC_UP))
-        log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Weird, this nic should be stopped!");
-
-      if (sreg & BIT_ISR_OVERFLW)
-      {
-        if (debug >= 1)
-          log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Overflow in rx buffer");
-
-        /* This a little more than 10ms. */
+  if (debug >= 2)
+    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Entering interrupt again");
+  
+  if (card->status & NIC_INT)
+    log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- What, entering interrupt again???");
+  
+  card->status |= NIC_INT;
+  
+  /* Switch to page 0 */
+  outb (NE_NODMA + NE_PAGE0, card->io);
+  
+  num_handled = 0;
+  while (!(card->status & NIC_BUSY) && 
+         (sreg = inb (card->io + NE_R0_ISR)) != 0 && 
+         num_handled++ < MAX_INT_WORK)
+  {
+    //      sreg = inb (card->io+NE_R0_ISR);
+    if (debug == 2)
+      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x", sreg, inb(card->io + NE_R0_IMR));
+    
+    if (!(card->status & NIC_UP))
+      log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Weird, this nic should be stopped!");
+    
+    if (sreg & BIT_ISR_OVERFLW)
+    {
+      if (debug >= 1)
+        log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Overflow in rx buffer");
+      
+      /* This a little more than 10ms. */
 #ifdef CAN_WAIT_10_MS
-        ne_handle_overflow (card);
-
+      ne_handle_overflow (card);
+      
 #else /* XXX - this code probably DONT work */
 #error "Tomtevarning; DEN HÄR KODEN FUNKAR INTE"
-        {
-          u32 tomte;
-
-          if (debug >= 1)
-            log_print_formatted ("** resetting card->.");
-
-          tomte = NE_RST_OVERRUN;
-          card->status |= NIC_BUSY;
-          syscall_message_send (syscall_process_get_pid_by_name ("ne"), &tomte, 4);
-          break;
-          /* Maybe we should ack. some interrupts.. */
-        }
+      {
+        u32 tomte;
+        
+        if (debug >= 1)
+          log_print_formatted ("** resetting card->.");
+        
+        tomte = NE_RST_OVERRUN;
+        card->status |= NIC_BUSY;
+        syscall_message_send (syscall_process_get_pid_by_name ("ne"), &tomte, 4);
+        break;
+        /* Maybe we should ack. some interrupts.. */
+      }
 #endif
-      }
-  
-      if (sreg & (BIT_ISR_RX+BIT_ISR_RX_ERR))
-      {
-        if (debug >= 2)
-          log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Packet received");
-
-        ne_recv (card);
-      }
+    }
     
-      if (sreg & BIT_ISR_TX)
-        if (debug >= 1)
-          log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Transmit");
+    if (sreg & (BIT_ISR_RX+BIT_ISR_RX_ERR))
+    {
+      if (debug >= 2)
+        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Packet received");
+
+      ne_recv (card);
+    }
     
-      if (sreg & BIT_ISR_TX_ERR)
-        if (debug >= 1)
-          log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Transmit error");
+    if (sreg & BIT_ISR_TX)
+      if (debug >= 1)
+        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Transmit");
+    
+    if (sreg & BIT_ISR_TX_ERR)
+      if (debug >= 1)
+        log_print_formatted (&log_structure, LOG_URGENCY_WARNING, "-- Transmit error");
 
-      if (sreg & BIT_ISR_CNTRS)
-      {
-        u8 x,y,z;
-        x = inb (card->io+NE_R0_CNTR0);
-        y = inb (card->io+NE_R0_CNTR1);
-        z = inb (card->io+NE_R0_CNTR2);
-        outb (BIT_ISR_CNTRS, card->io+NE_R0_ISR);
-        if (debug >= 2)
-          log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- COUNTERS: frame:%d crc:%d missed:%d", x,y,z);
-      }
+    if (sreg & BIT_ISR_CNTRS)
+    {
+      u8 x,y,z;
+      x = inb (card->io+NE_R0_CNTR0);
+      y = inb (card->io+NE_R0_CNTR1);
+      z = inb (card->io+NE_R0_CNTR2);
+      outb (BIT_ISR_CNTRS, card->io+NE_R0_ISR);
+      if (debug >= 2)
+        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- COUNTERS: frame:%d crc:%d missed:%d", x,y,z);
+    }
   
-      if (sreg & BIT_ISR_RDC)
-      {
-        if (debug >= 2)
-          log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- Ignoring RDC interrupt");
+    if (sreg & BIT_ISR_RDC)
+    {
+      if (debug >= 2)
+        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- Ignoring RDC interrupt");
 
-        outb (BIT_ISR_RDC, card->io + NE_R0_ISR);
+      outb (BIT_ISR_RDC, card->io + NE_R0_ISR);
 
-        /* XXX - lock here for debugging purposes */
-//        for(;;);
-      }
-
-
-     /* XXX - varför i helvete sitter det en // här? */
-     /* Ack. all interrupts */
-//      outb (0xff, card->io + NE_R0_ISR);
-
-
-      /* XXX - does this enable the card again?
-               does it make the card generate intr.:s. again? */
-
-      outb (NE_NODMA + NE_PAGE0 + NE_START, card->io);
+      /* XXX - lock here for debugging purposes */
+      //        for(;;);
     }
 
-    if (num_handled == MAX_INT_WORK)
-      if (debug >= 1)
-        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- ** -- Max interrupt work done!!");
 
-    card->status &= ~NIC_INT;
-    if (debug >= 2)
-      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x device_type status:%.2x (Leaving interrupt handler)", inb(card->io+NE_R0_ISR),
-             inb (card->io+NE_R0_IMR), card->status);
+    /* XXX - varför i helvete sitter det en // här? */
+       /* Ack. all interrupts */
+       //      outb (0xff, card->io + NE_R0_ISR);
 
-    // FIXME: should we acknowledge each interrupt if we have multiple
-    // interrupts waiting in queue? Probably.
-    system_call_irq_acknowledge (card->irq);
+
+       /* XXX - does this enable the card again?
+          does it make the card generate intr.:s. again? */
+
+       outb (NE_NODMA + NE_PAGE0 + NE_START, card->io);
   }
-#endif
-}
 
+  if (num_handled == MAX_INT_WORK)
+    if (debug >= 1)
+      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- ** -- Max interrupt work done!!");
+
+  card->status &= ~NIC_INT;
+  if (debug >= 2)
+    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x device_type status:%.2x (Leaving interrupt handler)", inb(card->io+NE_R0_ISR),
+                         inb (card->io+NE_R0_IMR), card->status);
+}
 
 void ne_recv (device_type *card)
 {
-/* xxx - moved data_buffer to global .. */
-   u8 *data = ((u8 *)data_buffer) + ((u8) 8);
+  /* xxx - moved data_buffer to global .. */
+   u8 *data = ((u8 *) data_buffer) + ((u8) 8);
    u8 rx_packets = 0;
    u8 rx_page;
    u8 frame, next_frame, pkt_status;
@@ -407,7 +290,7 @@ void ne_recv (device_type *card)
 
     if (frame == rx_page) /* D0h, we're done */
     {
-      if (debug >= 1)
+      if (debug >= 2)
         log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** wow, we're done recv!");
 
       break;
@@ -479,7 +362,7 @@ void ne_recv (device_type *card)
       /* Do something useful */
       if ((pkt_status & 0x0f) == BIT_RSR_RXOK)
       {
-        /* Wheee.. We recv. a good packet */
+        /* Wheee.. We received a good packet */
 #define PROTO ((data[12]*256)+data[13])
 
         if (debug >= 1)
@@ -523,34 +406,38 @@ void ne_recv (device_type *card)
 
             if (i->protocol == 0x1)
             {
-              p += sizeof (struct iphdr);
+              p += sizeof (ipv4_ethernet_header_type);
               log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "ICMP type is [%.2x : %.2x]", p[0], p[1]);
             }
 
           }
-         
-          for (n = 0; n < num_users; n++)
-          {
-            if (users[n].proto != e->h_proto)
+
+          /* Check if this packet should be delivered somewhere. */
+          
+          for (n = 0; n < card->number_of_targets; n++)
+          {          
+            if (card->target[n].protocol_type ==
+                ((ipv4_ethernet_header_type *) data)->protocol_type)
             {
-              log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** User proto: %d eth: %d\n", users[n].proto, (e->h_proto));
-              continue;
+              message_parameter_type message_parameter;
+              
+              message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
+              message_parameter.message_class = IPC_ETHERNET_PACKET_RECEIVED;
+              message_parameter.length = pkt_len + 8; /* probably 8 bytes of header. */
+              message_parameter.block = FALSE;
+              message_parameter.data = data;
+              
+              if (debug >= 1)
+              {
+                log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, 
+                                     "Sending to mailbox ID %u", 
+                                     card->target[n].mailbox_id);
+              }
+              
+              system_call_mailbox_send (card->target[n].mailbox_id,
+                                        &message_parameter);
+              break;
             }
-
-            // Send the packet to the destination
-#if 0
-            message_parameter_type message_parameter;
-
-            message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
-            message_parameter.message_class = IPC_ETHERNET_PACKET_RECEIVED;
-            message_parameter.length = pkt_len;
-            message_parameter.block = FALSE;
-            message_parameter.data = data_buffer;
-
-            log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "Sending data to pid %ld: ETHERNET_PACKET_RECEIVED, len %d 0x%x\n", users[n].pid, pkt_len + 8, pkt_len + 8);
-            system_call_mailbox_send (device->target[n].mailbox_id,
-                                      &message_parameter);
-#endif
           }
 	} /* End of IP code */
       } /* End of RX ok code */
@@ -630,16 +517,16 @@ void ne_download_buf (device_type *n, u16 len, u8 *data, u16 offset)
 
 
 
-void ne_handle_overflow (device_type *n)
+void ne_handle_overflow (device_type *device)
 {
  
   u8 txing, resend = 0;
   u16 x;
   
-  txing = inb (n->io) & NE_TRANS;
+  txing = inb (device->io) & NE_TRANS;
 
   /* stop the card->. */
-  outb (NE_NODMA + NE_PAGE0 + NE_STOP, n->io);
+  outb (NE_NODMA + NE_PAGE0 + NE_STOP, device->io);
   if (debug >= 1)
     log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- Huh.. Overflow.. Sleeping one second!");
 
@@ -649,36 +536,36 @@ void ne_handle_overflow (device_type *n)
 #endif
 
   for(x = 1;x != 0;x++); /* XXX - Hmm, this is probably ok for now :) */
-  outb (0, n->io + NE_R0_RBCR0);
-  outb (0, n->io + NE_R0_RBCR1);
+  outb (0, device->io + NE_R0_RBCR0);
+  outb (0, device->io + NE_R0_RBCR1);
 
   if (txing)
   {
-    if (!(inb (n->io+NE_R0_ISR) & (BIT_ISR_TX+BIT_ISR_TX_ERR)))
+    if (!(inb (device->io+NE_R0_ISR) & (BIT_ISR_TX+BIT_ISR_TX_ERR)))
       resend++;
   }
 
 
-  outb (BIT_TCR_LB, n->io + NE_R0_TCR); /* Enter loopback mode */
-  outb (NE_NODMA + NE_PAGE0+NE_START, n->io);
+  outb (BIT_TCR_LB, device->io + NE_R0_TCR); /* Enter loopback mode */
+  outb (NE_NODMA + NE_PAGE0+NE_START, device->io);
 
   if (debug >= 1)
     log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** - Clearing rx buffer ring");
   /* Clear RX ring buffer */
-  ne_recv (n);
+  ne_recv (device);
 
   /* Ack. overflow interrupt */
-  outb (BIT_ISR_OVERFLW, n->io+NE_R0_ISR);
+  outb (BIT_ISR_OVERFLW, device->io+NE_R0_ISR);
 
   /* Leave loopback mode & resend any stopped packets */
-  outb (0, n->io + NE_R0_TCR);
+  outb (0, device->io + NE_R0_TCR);
   if (resend)
-    outb (NE_NODMA + NE_PAGE0 + NE_START + NE_TRANS, n->io);
+    outb (NE_NODMA + NE_PAGE0 + NE_START + NE_TRANS, device->io);
 
   /* We're finnished */
 
   log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "** overflow reset done!");
-  n->status &= ~NIC_BUSY;
+  device->status &= ~NIC_BUSY;
 }
 
 u16 hex2dec (u8 *s)
@@ -709,17 +596,126 @@ u16 hex2dec (u8 *s)
 
 /* Open the ne2000 device. */
 
-static bool ne2000_open (device_type *device __attribute__ ((unused)))
+static bool ne2000_open (device_type *device)
 {
-  // FIXME
+  /* Create a thread for the IRQ handler and set up an IRQ handler loop. */
+  if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW) {
+    log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "in IRQ thread");
+
+    if (system_call_irq_register (device->irq, PACKAGE_NAME) != SYSTEM_RETURN_SUCCESS)
+    {
+      log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "$@!# Couldn't register irq %d :(", device->irq);
+      /* FIXME: Deallocate I/O space. */
+
+      return FALSE;
+    }
+
+    system_call_thread_name_set ("IRQ handler");
+
+    while (TRUE) {
+      system_call_irq_wait (device->irq);
+      ne_int_handler (device);
+      system_call_irq_acknowledge (device->irq);
+    }
+  }
+
+  ne_init_chip (device, 1);
   return TRUE;
 }
 
+// FIXME: should have an accompanying ne2000_close ()...
+
 /* Probe for an ne2000 compatible device. */
 
-static bool ne2000_probe (device_type *device __attribute__ ((unused)))
+static bool ne2000_probe (device_type *device)
 {
-  // FIXME
+  u8 chk = 0, x;
+  u32 i;
+
+  if (!device || !device->io || !device->irq)
+  {
+    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Invalid io(0x%x) address or irq(%d)", device->io, device->irq);
+    return FALSE;
+  }
+
+  if (system_call_port_range_register (device->io, 0x1F, PACKAGE_NAME))
+  {
+    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Cannot allocate 0x%x => 0x%x", device->io, device->io + 0x1f);
+    return FALSE;
+  }
+
+  chk = system_port_in_u8 (device->io);
+  if (chk == 0xff) /* No card found */
+  {
+    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "-- Nothing found on 0x%x", device->io);
+
+    /* FIXME: deallocate I/O space */
+    return FALSE;
+  }
+
+  /* Check if it really is a NE2k card */
+  outb (NE_NODMA + NE_PAGE1 + NE_STOP, device->io); /* Stop the card */
+  x = inb (device->io + NE_R0_CNTR0);
+  outb (0xff, device->io + NE_R0_CNTR0);
+  outb (NE_NODMA + NE_PAGE0, device->io);
+  inb (device->io + NE_R0_CNTR0); /* Clear the counter by reading */
+
+  if (inb (device->io + NE_R0_CNTR0) != 0) /* Ooops ;) */
+  {
+    outb (chk, device->io);
+    outb (chk, device->io + NE_R0_CNTR0);
+    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "Something, but not a NE2k card, found. Aborting");
+    return FALSE;
+  }
+
+  ne_reset_chip (device);
+
+  /* We don't ack _all_ interrupts in ne_reset_chip(),
+     so we do it here instead */
+  outb (0xff, device->io + NE_R0_ISR);
+
+
+  /* Init registers and shit */
+  for (i = 0;i < sizeof (ne_preinit_program)/sizeof (ne_program);i++)
+  {
+    outb (ne_preinit_program[i].value, device->io + ne_preinit_program[i].offset);
+  }
+
+  /* It's time to read the station address prom now */
+  for (i = 0, x = 0;i < 32;i += 2)
+  {
+    device->prom[i] = inb (device->io + NE_DATAPORT);
+    device->prom[i+1] = inb (device->io + NE_DATAPORT);
+    if (device->prom[i] != device->prom[i+1])
+      x = 1;
+  }
+
+  if (x) /* This isn't a 16 bit card */
+  {
+    log_print_formatted (&log_structure, LOG_URGENCY_EMERGENCY, "Haha! Your card isn't supported. Get a 16 bit card");
+    return FALSE;
+  }
+
+  for (i = 0;i < 16;i++) {
+    device->prom[i] = device->prom[i + i];
+  }
+
+  for (i = 0; i < 6; i++) {
+    device->ethernet_address[i] = device->prom[i];
+  }
+
+  log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "MAC address is %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x"
+         " and signature [0x%x 0x%x]",
+         device->prom[0], device->prom[1], device->prom[2],
+         device->prom[3], device->prom[4], device->prom[5], 
+         device->prom[14], device->prom[15]);
+
+  outb (0x49, device->io + NE_R0_DCR); /* Set the card in word-wide mode */
+
+  /* this code should probably wait here until the IRQ handler etc has
+     been setup... */
+  
+  ne_init_chip (device, 0);
   return TRUE;
 }
 
@@ -835,7 +831,7 @@ static void handle_device (device_type *device)
   while (TRUE)
   {
     mailbox_id_type reply_mailbox_id;
-
+    
     ipc_service_connection_wait (&ipc_structure);
     reply_mailbox_id = ipc_structure.output_mailbox_id;
 
@@ -851,6 +847,7 @@ static void handle_device (device_type *device)
 
 int main (void)
 {
+  device_type *device;
   bool found;
 
   /* Set up our name. */
@@ -867,26 +864,31 @@ int main (void)
 
   log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "NE2000 server by noah williamsson");
 
-  do
+  memory_allocate ((void **) &device, sizeof (device_type));
+  
+  // FIXME: Hardwired for now. These are the values that Bochs use
+  // by default, that's why I'm choosing them.
+  device->io = 0x300;
+  device->irq = 3;
+
+  device->num_dropped = 0;
+  device->num_interrupts = 0;
+  
+  found = ne2000_probe (device);
+  
+  if (!found)
   {
-    device_type *device;
-
-    memory_allocate ((void **) &device, sizeof (device_type));
-    found = ne2000_probe (device);
-
-    if (!found)
+    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "!found");
+    memory_deallocate ((void **) &device);
+  }
+  else
+  {
+    if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
     {
-      memory_deallocate ((void **) &device);
+      handle_device (device);
+      return 0;
     }
-    else
-    {
-      if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
-      {
-        handle_device (device);
-        return 0;
-      }
-    }
-  } while (found);
+  }
 
   system_call_process_parent_unblock ();
 
@@ -994,11 +996,6 @@ int main(int argc, char *argv[])
 
     switch (message[0])
     {
-      case NE_START_CARD:
-        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "Starting card->. (pid %ld wants this..)", from);
-        ne_init_chip (&card, 1);
-        break;
-
       case NE_STOP_CARD:
         log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "Stopping card->. (pid %ld wants this..)", from);
         ne_init_chip (&card, 0);
