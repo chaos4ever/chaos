@@ -434,12 +434,16 @@ bool ne2000_start_transmit (void *data, u32 length, device_type *device)
   int nic_base = device->io;
   time_type dma_start;
 
-  int destination = 64 << 8;
+  int start_page = 64;
 #ifdef NE_SANITY_CHECK
   int retries = 0;
 #endif
+  u8 scratch[60];
 
   log_print(&log_structure, LOG_URGENCY_DEBUG, "in ne2000_start_transmit");
+
+  /* Turn off interrupts. */
+  outb_p(0x00, nic_base + NE_R0_IMR);
   
   /* Round the count up for word writes.  Do we need to do this?
      What effect will an odd byte count have on the 8390?
@@ -456,6 +460,10 @@ bool ne2000_start_transmit (void *data, u32 length, device_type *device)
                         "DMAing conflict in ne_block_output."
                         "[DMAstat:%d][irqlock:%d]\n",
                         device->status & NIC_DMA, device->status & NIC_INT);
+    
+    /* Turn 8390 interrupts back on. */
+    outb_p(BIT_ISR_ALL, nic_base + NE_R0_IMR);
+
     return FALSE;
   }
 
@@ -483,13 +491,23 @@ retry:
 #endif
   
   outb_p(BIT_ISR_RDC, nic_base + NE_R0_ISR);
-  
+
+  /* The minimum length of a frame that can be successfully sent is 60
+     bytes, minus FCS. */
+
+  if (length < 60) {
+    memory_copy(&scratch, data, length); // what if it has been word-aligned...?
+    memory_set_u8(&scratch[length], 0, 60 - length);
+    data = &scratch;
+    length = 60;
+  }
+
   /* Now the normal output. */
   outb_p(length & 0xFF, nic_base + NE_R0_RBCR0);
   outb_p(length >> 8,   nic_base + NE_R0_RBCR1);
   
-  outb_p(destination & 0xFF, nic_base + NE_R0_RSAR0);
-  outb_p(destination >> 8, nic_base + NE_R0_RSAR1);
+  outb_p(0, nic_base + NE_R0_RSAR0);
+  outb_p(start_page, nic_base + NE_R0_RSAR1);
   
   outb_p(NE_RWRITE + NE_START, nic_base + NE_R0_CMD);
   log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
@@ -510,7 +528,7 @@ retry:
       int high = inb_p(nic_base + NE_R0_RSAR1);
       int low = inb_p(nic_base + NE_R0_RSAR0);
       addr = (high << 8) + low;
-      if (destination + length == addr) {
+      if ((start_page << 8) + length == addr) {
         break;
       }
     } while (--tries > 0);
@@ -519,7 +537,7 @@ retry:
     {
       log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "Tx packet transfer address mismatch,"
              "%#4.4lx (expected) vs. %#4.4x (actual).\n",
-             destination + length, addr);
+                          (start_page << 8) + length, addr);
       if (retries++ == 0)
         goto retry;
     }
@@ -534,6 +552,10 @@ retry:
       log_print(&log_structure, LOG_URGENCY_WARNING, "timeout waiting for Tx RDC.");
       ne_reset_chip(device);
       ne_init_chip(device, 1);
+
+      /* Turn 8390 interrupts back on. */
+      outb_p(BIT_ISR_ALL, nic_base + NE_R0_IMR);
+      
       return FALSE;
     }
   
@@ -546,13 +568,20 @@ retry:
   if (inb_p(nic_base) & NE_TRANS)
   {
     log_print(&log_structure, LOG_URGENCY_WARNING, "ne2000_start_transmit() called with the transmitter busy");
+
+    /* Turn 8390 interrupts back on. */
+    outb_p(BIT_ISR_ALL, nic_base + NE_R0_IMR);
+    
     return FALSE;
   }
 
   outb_p(length & 0xFF, nic_base + NE_R0_TBCR0);
   outb_p(length >> 8, nic_base + NE_R0_TBCR1);
-  outb_p(destination >> 8, nic_base + NE_R0_TPSR);
+  outb_p(start_page, nic_base + NE_R0_TPSR);
   outb_p(NE_NODMA + NE_TRANS + NE_START, nic_base + NE_R0_CMD);
+
+  /* Turn 8390 interrupts back on. */
+  outb_p(BIT_ISR_ALL, nic_base + NE_R0_IMR);
 
   return TRUE;
 }
