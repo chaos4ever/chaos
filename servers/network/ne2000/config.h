@@ -13,5 +13,6 @@
 #include <system/system.h>
 #include <memory/memory.h>
 #include <ipv4/ipv4.h>
+#include <time/time.h>
 
 #endif /* !__CONFIG_H__ */

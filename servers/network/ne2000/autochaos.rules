@@ -10,6 +10,7 @@
     <library type="depend">system</library>
     <library type="depend">memory</library>
     <library type="depend">ipv4</library>
+    <library type="depend">time</library>
     <makefile>makefile</makefile>
     <source>ne2000.c</source>
   </package>

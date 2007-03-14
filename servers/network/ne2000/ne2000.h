@@ -19,7 +19,10 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
    USA. */
 
-const int debug = 1;
+// FIXME: this should be a define, not a variable. That way we will
+// not even compile in debugging code if not debugging = greater
+// performance.
+const int debug = 0;
 
 /* 0: no debug at all
    1: normal debug
@@ -127,10 +130,18 @@ struct tcphdr {
 /* To avoid rewriting a lot of code... */
 #define outb(a,b) system_port_out_u8 (b, a)
 #define inb(a) system_port_in_u8 (a)
+#define outb_p(a,b) system_port_out_u8_pause (b,a)
+
+static inline u8 inb_p(u16 a) {
+  u8 value = system_port_in_u8 (a); 
+  system_sleep (1);
+  return value;
+}
+
+#define outsw(a,b,c) system_port_out_u16_string(a,b,c)
 
 /* FIXME: this should be placed in the ipv4 library or similar. */
 #define host_to_network_u16(a) system_byte_swap_u16(a)
-
 
 /* Message stuff */
 #define NE_START_CARD	0x02
@@ -186,9 +197,9 @@ struct tcphdr {
 #define NE_R0_TSR	0x04	/* Transmit status register [read] */
 #define NE_R0_TPSR	0x04	/* Transmit page start address [write] */
 #define NE_R0_NCR	0x05	/* Number of collision register [read] */
-#define NE_R0_TBCR0	0x06	/* Transmit byte count register 0 [write] */
-#define NE_R0_TBCR1	0x07	/* Transmit byte count register 1 [write] */
-#define NE_R0_FIFO	0x06	/* Fifo [read] */
+#define NE_R0_TBCR0	0x05	/* Transmit byte count register 0 [write] */
+#define NE_R0_FIFO	0x06	/* FIFO [read] */
+#define NE_R0_TBCR1	0x06	/* Transmit byte count register 1 [write] */
 #define NE_R0_ISR	0x07	/* Interrupt status register [read/write] */
 #define NE_R0_CRDA0	0x08	/* Current remote DMA address register 0 [read] */
 #define NE_R0_RSAR0	0x08	/* Remote start address register 0 [write] */

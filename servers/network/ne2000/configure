@@ -169,6 +169,20 @@ else
   exit 1;
 }
 
+print ("Checking for time library... ");
+if (-f "$chaos_root/data/programming/libraries/static/library_time.a")
+{
+  print ("found.\n");
+
+  push (@libraries, "time");
+}
+else
+{
+  print ("not found.\n");
+  print ("\nError: time is a required library. Please check your configuration.\n\n");
+  exit 1;
+}
+
 
 my $all_arguments = "";
 foreach my $argument (@ARGV)

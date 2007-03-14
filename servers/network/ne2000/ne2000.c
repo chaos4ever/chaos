@@ -40,7 +40,7 @@ u8 ne_reset_chip(device_type *);
 void ne_init_chip(device_type *, u8);
 void ne_int_handler(device_type *);
 void ne_recv(device_type *);
-void ne_xmit(device_type *);
+bool ne2000_start_transmit (void *data, u32 length, device_type *device);
 void ne_download_buf(device_type *, u16, u8 *, u16);
 void ne_handle_overflow(device_type *);
 u16 hex2dec(u8 *);
@@ -191,7 +191,7 @@ void ne_int_handler (device_type *card __attribute__ ((unused)))
 #endif
     }
     
-    if (sreg & (BIT_ISR_RX+BIT_ISR_RX_ERR))
+    if (sreg & (BIT_ISR_RX + BIT_ISR_RX_ERR))
     {
       if (debug >= 2)
         log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Packet received");
@@ -241,45 +241,51 @@ void ne_int_handler (device_type *card __attribute__ ((unused)))
        outb (NE_NODMA + NE_PAGE0 + NE_START, card->io);
   }
 
-  if (num_handled == MAX_INT_WORK)
-    if (debug >= 1)
+  if (num_handled == MAX_INT_WORK) {
+    if (debug >= 1) {
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- ** -- Max interrupt work done!!");
+    }
+  }
 
   card->status &= ~NIC_INT;
-  if (debug >= 2)
-    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x device_type status:%.2x (Leaving interrupt handler)", inb(card->io+NE_R0_ISR),
-                         inb (card->io+NE_R0_IMR), card->status);
+  if (debug >= 2) {
+    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ISR:%2.2x ISM:%2.2x device_type status:%.2x (Leaving interrupt handler)", inb(card->io + NE_R0_ISR),
+                         inb (card->io + NE_R0_IMR), card->status);
+  }
 }
 
 void ne_recv (device_type *card)
 {
   /* xxx - moved data_buffer to global .. */
-   u8 *data = ((u8 *) data_buffer) + ((u8) 8);
-   u8 rx_packets = 0;
-   u8 rx_page;
-   u8 frame, next_frame, pkt_status;
-   u16 current_offset, pkt_len;
-   struct ne_pkt_hdr pkt_hdr;
+  u8 *data = ((u8 *) data_buffer) + ((u8) 8);
+  u8 rx_packets = 0;
+  u8 rx_page;
+  u8 frame, next_frame, pkt_status;
+  u16 current_offset, pkt_len;
+  struct ne_pkt_hdr pkt_hdr;
+  int n;
 
   frame = 0;
   current_offset = 0;
   for (rx_packets = 0;rx_packets < 10;rx_packets++)
   {
     /* Switch to page 1 */  
-    outb (NE_NODMA+NE_PAGE1, card->io);
+    outb (NE_NODMA + NE_PAGE1, card->io);
 
     /* Get the packet ptr from current page */
-    rx_page = inb (card->io+NE_PG_CURRENT);
+    rx_page = inb (card->io + NE_PG_CURRENT);
 
     /* Switch back to page 0 */
-    outb (NE_NODMA+NE_PAGE0, card->io);
+    outb (NE_NODMA + NE_PAGE0, card->io);
 
 
-    frame = inb (card->io+NE_BOUNDARY) + 1;
+    frame = inb (card->io + NE_BOUNDARY) + 1;
     if (frame >= NE_PG_STOP)
     {
-      if (debug >= 2)
+      if (debug >= 2) {
         log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "-- hmm? weirdo. fixing frame: %x => %x", frame, NE_PG_RX_START);
+      }
+
       frame = NE_PG_RX_START;
     }
     
@@ -373,73 +379,33 @@ void ne_recv (device_type *card)
           log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** Download done!");
 
 
-	{ /* XXX - This code doesn't belong here, heh. */
-          struct ethhdr *e;
-          struct iphdr *i;
-          struct tcphdr *t;
-          u8 *p = data;
-          u8 n;
-
-          log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** proto is [%.4x] ==> %s", PROTO,
-                 PROTO == 0x800? "IP/ETH": 
-                 PROTO == 0x806? "ARP/ETH": "unknown");
-
-          e = (struct ethhdr *) p;
-          p += sizeof(struct ethhdr);
-          i = (struct iphdr *) p;
-          p += sizeof(struct iphdr);
-          t = (struct tcphdr *) p;
-           
-          if (host_to_network_u16 (e->h_proto) == 0x800)
+        /* Check if this packet should be delivered somewhere. */
+        
+        for (n = 0; n < card->number_of_targets; n++)
+        {          
+          if (card->target[n].protocol_type ==
+              ((ipv4_ethernet_header_type *) data)->protocol_type)
           {
-            log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, 
-                                 "** IP: ver:0x%x prot:0x%x len:0x%x", 
-                                 i->version, i->protocol, 
-                                 host_to_network_u16(i->tot_len)-sizeof(struct ethhdr)-sizeof(struct iphdr));
-            p = (u8 *)&i->saddr;
-            log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, 
-                                 "++ %s/IP Packet received [%u.%u.%u.%u ==> %u.%u.%u.%u]",
-                                 i->protocol == 0x11? "UDP": i->protocol == 0x6? "TCP":
-                                 i->protocol == 0x1? "ICMP": "Unknown", 
-                                 p[0], p[1], p[2], p[3],
-                                 p[4], p[5], p[6], p[7]);
-
-            if (i->protocol == 0x1)
+            message_parameter_type message_parameter;
+            
+            message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
+            message_parameter.message_class = IPC_ETHERNET_PACKET_RECEIVED;
+            message_parameter.length = pkt_len + 8; /* probably 8 bytes of header. */
+            message_parameter.block = FALSE;
+            message_parameter.data = data;
+            
+            if (debug >= 1)
             {
-              p += sizeof (ipv4_ethernet_header_type);
-              log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "ICMP type is [%.2x : %.2x]", p[0], p[1]);
+              log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, 
+                                   "Sending to mailbox ID %u", 
+                                   card->target[n].mailbox_id);
             }
-
+            
+            system_call_mailbox_send (card->target[n].mailbox_id,
+                                      &message_parameter);
+            break;
           }
-
-          /* Check if this packet should be delivered somewhere. */
-          
-          for (n = 0; n < card->number_of_targets; n++)
-          {          
-            if (card->target[n].protocol_type ==
-                ((ipv4_ethernet_header_type *) data)->protocol_type)
-            {
-              message_parameter_type message_parameter;
-              
-              message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
-              message_parameter.message_class = IPC_ETHERNET_PACKET_RECEIVED;
-              message_parameter.length = pkt_len + 8; /* probably 8 bytes of header. */
-              message_parameter.block = FALSE;
-              message_parameter.data = data;
-              
-              if (debug >= 1)
-              {
-                log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, 
-                                     "Sending to mailbox ID %u", 
-                                     card->target[n].mailbox_id);
-              }
-              
-              system_call_mailbox_send (card->target[n].mailbox_id,
-                                        &message_parameter);
-              break;
-            }
-          }
-	} /* End of IP code */
+        }
       } /* End of RX ok code */
       else
       {
@@ -447,11 +413,13 @@ void ne_recv (device_type *card)
          card->num_dropped++;
       }
 
-      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x => %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x]", 
-                           data[6], data[7], data[8],
-                           data[9], data[10], data[11],
-                           data[0], data[1], data[2],
-                           data[3], data[4], data[5]);
+      if (debug >= 2) {
+        log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x => %2.2x:%2.2x:%2.2x:%2.2x:%2.2x:%2.2x]", 
+                             data[6], data[7], data[8],
+                             data[9], data[10], data[11],
+                             data[0], data[1], data[2],
+                             data[3], data[4], data[5]);
+      }
 
       next_frame = pkt_hdr.next;
       outb (next_frame-1, card->io+NE_BOUNDARY);
@@ -460,30 +428,134 @@ void ne_recv (device_type *card)
    outb (BIT_ISR_RX + BIT_ISR_RX_ERR, card->io + NE_R0_ISR);
 }
 
-void ne_xmit (device_type *card)
+#define NE_SANITY_CHECK
+bool ne2000_start_transmit (void *data, u32 length, device_type *device)
 {
-  u8 status;
+  int nic_base = device->io;
+  time_type dma_start;
 
-  status = inb (card->io + NE_R0_TSR);
-  if (debug >= 1)
-    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** TSR status is 0x%x", status);
+  int destination = 64 << 8;
+#ifdef NE_SANITY_CHECK
+  int retries = 0;
+#endif
 
-  /* Acknowledge interrupt */
-  outb (BIT_ISR_TX, card->io+NE_R0_ISR);
-
-
+  log_print(&log_structure, LOG_URGENCY_DEBUG, "in ne2000_start_transmit");
   
-  /* XXX - hehe... */
-
-
+  /* Round the count up for word writes.  Do we need to do this?
+     What effect will an odd byte count have on the 8390?
+     I should check someday. */
   
+  if (length & 0x01) {
+    length++;
+  }
+  
+  /* This *shouldn't* happen. If it does, it's the last thing you'll see */
+  if ((device->status & NIC_DMA) == NIC_DMA)
+  {
+    log_print_formatted(&log_structure, LOG_URGENCY_EMERGENCY,
+                        "DMAing conflict in ne_block_output."
+                        "[DMAstat:%d][irqlock:%d]\n",
+                        device->status & NIC_DMA, device->status & NIC_INT);
+    return FALSE;
+  }
 
+  device->status |= NIC_DMA;
+  /* We should already be in page 0, but to be safe... */
+  outb_p(NE_PAGE0 + NE_START + NE_NODMA, nic_base + NE_R0_CMD);
+  
+#ifdef NE_SANITY_CHECK
+retry:
+#endif
+  
+#ifdef NE8390_RW_BUGFIX
+  /* Handle the read-before-write bug the same way as the
+     Crynwr packet driver -- the NatSemi method doesn't work.
+     Actually this doesn't always work either, but if you have
+     problems with your NEx000 this is better than nothing! */
+  
+  outb_p(0x42, nic_base + NE_R0_RCNT0);
+  outb_p(0x00, nic_base + NE_R0_RCNT1);
+  outb_p(0x42, nic_base + NE_R0_RSAR0);
+  outb_p(0x00, nic_base + NE_R0_RSAR1);
+  outb_p(E8390_RREAD + E8390_START, nic_base + NE_R0_CMD);
+  /* Make certain that the dummy read has occurred. */
+  system_sleep(1);
+#endif
+  
+  outb_p(BIT_ISR_RDC, nic_base + NE_R0_ISR);
+  
+  /* Now the normal output. */
+  outb_p(length & 0xFF, nic_base + NE_R0_RBCR0);
+  outb_p(length >> 8,   nic_base + NE_R0_RBCR1);
+  
+  outb_p(destination & 0xFF, nic_base + NE_R0_RSAR0);
+  outb_p(destination >> 8, nic_base + NE_R0_RSAR1);
+  
+  outb_p(NE_RWRITE + NE_START, nic_base + NE_R0_CMD);
+  log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
+                      "Sending %ld bytes...", length);
+  outsw(nic_base + NE_DATAPORT, data, length >> 1);
+  
+  dma_start = time_get ();
+  
+#ifdef NE_SANITY_CHECK
+  /* This was for the ALPHA version only, but enough people have
+     been encountering problems so it is still here. */
+  
+  if (debug > 1)
+  {
+    /* DMA termination address check... */
+    unsigned int addr, tries = 20;
+    do {
+      int high = inb_p(nic_base + NE_R0_RSAR1);
+      int low = inb_p(nic_base + NE_R0_RSAR0);
+      addr = (high << 8) + low;
+      if (destination + length == addr) {
+        break;
+      }
+    } while (--tries > 0);
+    
+    if (tries <= 0)
+    {
+      log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "Tx packet transfer address mismatch,"
+             "%#4.4lx (expected) vs. %#4.4x (actual).\n",
+             destination + length, addr);
+      if (retries++ == 0)
+        goto retry;
+    }
+  }
+#endif
+  
+  while ((inb_p(nic_base + NE_R0_ISR) & BIT_ISR_RDC) == 0)
+    /* Wait for up to 1 second. This is obviously far too long, the
+       Linux code uses 20ms but this is much easier to
+       implement. :-) */
+    if (time_get () - dma_start > 0) { 
+      log_print(&log_structure, LOG_URGENCY_WARNING, "timeout waiting for Tx RDC.");
+      ne_reset_chip(device);
+      ne_init_chip(device, 1);
+      return FALSE;
+    }
+  
+  outb_p(BIT_ISR_RDC, nic_base + NE_R0_ISR);  /* Ack intr. */
+  device->status &= ~NIC_DMA;
+
+  /* Okay, let's send this frame. */
+  outb_p(NE_NODMA + NE_PAGE0, nic_base + NE_R0_CMD);
+  
+  if (inb_p(nic_base) & NE_TRANS)
+  {
+    log_print(&log_structure, LOG_URGENCY_WARNING, "ne2000_start_transmit() called with the transmitter busy");
+    return FALSE;
+  }
+
+  outb_p(length & 0xFF, nic_base + NE_R0_TBCR0);
+  outb_p(length >> 8, nic_base + NE_R0_TBCR1);
+  outb_p(destination >> 8, nic_base + NE_R0_TPSR);
+  outb_p(NE_NODMA + NE_TRANS + NE_START, nic_base + NE_R0_CMD);
+
+  return TRUE;
 }
-
-
-
-
-
 
 
 void ne_download_buf (device_type *n, u16 len, u8 *data, u16 offset)
@@ -497,7 +569,7 @@ void ne_download_buf (device_type *n, u16 len, u8 *data, u16 offset)
   outb (len >> 8, n->io + NE_R0_RBCR1);
   outb (offset & 0xFF, n->io + NE_R0_RSAR0);
   outb (offset >> 8, n->io + NE_R0_RSAR1);
-  outb (NE_RREAD+NE_START, n->io);
+  outb (NE_RREAD + NE_START, n->io);
   
   if (debug >= 2)
     log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "** ne_download_buf(): now we're about to read..");
@@ -676,13 +748,13 @@ static bool ne2000_probe (device_type *device)
 
 
   /* Init registers and shit */
-  for (i = 0;i < sizeof (ne_preinit_program)/sizeof (ne_program);i++)
+  for (i = 0; i < sizeof (ne_preinit_program)/ sizeof (ne_program); i++)
   {
     outb (ne_preinit_program[i].value, device->io + ne_preinit_program[i].offset);
   }
 
   /* It's time to read the station address prom now */
-  for (i = 0, x = 0;i < 32;i += 2)
+  for (i = 0, x = 0; i < 32; i += 2)
   {
     device->prom[i] = inb (device->io + NE_DATAPORT);
     device->prom[i+1] = inb (device->io + NE_DATAPORT);
@@ -767,20 +839,20 @@ static void handle_connection (mailbox_id_type reply_mailbox_id,
         break;
       }
 
-#if FALSE
       case IPC_ETHERNET_PACKET_SEND:
       {
-        if (!etherlink3_start_transmit (data, message_parameter.length, device))
+        if (!ne2000_start_transmit (data, message_parameter.length, device))
         {
           log_print (&log_structure, LOG_URGENCY_ERROR,
                      "Failed to send an ethernet packet.");
 
-          /* FIXME: Do something. */
+          /* FIXME: Do something useful. We should probably send an
+             IPC message back to the sender regardless, to notify that
+             the package was sent/not sent. */
         }
 
         break;
       }
-#endif
 
       case IPC_ETHERNET_ADDRESS_GET:
       {
@@ -895,6 +967,7 @@ int main (void)
   return 0;
 }
 
+/* Can probably be removed soon... */
 #if 0
 int main(int argc, char *argv[]) 
 {
