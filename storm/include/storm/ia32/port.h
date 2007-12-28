@@ -91,11 +91,9 @@ static inline u32 port_in_u32 (u16 port)
 static inline void port_out_u8_string (u16 port, u8 *data, u32 length)
 {
   asm volatile
-  ("\
-    cld
-    rep
-    outsb
-   "
+  ("cld\n"
+   "rep\n"
+   "outsb"
    :
    : "c" (length),
      "S" (data),
@@ -105,11 +103,9 @@ static inline void port_out_u8_string (u16 port, u8 *data, u32 length)
 static inline void port_out_u32_string (u16 port, u32 *data, u32 length)
 {
   asm volatile 
-  ("\
-    cld
-    rep
-    outsl
-   "
+  ("cld\n"
+   "rep\n"
+   "outsl"
    :
    : "c" (length),
      "S" (data),
@@ -120,11 +116,9 @@ static inline void port_out_u32_string (u16 port, u32 *data, u32 length)
 static inline void port_in_u32_string (u16 port, u32 *data, u32 length)
 {
   asm volatile 
-  ("\
-    cld
-    rep
-    insl
-   "
+  ("cld\n"
+   "rep\n"
+   "insl"
    :
    : "c" (length),
      "D" (data),

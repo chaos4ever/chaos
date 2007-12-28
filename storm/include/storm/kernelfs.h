@@ -162,7 +162,7 @@ typedef struct
 
   /* GenuineIntel, AuthenticAMD, CyrixInstead etcetera.. */
 
-  u8 vendor[17];
+  char vendor[17];
 } kernelfs_cpu_info_type;
 
 typedef struct

@@ -1,21 +1,7 @@
 /* $Id$ */
 /* Author: Anders Ohrt <doa@chaosdev.org> */
-/* Copyright 2000 chaos development */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA */
+/* Copyright 2000 chaos development. */
+/* Copyright 2007 chaos development. */
 
 #include <storm/generic/avl.h>
 #include <storm/generic/avl_delete.h>
@@ -242,26 +228,53 @@ static void rebalance (void)
   return;
 }
 
+#define LARGEST_CHILD(key, P) (key == +1 ? P->more : P->less)
+
+static inline avl_node_type *largest_child(int key, avl_node_type *node)
+{
+  if (key == 1)
+  {
+    return node->more;
+  }
+  else
+  {
+    return node->less;
+  }  
+}
+
+static void update_largest_child(int key, avl_node_type *node, 
+                                 avl_node_type *value)
+{
+  if (key == +1) 
+  { 
+    node->more = value;
+  }
+  else
+  {
+    node->less = value;
+  }
+ 
+}
+
 static void single_rotation_with_balanced_child (avl_node_type *node,
                                                  avl_node_type *child)
 {
   /* Single rotation with balanced child. */
-
-  LARGEST_CHILD (-a[depth], node) = LARGEST_CHILD (a[depth], child);
-  LARGEST_CHILD (a[depth], child) = node;
+  update_largest_child(-a[depth], node, LARGEST_CHILD(a[depth], child));
+  update_largest_child(a[depth], child, node);
   child->balance = a[depth];
-  LARGEST_CHILD (a[depth-1], P[depth-1]) = child;
+  update_largest_child(a[depth - 1], P[depth - 1], child);
 }
 
 static void single_rotation_with_unbalanced_child (avl_node_type *node,
-                                                 avl_node_type *child)
+                                                   avl_node_type *child)
 {
   /* Single rotation with unbalanced child. */
 
-  LARGEST_CHILD (-a[depth], node) = LARGEST_CHILD (a[depth], child);
-  LARGEST_CHILD (a[depth], child) = node;
+  update_largest_child(-a[depth], node, LARGEST_CHILD (a[depth], child));
+  update_largest_child(a[depth], child,  node);
   node->balance = child->balance = 0;
-  LARGEST_CHILD (a[depth-1], P[depth-1]) = child;
+  update_largest_child(a[depth-1], P[depth-1], child);
 }
 
 static void double_rotation (avl_node_type *node, avl_node_type *child)
@@ -269,10 +282,10 @@ static void double_rotation (avl_node_type *node, avl_node_type *child)
   /* Double rotation. */
 
   node = LARGEST_CHILD (a[depth], child);
-  LARGEST_CHILD (a[depth], child) = LARGEST_CHILD (-a[depth], node);
-  LARGEST_CHILD (-a[depth], node) = child;
-  LARGEST_CHILD (-a[depth], node) = LARGEST_CHILD (a[depth], node);
-  LARGEST_CHILD (a[depth], node) = node;
+  update_largest_child(a[depth], child, LARGEST_CHILD (-a[depth], node));
+  update_largest_child(-a[depth], node, child);
+  update_largest_child(-a[depth], node, LARGEST_CHILD (a[depth], node));
+  update_largest_child(a[depth], node, node);
 
   if (node->balance == -a[depth])
   {
@@ -290,5 +303,5 @@ static void double_rotation (avl_node_type *node, avl_node_type *child)
   }
 
   node->balance = 0;
-  LARGEST_CHILD (a[depth-1], P[depth-1]) = node;
+  update_largest_child(a[depth-1], P[depth-1], node);
 }

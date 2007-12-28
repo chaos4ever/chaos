@@ -4,21 +4,7 @@
             Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 /* Define this as TRUE if you want *lots* of debug information. */
 
@@ -286,33 +272,31 @@ void dispatch_task_switcher (void)
 
   asm volatile ("pusha");
   asm volatile
-  ("\
-    movl        32(%%esp), %%eax
-   "
+  ("movl        32(%%esp), %%eax"
    : "=a" (current_tss->instruction_pointer)
    : "m" (current_tss->instruction_pointer));
  
   asm volatile
-  ("\
-    /* Call the dispatch helper function. */
+    (
+      /* Call the dispatch helper function. */
 
-    call        dispatch_update
+      "call        dispatch_update\n"
 
-    movb        %al, %bl
+      "movb        %al, %bl\n"
 
-    movb        $0x20, %al
-    outb        %al, $0x20
+      "movb        $0x20, %al\n"
+      "outb        %al, $0x20\n"
 
-    cmpb        $1, %bl
-    je          1f
+      "cmpb        $1, %bl\n"
+      "je          1f\n"
 
-    /* Dispatch the new task. */
+      /* Dispatch the new task. */
+      
+      "ljmp        *jump_data\n"
 
-    ljmp        *jump_data
-
-1:  popa
-    iret
-  ");
+      "1:  popa\n"
+      "iret"
+      );
 
   /* Just to make gcc happy, so that it will know that this function
      will never return... */

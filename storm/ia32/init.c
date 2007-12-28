@@ -2,24 +2,10 @@
 /* Abstract: Set up the GDT, stack, selectors and pass control to the
    kernel. */
 /* Author: Per Lundberg <plundis@chaosdev.org>
-            Henrik Hallin <hal@chaosdev.org> */
+           Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1997-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software
-  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-  USA. */
+/* Copyright 2007 chaos development. */
 
 #include <storm/generic/arguments.h>
 #include <storm/generic/idle.h>
@@ -77,7 +63,7 @@ static u16 temporary_gdt[] INIT_DATA =
 
 /* The GDT ant IDT fits into the first physical page. */
 
-static u16 idtr[] __attribute__ ((unused)) INIT_DATA = 
+u16 idtr[] __attribute__ ((unused)) INIT_DATA = 
 {
   /* IDT limit, 256 IDT entries. */
 
@@ -89,7 +75,7 @@ static u16 idtr[] __attribute__ ((unused)) INIT_DATA =
   HIGH_U16 (BASE_IDT)
 };
 
-static u16 gdtr[] __attribute__ ((unused)) INIT_DATA =
+u16 gdtr[] __attribute__ ((unused)) INIT_DATA =
 { 
   /* GDT limit, 256 GDT entries. */
 
@@ -143,10 +129,10 @@ void _start (void)
   /* EBX contains the address to the multiboot table. Save this in the
      kernel data table. */
 
-  asm ("movl    %0, %%edi
-        movl    %%ebx, %%esi
-        movl    %1, %%ecx
-        rep     movsl"
+  asm ("movl    %0, %%edi\n"
+       "movl    %%ebx, %%esi\n"
+       "movl    %1, %%ecx\n"
+       "rep     movsl"
        :
        : "g" ((u32) &multiboot_info), "g" (sizeof (multiboot_info_type) / 4));
 
@@ -163,45 +149,45 @@ void _start (void)
                 
   /* Move the GDT to the right location in memory. */
     
-  asm ("cld
-        movl    %0, %%edi
-        movl    %1, %%esi
-        movl    %2, %%ecx
-        rep     movsl
-        movl    %3, %%ecx
-        movl    $0, %%eax
-        rep     stosl"
+  asm ("cld\n"
+       "movl    %0, %%edi\n"
+       "movl    %1, %%esi\n"
+       "movl    %2, %%ecx\n"
+       "rep     movsl\n"
+       "movl    %3, %%ecx\n"
+       "movl    $0, %%eax\n"
+       "rep     stosl"
        :
        : "g" ((u32) BASE_GDT),
          "g" ((u32) &temporary_gdt),
          "n" (sizeof (temporary_gdt) / 4),
          "n" ((0x800 - sizeof (temporary_gdt)) / 4));
 
-  /* Wipe them out. All of them. */
+  /* "Wipe them out. All of them." */
 
-  asm ("movl    %0, %%edi
-        movl    $0, %%eax
-        movl    %1, %%ecx
-        rep     stosl"
+  asm ("movl    %0, %%edi\n"
+        "movl    $0, %%eax\n"
+       "movl    %1, %%ecx\n"
+       "rep     stosl"
        :
        : "n" (BASE_IDT), "n" (SIZE_IDT / 4));
 
   /* Set up the GDTR and IDTR. */
   /* FIXME: Use constraints. */
 
-  asm ("lgdt    gdtr
-        lidt    idtr");
+  asm ("lgdt    gdtr\n"
+       "lidt    idtr");
 
   /* Initialise the segment registers so they are loaded with our new
      selectors. */
   
-  asm ("movl    %0, %%eax
-        movw    %%ax, %%ss
-        movl    %1, %%esp
-        movw    %%ax, %%es
-        movw    %%ax, %%fs
-        movw    %%ax, %%gs
-        movw    %%ax, %%ds"
+  asm ("movl    %0, %%eax\n"
+       "movw    %%ax, %%ss\n"
+       "movl    %1, %%esp\n"
+       "movw    %%ax, %%es\n"
+       "movw    %%ax, %%fs\n"
+       "movw    %%ax, %%gs\n"
+       "movw    %%ax, %%ds"
        :
        : "n" (SELECTOR_KERNEL_DATA),
          "n" (BASE_KERNEL_STACK + SIZE_KERNEL_STACK));

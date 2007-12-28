@@ -329,7 +329,7 @@ typedef struct
 
 /* Function prototypes. */
 
-return_type elf_execute (u8 *image, u8 *parameter_string,
+return_type elf_execute (u8 *image, char *parameter_string,
                          process_id_type *process_id) INIT_CODE;
 
 #endif /* !__STORM_IA32_ELF_H__ */

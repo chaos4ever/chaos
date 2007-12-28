@@ -2,21 +2,7 @@
 /* Abstract: Mutexes for the kernel. */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA */
+/* Copyright 2007 chaos development. */
 
 /* Defined this as true if you want lots of debug information .*/
 
@@ -68,6 +54,8 @@ spinlock_type mutex_spinlock = MUTEX_SPIN_UNLOCKED;
 
 static mutex_kernel_type id_mutex = MUTEX_UNLOCKED;
 
+#if FALSE
+
 static int next_free_id = 0;
 
 /* Get the first free mutex ID. */
@@ -83,6 +71,7 @@ static mutex_id_type mutex_get_free_id (void)
 
   return id;
 }
+#endif
 
 /* Wait if this mutex is busy. */
 /* FIXME: Support access checks. */

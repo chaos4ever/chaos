@@ -10,21 +10,7 @@
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1998-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 /* Define this as TRUE if you are debugging this part of the
    kernel. */
@@ -68,7 +54,7 @@ dataarea_type dataarea;
 /* Local variables. */
 
 static u32 server_process_id INIT_DATA;
-static bool help INIT_DATA = FALSE;
+static u32 help INIT_DATA = 0;
 
 /* Struct to define kernel arguments. */
 
@@ -87,16 +73,16 @@ static kernel_argument_type kernel_argument[] INIT_DATA =
 
   /* Set the attributes of what is being printed from the kernel. */
 
-  { "--attribute-text", TRUE, (u32 *) &debug_text_attribute },
-  { "--attribute-background", TRUE, (u32 *) &debug_background_attribute },
+  { "--attribute-text", TRUE, &debug_text_attribute },
+  { "--attribute-background", TRUE, &debug_background_attribute },
 
 #endif
 
   /* Set the sizes of the global memory. The defaults should be fine,
      though. */
 
-  { "--global-heap", TRUE, (u32 *) &limit_global_heap },
-  { "--global-nodes", TRUE, (u32 *) &limit_global_nodes },
+  { "--global-heap", TRUE, &limit_global_heap },
+  { "--global-nodes", TRUE, &limit_global_nodes },
   
   /* Force a different startup task switch rate. */
 
@@ -104,17 +90,17 @@ static kernel_argument_type kernel_argument[] INIT_DATA =
 
   /* Number of entries in the mailbox hash-table. */
 
-  { "--mailbox_hash", TRUE, (u32 *) &limit_mailbox_hash_entries },
+  { "--mailbox_hash", TRUE, &limit_mailbox_hash_entries },
 
   /* Limit system memory. Could be used if your motherboard reports
      bad memory values. FIXME: We should have a "real" memory
      detection scheme too. */
 
-  { "--limit_memory", TRUE, (u32 *) &limit_memory },
+  { "--limit_memory", TRUE, &limit_memory },
 
   /* Do we want a listing of available commands. */
 
-  { "--help", FALSE, (u32 *) &help },
+  { "--help", FALSE, &help },
 
   /* No more parameters. */
 
@@ -177,7 +163,7 @@ return_type main (int arguments, char *argument[])
   parse_arguments (arguments, argument);
   debug_init ();
 
-  if (help)
+  if (help != 0)
   {
     debug_print ("Help...\n");
     cpu_halt ();
@@ -305,7 +291,7 @@ return_type main (int arguments, char *argument[])
     /* Check that the startup worked as expected. */
 
     switch (elf_execute
-            ((void *) BASE_MODULE, multiboot_module_info[index].name,
+            ((void *) BASE_MODULE, (char *) multiboot_module_info[index].name,
              &server_process_id))
     {
       /* The given image was not a valid IA32 ELF. */

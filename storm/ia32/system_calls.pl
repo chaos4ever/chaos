@@ -108,9 +108,7 @@ for ($count = 0; $count < $system_calls; $count++)
   print (FILE "\
 void wrapper_$system_call[$count * 2] (void)
 {
-  asm (\"
-                pushal
-");
+  asm (\"pushal\\n\"");
 
   print (FILE "\
                 /* Push all arguments. This is pretty smart... */
@@ -120,32 +118,31 @@ void wrapper_$system_call[$count * 2] (void)
   for (my $variables = 0; $variables < $system_call[$count * 2 + 1];
        $variables++)
   {
-    print (FILE "                pushl  32 + 4 + $system_call[$count * 2 + 1] * 4(%esp)\n");
+    print (FILE "                \"pushl  32 + 4 + $system_call[$count * 2 + 1] * 4(%esp)\\n\"\n");
   }
   print (FILE "\
-                call	system_call_$system_call[$count * 2]
+                \"call	system_call_$system_call[$count * 2]\\n\"
 
-                addl	\$4 * $system_call[$count * 2 + 1], %esp
+                \"addl	\$4 * $system_call[$count * 2 + 1], %esp\\n\"
 
 		/* Simulate a popa, without overwriting EAX. */
 
-		popl	%edi
-		popl	%esi
-		popl	%ebp
+		\"popl	%edi\\n\"
+		\"popl	%esi\\n\"
+		\"popl	%ebp\\n\"
 
 		/* ESP can't be popped for obvious reasons. */
 
-		addl	\$4, %esp
-		popl	%ebx
-		popl	%edx
-		popl	%ecx
+		\"addl	\$4, %esp\\n\"
+		\"popl	%ebx\\n\"
+		\"popl	%edx\\n\"
+		\"popl	%ecx\\n\"
 
 		/* EAX shall not be changed, since it is our return
           	  value. */
 
-		addl	\$4, %esp
-		lret	\$4 * $system_call[$count * 2 + 1]
-  \");
+		\"addl	\$4, %esp\\n\"
+		\"lret	\$4 * $system_call[$count * 2 + 1]\\n\");
 }
 ");
 }
@@ -170,7 +167,7 @@ for ($count = 1; $count < $system_calls; $count++)
 };
 
 print (FILE "};\n\
-#endif /* !__STORM_SYSTEM_CALL_H__ */");
+#endif /* !__STORM_SYSTEM_CALL_H__ */\n");
   
 close (FILE);
 
@@ -189,7 +186,7 @@ for ($count = 0; $count < $system_calls; $count++)
 	  toupper ($system_call[$count * 2]), $system_call[$count * 2]);
 }
 
-print (FILE "};");
+print (FILE "};\n");
 close (FILE);
 
 # ...and include/storm/wrapper.h
@@ -205,7 +202,7 @@ for ($count = 0; $count < $system_calls; $count++)
   print (FILE "void wrapper_$system_call[$count * 2] (void);\n")
 }
 
-print (FILE "\n#endif /* !__STORM_IA32_WRAPPER_H__ */");
+print (FILE "\n#endif /* !__STORM_IA32_WRAPPER_H__ */\n");
 close (FILE);
 
 # Over and out!

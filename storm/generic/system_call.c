@@ -30,7 +30,7 @@ return_type system_call_dispatch_next (void)
 
 return_type system_call_thread_name_set (char *name)
 {
-  memory_set_u8 (current_tss->thread_name, 0, MAX_THREAD_NAME_LENGTH);
+  memory_set_u8 ((u8 *) current_tss->thread_name, 0, MAX_THREAD_NAME_LENGTH);
   string_copy_max (current_tss->thread_name, name,
                    MAX_THREAD_NAME_LENGTH - 1);
   return STORM_RETURN_SUCCESS;

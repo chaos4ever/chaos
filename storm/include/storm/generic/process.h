@@ -30,7 +30,7 @@
 
 /* Type definitions. */
 
-typedef struct
+typedef struct process_info_type
 {
   struct process_info_type *next;
 

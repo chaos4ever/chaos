@@ -62,6 +62,6 @@ typedef u32 state_type;
 typedef unsigned int mailbox_id_type;
 typedef unsigned int mutex_id_type;
 typedef volatile int spinlock_type;
-typedef unsigned int limit_type;
+typedef u32 limit_type;
 
 #endif /* !__STORM_TYPES_H__ */

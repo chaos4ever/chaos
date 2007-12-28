@@ -4,6 +4,7 @@
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
+/* Copyright 2007 chaos development. */
 
 /* This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -169,8 +170,8 @@ void debug_memory_dump (u32 *memory, u32 length)
 
 void command_dump (int number_of_arguments, char **argument)
 {
-  unsigned int length;
-  u32 base;
+  int length;
+  int base;
 
   if (number_of_arguments != 2 &&
       number_of_arguments != 3)
@@ -179,7 +180,7 @@ void command_dump (int number_of_arguments, char **argument)
     return;
   }
 
-  string_to_number (argument[1], (int *) &base);
+  string_to_number (argument[1], &base);
 
   if (number_of_arguments == 3)
   {
@@ -477,7 +478,7 @@ void debug_print (const char *format_string, ...)
 
           case 'c':
           {
-            char character = va_arg (va_arguments, char);
+            char character = (char) va_arg (va_arguments, int);
 
             put_character (x_position, y_position, character,
                            debug_text_attribute);
@@ -993,7 +994,7 @@ void debug_run (void)
 
     /* Now, parse this command line... */
     
-    memory_set_u8 (parsed_command.arguments, 0, 512);
+    memory_set_u8 ((u8 *) parsed_command.arguments, 0, 512);
     words = debug_line_parse (input_string, &parsed_command);
 
     if (words > 0)

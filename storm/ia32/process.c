@@ -5,21 +5,7 @@
             Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 /* FIXME: Most of this should be put into the generic subdirectory. */
 
@@ -50,7 +36,7 @@
 static process_id_type free_process_id = 1;
 static mutex_kernel_type process_id_mutex = MUTEX_UNLOCKED;
 static tss_list_type kernel_tss_list;
-static process_info_type kernel_process_info;
+static struct process_info_type kernel_process_info;
 
 /* Tree used for holding information about the processes in the
    system. process_info_kernel is the root node, which points at the
@@ -133,7 +119,7 @@ void process_init (void)
   kernel_process_info.name = PACKAGE_NAME " " PACKAGE_VERSION;
   kernel_process_info.number_of_threads = 1;
   process_link (&kernel_process_info);
-  kernel_tss->process_info = (struct process_info_type *) &kernel_process_info;
+  kernel_tss->process_info = &kernel_process_info;
 }
 
 /* Get the first available process_id. */

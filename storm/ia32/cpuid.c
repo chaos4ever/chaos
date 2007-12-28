@@ -2,9 +2,11 @@
 /* Abstract: CPU identification. Parts borrowed from the Linux
    kernel. */
 /* Author: Per Lundberg <plundis@chaosdev.org>
-           Parts borrowed from Linux kernel. */
+           Parts borrowed from Linux kernel. OOPS! This is bad, this
+           probably means that this file cannot be BSD-licensed. */
 
 /* Copyright 1999-2000 chaos development. */
+/* Copyright 2007 chaos development. */
 
 /* This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as
@@ -44,8 +46,7 @@ enum
 static inline void rdtsc (u32 *low, u32 *high)
 {
   asm volatile 
-  (\
-   "rdtsc" 
+  ("rdtsc" 
    : "=a" (*low), "=d" (*high));
 }
 
@@ -144,50 +145,47 @@ static int INIT_CODE has_cpuid (void)
 {
   int return_value;
 
-  asm volatile ("\
-    pushl       %%ebx
+  asm volatile ("pushl       %%ebx\n"
 
-    /* Invert id bit. */
+                /* Invert id bit. */
+                "pushfl\n"
+                "xorl        %1, (%%esp)\n"
+                "popfl\n"
 
-    pushfl
-    xorl        %1, (%%esp)
-    popfl
+                /* Read eflags register and mask all bits but id bit. */
+                
+                "pushfl\n"
+                "movl        (%%esp), %%eax\n"
+                "andl        %1, %%eax\n"
+                "popfl\n"
 
-    /* Read eflags register and mask all bits but id bit. */
+                /* Invert id bit. */
 
-    pushfl
-    movl        (%%esp), %%eax
-    andl        %1, %%eax
-    popfl
+                "pushfl\n"
+                "xorl        %1, (%%esp)\n"
+                "popfl\n"
 
-    /* Invert id bit. */
+                /* Mask. */
 
-    pushfl
-    xorl        %1, (%%esp)
-    popfl
+                "pushfl\n"
+                "movl        (%%esp), %%ebx\n"
+                "andl        %1, %%ebx\n"
+                "popfl\n"
 
-    /* Mask. */
-
-    pushfl
-    movl        (%%esp), %%ebx
-    andl        %1, %%ebx
-    popfl
-
-    /* Is id bit the same? */
-          
-    cmpl        %%ebx, %%eax
-    jne         1f
+                /* Is id bit the same? */
+                
+                "cmpl        %%ebx, %%eax\n"
+                "jne         1f\n"
   
-    /* CPUID not supported. */
+                /* CPUID not supported. */
 
-    movl        $0, %%eax
-    jmp         2f
- 1: movl        $1, %%eax
- 2: popl        %%ebx
-  "
-       : "=&a" (return_value)
-       : "g" (FLAG_ID));
-
+                "movl        $0, %%eax\n"
+                "jmp         2f\n"
+                "1: movl        $1, %%eax\n"
+                "2: popl        %%ebx"
+                : "=&a" (return_value)
+                : "g" (FLAG_ID));
+  
   return return_value;
 }
 
@@ -199,30 +197,28 @@ static int INIT_CODE is_486 (void)
   int return_value;
 
   asm
-  ("\
-    pushl   %%ecx
+  ("pushl   %%ecx\n"
     
-    pushfl
-    popl    %%eax
-    movl    %%eax, %%ecx
-    xorl    $0x40000, %%eax
-    pushl   %%eax
-    popf
+   "pushfl\n"
+   "popl    %%eax\n"
+   "movl    %%eax, %%ecx\n"
+   "xorl    $0x40000, %%eax\n"
+   "pushl   %%eax\n"
+   "popf\n"
                   
-    pushf
-    popl    %%eax
-    xorl    %%ecx, %%eax
-    and     $0x40000, %%eax
-    je      1f
+   "pushf\n"
+   "popl    %%eax\n"
+   "xorl    %%ecx, %%eax\n"
+   "and     $0x40000, %%eax\n"
+   "je      1f\n"
   
    /* 486 was detected. */
 
-    movl   $1, %%eax
-    jmp    2f
+   "movl   $1, %%eax\n"
+   "jmp    2f\n"
                 
-1:  movl   $0, %%eax     
-2:  popl   %%ecx
-   "
+   "1:  movl   $0, %%eax\n"
+   "2:  popl   %%ecx"
    : "=&a" (return_value));
   
   return return_value;
@@ -252,7 +248,7 @@ static void INIT_CODE cpu_examine (void)
     /* Get model type and flags. */
    
     cpuid (GET_CPU_INFO, (u32 *) &cpu_info.signature, &dummy, &dummy,
-           (u32 *) &cpu_info.flags.flags);
+           (u32 *) &cpu_info.flags.real_flags);
   }
   else
   {
