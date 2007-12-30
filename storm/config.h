@@ -5,7 +5,7 @@
 #define __CONFIG_H__
 
 #define PACKAGE_NAME "storm"
-#define PACKAGE_VERSION "0.5.0"
+#define PACKAGE_VERSION "0.5.1"
 
 #define OPTION_RELEASE FALSE
 

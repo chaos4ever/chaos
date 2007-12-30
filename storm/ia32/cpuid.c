@@ -61,6 +61,10 @@ unsigned int cpus = 1;
 
 /* FIXME: Once the CPU type is determined, we can safely copy the name
    and deallocate this structure. */
+/* FIXME: This list is totally irrelevant for most modern CPUs that
+   fully implement CPUID detection... We can get the name of the CPU
+   using CPUID instead and only store the family, model and flags (for
+   use by code that e.g. relies on MMX being present etc). */
 
 static cpu_model_type cpu_model[] =
 {
@@ -87,6 +91,16 @@ static cpu_model_type cpu_model[] =
       unknown, "Pentium II (Deschutes)", "Celeron (Mendocino)",
       "Pentium III (McKinley)", "Pentium III (Coppermine)", unknown,
       unknown, unknown, unknown, unknown, unknown, unknown 
+    }
+  },
+  {
+    VENDOR_INTEL, 15,
+    {
+      "Core Duo", "Core 2", unknown, unknown, unknown, unknown, unknown,
+      unknown, unknown, unknown, unknown, unknown, unknown, unknown,
+      unknown, unknown, unknown, unknown, unknown, unknown, unknown,
+      unknown, unknown, unknown, unknown, unknown, unknown, unknown,
+      unknown, unknown, unknown, unknown
     }
   },
   {
@@ -468,6 +482,8 @@ void cpuid_init (void)
     
     case 1:
     {
+      DEBUG_MESSAGE (DEBUG, "Passed");
+
       if (!string_compare (cpu_info.name, VENDOR_AMD_STRING))
       {
         vendor = VENDOR_AMD;
@@ -485,20 +501,30 @@ void cpuid_init (void)
       }
       else 
       {
+        vendor = VENDOR_UNKNOWN;
         parsed_cpu.name = "Unknown clone manufacturer";
         parsed_cpu.vendor = "Unknown";
-        break;
       }      
       
-      for (c = 0;; c++)
-      {
-        if (cpu_model[c].vendor == vendor &&
-            cpu_info.family == cpu_model[c].x86)
+      DEBUG_MESSAGE (DEBUG, "Passed");
+
+      if (vendor != VENDOR_UNKNOWN) {
+
+        /* Find the model name for this CPU. */
+
+        for (c = 0; c < sizeof(cpu_model) / sizeof(cpu_model_type); c++)
         {
-          parsed_cpu.name = cpu_model[c].name[cpu_info.model];
-          break;
+          if (cpu_model[c].vendor == vendor &&
+              cpu_model[c].x86 == cpu_info.family)
+          {
+            parsed_cpu.name = cpu_model[c].name[cpu_info.model];
+            break;
+          }
         }
       }
+
+      DEBUG_MESSAGE (DEBUG, "Passed");
+
       break;
     }
     

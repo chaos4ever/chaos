@@ -119,5 +119,6 @@ extern void cpuid_init (void) INIT_CODE;
 #define VENDOR_AMD 0
 #define VENDOR_INTEL 1
 #define VENDOR_CYRIX 2
+#define VENDOR_UNKNOWN 0xFF
 
 #endif /* !__STORM_IA32_CPUID_H__ */

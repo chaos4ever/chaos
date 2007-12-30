@@ -89,7 +89,7 @@ u16 gdtr[] __attribute__ ((unused)) INIT_DATA =
 
 /* Multiboot header. */
 
-static u32 multiboot_header[] __attribute__ ((section (".init.pre"), unused)) = 
+u32 multiboot_header[] __attribute__ ((section (".init.pre"), unused)) = 
 {
   MULTIBOOT_MAGIC,
   MULTIBOOT_FLAGS,

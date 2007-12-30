@@ -121,8 +121,8 @@ package-check: package-source
 	     find package-source -name makefile -exec rm {} ';'
 	     rm package-source/config.h
 package: package-check
-	rm -rf storm-0.5.0
-	mv package-source storm-0.5.0
-	tar cvIf storm-0.5.0.tar.bz2 storm-0.5.0
+	rm -rf storm-0.5.1
+	mv package-source storm-0.5.1
+	tar cvIf storm-0.5.1.tar.bz2 storm-0.5.1
 	     
 

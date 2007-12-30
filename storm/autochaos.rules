@@ -3,7 +3,7 @@
 <!-- $Id$ -->
 
 <autochaos>
-  <package name="storm" version="0.5.0" type="kernel" license="GPL">
+  <package name="storm" version="0.5.1" type="kernel" license="GPL">
     <include>../include</include>
     <include>..</include>
     <include-base>include/storm</include-base>
