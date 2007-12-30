@@ -4,21 +4,7 @@
             Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public License
-   as published by the Free Software Foundation; either version 2 of
-   the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #ifndef __LIBRARY_SYSTEM_SYSTEM_CALLS_H__
 #define __LIBRARY_SYSTEM_SYSTEM_CALLS_H__
@@ -47,9 +33,8 @@ static inline return_type system_call_timer_read (time_type *timer)
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %2
-    lcall %3, $0"
+  ("pushl %2\n"
+   "lcall %3, $0"
    : "=a" (return_value),
      "=m" (*timer)
    : "g" (timer),
@@ -66,11 +51,9 @@ static inline return_type system_call_irq_register (unsigned int irq_number,
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    pushl %2
-    lcall %3, $0
-   "
+  ("pushl %1\n"
+   "pushl %2\n"
+   "lcall %3, $0"
    : "=a" (return_value)
    : "g" (description),
      "g" (irq_number),
@@ -86,9 +69,8 @@ static inline return_type system_call_irq_unregister (unsigned int irq_number)
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    lcall %2, $0"
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (irq_number),
      "n" (SYSTEM_CALL_IRQ_UNREGISTER << 3));
@@ -103,10 +85,8 @@ static inline return_type system_call_irq_wait (unsigned int irq_number)
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (irq_number),
      "n" (SYSTEM_CALL_IRQ_WAIT << 3));
@@ -121,10 +101,8 @@ static inline return_type system_call_irq_acknowledge (unsigned int irq_number)
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (irq_number),
      "n" (SYSTEM_CALL_IRQ_ACKNOWLEDGE << 3));
@@ -141,12 +119,10 @@ static inline return_type system_call_port_range_register
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %1\n"
+   "pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value)
    : "g" (description),
      "g" (length),
@@ -163,10 +139,8 @@ static inline return_type system_call_port_range_unregister (u32 start)
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (start),
      "n" (SYSTEM_CALL_PORT_RANGE_UNREGISTER << 3));
@@ -186,12 +160,10 @@ static inline return_type system_call_memory_allocate (void **address,
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %2
-    pushl %3
-    pushl %4
-    lcall %5, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "lcall %5, $0"
    : "=a" (return_value),
      "=g" (*address)
    : "g" (cacheable),
@@ -209,10 +181,8 @@ static inline return_type system_call_memory_deallocate (void **address)
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %2
-    lcall %3, $0
-   "
+  ("pushl %2\n"
+   "lcall %3, $0"
    : "=a" (return_value),
      "=g" (*address)
    : "g" (address),
@@ -229,11 +199,9 @@ static inline return_type system_call_memory_get_physical_address
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value),
      "=g" (*physical_address)
    : "g" (physical_address),
@@ -251,12 +219,10 @@ static inline return_type system_call_memory_reserve
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %2
-    pushl %3
-    pushl %4
-    lcall %5, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "lcall %5, $0"
    : "=a" (return_value),
      "=g" (*virtual_address)
    : "g" (virtual_address),
@@ -276,12 +242,10 @@ static inline return_type system_call_thread_control
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %1\n"
+   "pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value)
    : "g" (parameter),
      "g" (control_class),
@@ -298,9 +262,7 @@ static inline return_type system_call_thread_create (void)
   return_type return_value;
 
   asm volatile 
-  ("\
-    lcall %1, $0
-   "
+  ("lcall %1, $0"
    : "=a" (return_value)
    : "n" (SYSTEM_CALL_THREAD_CREATE << 3));
 
@@ -314,9 +276,7 @@ static inline return_type system_call_process_parent_unblock (void)
   return_type return_value;
 
   asm volatile 
-  ("\
-    lcall %1, $0
-   "
+  ("lcall %1, $0"
    : "=a" (return_value)
    : "n" (SYSTEM_CALL_PROCESS_PARENT_UNBLOCK << 3));
 
@@ -330,10 +290,8 @@ static inline return_type system_call_process_name_set (const char *name)
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (name),
      "n" (SYSTEM_CALL_PROCESS_NAME_SET << 3));
@@ -348,10 +306,8 @@ static inline return_type system_call_thread_name_set (const char *name)
   return_type return_value;
 
   asm volatile 
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (name),
      "n" (SYSTEM_CALL_THREAD_NAME_SET << 3));
@@ -366,10 +322,8 @@ static inline return_type system_call_kernelfs_entry_read (void *buffer)
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    lcall %3, $0
-   "
+  ("pushl %2\n"
+   "lcall %3, $0"
    : "=a" (return_value),
      "=g" (*(int *) buffer)
    : "g" (buffer),
@@ -400,14 +354,12 @@ static inline return_type system_call_mailbox_create
   return_type return_value;
 
   asm volatile
-  ("\
-     pushl %2
-     pushl %3
-     pushl %4
-     pushl %5
-     pushl %6
-     lcall %7, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "pushl %5\n"
+   "pushl %6\n"
+   "lcall %7, $0"
    : "=a" (return_value),
      "=g" (*mailbox_id)
    : "g" (user_thread_id),
@@ -428,10 +380,8 @@ static inline return_type system_call_mailbox_destroy
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (mailbox_id),
      "n" (SYSTEM_CALL_MAILBOX_DESTROY << 3));
@@ -447,11 +397,9 @@ static inline return_type system_call_mailbox_send
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value),
      "=g" (*message_parameter)
    : "g" (message_parameter),
@@ -469,11 +417,9 @@ static inline return_type system_call_mailbox_receive
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value),
      "=g" (*message_parameter)
    : "g" (message_parameter),
@@ -492,12 +438,10 @@ static inline return_type system_call_service_create
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    pushl %3
-    pushl %4
-    lcall %5, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "lcall %5, $0"
    : "=a" (return_value),
      "=g" (*mailbox_id)
    : "g" (identification),
@@ -517,12 +461,10 @@ static inline return_type system_call_service_get
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    pushl %3
-    pushl %4
-    lcall %5, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "lcall %5, $0"
    : "=a" (return_value),
      "=g" (*service_parameter)
    : "g" (identification),
@@ -541,10 +483,8 @@ static inline return_type system_call_service_protocol_get_amount
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    lcall %3, $0
-   "
+  ("pushl %2\n"
+   "lcall %3, $0"
    : "=a" (return_value),
      "=g" (number_of_protocols)
    : "g" (number_of_protocols),
@@ -555,17 +495,15 @@ static inline return_type system_call_service_protocol_get_amount
 
 /* Get a list of the protocols supported by the system. */
 
-static return_type system_call_service_protocol_get
+static inline return_type system_call_service_protocol_get
   (unsigned int *maximum_protocols, service_protocol_type *protocol_info)
 {
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %3
-    pushl %4
-    lcall %5, $0
-   "
+  ("pushl %3\n"
+   "pushl %4\n"
+   "lcall %5, $0"
    : "=a" (return_value),
      "=g" (*protocol_info),
      "=g" (*maximum_protocols)
@@ -583,10 +521,8 @@ static inline return_type system_call_process_create (process_create_type *proce
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (process_data),
      "n" (SYSTEM_CALL_PROCESS_CREATE << 3));
@@ -602,11 +538,9 @@ static inline return_type system_call_dma_register
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %2
-    pushl %3
-    lcall %4, $0
-   "
+  ("pushl %2\n"
+   "pushl %3\n"
+   "lcall %4, $0"
    : "=a" (return_value),
      "=g" (*dma_buffer)
    : "g" (dma_buffer),
@@ -624,10 +558,8 @@ static inline return_type system_call_dma_unregister
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (channel),
      "n" (SYSTEM_CALL_DMA_UNREGISTER << 3));
@@ -645,14 +577,12 @@ static inline return_type system_call_dma_transfer
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    pushl %2
-    pushl %3
-    pushl %4
-    pushl %5
-    lcall %6, $0
-   "
+  ("pushl %1\n"
+   "pushl %2\n"
+   "pushl %3\n"
+   "pushl %4\n"
+   "pushl %5\n"
+   "lcall %6, $0"
    : "=a" (return_value)
    : "g" (autoinit),
      "g" (transfer_mode),
@@ -671,10 +601,8 @@ static inline return_type dma_transfer_cancel (unsigned int channel)
   return_type return_value;
 
   asm volatile
-  ("\
-    pushl %1
-    lcall %2, $0
-   "
+  ("pushl %1\n"
+   "lcall %2, $0"
    : "=a" (return_value)
    : "g" (channel),
      "n" (SYSTEM_CALL_DMA_TRANSFER_CANCEL << 3));

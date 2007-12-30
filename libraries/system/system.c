@@ -3,27 +3,13 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public License
-   as published by the Free Software Foundation; either version 2 of
-   the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <system/system.h>
 
 /* Shut down the system. */
 
-return_type system_shutdown (void)
+void system_shutdown (void)
 {
   /* Make sure we are root. If not, we will only end up killing our
      own processes, which is probably not what we want... */
@@ -137,9 +123,10 @@ return_type system_execute (char *program __attribute__ ((unused)))
   return SYSTEM_RETURN_SUCCESS;
 }
 
-/* Abort the current thread. */
+/* Exit the current thread. If this is the last thread of the process,
+   the process will be terminated too. */
 
-return_type system_exit (void)
+void system_exit (void)
 {
   kernelfs_self_type kernelfs_self;
   

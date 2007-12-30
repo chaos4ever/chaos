@@ -1,23 +1,13 @@
 /* $Id$ */
 /* Abstract: Functions for setting memory blocks. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <plundis@chaosdev.org> 
+   
+   Probably a bit ripped off of Linux or similar. OTOH, it is hard to
+   write these functions differently to how they are currently
+   written... */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public License
-   as published by the Free Software Foundation; either version 2 of
-   the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #ifndef __LIBRARY_MEMORY_SET_H__
 #define __LIBRARY_MEMORY_SET_H__
@@ -34,11 +24,9 @@ static inline void memory_set_u8 (u8 *address, u8 c, unsigned int size)
   int ecx, edi;
 
   asm volatile
-  ("\
-    cld
-    rep
-    stosb
-   "
+  ("cld\n"
+   "rep\n"
+   "stosb"
    : "=&c" (ecx), "=&D" (edi)
    : "a" (c), "1" (address), "0" (size)
    : "memory");
@@ -51,11 +39,9 @@ static inline void memory_set_u16 (u16 *address, u16 c, unsigned int size)
   int ecx, edi;
 
   asm volatile
-  ("\
-    cld
-    rep
-    stosw
-   "
+  ("cld\n"
+   "rep\n"
+   "stosw"
    : "=&c" (ecx), "=&D" (edi)
    : "a" (c), "1" (address), "0" (size)
    : "memory");
@@ -68,14 +54,12 @@ static inline void memory_set_u32 (u32 *address, u32 c, unsigned int size)
   int ecx, edi;
 
   asm volatile
-  ("\
-    cld
-    rep
-    stosl
-   "
+  ("cld\n"
+   "rep\n"
+   "stosl"
    : "=&c" (ecx), "=&D" (edi)
    : "a" (c), "1" (address), "0" (size)
    : "memory");
 }
 
-#endif /* !__LIBRARY_MEMORY_SET_H__ */
+#endif /* !defined __LIBRARY_MEMORY_SET_H__ */

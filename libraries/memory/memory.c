@@ -39,7 +39,8 @@ bool initialised = FALSE;
 
 void memory_init (void)
 {
-  system_call_memory_allocate ((void **) &memory_structure.slab_heap, 1,
+  slab_heap_type **heap = &memory_structure.slab_heap;
+  system_call_memory_allocate ((void **) heap, 1,
                                TRUE);
   memory_structure.locked = FALSE;
   slab_heap_init (memory_structure.slab_heap);
@@ -103,7 +104,8 @@ return_type memory_allocate (void **pointer, unsigned int bytes)
     {
       /* FIXME: Check return value. */
 
-      system_call_memory_allocate ((void **) &superblock, 1, TRUE);
+      slab_superblock_type **superblock_pointer = &superblock;
+      system_call_memory_allocate ((void **) superblock_pointer, 1, TRUE);
 
       /* Initialise this newly created slab superblock. */
 
@@ -167,7 +169,12 @@ return_type memory_deallocate (void **pointer)
 
   if (*pointer == superblock)
   {
-    system_call_memory_deallocate ((void **) &pointer);
+    // FIXME: I'm not 100% sure I got this one right... The original code was:
+    // system_call_memory_deallocate ((void **) &pointer)
+    // but that's not OK now with the new rules for strict aliasing in gcc
+    // 3 and 4.
+    void *double_pointer = &pointer;
+    system_call_memory_deallocate ((void **) double_pointer);
     memory_structure.locked = FALSE;
 
     return MEMORY_RETURN_SUCCESS;

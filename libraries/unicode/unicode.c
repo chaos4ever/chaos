@@ -66,7 +66,7 @@ return_type unicode_ucs2_to_utf8 (u8 *utf8_char, ucs2_type ucs2_char)
     utf8_char[0] = (u8) ((ucs2_char >> 6) | B11000000);
     utf8_char[1] = (u8) ((ucs2_char & B00111111) | B10000000);
   }
-  else if (ucs2_char <= 0x0000FFFF)
+  else /* (ucs2_char <= 0x0000FFFF) */
   {
     /* 1110xxxx 10xxxxxx 10xxxxxx */
     
@@ -74,10 +74,6 @@ return_type unicode_ucs2_to_utf8 (u8 *utf8_char, ucs2_type ucs2_char)
     utf8_char[0] = (u8) ((ucs2_char >> 12) | B11100000);
     utf8_char[1] = (u8) (((ucs2_char >> 6) & B00111111) | B10000000);
     utf8_char[2] = (u8) ((ucs2_char & B00111111) | B10000000);
-  }
-  else
-  {
-    return UNICODE_RETURN_UCS2_INVALID;
   }
 
   utf8_char[utf8_bytes] = '\0';
@@ -370,14 +366,14 @@ return_type unicode_ucs2_to_utf8_string (u8 *utf8_string,
     ucs2_index++;
     ucs2_char = ucs2_string[ucs2_index];
 
-    if (utf8_index + string_length (utf8_char) >= max_utf8_bytes)
+    if (utf8_index + string_length ((char *) utf8_char) >= max_utf8_bytes)
     {
       return UNICODE_RETURN_BUFFER_TOO_SHORT;
     }
     else
     {
-      string_copy (utf8_string + utf8_index, utf8_char);
-      utf8_index += string_length (utf8_char);
+      string_copy ((char *) utf8_string + utf8_index, (char *) utf8_char);
+      utf8_index += string_length ((char *) utf8_char);
     }
   }
 
@@ -406,14 +402,14 @@ return_type unicode_ucs4_to_utf8_string (u8 *utf8_string,
 
     ucs4_index++;
 
-    if (utf8_index + string_length (utf8_char) >= max_utf8_bytes)
+    if (utf8_index + string_length ((char *) utf8_char) >= max_utf8_bytes)
     {
       return UNICODE_RETURN_BUFFER_TOO_SHORT;
     }
     else
     {
-      string_copy (utf8_string + utf8_index, utf8_char);
-      utf8_index += string_length (utf8_char);
+      string_copy ((char *) utf8_string + utf8_index, (char *) utf8_char);
+      utf8_index += string_length ((char *) utf8_char);
     }
   }
   return UNICODE_RETURN_SUCCESS;
@@ -515,7 +511,7 @@ unsigned int unicode_utf8_previous_character_length
    length. */
 
 unsigned int unicode_utf8_next_character_length
-   (char *utf8_string, unsigned int string_position)
+   (u8 *utf8_string, unsigned int string_position)
 {
   unsigned int character_length;
 

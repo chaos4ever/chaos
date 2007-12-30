@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public License
-   as published by the Free Software Foundation; either version 2 of
-   the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <console/console.h>
 #include <ipc/ipc.h>
@@ -112,10 +98,10 @@ return_type ipc_service_resolve
 return_type ipc_service_connection_wait (ipc_structure_type *ipc_structure)
 {
   message_parameter_type message_parameter;
-  u8 *buffer;
+  void *buffer;
   unsigned int buffer_size = 1024;
 
-  memory_allocate ((void **) &buffer, buffer_size);
+  memory_allocate (&buffer, buffer_size);
 
   /* Check the input parameter. */
 
@@ -176,7 +162,7 @@ return_type ipc_service_connection_wait (ipc_structure_type *ipc_structure)
             /* FIXME: Fill in better stuff here! */
 
             string_copy ((char *) message_parameter.data,
-                         PACKAGE_NAME " " PACKAGE_VERSION);
+                         (char *) PACKAGE_NAME " " PACKAGE_VERSION);
 
             message_parameter.length =
               string_length ((char *) message_parameter.data);

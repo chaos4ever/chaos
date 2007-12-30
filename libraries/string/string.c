@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Lesser General Public License
-   as published by the Free Software Foundation; either version 2 of
-   the License, or (at your option) any later version.
-
-   This library is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Lesser General Public License for more details.
-
-   You should have received a copy of the GNU Lesser General Public
-   License along with this library; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <system/system.h>
 #include <string/string.h>
@@ -57,7 +43,7 @@
 /* Converts a string to a number. */
 
 return_type string_to_number (const char *string, int *number,
-                              int *characters)
+                              unsigned int *characters)
 {
   unsigned int index = 0;
   unsigned int base = 10;
@@ -532,8 +518,8 @@ return_type string_print_va (char *output, const char *format_string,
         if (format_string[input_index] >= '0' && 
             format_string[input_index] <= '9')
         {
-          int characters;
-
+          unsigned int characters;
+          
           string_to_number (&format_string[input_index], &field_width,
                             &characters);
           input_index += characters;
@@ -549,7 +535,7 @@ return_type string_print_va (char *output, const char *format_string,
           if (format_string[input_index] >= '0' &&
               format_string[input_index] <= '9')
           {
-            int characters;
+            unsigned int characters;
 
             string_to_number (&format_string[input_index], &precision,
                               &characters);

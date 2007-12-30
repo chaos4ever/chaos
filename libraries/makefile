@@ -3,40 +3,29 @@
 ##          Per Lundberg <plundis@chaosdev.org>
 
 ## Copyright 1999-2000 chaos development.
+## Copyright 2007 chaos development.
 
-## This library is free software; you can redistribute it and/or
-## modify it under the terms of the GNU Lesser General Public License
-## as published by the Free Software Foundation; either version 2 of
-## the License, or (at your option) any later version.
-
-## This library is distributed in the hope that it will be useful, but
-## WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-## Lesser General Public License for more details.
-
-## You should have received a copy of the GNU Lesser General Public
-## License along with this library; if not, write to the Free Software
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-## USA. 
+include ../install.config
 
 LIBRARIES = string system ipc execute_elf memory unicode ipv4 \
 video serial console random log file math checksum mutex pci time \
 list sound
 
-# Specify where you want make install to put the files in here. Remember to
-# do a make configure afterwards!
+# Specifies the installation prefix (now taken from the global
+# install.cfg file). Remember to do a make configure after changing
+# the root!
 
-PREFIX = /tftpboot/chaos
+PREFIX = $(CHAOS_ROOT)
 
 CFLAGS = -Wall -W -Wshadow -Wpointer-arith -Waggregate-return \
 -Wstrict-prototypes -Wredundant-decls -Winline -Wmissing-prototypes \
 -Werror -Wcast-align -Wbad-function-cast -Wsign-compare \
--Wmissing-declarations -Wmissing-noreturns -pipe \
--Wnested-externs -O3 -fno-builtin -funsigned-char -g
+-Wmissing-declarations -pipe -Wnested-externs -O3 -fno-builtin \
+-funsigned-char -g -m32
 
 INCLUDES = -I. -I$(PREFIX)/data/programming/c/headers
 
-CC = gcc-2.95
+CC = gcc
 
 %.o: %.c
 	$(CC) -o $(@) $(CFLAGS) $(INCLUDES) $(DEFS) -c $<
