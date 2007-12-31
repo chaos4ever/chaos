@@ -2,31 +2,25 @@
 ## Author: Per Lundberg <plundis@chaosdev.org>
 
 ## Copyright 1999-2000 chaos development.
+## Copyright 2007 chaos development.
 
-## This program is free software; you can redistribute it and/or
-## modify it under the terms of the GNU General Public License as
-## published by the Free Software Foundation; either version 2 of the
-## License, or (at your option) any later version.
+#
+# TODO: the makefiles in the subdirectories here are pretty much
+# identical... we should try and move the generic content to a
+# template that we include from all the makefiles.
+#
 
-## This program is distributed in the hope that it will be useful, but
-## WITHOUT ANY WARRANTY; without even the implied warranty of
-## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-## General Public License for more details.
-
-## You should have received a copy of the GNU General Public License
-## along with this program; if not, write to the Free Software
-## Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-## USA.
+include ../install.config
 
 # List all the servers you want to compile here.
 
 SUB_DIRECTORIES = network system file_system sound other video block
 
-# Specify where you want make install to put the files in here. Remember to
-# do a make configure afterwards!
+# Specifies the installation prefix (now taken from the global
+# install.config file). Remember to do a make configure after changing
+# the root!
 
-PREFIX = /tftpboot/chaos
-
+PREFIX = $(CHAOS_ROOT)
 
 .PHONY: all autochaos clean config install tags
 

@@ -4,8 +4,10 @@
 ## Copyright 1999-2000 chaos development.
 ## Copyright 2007 chaos development.
 
+include ../../install.config
+
 SERVERS = 3c509 loopback ipv4 3com-pci realtek-pci ne2000 # tulip via-rhine
-PREFIX = /tftpboot/chaos
+PREFIX = $(CHAOS_ROOT)
 
 .PHONY: all autochaos clean config install tags
 
