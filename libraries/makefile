@@ -12,7 +12,7 @@ video serial console random log file math checksum mutex pci time \
 list sound
 
 # Specifies the installation prefix (now taken from the global
-# install.cfg file). Remember to do a make configure after changing
+# install.config file). Remember to do a make configure after changing
 # the root!
 
 PREFIX = $(CHAOS_ROOT)
