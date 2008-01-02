@@ -44,12 +44,12 @@ my $CFLAGS = '-Wall -W -Wshadow -Wpointer-arith -Waggregate-return \\\
 -Wstrict-prototypes -Wredundant-decls -Winline -Wmissing-prototypes \\\
 -Werror -Wcast-align -Wbad-function-cast -Wsign-compare \\\
 -Wmissing-declarations -Wmissing-noreturn -pipe \\\
--Wnested-externs -O3 -fno-builtin -funsigned-char -g';
+-Wnested-externs -O3 -fno-builtin -funsigned-char -g -m32';
 
 my $LDFLAGS_NORMAL = '\$(PREFIX)/data/programming/c/startup/startup.o \\\
--nostdlib -Wl,-T,\$(PREFIX)/data/programming/linker/chaos.ld -lgcc';
+-nostdlib -Wl,-T,\$(PREFIX)/data/programming/linker/chaos.ld -lgcc -m32';
 
-my $LDFLAGS_KERNEL = '-nostdlib -Wl,-T,current-arch/kernel.ld -lgcc';
+my $LDFLAGS_KERNEL = '-nostdlib -Wl,-T,current-arch/kernel.ld -lgcc -m32';
 
 # Variables.
 
@@ -584,7 +584,7 @@ HEADER_PATH = $header_path
 
 # TODO: Those should be overridable.
 
-CC = gcc-2.95
+CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
