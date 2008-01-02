@@ -5,21 +5,7 @@
  * the Linux source, but not by far as obnoxious... */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <ipc/ipc.h>
 #include <log/log.h>
@@ -34,6 +20,7 @@ static log_structure_type log_structure;
 /* Linked list of all PCI devices. */
 
 static pci_device_type *pci_device_list = NULL;
+static pci_device_type **pci_device_list_pointer = &pci_device_list;
 
 /* Linked list of all buses. */
 
@@ -210,6 +197,12 @@ static void pci_write_config_u32 (pci_device_type *device, int where, u32 data)
                                                               data);
 }
 
+/* The following functions are not yet used; they remain since the PCI
+   server is esentially a rip-off of the Linux code. I keep them for
+   now since they might be useful later. */
+
+#if FALSE
+
 static void pci_write_config_u16 (pci_device_type *device, int where, u32 data)
 {
   ((pci_operation_type *) device->bus->operation)->write_u16 (device, where,
@@ -221,6 +214,8 @@ static void pci_write_config_u8 (pci_device_type *device, int where, u32 data)
   ((pci_operation_type *) device->bus->operation)->write_u8 (device, where,
                                                              data);
 }
+
+/* The following methods are mostly of interest when debugging. */
 
 /* Get the vendor name for the given ID. */
 
@@ -257,6 +252,8 @@ static const char *device_get_name (u16 vendor_id, u16 device_id)
   return pci_device_id[counter].name;
 }
 
+#endif
+
 /* Handle an IPC connection request. */
 
 static void handle_connection (mailbox_id_type reply_mailbox_id)
@@ -265,9 +262,10 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
   ipc_structure_type ipc_structure;
   bool done = FALSE;
   u32 *data;
+  u32 **data_pointer = &data;
   unsigned int data_size = 1024;
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -300,6 +298,7 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
         unsigned int devices = 0;
         pci_device_type *device = pci_device_list;
         pci_device_info_type *device_info = NULL;
+        pci_device_info_type **device_info_pointer = &device_info;
         unsigned int counter = 0;
 
         while (device != NULL)
@@ -315,7 +314,7 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
 
         /* Allocate memory to hold this many devices. */
         
-        memory_allocate ((void **) &device_info,
+        memory_allocate ((void **) device_info_pointer,
                          devices * sizeof (pci_device_info_type));
 
         device = pci_device_list;
@@ -338,7 +337,7 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
         message_parameter.data = device_info;
         message_parameter.length = devices * sizeof (pci_device_info_type);
         ipc_send (ipc_structure.output_mailbox_id, &message_parameter);
-        memory_deallocate ((void **) &device_info);
+        memory_deallocate ((void **) device_info_pointer);
 
         break;
       }
@@ -600,6 +599,7 @@ static bool pci_setup_device (pci_device_type *device)
 static pci_device_type *pci_scan_device (pci_device_type *input_device)
 {
   pci_device_type *device;
+  pci_device_type **device_pointer = &device;
   u32 vendor_id;
   
   vendor_id = pci_read_config_u32 (input_device, PCI_VENDOR_ID);
@@ -612,7 +612,7 @@ static pci_device_type *pci_scan_device (pci_device_type *input_device)
     return NULL;
   }
   
-  memory_allocate ((void **) &device, sizeof (pci_device_type));
+  memory_allocate ((void **) device_pointer, sizeof (pci_device_type));
 
   if (device == NULL)
   {
@@ -629,7 +629,7 @@ static pci_device_type *pci_scan_device (pci_device_type *input_device)
 
   if (!pci_setup_device (device)) 
   {
-    memory_deallocate ((void **) &device);
+    memory_deallocate ((void **) device_pointer);
   }
 
   return device;
@@ -671,7 +671,7 @@ static pci_device_type *pci_scan_slot (pci_device_type *input_device)
     
     /* Add this device to the linked list. */
 
-    list_node_insert ((list_type **) &pci_device_list, (list_type *) device);
+    list_node_insert ((list_type **) pci_device_list_pointer, (list_type *) device);
   }
 
   return first_device;
@@ -683,10 +683,11 @@ static pci_bus_type *pci_scan_bus (int bus_number,
                                    pci_operation_type *operation)
 {
   pci_bus_type *bus;
+  pci_bus_type **bus_pointer = &bus;
   unsigned int device_function;
   pci_device_type device;
 
-  memory_allocate ((void **) &bus, sizeof (pci_bus_type));
+  memory_allocate ((void **) bus_pointer, sizeof (pci_bus_type));
   bus->number = bus->secondary = bus_number;
   bus->operation = (struct pci_operation_type *) operation;
 

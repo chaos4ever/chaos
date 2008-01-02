@@ -3,23 +3,9 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
+/* Copyright 2007 chaos development. */
 
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
-
-/* Partially based on the Linux driver, written by Donald Becker. */
+/* Partially based on the GPL:ed Linux driver, written by Donald Becker. */
 
 #include "config.h"
 #include "realtek-pci.h"
@@ -272,8 +258,9 @@ static int realtek_receive (realtek_device_type *device)
     else 
     {
       u8 *data;
+      u8 **data_pointer = &data;
       
-      memory_allocate ((void **) &data, rx_size);
+      memory_allocate ((void **) data_pointer, rx_size);
 
       if (ring_offset + rx_size + 4 > RX_BUFFER_LENGTH)
       {
@@ -415,8 +402,9 @@ static void handle_connection (mailbox_id_type reply_mailbox_id,
   bool done = FALSE;
   unsigned int data_size = 1024;
   u32 *data;
+  u32 **data_pointer = &data;
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -493,6 +481,7 @@ static void handle_8139 (pci_device_info_type *device_info)
   u16 port_base = MAX_U16;
   u16 ports = 0;
   realtek_device_type *device;
+  realtek_device_type **device_pointer = &device;
   unsigned int physical, physical_index;
   ipc_structure_type ipc_structure;
 
@@ -517,7 +506,7 @@ static void handle_8139 (pci_device_info_type *device_info)
 
   system_call_port_range_register (port_base, ports, "Realtek 8139");
 
-  memory_allocate ((void **) &device, sizeof (realtek_device_type));
+  memory_allocate ((void **) device_pointer, sizeof (realtek_device_type));
 
   device->port_base = port_base;
   device->irq = device_info->irq;
@@ -586,11 +575,16 @@ static void handle_8139 (pci_device_info_type *device_info)
 
   system_port_out_u8 (port_base + ChipCommand, CommandReset);
 
-  pci_allocate_buffer ((void **) &device->tx_buffers_dma,
-                       (void **) &device->tx_buffers,
+  u8 **tx_buffers_dma_pointer = &device->tx_buffers_dma;
+  u8 **tx_buffers_pointer = &device->tx_buffers;
+  u8 **rx_ring_dma_pointer = &device->rx_ring_dma;
+  u8 **rx_ring_pointer = &device->rx_ring;
+
+  pci_allocate_buffer ((void **) tx_buffers_dma_pointer,
+                       (void **) tx_buffers_pointer,
                        TX_BUFFER_SIZE * NUMBER_OF_TX_DESCRIPTORS);
-  pci_allocate_buffer ((void **) &device->rx_ring_dma,
-                       (void **) &device->rx_ring,
+  pci_allocate_buffer ((void **) rx_ring_dma_pointer,
+                       (void **) rx_ring_pointer,
                        RX_BUFFER_LENGTH + 16);
 
   device->tx_full = FALSE;

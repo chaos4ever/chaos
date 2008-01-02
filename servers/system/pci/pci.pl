@@ -36,6 +36,7 @@ sub escape
   my $line = shift;
   
   $line =~ s/\"/\\\"/g;
+  $line =~ s/\?/\\\?/g;
   return $line;
 }
 

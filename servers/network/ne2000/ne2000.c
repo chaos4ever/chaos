@@ -6,21 +6,6 @@
 /* Copyright 1999-2000 chaos development. */
 /* Copyright 2007 chaos development. */
 
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
-
 #include <config.h>
 #include "ne2000.h"
 
@@ -830,8 +815,9 @@ static void handle_connection (mailbox_id_type reply_mailbox_id,
   bool done = FALSE;
   unsigned int data_size = 1024;
   u32 *data;
+  u32 **data_pointer = &data;
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -965,7 +951,8 @@ int main (void)
 
   log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE, "NE2000 server by noah williamsson");
 
-  memory_allocate ((void **) &device, sizeof (device_type));
+  device_type **device_pointer = &device;
+  memory_allocate ((void **) device_pointer, sizeof (device_type));
   
   // FIXME: Hardwired for now. These are the values that Bochs use
   // by default, that's why I'm choosing them.
@@ -980,7 +967,7 @@ int main (void)
   if (!found)
   {
     log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "!found");
-    memory_deallocate ((void **) &device);
+    memory_deallocate ((void **) device_pointer);
   }
   else
   {

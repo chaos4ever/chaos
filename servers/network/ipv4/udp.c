@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <log/log.h>
 #include <system/system.h>
@@ -37,7 +23,8 @@ static unsigned int last_source_port = 1024;
 
 void udp_init (void)
 {
-  memory_allocate ((void **) &udp_hash, 
+  socket_type ***udp_hash_pointer = &udp_hash;
+  memory_allocate ((void **) udp_hash_pointer, 
                    SOCKET_HASH_SIZE * sizeof (socket_type *));
 }
 
@@ -99,8 +86,9 @@ return_type udp_connect
   (u32 destination, unsigned int destination_port, unsigned int *socket_id)
 {
   socket_type *socket;
+  socket_type **socket_pointer = &socket;
 
-  memory_allocate ((void **) &socket, sizeof (socket_type));
+  memory_allocate ((void **) socket_pointer, sizeof (socket_type));
   socket->protocol_type = IPC_IPV4_PROTOCOL_UDP;
   socket->source_port = udp_find_port ();
   socket->destination_port = destination_port;
@@ -166,7 +154,8 @@ return_type udp_send
 
   /* Now, construct the package, and send it. */
 
-  memory_allocate ((void **) &ethernet_header, 
+  ipv4_ethernet_header_type **ethernet_header_pointer = &ethernet_header;
+  memory_allocate ((void **) ethernet_header_pointer,
                    sizeof (ipv4_ethernet_header_type) +
                    sizeof (ipv4_header_type) + sizeof (udp_header_type) +
                    length);
@@ -230,10 +219,11 @@ void udp_packet_receive
   if (socket != NULL)
   {
     packet_list_type *packet;
+    packet_list_type **packet_pointer = &packet;
 
     log_print (&log_structure, LOG_URGENCY_DEBUG, "Buffering packet");
 
-    memory_allocate ((void **) &packet, sizeof (packet_list_type));
+    memory_allocate ((void **) packet_pointer, sizeof (packet_list_type));
     packet->length = (length - sizeof (ipv4_ethernet_header_type) -
                       sizeof (ipv4_header_type) - sizeof (udp_header_type));
     packet->source_address = ipv4_header->source_address;
@@ -245,7 +235,8 @@ void udp_packet_receive
     log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "ull: %u",
                          packet->length);
 
-    list_node_insert ((list_type **) &socket->packet_list,
+    packet_list_type **packet_list_pointer = &socket->packet_list;
+    list_node_insert ((list_type **) packet_list_pointer,
                       (list_type *) packet);
   }
 }

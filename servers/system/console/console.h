@@ -4,21 +4,7 @@
             Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #ifndef __CONSOLE_H__
 #define __CONSOLE_H__
@@ -165,7 +151,7 @@ enum
 /* Global variables. */
 
 extern character_type *screen;
-extern bool has_video;
+extern volatile bool has_video;
 extern ipc_structure_type video_structure;
 extern volatile console_type *current_console;
 extern volatile unsigned int number_of_consoles;
@@ -174,9 +160,8 @@ extern volatile console_type *console_shortcut[];
 
 /* External functions. */
 
-extern void handle_connection (mailbox_id_type reply_mailbox_id);
+extern void handle_connection (mailbox_id_type reply_mailbox_id) __attribute__ ((noreturn));
 extern void console_link (console_type *console);
 extern void console_flip (console_type *console);
 
-#endif /* !__CONSOLE_H__ */
-
+#endif /* !defined __CONSOLE_H__ */

@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 #include "console.h"
@@ -47,7 +33,7 @@ static void connection_client
         }
         
         (*our_console)->lock = TRUE;
-        console_output (*our_console, (u8 *) message_parameter->data);
+        console_output (*our_console, message_parameter->data);
         (*our_console)->lock = FALSE;
       }
       
@@ -122,16 +108,17 @@ static void connection_client
         
         /* Allocate memory for a buffer for this console. */
         
+        character_type **buffer_pointer = &((*our_console)->buffer);
         if ((*our_console)->type == VIDEO_MODE_TYPE_TEXT)
         {
-          memory_allocate ((void **) &((*our_console)->buffer),
+          memory_allocate ((void **) buffer_pointer,
                            (*our_console)->width *
                            (*our_console)->height *
                            sizeof (character_type));
         }
         else
         {
-          memory_allocate ((void **) &((*our_console)->buffer),
+          memory_allocate ((void **) buffer_pointer,
                            (*our_console)->width *
                            (*our_console)->height *
                            (*our_console)->depth);
@@ -405,16 +392,17 @@ static void connection_provider_mouse
 void handle_connection (mailbox_id_type reply_mailbox_id)
 {
   u32 *data;
+  u32 **data_pointer = &data;
   message_parameter_type message_parameter;
   ipc_structure_type ipc_structure;
-  bool done = FALSE;
   unsigned int connection_class = IPC_CONSOLE_CONNECTION_CLASS_NONE;
   console_type *our_console = NULL;
   console_application_type *our_application = NULL;
+  console_application_type **our_application_pointer = &our_application;
   unsigned int data_size = 4096;
 
-  memory_allocate ((void **) &data, data_size);
-  memory_allocate ((void **) &our_application,
+  memory_allocate ((void **) data_pointer, data_size);
+  memory_allocate ((void **) our_application_pointer,
                    sizeof (console_application_type));
 
   /* Accept the connection. */ 
@@ -424,7 +412,7 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
 
   message_parameter.data = data;
 
-  while (!done)
+  while (TRUE)
   {
     message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
     message_parameter.message_class = IPC_CLASS_NONE;

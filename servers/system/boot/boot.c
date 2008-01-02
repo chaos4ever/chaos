@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 
@@ -48,7 +34,8 @@ int main (void)
   file_handle_type handle;
   file_verbose_directory_entry_type directory_entry;
   u8 *buffer;
-  u8 *server_name_buffer;
+  u8 **buffer_pointer = &buffer;
+  char *server_name_buffer;
   char *server[MAX_SERVERS];
   unsigned int where, number_of_servers = 0, server_number;
   process_id_type process_id;
@@ -130,7 +117,8 @@ int main (void)
     return -1;
   }
 
-  memory_allocate ((void **) &server_name_buffer, directory_entry.size);
+  char **server_name_pointer = &server_name_buffer;
+  memory_allocate ((void **) server_name_pointer, directory_entry.size);
 
   file_open (&vfs_structure, STARTUP_FILE, FILE_MODE_READ, &handle);
   file_read (&vfs_structure, handle, directory_entry.size,
@@ -184,7 +172,7 @@ int main (void)
                          "Allocating %lu bytes for %s.",
                          directory_entry.size, server[server_number]);
 
-    memory_allocate ((void **) &buffer, directory_entry.size);
+    memory_allocate ((void **) buffer_pointer, directory_entry.size);
 
     log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                          "Buffer is at %p.", buffer);
@@ -236,7 +224,7 @@ int main (void)
       }
     }
 
-    memory_deallocate ((void **) &buffer);
+    memory_deallocate ((void **) buffer_pointer);
   }
 
   system_call_process_parent_unblock ();
