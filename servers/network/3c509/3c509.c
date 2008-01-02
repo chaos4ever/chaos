@@ -3,24 +3,11 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 /* Partially based on 3c509.c: A 3c509 EtherLink3 ethernet driver for
-   Linux, Written 1993-1998 by Donald Becker. */
+   Linux, Written 1993-1998 by Donald Becker. (Licensed under the GNU 
+   GPL) */
 
 /* TODO:
    
@@ -317,7 +304,8 @@ static bool etherlink3_open (device_type *device)
   {
     /* Allocate memory for the input buffer. */
     
-    memory_allocate ((void **) &device->input_buffer, 2048);
+    u32 **buffer = &device->input_buffer;
+    memory_allocate ((void **) buffer, 2048);
     
     if (system_call_irq_register (device->irq, "3Com Etherlink III") != 
         STORM_RETURN_SUCCESS)
@@ -1007,8 +995,9 @@ static void handle_connection (mailbox_id_type reply_mailbox_id,
   bool done = FALSE;
   unsigned int data_size = 1024;
   u32 *data;
+  u32 **data_pointer = &data;
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -1137,13 +1126,13 @@ int main (void)
   do
   {
     device_type *device;
-
-    memory_allocate ((void **) &device, sizeof (device_type));
+    device_type **device_pointer = &device;
+    memory_allocate ((void **) device_pointer, sizeof (device_type));
     found = etherlink3_probe (device);
 
     if (!found)
     {
-      memory_deallocate ((void **) &device);
+      memory_deallocate ((void **) device_pointer);
     }
     else
     {

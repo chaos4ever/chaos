@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <ipc/ipc.h>
 #include <log/log.h>
@@ -98,7 +84,8 @@ void tcp_packet_receive (ipv4_interface_type *interface,
   /* FIXME: We should really calculate the size needed, or at least
      have some fixed maximum. This is ugly. */
 
-  memory_allocate ((void **) &packet, 1024);
+  u32 **packet_pointer = &packet;
+  memory_allocate ((void **) packet_pointer, 1024);
 
   ethernet_header = (ipv4_ethernet_header_type *) packet;
   ipv4_header = (ipv4_header_type *) &ethernet_header->data;
@@ -173,5 +160,5 @@ void tcp_packet_receive (ipv4_interface_type *interface,
   message_parameter.data = packet;
   ipc_send (output_mailbox_id, &message_parameter);
 
-  memory_deallocate ((void **) &packet);
+  memory_deallocate ((void **) packet_pointer);
 }

@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 #include "ipv4.h"
@@ -50,7 +36,8 @@ ipv4_socket_id_type socket_get_free (void)
 
 void socket_init (void)
 {
-  memory_allocate ((void **) &socket_hash, 
+  socket_type ***socket_hash_pointer = &socket_hash;
+  memory_allocate ((void **) socket_hash_pointer, 
                    SOCKET_HASH_SIZE * sizeof (socket_type *));
 }
 
@@ -158,6 +145,7 @@ void socket_receive
   log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                        "ULL: %u", socket->packet_list->length);
 
-  list_node_delete ((list_type **) &socket->packet_list, 
+  packet_list_type **packet_list_pointer = &socket->packet_list;
+  list_node_delete ((list_type **) packet_list_pointer,
                     (list_type *) socket->packet_list);
 }

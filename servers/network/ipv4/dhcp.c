@@ -1,23 +1,9 @@
 /* $Id$ */
-/* Abstract: DHCP support. */
+/* Abstract: DHCP (client) support. */
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 #include "ipv4.h"
@@ -36,6 +22,7 @@ void dhcp_assign (ipv4_interface_type *ipv4_interface,
   dhcp_packet_type *dhcp_reply;
   message_parameter_type message_parameter;
   u32 *data;
+  u32 **data_pointer = &data;
   unsigned int data_size = 4096;
   u32 transaction_id;
   unsigned int index = 0;
@@ -49,7 +36,7 @@ void dhcp_assign (ipv4_interface_type *ipv4_interface,
 
   /* Allocate memory for the reply. */
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
   dhcp_reply = (dhcp_packet_type *) data;
 
   /* Zap the DHCP packet over to the enemy. */

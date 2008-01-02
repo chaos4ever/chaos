@@ -85,7 +85,7 @@ configure: autochaos.rules
 
 
 LDFLAGS = $(PREFIX)/data/programming/c/startup/startup.o \
--nostdlib -Wl,-T,$(PREFIX)/data/programming/linker/chaos.ld -lgcc $(EXTRA_LDFLAGS)
+-nostdlib -Wl,-T,$(PREFIX)/data/programming/linker/chaos.ld -lgcc -m32 $(EXTRA_LDFLAGS)
 
 initial_ramdisk: $(OBJECTS)
 	@echo "Linking..."

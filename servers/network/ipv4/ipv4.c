@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 #include "arp.h"
@@ -70,8 +56,9 @@ static void interface_add (ipv4_interface_type *interface,
                            ipc_structure_type *ethernet_structure)
 {
   ipv4_interface_list_type *entry;
+  ipv4_interface_list_type **entry_pointer = &entry;
 
-  memory_allocate ((void **) &entry, sizeof (ipv4_interface_list_type));
+  memory_allocate ((void **) entry_pointer, sizeof (ipv4_interface_list_type));
   entry->interface = interface;
   entry->ethernet_structure = ethernet_structure;
 
@@ -230,9 +217,10 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
   ipc_structure_type ipc_structure;
   bool done = FALSE;
   u32 *data;
+  u32 **data_pointer = &data;
   unsigned int data_size = 1024;
   
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -497,15 +485,18 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
 static bool handle_ethernet (mailbox_id_type mailbox_id)
 {
   ipc_structure_type *ethernet_structure;
+  ipc_structure_type **ethernet_structure_pointer = &ethernet_structure;
   message_parameter_type message_parameter;
   u32 *data;
+  u32 **data_pointer = &data;
   bool done = FALSE;
   ipv4_interface_type *interface;
+  ipv4_interface_type **interface_pointer = &interface;
   unsigned int data_size = 1024;
 
-  memory_allocate ((void **) &data, data_size);
-  memory_allocate ((void **) &interface, sizeof (ipv4_interface_type));
-  memory_allocate ((void **) &ethernet_structure, sizeof (ipc_structure_type));
+  memory_allocate ((void **) data_pointer, data_size);
+  memory_allocate ((void **) interface_pointer, sizeof (ipv4_interface_type));
+  memory_allocate ((void **) ethernet_structure_pointer, sizeof (ipc_structure_type));
 
   memory_set_u8 ((u8 *) interface, 0, sizeof (ipv4_interface_type));
 
@@ -655,7 +646,7 @@ int main (void)
   mailbox_id_type mailbox_id[10];
   unsigned int services = 10;
   unsigned int index;
-  unsigned int seed;
+  time_type seed;
   bool done = FALSE;
 
   system_call_timer_read ((time_type *) &seed);

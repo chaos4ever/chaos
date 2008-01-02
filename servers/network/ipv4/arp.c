@@ -3,21 +3,7 @@
 /* Author: Per Lundberg <plundis@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include "config.h"
 #include "ipv4.h"
@@ -64,8 +50,9 @@ bool arp_ip_to_ethernet_address (u32 ip_address, u8 ethernet_address[])
 void arp_insert_entry (u32 ip_address, u8 ethernet_address[])
 {
   arp_cache_entry_type *entry;
+  arp_cache_entry_type **entry_pointer = &entry;
 
-  memory_allocate ((void **) &entry, sizeof (arp_cache_entry_type));
+  memory_allocate ((void **) entry_pointer, sizeof (arp_cache_entry_type));
   entry->ip_address = ip_address;
   memory_copy (entry->ethernet_address, ethernet_address,
                IPV4_ETHERNET_ADDRESS_LENGTH);
@@ -199,10 +186,11 @@ void arp_who_has (u32 ip_address, ipv4_interface_type *interface,
                   ipc_structure_type *ethernet_structure)
 {
   ipv4_ethernet_header_type *ethernet_header;
+  ipv4_ethernet_header_type **ethernet_header_pointer = &ethernet_header;
   arp_packet_type *arp_packet;
   message_parameter_type message_parameter;
 
-  memory_allocate ((void **) &ethernet_header, 
+  memory_allocate ((void **) ethernet_header_pointer, 
                    sizeof (ipv4_ethernet_header_type) + 
                    sizeof (arp_packet_type));
   
@@ -235,5 +223,5 @@ void arp_who_has (u32 ip_address, ipv4_interface_type *interface,
                               sizeof (arp_packet_type));
   message_parameter.block = TRUE;
   ipc_send (ethernet_structure->output_mailbox_id, &message_parameter);
-  memory_deallocate ((void **) &ethernet_header);
+  memory_deallocate ((void **) ethernet_header_pointer);
 }
