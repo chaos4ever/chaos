@@ -126,6 +126,17 @@ static inline void system_port_out_u8_string (u16 port, u8 *data, u32 length)
                   "d" (port));
 }
 
+static inline void system_port_out_u16_string (u16 port, u16 *data, u32 length)
+{
+  asm volatile ("cld\n"
+                "rep\n"
+                "outsw"
+                :
+                : "c" (length),
+                  "S" (data),
+                  "d" (port));
+}
+
 static inline void system_port_out_u32_string (u16 port, u32 *data, u32 length)
 {
   asm volatile ("cld\n"

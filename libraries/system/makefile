@@ -92,7 +92,7 @@ configure: autochaos.rules
 
 
 LDFLAGS = $(PREFIX)/data/programming/c/startup/startup.o \
--nostdlib -Wl,-T,$(PREFIX)/data/programming/linker/chaos.ld -lgcc $(EXTRA_LDFLAGS)
+-nostdlib -Wl,-T,$(PREFIX)/data/programming/linker/chaos.ld -lgcc -m32 $(EXTRA_LDFLAGS)
 
 library_system.a: $(OBJECTS)
 	@echo "Creating library..."
@@ -104,7 +104,7 @@ install: all
 	@mkdir -p $(PREFIX)/data/programming/libraries/static
 	@cp library_system.a $(PREFIX)/data/programming/libraries/static
 	@mkdir -p $(PREFIX)/data/programming/c/headers/$(PACKAGE)
-	@for header in $(HEADERS) ; do cp $$header $(PREFIX)/data/programming/c/headers/$(PACKAGE) ; done
+	@for header in $(HEADERS) ; do cp -p $$header $(PREFIX)/data/programming/c/headers/$(PACKAGE) ; done
 
 package-source:
 	mkdir -p /home/per/Projects/chaos-old/libraries/system/package-source/.
