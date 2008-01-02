@@ -772,7 +772,7 @@ install: all
 \t\\\@mkdir -p \\\$(PREFIX)/data/programming/libraries/static
 \t\\\@cp $target \\\$(PREFIX)/data/programming/libraries/static
 \t\\\@mkdir -p \\\$(PREFIX)/data/programming/c/headers/\\\$(PACKAGE)
-\t\\\@for header in \\\$(HEADERS) ; do cp \\\$\\\$header \\\$(PREFIX)/data/programming/c/headers/\\\$(PACKAGE) ; done
+\t\\\@for header in \\\$(HEADERS) ; do cp -p \\\$\\\$header \\\$(PREFIX)/data/programming/c/headers/\\\$(PACKAGE) ; done
 STOP
 END
    }
