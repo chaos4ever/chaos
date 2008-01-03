@@ -4,21 +4,7 @@
             Anders Öhrt <doa@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+/* Copyright 2007 chaos development. */
 
 #include <file/file.h>
 #include <ipc/ipc.h>
@@ -831,19 +817,20 @@ static bool fat_file_read (fat_info_type *fat_info,
   if (fat_open_file[file].file_position % fat_info->bytes_per_cluster != 0)
   {
     u8 *extra_buffer;
+    u8 **extra_buffer_pointer = &extra_buffer;
     unsigned int length = min_of_two
       (bytes, (fat_info->bytes_per_cluster -
                (fat_open_file[file].file_position %
                 fat_info->bytes_per_cluster)));
 
-    memory_allocate ((void **) &extra_buffer, length);
+    memory_allocate ((void **) extra_buffer_pointer, length);
 
     read_single_cluster (fat_info, cluster_number, (void *) extra_buffer);
     memory_copy (read_buffer, (u8 *) ((u32) extra_buffer +
                                       fat_open_file[file].file_position %
                                       fat_info->bytes_per_cluster), length);
 
-    memory_deallocate ((void **) &extra_buffer);
+    memory_deallocate ((void **) extra_buffer_pointer);
 
     fat_open_file[file].file_position += length;
     read_bytes += length;
@@ -911,8 +898,7 @@ static bool detect_fat (fat_info_type *fat_info)
   if (sector[510] == 0x55 &&
       sector[511] == 0xAA && 
       (bios_parameter_block->media == 0xF0 ||
-       (bios_parameter_block->media >= 0xF8 &&
-        bios_parameter_block->media <= 0xFF)))
+       (bios_parameter_block->media >= 0xF8)))
   {
     /* Now, get the size of this FAT (12, 16 or 32 bits). */
 
@@ -1034,9 +1020,10 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
   fat_info_type fat_info;
   ipc_structure_type ipc_structure;
   u8 *data;
+  u8 **data_pointer = &data;
   unsigned int data_size = 16384;
 
-  memory_allocate ((void **) &data, data_size);
+  memory_allocate ((void **) data_pointer, data_size);
 
   /* Accept the connection. */ 
 
@@ -1156,8 +1143,9 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
       {
         file_read_type *read = (file_read_type *) data;
         u8 *read_buffer;
+        u8 **read_buffer_pointer = &read_buffer;
 
-        memory_allocate ((void **) &read_buffer, read->bytes);
+        memory_allocate ((void **) read_buffer_pointer, read->bytes);
 
         if (!fat_file_read (&fat_info, read->file_handle, read_buffer, 
                             read->bytes))
@@ -1173,7 +1161,7 @@ static void handle_connection (mailbox_id_type reply_mailbox_id)
                              "Sending %lu", read->bytes);
 #endif
         ipc_send (ipc_structure.output_mailbox_id, &message_parameter);
-        memory_deallocate ((void **) &read_buffer);
+        memory_deallocate ((void **) read_buffer_pointer);
         break;
       }
 
