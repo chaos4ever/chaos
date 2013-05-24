@@ -302,9 +302,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)/generic
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -614,9 +613,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)//generic
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -911,9 +909,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)//ia32
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -1189,9 +1186,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)/include
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -1633,9 +1629,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)/ia32
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -1987,9 +1982,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)/
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
@@ -2349,9 +2343,8 @@ $source";
 
 HEADER_PATH = \$(PREFIX)/data/programming/c/headers/\$(PACKAGE)/.
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
