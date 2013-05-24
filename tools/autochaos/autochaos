@@ -1,11 +1,9 @@
 #!/usr/bin/perl -w
 
-# $chaos: autochaos,v 1.8 2002/05/23 11:23:20 per Exp $
-
 # Abstract: Program for generating configure scripts.
-# Author: Per Lundberg <plundis@chaosdev.org>
+# Author: Per Lundberg <per@halleluja.nu>
 
-# Copyright 2000 chaos development.
+# Copyright 2000, 2013 chaos development.
 
 use strict;
 use English;
@@ -582,9 +580,8 @@ END
 
 HEADER_PATH = $header_path
 
-# TODO: Those should be overridable.
+# TODO: Those should possibly be overridable...
 
-CC = gcc
 NASM = nasm
 AR = ar
 RANLIB = ranlib
