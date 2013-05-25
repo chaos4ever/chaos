@@ -3,7 +3,7 @@ target_arch = 'ia32'
 
 folders = 
 
-task :default => [ 'current-arch', 'include/current-arch' ] do
+task :default => [ 'current-arch', 'include/storm/current-arch' ] do
   [ 'generic', 'current-arch' ].each do |folder|
     sh "cd #{folder} && rake"
   end
@@ -15,14 +15,14 @@ task :clean do
     sh "cd #{folder} && rake clean"
   end
 
-  rm_f 'current-arch', 'include/storm/' + target_arch
+  rm_f [ 'current-arch', 'include/storm/' + target_arch ]
 end
 
 file 'current-arch' do
   ln_sf target_arch, 'current-arch'
 end
 
-file 'include/current-arch' do
+file 'include/storm/current-arch' do
   # The first argument here is actually non-qualified, which is the way it seems like it should be oddly enough...
   ln_sf target_arch, 'include/storm/current-arch'
 end
