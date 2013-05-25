@@ -1,0 +1,23 @@
+# TODO: Properly support cross-compiling to e.g. armv6.
+target_arch = 'ia32'
+
+folders = 
+
+task :default => [ 'current-arch' ] do
+  [ 'generic', 'current-arch' ].each do |folder|
+    sh "cd #{folder} && rake"
+  end
+end
+
+task :clean do
+  # Cannot use current-arch here, since it may not exist any more (if you run 'rake clean' multiple times).
+  [ 'generic', 'ia32' ].each do |folder|
+    sh "cd #{folder} && rake clean"
+  end
+
+  rm_f 'current-arch'
+end
+
+file 'current-arch' do
+  ln_sf target_arch, 'current-arch'
+end

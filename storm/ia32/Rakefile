@@ -1,0 +1,3 @@
+# TODO: Only placeholders at the moment.
+task :default
+task :clean
