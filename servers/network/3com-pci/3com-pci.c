@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Server for 3Com PCI ethernet cards. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

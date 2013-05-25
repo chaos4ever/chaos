@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: String routines. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999 chaos development. */
 

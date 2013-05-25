@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Definition of the data area which is used for
    communication between the startup code and the kernel. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1998-1999 chaos development. */
 

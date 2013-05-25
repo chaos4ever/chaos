@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: RSA Data Security, Inc., MD5 message-digest algorithm. */
-/* Author: Per Lundberg <plundis@chaosdev.org>,
+/* Author: Per Lundberg <per@halleluja.nu>,
            Derived from the RSA Data Security, Inc. MD5
            Message-Digest Algorithm. */
 

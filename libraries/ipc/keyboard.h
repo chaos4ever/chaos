@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Protocol used when communicating with keyboard
    servers. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright chaos development 1999. */

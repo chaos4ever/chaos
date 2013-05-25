@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Memory allocation functions for the global memory area. */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

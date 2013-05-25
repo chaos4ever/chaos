@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Type definitions and function prototypes for the PCI
    server. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

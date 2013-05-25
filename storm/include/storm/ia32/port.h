@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Function prototypes and structure definitions of port in
    and output. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1998-2000 chaos development. */
 

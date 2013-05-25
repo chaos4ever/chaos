@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Function prototypes and structure definitions of the
    timer support. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

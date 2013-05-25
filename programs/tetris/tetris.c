@@ -2,7 +2,7 @@
 /* Abstract: A simple tetris game. */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
             Anders Öhrt <doa@chaosdev.org>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development */
 

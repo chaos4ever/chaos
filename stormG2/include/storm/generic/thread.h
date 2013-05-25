@@ -2,7 +2,7 @@
 /* Abstract: Thread functions. */
 
 /* Authors: Henrik Hallin <hal@chaosdev.org>,
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

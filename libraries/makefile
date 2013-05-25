@@ -1,6 +1,6 @@
 ## $Id$
 ## Authors: Henrik Hallin <hal@chaosdev.org>
-##          Per Lundberg <plundis@chaosdev.org>
+##          Per Lundberg <per@halleluja.nu>
 
 ## Copyright 1999-2000 chaos development.
 ## Copyright 2007 chaos development.

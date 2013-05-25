@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Console header file. */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 /* Copyright 2007 chaos development. */

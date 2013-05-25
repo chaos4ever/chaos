@@ -2,7 +2,7 @@
 /* Abstract: Physical memory allocation functions. */
 
 /* Author: Henrik Hallin <hal@chaosdev.org> 
-           Per Lundberg <plundis@chaosdev.org> */
+           Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

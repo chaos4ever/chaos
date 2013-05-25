@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Log library. The functions in this library are used for
    communicating to the log server. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

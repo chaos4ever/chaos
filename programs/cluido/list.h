@@ -1,7 +1,7 @@
 /* $Id */
 /* Abstract: Linked list function prototypes and structure
    definitions. */
-/* Author: Per Lundberg <plundis@chaosdev.org>
+/* Author: Per Lundberg <per@halleluja.nu>
            Anders Öhrt <hal@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development */

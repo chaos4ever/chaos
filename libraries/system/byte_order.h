@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Inline functions for swapping byte order. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 /* Copyright 2007 chaos development. */

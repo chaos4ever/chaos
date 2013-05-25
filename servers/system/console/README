@@ -6,4 +6,4 @@ and supports multiple virtual consoles. You can in fact have different
 resolutions on your virtual consoles, and even mix text and graphical
 one -- the console server will have no problems handling this.
 
--- Per Lundberg <plundis@chaosdev.org>  Fri, 23 Jun 2000 11:07:58 +0200
+-- Per Lundberg <per@halleluja.nu>  Fri, 23 Jun 2000 11:07:58 +0200

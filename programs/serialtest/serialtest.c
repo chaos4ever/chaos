@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Terminator 2000. */
 /* Authors: Martin Alvarez <malvarez@aapsa.es>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

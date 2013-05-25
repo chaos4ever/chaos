@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Routines for managing the Global Descriptor Table. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1998-2000 chaos development. */

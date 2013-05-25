@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Realtek PCI server. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 /* Copyright 2007 chaos development. */

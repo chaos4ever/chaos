@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Return values */
-/* Authors: Per Lundberg <plundis@chaosdev.org> 
+/* Authors: Per Lundberg <per@halleluja.nu> 
             Henrik Hallin <hal@chaosdev.org> 
             Anders Ohrt <doa@chaosdev.org> */
 

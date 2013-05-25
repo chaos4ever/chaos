@@ -3,7 +3,7 @@
 
 /* Authors:
    
-   Per Lundberg <plundis@chaosdev.org> 
+   Per Lundberg <per@halleluja.nu> 
    Erik Moren   <nemo@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

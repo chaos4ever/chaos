@@ -4,7 +4,7 @@
    Virtual File System protocol is actually merely a superset of the
    File System interface (as understood by the specific file system
    servers). */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

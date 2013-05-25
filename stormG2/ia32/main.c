@@ -7,7 +7,7 @@
    starting the servers loaded by the Multiboot compliant boot
    loader. */
 
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1998-2000 chaos development. */

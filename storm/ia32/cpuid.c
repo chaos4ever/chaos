@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: CPU identification. Parts borrowed from the Linux
    kernel. */
-/* Author: Per Lundberg <plundis@chaosdev.org>
+/* Author: Per Lundberg <per@halleluja.nu>
            Parts borrowed from Linux kernel. OOPS! This is bad, this
            probably means that this file cannot be BSD-licensed. */
 

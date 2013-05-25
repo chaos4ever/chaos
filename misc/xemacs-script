@@ -43,7 +43,7 @@
 
 ;; Customisable variables.
 
-(setq add-log-mailing-address "plundis@chaosdev.org")
+(setq add-log-mailing-address "per@halleluja.nu")
 (setq user-mail-address add-log-mailing-address)
 (setq chaos-mail-address add-log-mailing-address)
 (setq copyright-holder "chaos development")
@@ -195,7 +195,7 @@
 (add-hook 'changelog-mode-hook 'my-changelog-mode-hook)
 (defun my-changelog-mode-hook ()
   (make-local-variable 'add-log-mailing-address)
-  (setq add-log-mailing-address \"plundis@chaosdev.org\"))
+  (setq add-log-mailing-address \"per@halleluja.nu\"))
 
 (add-hook 'debian-changelog-mode-hook 'my-debian-changelog-mode-hook)
 (defun my-debian-changelog-mode-hook ()

@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Parse some of the Multiboot data. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

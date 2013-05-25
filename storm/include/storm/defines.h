@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: General definitions. */
-/* Authors: Per Lundberg <plundis@chaosdev.org> 
+/* Authors: Per Lundberg <per@halleluja.nu> 
             Henrik Hallin <hal@chaosdev.org> 
             Anders Öhrt <doa@chaosdev.org> */
 
