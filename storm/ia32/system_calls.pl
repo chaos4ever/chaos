@@ -6,7 +6,7 @@
 # bunch, updating them all manually was a little
 # uncomfortable. Ideally, the architecture independant parts of this
 # file should be in a generic directory.
-# Author: Per Lundberg <plundis@chaosdev.org>
+# Author: Per Lundberg <per@halleluja.nu>
 
 # C-emulation. :)
 

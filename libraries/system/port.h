@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Function prototypes and structure definitions of port in-
    and output. */
-/* Author: Per Lundberg <plundis@chaosdev.org> 
+/* Author: Per Lundberg <per@halleluja.nu> 
 
    Probably a bit based on Linux or similar (to know the gcc syntax
    for inline assembly). */

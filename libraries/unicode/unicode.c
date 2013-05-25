@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Unicode library. */
 /* Authors: Anders Ohrt <doa@chaosdev.org>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development */
 

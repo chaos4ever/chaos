@@ -2,7 +2,7 @@
 /* Abstract: Log server for chaos. This server's purpose is to collect
              debug and/or warnings from servers and from the
              kernel. */
-/* Author: Per Lundberg <plundis@chaosdev.org>
+/* Author: Per Lundberg <per@halleluja.nu>
            Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */

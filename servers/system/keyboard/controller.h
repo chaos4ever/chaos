@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Keyboard controller stuff. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

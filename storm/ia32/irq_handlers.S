@@ -1,6 +1,6 @@
 /* $Id: irq_handlers.S,v 1.2 2000/10/16 17:06:48 plundis Exp $ */
 /* Abstract: IRQ management. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 	
 /* Copyright 2000 chaos development. */
 

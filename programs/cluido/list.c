@@ -3,7 +3,7 @@
 
 /* Description: Definition of data structures and functiosn used by
    the caps-build configuration file parser */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
    
 /* This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public License as

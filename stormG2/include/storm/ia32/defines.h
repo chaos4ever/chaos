@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: IA32 specific defines. */
 
-/* Author: Per Lundberg <plundis@chaosdev.org> 
+/* Author: Per Lundberg <per@halleluja.nu> 
            Henrik Hallin <hal@chaosdev.org> 
            Anders Öhrt <doa@chaosdev.org> */
 

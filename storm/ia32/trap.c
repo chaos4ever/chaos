@@ -2,7 +2,7 @@
 /* Abstract: Handle CPU exceptions (called 'traps' on motorola.. ;) */
 /* Authors: Henrik Hallin <hal@chaosdev.org>,
             Johan Thim <nospam@inter.net>,
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1998-2000 chaos development. */
 

@@ -414,7 +414,7 @@ FORMAT="LINESPECIFIC"
 # $Id$
 
 # Abstract: Program for building chaos packages.
-# Author: Per Lundberg &lt;plundis@chaosdev.org&gt;
+# Author: Per Lundberg &lt;per@halleluja.nu&gt;
 
 use chaos::cAPS;
 use strict;

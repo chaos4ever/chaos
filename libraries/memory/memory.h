@@ -2,7 +2,7 @@
 /* Abstract: Memory functions. */
 /* Author: Anders Ohrt <doa@chaosdev.org>
             Henrik Hallin <hal@chaosdev.org>
-             Per Lundberg <sug-plundis@chaosdev.org> */
+             Per Lundberg <sug-per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

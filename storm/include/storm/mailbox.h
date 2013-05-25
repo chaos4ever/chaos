@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Mailbox structures*/
-/* Maintainer: Per Lundberg <plundis@chaosdev.org> */
+/* Maintainer: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Serial server for chaos. */
 /* Authors: Martin Alvarez <malvarez@aapsa.es>
-            Per Lundberg <plundis@chaosdev.org>
+            Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development */

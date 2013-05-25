@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Ethernet library type defintions and function
    prototypes. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

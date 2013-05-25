@@ -2,7 +2,7 @@
 /* Abstract: The kernel virtual file system. In this filesystem,
    information about the kernel and the rest of the system is made
    easily available to regular user processes. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

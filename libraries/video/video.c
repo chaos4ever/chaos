@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Video library. */
-/* Authors: Per Lundberg <plundis@chaosdev.org> */
+/* Authors: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 1999-2000 chaos development. */
 

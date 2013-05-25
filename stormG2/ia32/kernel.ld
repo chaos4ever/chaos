@@ -1,7 +1,7 @@
 /* $Id: kernel.ld,v 1.3 2000/11/13 15:33:12 plundis Exp $ */
 /* Abstract: storm linker script. Heavily based on the elf_i386.xbn
    from GNU binutils. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

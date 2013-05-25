@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: FAT file system server. */
-/* Authors: Per Lundberg <plundis@chaosdev.org> 
+/* Authors: Per Lundberg <per@halleluja.nu> 
             Anders Öhrt <doa@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

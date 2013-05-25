@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: PCI server. (It should also support AGP sometime, but
    currently, it hardly does PCI right...) */
-/* Author: Per Lundberg <plundis@chaosdev.org>. Heaviliy inspired by
+/* Author: Per Lundberg <per@halleluja.nu>. Heaviliy inspired by
  * the Linux source, but not by far as obnoxious... */
 
 /* Copyright 1999-2000 chaos development. */

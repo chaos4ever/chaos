@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Set up the GDT, stack, selectors and pass control to the
              kernel. */
-/* Author: Per Lundberg <plundis@chaosdev.org>
+/* Author: Per Lundberg <per@halleluja.nu>
            Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1997-2000 chaos development. */

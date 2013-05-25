@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Connection handling in the land of Oz. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 /* Copyright 2007 chaos development. */

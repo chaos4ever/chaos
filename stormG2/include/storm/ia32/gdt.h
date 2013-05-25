@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Function prototypes for GDT routines. */
 
-/* Author: Per Lundberg <plundis@chaosdev.org>
+/* Author: Per Lundberg <per@halleluja.nu>
            Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1998-2000 chaos development. */

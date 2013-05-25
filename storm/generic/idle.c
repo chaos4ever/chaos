@@ -3,7 +3,7 @@
    chaos than just wasting CPU cycles; it performs actual thread
    deletion (since it's a little hard to do when the thread is still
    active) and some other clever things. */
-/* Author: Per Lundberg <plundis@chaosdev.org> */
+/* Author: Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

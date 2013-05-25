@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: ELF execution library return values. */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 

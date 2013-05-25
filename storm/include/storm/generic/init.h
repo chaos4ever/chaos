@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Function prototypes. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 2000 chaos development. */

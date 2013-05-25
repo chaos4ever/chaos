@@ -16,4 +16,4 @@ keyboard servers both have to register a service of protocol
 "keyboard", but the first one will be /services/keyboard/0 and the
 second one will be /services/keyboard/1.
 
--- Per Lundberg <plundis@chaosdev.org>  Sat,  8 Jul 2000 02:48:28 +0200
+-- Per Lundberg <per@halleluja.nu>  Sat,  8 Jul 2000 02:48:28 +0200

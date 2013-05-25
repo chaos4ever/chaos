@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Functions for setting up the system calls. */
-/* Authors: Per Lundberg <plundis@chaosdev.org>
+/* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

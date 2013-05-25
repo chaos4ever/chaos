@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Return values used by the serial library. */
 /* Authors: Martin Alvarez <malvarez@aapsa.es>
-            Per Lundberg <plundis@chaosdev.org> */
+            Per Lundberg <per@halleluja.nu> */
 
 /* Copyright 2000 chaos development. */
 
