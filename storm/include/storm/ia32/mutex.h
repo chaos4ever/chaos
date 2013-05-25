@@ -32,11 +32,11 @@ static inline void mutex_spin_lock (spinlock_type spinlock)
 /* Unlock a mutex which has previously been locked with
    mutex_spin_lock. */
 
-static inline void mutex_spin_unlock (spinlock_type spinlock)
+static inline void mutex_spin_unlock (spinlock_type *spinlock)
 {
   //  DEBUG_MESSAGE ("Called");
   
-  spinlock = MUTEX_SPIN_UNLOCKED;
+  *spinlock = MUTEX_SPIN_UNLOCKED;
 }
 
 #endif /* !__STORM_IA32_MUTEX_H__ */
