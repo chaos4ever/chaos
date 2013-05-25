@@ -23,5 +23,6 @@ file 'current-arch' do
 end
 
 file 'include/current-arch' do
-  ln_sf 'include/storm/' + target_arch, 'include/storm/current-arch'
+  # The first argument here is actually non-qualified, which is the way it seems like it should be oddly enough...
+  ln_sf target_arch, 'include/storm/current-arch'
 end
