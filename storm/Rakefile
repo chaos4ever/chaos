@@ -3,7 +3,7 @@ target_arch = 'ia32'
 
 folders = 
 
-task :default => [ 'current-arch' ] do
+task :default => [ 'current-arch', 'include/current-arch' ] do
   [ 'generic', 'current-arch' ].each do |folder|
     sh "cd #{folder} && rake"
   end
@@ -20,4 +20,8 @@ end
 
 file 'current-arch' do
   ln_sf target_arch, 'current-arch'
+end
+
+file 'include/current-arch' do
+  ln_sf 'include/storm/' + target_arch, 'include/storm/current-arch'
 end
