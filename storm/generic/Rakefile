@@ -15,7 +15,7 @@ INCLUDES =
 -I.. \
 -I."
 
-ALL_OBJECTS = %w(
+OBJECTS = %w(
   arguments.o
   avl.o
   avl_debug.o
@@ -36,9 +36,7 @@ ALL_OBJECTS = %w(
   time.o
 )
 
-verbose false
-
-task :default => [ :banner ] + ALL_OBJECTS do
+task :default => [ :banner ] + OBJECTS do
   puts
 end
 
@@ -47,11 +45,11 @@ task :banner do
   print "storm/generic".cyan.bold
   puts "..."
 
-  $stdout.print "    "
+  print "    "
 end
 
 task :clean do
-  rm_f ALL_OBJECTS
+  rm_f OBJECTS
 end
 
 rule '.o' => [ '.c' ] do |t|
