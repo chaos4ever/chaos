@@ -48,11 +48,7 @@ task :banner do
   print "    "
 end
 
+# TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
 task :clean do
   rm_f OBJECTS
-end
-
-rule '.o' => [ '.c' ] do |t|
-  print((t.source + ' ').cyan)
-  sh "#{CC} -o #{t.name} #{CFLAGS} #{INCLUDES} -c #{t.source}"
 end
