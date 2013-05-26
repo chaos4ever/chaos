@@ -5,6 +5,8 @@ folders = [ :storm ] #, :libraries, :servers, :programs ]
 
 verbose false
 
+root = pwd()
+
 task :default => folders
 
 task :clean do
@@ -14,7 +16,7 @@ task :clean do
 end
 
 task :storm do |folder|
-  sh "cd #{folder} && rake -s"
+  sh "cd #{folder} && rake -s -R #{root}/rakelib"
 end
 
 # TODO: Not yet functional.

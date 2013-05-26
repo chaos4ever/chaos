@@ -43,7 +43,10 @@ task :default => [ :banner ] + ALL_OBJECTS do
 end
 
 task :banner do
-  puts "\e[1mCompiling \e[36mstorm/generic\e[0m..."
+  $stdout.print "Compiling ".bold
+  $stdout.print "storm/generic".cyan.bold
+  puts "..."
+
   $stdout.print "    "
 end
 
