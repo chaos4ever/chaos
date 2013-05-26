@@ -1,7 +1,7 @@
 # FIXME: Should support a toplevel Rakefile.local or something where you can define this, so you don't have to override it on the command line every time you build.
 CC = ENV['CC'] || 'x86_64-pc-linux-gcc'
 
-DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\""
+DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\" -DCREATOR=\\\"`whoami`\\\""
 
 CFLAGS = 
 "-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
