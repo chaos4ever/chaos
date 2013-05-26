@@ -1,4 +1,3 @@
-/* $Id$ */
 /* Abstract: This is the startup point of storm. It is executed right
    after the assembly language init code has set up the GDT, kernel
    stack, etc. Here, we initialise everything in the storm, like
@@ -9,8 +8,7 @@
 /* Authors: Per Lundberg <per@halleluja.nu>
             Henrik Hallin <hal@chaosdev.org> */
 
-/* Copyright 1998-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+/* Copyright 1998-2000, 2007, 2013 chaos development. */
 
 /* Define this as TRUE if you are debugging this part of the
    kernel. */
