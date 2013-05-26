@@ -43,8 +43,8 @@ task :default => [ :banner ] + ALL_OBJECTS do
 end
 
 task :banner do
-  $stdout.print "Compiling ".bold
-  $stdout.print "storm/generic".cyan.bold
+  print "Compiling ".bold
+  print "storm/generic".cyan.bold
   puts "..."
 
   $stdout.print "    "
@@ -55,6 +55,6 @@ task :clean do
 end
 
 rule '.o' => [ '.c' ] do |t|
-  $stdout.print "\e[36m#{t.source}\e[0m "
+  print((t.source + ' ').cyan)
   sh "#{CC} -o #{t.name} #{CFLAGS} #{INCLUDES} -c #{t.source}"
 end
