@@ -455,7 +455,6 @@ return_type memory_global_deallocate (void *data)
   slab_superblock_type *superblock = 
     (slab_superblock_type *) ((u32) data & 0xFFFFF000);
   slab_block_type *block = (slab_block_type *) data;
-  page_table_entry *page_table;
   int index = slab_heap_index (superblock->header.buffer_size);
 
   /* FIXME: Make sure that all code that uses this function has locked
@@ -471,7 +470,6 @@ return_type memory_global_deallocate (void *data)
   if (data == superblock)
   {
     u32 pages = memory_global_get_size (data);
-    u32 physical_page;
     
     if (pages == MAX_U32)
     {
@@ -481,15 +479,13 @@ return_type memory_global_deallocate (void *data)
 
 #ifdef DEALLOCATE    
     memory_global_deallocate_page (GET_PAGE_NUMBER ((u32) data));
-#endif
 
     /* Find the physical adress for this virtual address. */
     
-    page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES +
+    page_table_entry *page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES +
                                      ((u32) data) / (4 * MB));
-    physical_page = page_table[GET_PAGE_NUMBER ((u32) data) % 1024].page_base;
+    u32 physical_page = page_table[GET_PAGE_NUMBER ((u32) data) % 1024].page_base;
 
-#ifdef DEALLOCATE    
     memory_physical_deallocate (physical_page);
 #endif
 
