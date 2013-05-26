@@ -421,7 +421,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
 
   if (dma_channel[channel].process_id != PROCESS_ID_NONE)
   {
-    mutex_spin_unlock (dma_channel[channel].spinlock);
+    mutex_spin_unlock (&dma_channel[channel].spinlock);
     return STORM_RETURN_BUSY;
   }
 
@@ -474,7 +474,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
     else
     {
       dma_channel[channel].process_id = PROCESS_ID_NONE;
-      mutex_spin_unlock (dma_channel[channel].spinlock);
+      mutex_spin_unlock (&dma_channel[channel].spinlock);
       return STORM_RETURN_OUT_OF_MEMORY;
     }
   }
@@ -537,7 +537,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
   }
 #endif
   *dma_buffer = dma_channel[channel].virtual_buffer;
-  mutex_spin_unlock (dma_channel[channel].spinlock);
+  mutex_spin_unlock (&dma_channel[channel].spinlock);
 
   return STORM_RETURN_SUCCESS;
 }
@@ -561,7 +561,7 @@ return_type dma_unregister (unsigned int channel)
       (dma_channel[channel].cluster_id != current_tss->cluster_id) ||
       (dma_channel[channel].thread_id = current_tss->thread_id))
   {
-    mutex_spin_unlock (dma_channel[channel].spinlock);
+    mutex_spin_unlock (&dma_channel[channel].spinlock);
 
     return STORM_RETURN_BUSY;
   }
@@ -581,7 +581,7 @@ return_type dma_unregister (unsigned int channel)
   dma_channel[channel].cluster_id = CLUSTER_ID_NONE;
   dma_channel[channel].thread_id = THREAD_ID_NONE;
   
-  mutex_spin_unlock (dma_channel[channel].spinlock);
+  mutex_spin_unlock (&dma_channel[channel].spinlock);
 
   return STORM_RETURN_SUCCESS;
 }
