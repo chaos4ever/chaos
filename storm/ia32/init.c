@@ -105,9 +105,7 @@ static void INIT_CODE kernel_entry (void)
 {
   multiboot_init ();
   
-  /* FIXME: Remove the pointer arithmetic. */
-
-  main (((u32 *) arguments_kernel)[0], (char **) arguments_kernel + 1);
+  main (((char *) arguments_kernel)[0], (char **) &arguments_kernel[1]);
 
   /* Get in line and float downstream. */
 
