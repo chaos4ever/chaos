@@ -3,6 +3,8 @@
 # TODO: Uncomment the rest here.
 folders = [ :storm ] #, :libraries, :servers, :programs ]
 
+verbose false
+
 task :default => folders
 
 task :clean do
@@ -12,7 +14,7 @@ task :clean do
 end
 
 task :storm do |folder|
-  sh "cd #{folder} && rake"
+  sh "cd #{folder} && rake -s"
 end
 
 # TODO: Not yet functional.

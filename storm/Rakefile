@@ -3,9 +3,11 @@ target_arch = 'ia32'
 
 folders = 
 
+verbose false
+
 task :default => [ 'current-arch', 'include/storm/current-arch' ] do
   [ 'generic', 'current-arch' ].each do |folder|
-    sh "cd #{folder} && rake"
+    sh "cd #{folder} && rake -s"
   end
 end
 
