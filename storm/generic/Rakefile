@@ -48,7 +48,8 @@ task :banner do
 end
 
 file OUTPUT => OBJECTS do
-  puts 'Linking...'.bold
+  puts
+  puts '    Creating archive...'.blue.bold
   sh "#{AR} r --target=elf32-i386 #{OUTPUT} #{OBJECTS.join ' '}"
 end
 
