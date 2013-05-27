@@ -33,7 +33,9 @@ OBJECTS = %w(
   time.o
 )
 
-task :default => [ :banner ] + OBJECTS do
+OUTPUT = 'libstorm_generic.a'
+
+task :default => [ :banner, OUTPUT ] do
   puts
 end
 
@@ -43,6 +45,11 @@ task :banner do
   puts "..."
 
   print "    "
+end
+
+file OUTPUT => OBJECTS do
+  puts 'Linking...'.bold
+  sh "#{AR} r --target=elf32-i386 #{OUTPUT} #{OBJECTS.join ' '}"
 end
 
 # TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
