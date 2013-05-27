@@ -1,10 +1,11 @@
-/* $Id$ */
 /* Abstract: Mutexes for the kernel. */
+/* Authors: Per Lundberg <per@halleluja.nu>
+            Henrik Hallin <hal@chaosdev.org>
+            Anders Ohrt <doa@chaosdev.org> */
 
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+/* Copyright 1999-2000, 2007, 213 chaos development. */
 
-/* Defined this as true if you want lots of debug information .*/
+/* Define this as TRUE if you want lots of debug information .*/
 
 #define DEBUG FALSE
 
