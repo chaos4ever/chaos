@@ -114,7 +114,7 @@ return_type mutex_kernel_wait (mutex_kernel_type *mutex)
       DEBUG_HALT ("Tried to lock tss_tree_mutex, which was already locked. This should really never happen.");
     }
     DEBUG_MESSAGE (DEBUG, "%p is LOCKED!", mutex);
-    mutex_spin_unlock (mutex_spinlock);
+    mutex_spin_unlock (&mutex_spinlock);
 
     thread_block_kernel_mutex (current_tss, mutex);
   }
@@ -125,7 +125,7 @@ return_type mutex_kernel_wait (mutex_kernel_type *mutex)
   {
     DEBUG_MESSAGE (DEBUG, "Locking %p", mutex);
     *mutex = MUTEX_LOCKED;
-    mutex_spin_unlock (mutex_spinlock);
+    mutex_spin_unlock (&mutex_spinlock);
   }
 
   return RETURN_SUCCESS;
@@ -158,7 +158,7 @@ return_type mutex_kernel_signal (mutex_kernel_type *mutex)
     *mutex = MUTEX_UNLOCKED;
   }
 
-  mutex_spin_unlock (mutex_spinlock);
+  mutex_spin_unlock (&mutex_spinlock);
 
   return RETURN_SUCCESS;
 }
