@@ -4,3 +4,5 @@ verbose false
 # modify a version-controlled file.
 CC = ENV['CC'] || 'x86_64-pc-linux-gcc'
 AR = ENV['AR'] || 'x86_64-pc-linux-ar'
+
+TARGET_ARCH = 'ia32'
