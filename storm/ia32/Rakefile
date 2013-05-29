@@ -1,4 +1,4 @@
-DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\" -DCREATOR=\\\"`whoami`\\\""
+DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\" -DCREATOR=\\\"`whoami`@`hostname`\\\""
 
 CFLAGS = 
 "-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
