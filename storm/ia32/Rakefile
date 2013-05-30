@@ -63,8 +63,14 @@ task :banner do
 end
 
 file :storm => [ OUTPUT_LIB ] do |t|
-  puts '    Linking...'.blue.bold
-  sh "#{CC} -o #{t.name} #{t.prerequisites} ../generic/#{STORM_GENERIC_LIB} #{LDFLAGS}"
+  begin
+    puts '    Linking...'.blue.bold
+    command = "#{CC} -o #{t.name} #{t.prerequisites} ../generic/#{STORM_GENERIC_LIB} #{LDFLAGS}"
+    sh command
+  rescue
+    puts "Error linking kernel. Full command line was: #{command}"
+    raise
+  end
 end
 
 file OUTPUT_LIB => OBJECTS do |t|
