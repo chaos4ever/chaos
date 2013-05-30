@@ -65,7 +65,10 @@ end
 file :storm => [ OUTPUT_LIB ] do |t|
   begin
     puts '    Linking...'.blue.bold
-    command = "#{CC} -o #{t.name} #{t.prerequisites} ../generic/#{STORM_GENERIC_LIB} #{LDFLAGS}"
+
+    # It's crazy, but we actually have to specify the OUTPUT_LIB twice here (since ia32 has references to the generic lib and
+    # the generic lib has references to ia32... We could try to get rid of that eventually.)
+    command = "#{CC} -o #{t.name} #{OUTPUT_LIB} ../generic/#{STORM_GENERIC_LIB} #{OUTPUT_LIB} #{LDFLAGS}"
     sh command
   rescue
     puts "Error linking kernel. Full command line was: #{command}"
