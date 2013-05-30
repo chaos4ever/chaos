@@ -43,6 +43,8 @@ OBJECTS = %w(
   timer.o
   trap.o
   wrapper.o
+  compiler_rt/udivdi3.o
+  compiler_rt/umoddi3.o
 )
 
 OUTPUT_LIB = 'libstorm_ia32.a'
