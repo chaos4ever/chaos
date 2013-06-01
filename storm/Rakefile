@@ -18,10 +18,10 @@ task :install do
 end
 
 file 'current-arch' do
-  ln_sf target_arch, 'current-arch'
+  ln_sf TARGET_ARCH, 'current-arch'
 end
 
 file 'include/storm/current-arch' do
   # The first argument here is actually non-qualified, which is the way it seems like it should be oddly enough...
-  ln_sf target_arch, 'include/storm/current-arch'
+  ln_sf TARGET_ARCH, 'include/storm/current-arch'
 end
