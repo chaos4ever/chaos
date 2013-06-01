@@ -105,7 +105,7 @@ static void INIT_CODE kernel_entry (void)
 {
   multiboot_init ();
   
-  main (((char *) arguments_kernel)[0], (char **) &arguments_kernel[1]);
+  main (((u8 *) arguments_kernel)[0], (char **) &arguments_kernel[4]);
 
   /* Get in line and float downstream. */
 
