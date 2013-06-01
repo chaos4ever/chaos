@@ -161,7 +161,7 @@ void _start (void)
   /* "Wipe them out. All of them." */
 
   asm ("movl    %0, %%edi\n"
-        "movl    $0, %%eax\n"
+       "movl    $0, %%eax\n"
        "movl    %1, %%ecx\n"
        "rep     stosl"
        :
