@@ -11,7 +11,13 @@ task :default => folders
 
 task :clean do
   folders.each do |folder|
-    sh "cd #{folder} && rake clean"
+    sh "cd #{folder} && rake -s -R #{root}/rakelib clean"
+  end
+end
+
+task :install do
+  folders.each do |folder|
+    sh "cd #{folder} && rake -s -R #{root}/rakelib install"
   end
 end
 

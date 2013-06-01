@@ -2,9 +2,10 @@ DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\
 
 CFLAGS = 
 "-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
--Wredundant-decls -Winline -Wmissing-prototypes -Werror -Wcast-align \
--Wbad-function-cast -Wsign-compare -Wmissing-declarations \
--Wmissing-noreturn -pipe -Wnested-externs -O3 -fno-builtin -funsigned-char \
+-Wredundant-decls -Winline -Wmissing-prototypes -Wcast-align \
+-Wbad-function-cast -Wsign-compare -Wmissing-declarations -Wmissing-noreturn \
+-Wnested-externs -Werror \
+-pipe -O3 -fno-builtin -funsigned-char \
 -g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES}"
 
 INCLUDES =
@@ -48,6 +49,7 @@ OBJECTS = %w(
 )
 
 OUTPUT_LIB = 'libstorm_ia32.a'
+OUTPUT = 'storm'
 LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
 
 task :default => [ :banner, :storm ] + OBJECTS do
@@ -62,7 +64,16 @@ task :banner do
   print "    "
 end
 
-file :storm => [ OUTPUT_LIB ] do |t|
+# TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
+task :clean do
+  rm_f OBJECTS
+end
+
+task :install => [ :default ] do
+  sh "install #{OUTPUT} #{INSTALL_ROOT}"
+end
+
+file OUTPUT => [ OUTPUT_LIB ] do |t|
   begin
     puts '    Linking...'.blue.bold
 
@@ -80,9 +91,4 @@ file OUTPUT_LIB => OBJECTS do |t|
   puts
   puts '    Creating archive...'.blue.bold
   sh "#{AR} r --target=elf32-i386 #{t.name} #{t.prerequisites.join ' '}"
-end
-
-# TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
-task :clean do
-  rm_f OBJECTS
 end

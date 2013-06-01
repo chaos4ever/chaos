@@ -1,16 +1,20 @@
 task :default => [ 'current-arch', 'include/storm/current-arch' ] do
   [ 'generic', 'current-arch' ].each do |folder|
-    sh "cd #{folder} && rake -s -R #{Rake.application.options.rakelib}"
+    sh "cd #{folder} && #{RAKE_COMMAND}"
   end
 end
 
 task :clean do
   # Cannot use current-arch here, since it may not exist any more (if you run 'rake clean' multiple times).
-  [ 'generic', 'ia32' ].each do |folder|
+  [ 'generic', TARGET_ARCH ].each do |folder|
     sh "cd #{folder} && rake clean"
   end
 
   rm_f [ 'current-arch', 'include/storm/' + TARGET_ARCH ]
+end
+
+task :install do
+  sh "cd #{TARGET_ARCH} && #{RAKE_COMMAND} install"
 end
 
 file 'current-arch' do
