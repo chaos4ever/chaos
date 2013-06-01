@@ -1,9 +1,7 @@
-/* $Id$ */
 /* Abstract: Parse some of the Multiboot data. */
 /* Author: Per Lundberg <per@halleluja.nu> */
 
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+/* Copyright 1999-2000, 2007, 2013 chaos development. */
 
 #include <storm/generic/arguments.h>
 #include <storm/generic/defines.h>
