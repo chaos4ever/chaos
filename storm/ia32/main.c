@@ -105,17 +105,13 @@ static kernel_argument_type kernel_argument[] INIT_DATA =
   { NULL, FALSE, NULL }
 };
 
-static void INIT_CODE parse_arguments (unsigned int arguments, char *argument[])
+static void INIT_CODE parse_kernel_arguments (unsigned int arguments, char *argument[])
 {
-  unsigned int index, argument_index;
-
-  /* Parse our arguments. */
-
-  for (index = 0; index < arguments; index++)
+  for (unsigned int index = 0; index < arguments; index++)
   {
     bool found = FALSE;
 
-    for (argument_index = 0;
+    for (unsigned int argument_index = 0;
          kernel_argument[argument_index].name != NULL && !found;
          argument_index++)
     {      
@@ -158,7 +154,7 @@ return_type main (int arguments, char *argument[])
 
   cpuid_init ();
 
-  parse_arguments (arguments, argument);
+  parse_kernel_arguments (arguments, argument);
   debug_init ();
 
   if (help != 0)
