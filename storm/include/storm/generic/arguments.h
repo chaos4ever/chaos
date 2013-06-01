@@ -10,7 +10,14 @@
 
 /* Function prototypes. */
 
-extern u32 arguments_parse (char *source, char *destination, u32 delta);
-extern char arguments_kernel[];
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+  extern u32 arguments_parse (char *source, char *destination, u32 delta);
+  extern char arguments_kernel[];
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !__STORM_I386_ARGUMENTS_H__ */

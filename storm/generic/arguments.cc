@@ -10,33 +10,15 @@
 
 char arguments_kernel[MAX_KERNEL_PARAMETER_LENGTH];
 
+static int find_number_of_arguments (char *source);
+
 /* Split the command line parameters in words (separated by one or
    more spaces). */
 
+extern "C"
 u32 arguments_parse (char *source, char *destination, u32 delta)
 {
-  u32 args = 0, position, arg, length;
-  char **word_pointer, *word;
-
-  /* First of all, find out how many parameters we have. */
-
-  position = 0;
-
-  while (source[position] != '\0')
-  {
-    if (source[position] != ' ')
-    {
-      args++;
-      while (source[position] != ' ' && source[position] != '\0')
-      {
-        position++;
-      }
-    }
-    else
-    {
-      position++;
-    }
-  }
+  int args = find_number_of_arguments(source);
 
   /* Save this value. */
   
@@ -48,12 +30,12 @@ u32 arguments_parse (char *source, char *destination, u32 delta)
      for this. I'm not sure if it is possible to write this in a clean
      and nice way at all. */
 
-  word_pointer = (char **) (destination + 4);
-  word = (char *) (destination + 4 + sizeof (char *) * args);
+  auto word_pointer = (char **) (destination + 4);
+  auto word = (char *) (destination + 4 + sizeof (char *) * args);
 
   /* OK, the initial pointers are setup. */
 
-  for (position = 0, arg = 0; source[position] != '\0'; position++)
+  for (int position = 0, arg = 0; source[position] != '\0'; position++)
   {
     while (source[position] == ' ')
     {
@@ -64,7 +46,7 @@ u32 arguments_parse (char *source, char *destination, u32 delta)
     {
       /* Find out the length of the word. */
 
-      length = 0;
+      int length = 0;
       while (source[position + length] != ' ' &&
              source[position + length] != '\0')
       {
@@ -83,4 +65,28 @@ u32 arguments_parse (char *source, char *destination, u32 delta)
   }
 
   return args;
+}
+
+static int find_number_of_arguments (char *source)
+{
+  int position = 0, result = 0;
+
+  while (source[position] != '\0')
+  {
+    if (source[position] != ' ')
+    {
+      result++;
+
+      while (source[position] != ' ' && source[position] != '\0')
+      {
+        position++;
+      }
+    }
+    else
+    {
+      position++;
+    }
+  }
+
+  return result;
 }

@@ -1,11 +1,15 @@
 DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\""
 
-CFLAGS = 
-"-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
--Wredundant-decls -Winline -Wmissing-prototypes -Werror -Wcast-align \
--Wbad-function-cast -Wsign-compare -Wmissing-declarations \
--Wmissing-noreturn -pipe -Wnested-externs -O3 -fno-builtin -funsigned-char \
--g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES}"
+COMMON_CFLAGS =
+"-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
+-Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
+-Wmissing-noreturn -pipe -O3 -fno-builtin -funsigned-char \
+-g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} "
+
+CFLAGS = COMMON_CFLAGS + 
+"--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \
+-Wstrict-prototypes"
+CCFLAGS = COMMON_CFLAGS + "--std=gnu++11 " #-Wno-c++0x-compat"
 
 INCLUDES =
 "-I../include \
