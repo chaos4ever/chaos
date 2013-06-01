@@ -14,7 +14,7 @@
 multiboot_info_type multiboot_info;
 multiboot_module_info_type multiboot_module_info[MAX_STARTUP_SERVERS] INIT_DATA;
 
-void multiboot_init (void)
+void INIT_CODE multiboot_init (void)
 {
   char *target = (char *) BASE_MODULE_NAME;
   unsigned module;
