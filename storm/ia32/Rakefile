@@ -1,11 +1,10 @@
 DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\" -DCREATOR=\\\"`whoami`@`hostname`\\\""
 
 CFLAGS = 
-"-Wall -W -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
+"-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
 -Wredundant-decls -Winline -Wmissing-prototypes -Wcast-align \
--Wbad-function-cast -Wsign-compare -Wmissing-declarations -Wmissing-noreturn \
--Wnested-externs -Werror \
--pipe -O3 -fno-builtin -funsigned-char \
+-Wbad-function-cast -Wmissing-declarations -Wmissing-noreturn -Wnested-externs \
+-Werror -pipe -O3 -fno-builtin -funsigned-char \
 -g -m32 -fomit-frame-pointer -ffreestanding --std=gnu99 #{ENV['EXTRA_CFLAGS']} #{DEFINES}"
 
 INCLUDES =
