@@ -34,7 +34,6 @@ OBJECTS = %w(
   mutex.o
   port.o
   process.o
-  schedule.o
   string.o
   system_calls-auto.o
   system_calls.o
