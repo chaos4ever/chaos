@@ -1,27 +1,24 @@
-/* $Id$ */
-/* Abstract: CPU identification. Parts borrowed from the Linux
-   kernel. */
-/* Author: Per Lundberg <per@halleluja.nu>
-           Parts borrowed from Linux kernel. OOPS! This is bad, this
-           probably means that this file cannot be BSD-licensed. */
+// Abstract: CPU identification. Parts borrowed from the Linux kernel.
+// Author: Per Lundberg <per@halleluja.nu> with some parts borrowed from Linux kernel.
 
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+// Copyright 1999-2000, 2007, 2013 chaos development.
 
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
+// TODO: Get rid of the Linux kernel legacy here so we can relicense the file under the BSD license instead.
 
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License as
+// published by the Free Software Foundation; either version 2 of the
+// License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA. 
 
 #include <storm/ia32/timer.h>
 #include <storm/ia32/types.h>
@@ -119,7 +116,7 @@ static cpu_model_type cpu_model[] =
     }
   },
   { 
-    VENDOR_AMD,	6,
+    VENDOR_AMD, 6,
     {
       "Athlon", "Athlon", unknown, unknown, unknown, unknown, unknown,
       unknown, unknown, unknown, unknown, unknown, unknown, unknown,
@@ -296,8 +293,8 @@ static void INIT_CODE cpu_examine (void)
 /* For divider */
 
 #define LATCH           ((CLOCK_TICK_RATE + hz / 2) / hz)
-#define CALIBRATE_LATCH	(5 * LATCH)
-#define CALIBRATE_TIME	(5 * 1000020 / hz)
+#define CALIBRATE_LATCH (5 * LATCH)
+#define CALIBRATE_TIME  (5 * 1000020 / hz)
 
 static u32 INIT_CODE calibrate_tsc (void)
 {
@@ -387,11 +384,11 @@ static u32 INIT_CODE cpuid_get_cpu_speed (void)
        (2^32 * 1 / (clocks/us)) = clock/second. Our precision is about
        100 ppm. */
 
-    {	
+    {   
       u32 eax = 0, edx = 1000000;
       asm ("divl %2"
-	   : "=a" (cpu_hz), "=d" (edx)
-	   : "r" (tsc_quotient), "0" (eax), "1" (edx));
+           : "=a" (cpu_hz), "=d" (edx)
+           : "r" (tsc_quotient), "0" (eax), "1" (edx));
     }
   }
   else
@@ -448,28 +445,28 @@ void cpuid_init (void)
       {
         /* 386 */
 
-	case 3:
+        case 3:
         {
-	  parsed_cpu.name = "Unidentified 386";
+          parsed_cpu.name = "Unidentified 386";
           parsed_cpu.vendor = "Unknown";
-	  break;
-        }	 
+          break;
+        }        
 
         /* 486 */ 
 
-	case 4:
+        case 4:
         {
-	  parsed_cpu.name = "Unidentified 486";
+          parsed_cpu.name = "Unidentified 486";
           parsed_cpu.vendor = "Unknown";
-	  break;
-        }	 
+          break;
+        }        
  
         /* Error */
 
-	default: 
+        default: 
         {
-	  corrupted_struct ();
-	  break;
+          corrupted_struct ();
+          break;
         };
         break;
       }

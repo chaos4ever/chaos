@@ -1,24 +1,7 @@
-/* $Id$ */
-/* Abstract: Management of the DMA hardware. It is used for
-   transferring memory blocks to and from hardware. */
-/* Author: Anders Ohrt <doa@chaosdev.org> */
+// Abstract: Management of the DMA hardware. It is used for transferring memory blocks to and from hardware.
+// Author: Anders Ohrt <doa@chaosdev.org>
 
-/* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA */
+// Copyright 1999-2000 chaos development.
 
 #include <storm/generic/defines.h>
 #include <storm/generic/dispatch.h>
@@ -31,13 +14,11 @@
 
 #include <storm/ia32/dma.h>
 
-/* Unavailable channels. */
-
+// Unavailable channels.
 #define DMA_CHANNEL_MEMORY_REFRESH   0
 #define DMA_CHANNEL_CASCADE          4
 
-/* Controller registers. */
-
+// Controller registers.
 static const unsigned int dma_controller[NUMBER_OF_CONTROLLERS] =
 {
   0x08, 0xD0
@@ -68,8 +49,7 @@ static const unsigned int dma_flip_flop[NUMBER_OF_CONTROLLERS] =
   0x0C, 0xD8
 };
 
-/* Channel registers. */
-
+// Channel registers.
 static const unsigned int dma_page[NUMBER_OF_CHANNELS] =
 {
   0x87, 0x83, 0x81, 0x82, 0x8F, 0x8B, 0x89, 0x8A 
@@ -184,8 +164,6 @@ static const unsigned int dma_count[NUMBER_OF_CHANNELS] =
 static volatile dma_type dma_channel[NUMBER_OF_CHANNELS];
 static bool more_than_16M;
 
-/* Initialise the DMA code. */
-
 void dma_init (void)
 {
 //  unsigned int controller;
@@ -241,8 +219,7 @@ void dma_init (void)
   }
 }
 
-/* Perform a DMA transfer on the given DMA channel. */
-
+// Perform a DMA transfer on the given DMA channel.
 return_type dma_transfer (unsigned int channel, unsigned int buffer_size,
                           unsigned int operation, unsigned int transfer_mode,
 			  unsigned int autoinit)
