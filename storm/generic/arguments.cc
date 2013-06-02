@@ -18,11 +18,9 @@ static int find_number_of_arguments (char *source);
 extern "C"
 u32 arguments_parse(char *source, char *destination, u32 delta)
 {
-    auto args = find_number_of_arguments(source);
+    auto number_of_arguments = find_number_of_arguments(source);
 
-    /* Save this value. */
-
-    *((u32 *) destination) = args;
+    *((u32 *) destination) = number_of_arguments;
 
     /* Now, go through the string again and copy the parameters into the
        data area and set the pointers correctly. */
@@ -31,7 +29,7 @@ u32 arguments_parse(char *source, char *destination, u32 delta)
        and nice way at all. */
 
     auto word_pointer = (char **) (destination + 4);
-    auto word = (char *) (destination + 4 + sizeof (char *) * args);
+    auto word = (char *) (destination + 4 + sizeof (char *) * number_of_arguments);
 
     /* OK, the initial pointers are setup. */
 
@@ -63,7 +61,7 @@ u32 arguments_parse(char *source, char *destination, u32 delta)
         else break;
     }
 
-    return args;
+    return number_of_arguments;
 }
 
 static int find_number_of_arguments(char *source)
