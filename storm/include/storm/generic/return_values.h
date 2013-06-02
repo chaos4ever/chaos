@@ -2,7 +2,7 @@
 
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
-// Copyright © 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000, 2013 chaos development.
 
 #pragma once
 #include <storm/return_values.h>
