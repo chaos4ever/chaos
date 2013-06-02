@@ -1,7 +1,7 @@
-/* Abstract: Management of the DMA hardware. It is used for transferring memory blocks to and from hardware. */
-/* Author: Anders Ohrt <doa@chaosdev.org> */
+// Abstract: Management of the DMA hardware. It is used for transferring memory blocks to and from hardware.
+// Author: Anders Ohrt <doa@chaosdev.org>
 
-/* Copyright 1999-2000, 2013 chaos development. */
+// Copyright 1999-2000 chaos development.
 
 #include <storm/generic/defines.h>
 #include <storm/generic/dispatch.h>
@@ -14,13 +14,11 @@
 
 #include <storm/ia32/dma.h>
 
-/* Unavailable channels. */
-
+// Unavailable channels.
 #define DMA_CHANNEL_MEMORY_REFRESH   0
 #define DMA_CHANNEL_CASCADE          4
 
-/* Controller registers. */
-
+// Controller registers.
 static const unsigned int dma_controller[NUMBER_OF_CONTROLLERS] =
 {
   0x08, 0xD0
@@ -51,8 +49,7 @@ static const unsigned int dma_flip_flop[NUMBER_OF_CONTROLLERS] =
   0x0C, 0xD8
 };
 
-/* Channel registers. */
-
+// Channel registers.
 static const unsigned int dma_page[NUMBER_OF_CHANNELS] =
 {
   0x87, 0x83, 0x81, 0x82, 0x8F, 0x8B, 0x89, 0x8A 
@@ -167,8 +164,6 @@ static const unsigned int dma_count[NUMBER_OF_CHANNELS] =
 static volatile dma_type dma_channel[NUMBER_OF_CHANNELS];
 static bool more_than_16M;
 
-/* Initialise the DMA code. */
-
 void dma_init (void)
 {
 //  unsigned int controller;
@@ -224,8 +219,7 @@ void dma_init (void)
   }
 }
 
-/* Perform a DMA transfer on the given DMA channel. */
-
+// Perform a DMA transfer on the given DMA channel.
 return_type dma_transfer (unsigned int channel, unsigned int buffer_size,
                           unsigned int operation, unsigned int transfer_mode,
 			  unsigned int autoinit)
@@ -421,7 +415,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
 
   if (dma_channel[channel].process_id != PROCESS_ID_NONE)
   {
-    mutex_spin_unlock (&dma_channel[channel].spinlock);
+    mutex_spin_unlock (dma_channel[channel].spinlock);
     return STORM_RETURN_BUSY;
   }
 
@@ -474,7 +468,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
     else
     {
       dma_channel[channel].process_id = PROCESS_ID_NONE;
-      mutex_spin_unlock (&dma_channel[channel].spinlock);
+      mutex_spin_unlock (dma_channel[channel].spinlock);
       return STORM_RETURN_OUT_OF_MEMORY;
     }
   }
@@ -537,7 +531,7 @@ return_type dma_register (unsigned int channel, void **dma_buffer)
   }
 #endif
   *dma_buffer = dma_channel[channel].virtual_buffer;
-  mutex_spin_unlock (&dma_channel[channel].spinlock);
+  mutex_spin_unlock (dma_channel[channel].spinlock);
 
   return STORM_RETURN_SUCCESS;
 }
@@ -561,7 +555,7 @@ return_type dma_unregister (unsigned int channel)
       (dma_channel[channel].cluster_id != current_tss->cluster_id) ||
       (dma_channel[channel].thread_id = current_tss->thread_id))
   {
-    mutex_spin_unlock (&dma_channel[channel].spinlock);
+    mutex_spin_unlock (dma_channel[channel].spinlock);
 
     return STORM_RETURN_BUSY;
   }
@@ -581,7 +575,7 @@ return_type dma_unregister (unsigned int channel)
   dma_channel[channel].cluster_id = CLUSTER_ID_NONE;
   dma_channel[channel].thread_id = THREAD_ID_NONE;
   
-  mutex_spin_unlock (&dma_channel[channel].spinlock);
+  mutex_spin_unlock (dma_channel[channel].spinlock);
 
   return STORM_RETURN_SUCCESS;
 }

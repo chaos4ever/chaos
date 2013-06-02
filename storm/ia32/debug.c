@@ -1,7 +1,7 @@
-/* Abstract: Various functions and macros. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+// Abstract: Various functions and macros.
+// Author: Per Lundberg <per@halleluja.nu>
 
-/* Copyright 1998-2000, 2013 chaos development. */
+// Copyright 1998-2000, 2013 chaos development.
 
 #include <storm/generic/debug.h>
 #include <storm/ia32/debug.h>
@@ -10,7 +10,6 @@
 #include <storm/ia32/types.h>
 
 #if !OPTION_RELEASE
-/* Dump a descriptor numerically. */
 
 void debug_dump_descriptor (descriptor_type *desc)
 {

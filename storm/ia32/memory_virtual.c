@@ -1,11 +1,10 @@
-/* Abstract: Provides functions for managing the virtual memory (MMU)
-   mechanisms of the IA32 architecture. */
-/* Authors: Per Lundberg <per@halleluja.nu> 
-            Henrik Hallin <hal@chaosdev.org> */
+// Abstract: Provides functions for managing the virtual memory (MMU) mechanisms of the IA32 architecture.
+// Authors: Per Lundberg <per@halleluja.nu> 
+//          Henrik Hallin <hal@chaosdev.org>
 
-/* Copyright 1999-2000, 2013 chaos development. */
+// Copyright 1999-2000 chaos development.
 
-/* Define as TRUE to get debug information. */
+/* Define as true to get debug information. */
 
 #define DEBUG FALSE
 
@@ -770,6 +769,7 @@ return_type memory_virtual_deallocate (u32 page_number)
 {
   avl_node_type *node = process_avl_header->root;
   avl_node_type *adjacent_node;
+  unsigned int free_length;
   bool finished = FALSE;
   
 #ifdef CHECK
@@ -798,6 +798,8 @@ return_type memory_virtual_deallocate (u32 page_number)
 
     return STORM_RETURN_MEMORY_NOT_ALLOCATED;
   }
+
+  free_length = node->busy_length;
 
   /* Alright. We have the node to delete. Find the "less-adjacent"
      node. */

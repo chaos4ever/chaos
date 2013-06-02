@@ -1,9 +1,9 @@
-/* Abstract: Memory allocation functions on page level. */
-/* Authors: Henrik Hallin <hal@chaosdev.org>,
-            Anders Öhrt <doa@chaosdev.org>,
-            Per Lundberg <per@halleluja.nu> */
+// Abstract: Memory allocation functions on page level.
+// Authors: Henrik Hallin <hal@chaosdev.org>,
+//          Anders Öhrt <doa@chaosdev.org>,
+//          Per Lundberg <per@halleluja.nu>
 
-/* Copyright 1999-2000, 2013 chaos development. */
+// Copyright 1999-2000, 2013 chaos development.
 
 /* This is the low level page allocation system. It is based on the
    hifi-eslöf algorithms. On level zero, we have a bitmap which tells
