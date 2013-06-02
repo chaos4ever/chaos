@@ -9,16 +9,12 @@
 #include <storm/tag.h>
 #include <storm/service.h>
 
-/* A service. */
-
 typedef struct
 {
   mailbox_id_type mailbox_id;
   struct service_type *next;
   tag_type *identification;
 } service_type;
-
-/* A protocol. */
 
 typedef struct
 {

@@ -10,22 +10,16 @@
 #include <storm/generic/types.h>
 #include <storm/generic/memory_virtual.h>
 
-/* Type definitions. */
-
+// Type definitions
 typedef struct process_info_type
 {
   struct process_info_type *next;
-
-  /* The process ID for the given process. */
-
   process_id_type process_id;
 
-  /* Process name. */
-
+  // Process name.
   char *name;
 
-  /* A linked list over the threads in this process. */
-
+  // A linked list over the threads in this process.
   tss_list_type *thread_list;
   unsigned int number_of_threads;
 } process_info_type;
@@ -36,18 +30,16 @@ typedef struct
   struct kernel_child_list_type *next;
 } kernel_child_list_type;
 
-/* Function prototypes. */
+// External variables.
+extern storm_tss_type *kernel_tss;
+extern process_id_type *process_id_array;
+extern unsigned int number_of_processes;
+extern process_info_type *process_list;
 
+// Function prototypes
 extern void process_init (void) INIT_CODE;
 extern return_type process_create (process_create_type *process_data);
 extern return_type process_name_set (char *name);
 extern return_type process_parent_unblock(void);
 extern process_info_type *process_find (process_id_type process_id);
 extern void process_link (process_info_type *process_info);
-
-/* External variables. */
-
-extern storm_tss_type *kernel_tss;
-extern process_id_type *process_id_array;
-extern unsigned int number_of_processes;
-extern process_info_type *process_list;
