@@ -1,4 +1,5 @@
 // Abstract: Return values.
+
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 // Copyright © 1999-2000, 2013 chaos development.
@@ -8,7 +9,8 @@
 
 // Internal return values
 // FIXME: Look over this and see that all is good.
-// FIXME: Check if we can use a C++11 typed enum instead.
+// FIXME: Check if we can use a C++11 typed enum instead. Might be hard if we want C code to be able to use the header, which we
+// definitely want. :)
 enum
 {
     // Function returned successfully.
@@ -61,7 +63,7 @@ enum
 
     // One or more of the input arguments was invalid.
     RETURN_INVALID_ARGUMENT,
-    
+
     // The requested memory region could not be deallocated, since it wasn't previously allocated.
     RETURN_MEMORY_NOT_ALLOCATED,
 };
