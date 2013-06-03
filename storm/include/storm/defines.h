@@ -1,5 +1,4 @@
 // Abstract: General definitions.
-
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Öhrt <doa@chaosdev.org>
@@ -62,6 +61,7 @@
 
 #define NORETURN __attribute__ ((noreturn))
 #define UNUSED __attribute__ ((unused))
+#define PACKED __attribute__ ((packed))
 
 #ifdef __cplusplus
 #  define C_EXTERN extern "C"
