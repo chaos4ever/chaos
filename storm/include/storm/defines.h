@@ -59,3 +59,18 @@
 #define SIZE_IN_PAGES(x)        (((x) % SIZE_PAGE) != 0 ? \
                                  ((x) / SIZE_PAGE) + 1 : \
                                  ((x) / SIZE_PAGE))
+
+#ifdef __cplusplus
+#  define C_EXTERN_BEGIN        \
+extern "C"                      \
+{
+#else
+#  define C_EXTERN_BEGIN
+#endif
+
+#ifdef __cplusplus
+#  define C_EXTERN_END          \
+}
+#else
+#  define C_EXTERN_END
+#endif

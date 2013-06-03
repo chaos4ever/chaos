@@ -4,16 +4,12 @@
 
 #pragma once
 
+#include <storm/defines.h>
 #include <storm/types.h>
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+C_EXTERN_BEGIN
 
 extern u32 arguments_parse (char *source, char *destination, u32 delta);
 extern char arguments_kernel[];
 
-#ifdef __cplusplus
-}
-#endif
+C_EXTERN_END
