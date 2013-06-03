@@ -10,5 +10,5 @@ storm/include/storm/makefile
 storm/include/storm/generic/makefile
 storm/include/storm/ia32/makefile
 storm/ia32/makefile
+storm/ia32/storm
 current-arch
-storm/*/storm
