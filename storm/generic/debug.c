@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@halleluja.nu> 
 //          Henrik Hallin <hal@chaosdev.org>
 
-// Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 2000, 2007, 2013 chaos development.
 
 #include <storm/current-arch/timer.h>
 #include <storm/generic/avl_debug.h>

@@ -1,7 +1,7 @@
 // Abstract: Various functions and macros.
 // Author: Per Lundberg <per@halleluja.nu>
 
-// Copyright 1998-2000, 2013 chaos development.
+// © Copyright 1998-2000, 2013 chaos development.
 
 #include <storm/generic/debug.h>
 #include <storm/ia32/debug.h>
