@@ -10,11 +10,12 @@ Having that said, there are a number of issues with the codebase which made us s
 
 (This license is commonly known as the BSD license. The subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately!)
 
-The code in the following directories are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
+The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
 
 * servers/system/pci
 * servers/network/3c509
 * servers/network/ne2000
+* storm/ia32/cpuid.c (should be rewritten so the whole kernel can be used under the BSD license).
 
 ---------------------------------------------------
 
