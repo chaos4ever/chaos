@@ -61,6 +61,7 @@
                                  ((x) / SIZE_PAGE))
 
 #define NORETURN __attribute__ ((noreturn))
+#define UNUSED __attribute__ ((unused))
 
 #ifdef __cplusplus
 #  define C_EXTERN extern "C"
