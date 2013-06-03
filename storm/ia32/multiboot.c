@@ -1,9 +1,7 @@
-/* $Id$ */
 /* Abstract: Parse some of the Multiboot data. */
 /* Author: Per Lundberg <per@halleluja.nu> */
 
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+/* Copyright 1999-2000, 2007, 2013 chaos development. */
 
 #include <storm/generic/arguments.h>
 #include <storm/generic/defines.h>
@@ -16,7 +14,7 @@
 multiboot_info_type multiboot_info;
 multiboot_module_info_type multiboot_module_info[MAX_STARTUP_SERVERS] INIT_DATA;
 
-void multiboot_init (void)
+void INIT_CODE multiboot_init (void)
 {
   char *target = (char *) BASE_MODULE_NAME;
   unsigned module;

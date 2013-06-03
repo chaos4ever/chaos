@@ -683,7 +683,7 @@ void debug_crash_screen (const char *message,
   debug_print ("Causing process:\n");
 
   debug_print ("  Process: %s (PROCESS ID %u).\n",
-               dump_tss->process_name, dump_tss->process_id);
+               dump_tss->thread_name, dump_tss->process_id);
   debug_print ("  Thread: %s (THREAD ID %u).\n",
                dump_tss->thread_name, dump_tss->thread_id);
   debug_print ("  Process was dispatched %u times.\n", dump_tss->timeslices);
