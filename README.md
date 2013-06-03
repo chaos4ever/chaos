@@ -32,7 +32,7 @@ The code in the following directories/files are to be treated as licensed under 
 * servers/system/pci
 * servers/network/3c509
 * servers/network/ne2000
-* storm/ia32/cpuid.c (should be rewritten so the whole kernel can be used under the BSD license).
+* [storm/ia32/cpuid.c](storm/ia32/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
 
 ---------------------------------------------------
 
