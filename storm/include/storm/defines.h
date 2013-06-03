@@ -60,6 +60,14 @@
                                  ((x) / SIZE_PAGE) + 1 : \
                                  ((x) / SIZE_PAGE))
 
+#define NORETURN __attribute__ ((noreturn))
+
+#ifdef __cplusplus
+#  define C_EXTERN extern "C"
+#else
+#  error "You should not use this define from non-C++ code"
+#endif
+
 #ifdef __cplusplus
 #  define C_EXTERN_BEGIN        \
 extern "C"                      \

@@ -8,11 +8,11 @@
 #include <storm/current-arch/tss.h>
 #include <storm/generic/types.h>
 
-extern void dispatch_next (void);
-extern int dispatch_update (void);
-extern void dispatch (void);
-extern void dispatch_task_switcher (void) __attribute__ ((noreturn));
-extern void dispatch_init (void);
+extern void dispatch_next(void);
+extern int dispatch_update(void);
+extern void dispatch(void);
+extern void dispatch_task_switcher(void) NORETURN;
+extern void dispatch_init(void);
 
 extern volatile process_id_type current_process_id;
 extern volatile cluster_id_type current_cluster_id;
