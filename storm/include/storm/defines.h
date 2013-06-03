@@ -64,8 +64,6 @@
 
 #ifdef __cplusplus
 #  define C_EXTERN extern "C"
-#else
-#  error "You should not use this define from non-C++ code"
 #endif
 
 #ifdef __cplusplus
