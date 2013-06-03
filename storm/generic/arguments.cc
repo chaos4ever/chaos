@@ -1,8 +1,8 @@
-/* Abstract: Routines for parsing command line arguments. */
-/* Author: Per Lundberg <per@halleluja.nu>
-           Henrik Hallin <hal@chaosdev.org> */
+// Abstract: Routines for parsing command line arguments.
+// Author: Per Lundberg <per@halleluja.nu>
+//         Henrik Hallin <hal@chaosdev.org>
 
-/* Copyright 1999-2000, 2013 chaos development. */
+// © Copyright 1999-2000, 2013 chaos development.
 
 #include <storm/generic/arguments.h>
 #include <storm/current-arch/types.h>
@@ -12,26 +12,18 @@ char arguments_kernel[MAX_KERNEL_PARAMETER_LENGTH];
 
 static int find_number_of_arguments (char *source);
 
-/* Split the command line parameters in words (separated by one or
-   more spaces). */
-
-extern "C"
-u32 arguments_parse(char *source, char *destination, u32 delta)
+// Split the command line parameters in words (separated by one or more spaces).
+C_EXTERN u32 arguments_parse(char *source, char *destination, u32 delta)
 {
     auto number_of_arguments = find_number_of_arguments(source);
 
     *((u32 *) destination) = number_of_arguments;
 
-    /* Now, go through the string again and copy the parameters into the
-       data area and set the pointers correctly. */
-    /* FIXME: Avoid pointer arithmetic. We should have a pure structure
-       for this. I'm not sure if it is possible to write this in a clean
-       and nice way at all. */
-
+    // Now, go through the string again and copy the parameters into the data area and set the pointers correctly.
+    // FIXME: Avoid pointer arithmetic. We should have a pure structure for this. I'm not sure if it is possible to write this
+    // in a clean and nice way at all at the moment...
     auto word_pointer = (char **) (destination + 4);
     auto word = (char *) (destination + 4 + sizeof (char *) * number_of_arguments);
-
-    /* OK, the initial pointers are setup. */
 
     for (auto position = 0, current_arg = 0; source[position] != '\0'; position++)
     {
