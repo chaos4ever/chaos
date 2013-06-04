@@ -1,7 +1,7 @@
 // Abstract: Function prototypes and structure definitions for ELF support.
 // Author: Per Lundberg <per@halleluja.nu>
 
-// © Copyright 1999-2000 chaos development.
+// © Copyright 1999-2000, 2013 chaos development.
 
 #pragma once
 
