@@ -35,15 +35,15 @@
 #define MAILBOX_ID_NONE         (MAX_U32)
 
 // Some sizes.
-#define KB ((u32) 1024)
-#define MB ((u32) 1024 * KB)
-#define GB ((u32) 1024 * MB)
+#define KB                      ((u32) 1024)
+#define MB                      ((u32) 1024 * KB)
+#define GB                      ((u32) 1024 * MB)
 
 // Convert a number to the closest aligned address above x.
-#define ALIGN(x, align)          ((x) % (align) == 0 ? \
-                                  (x) : \
-                                  (x) + ((align) - \
-                                         ((x) % (align))))
+#define ALIGN(x, align)         ((x) % (align) == 0 ? \
+                                 (x) : \
+                                 (x) + ((align) - \
+                                        ((x) % (align))))
 
 // We always want to align things to the closest word - int is always equal to the machine word size. (Is this a false premise?)
 #define ARCHITECTURE_ALIGN      (sizeof (int))
@@ -59,9 +59,11 @@
                                  ((x) / SIZE_PAGE) + 1 : \
                                  ((x) / SIZE_PAGE))
 
-#define NORETURN __attribute__ ((noreturn))
-#define UNUSED __attribute__ ((unused))
-#define PACKED __attribute__ ((packed))
+// Use this define to attribute that the function will not ever return.
+
+#define NORETURN                __attribute__ ((noreturn))
+#define UNUSED                  __attribute__ ((unused))
+#define PACKED                  __attribute__ ((packed))
 
 #ifdef __cplusplus
 #  define C_EXTERN extern "C"
