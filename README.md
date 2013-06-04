@@ -6,6 +6,18 @@ Welcome to chaos. chaos is an operating system developed around the year 2000 fo
 
 Having that said, there are a number of issues with the codebase which made us start the development of the new [stormG3](https://github.com/chaos4ever/stormG3) kernel (which would replace the existing storm "G1" kernel. There was also a [stormG2](https://github.com/chaos4ever/stormG2) project being undertaken but it was abandoned before being completed). The most critical issue with stormG1 is that the kernel leaks memory; the number of free pages decrease gradually over time. Because of this and the general feeling that the system would benefit from a major refactoring (hey, isn't it always fun to rewrite your code? ;) the storm G3 project was initiated, where we attempted to Do Things Right&trade; to a greater point than had been earlier done. Like many hobby/spare-time projects, the project was never finished and storm G3 is therefore currently in a very unfinished state. You can still find the code for it at our old [Sourceforge site](https://sourceforge.net/projects/chaos/); we may possibly put the code up here on github also sometime in the future if there are people willing to try to fill in the gaps and finish the work to make that kernel be generally usable.
 
+## Compiling chaos
+
+Prerequisites:
+
+- A recent version of GCC (4.7 or newer recommended). If you are using Mac OS X, try [this link](http://crossgcc.rts-software.org/doku.php?id=compiling_for_linux). The 64-bit package is the one that you will need; it can compile 32-bit parts also.
+- Ruby (either [MRI](http://www.ruby-lang.org/) or [JRuby](http://www.jruby.org) should do). If you are using OS X, this is already included with the OS.
+
+Compiling:
+    
+    rake
+    rake install
+
 ## Authors
 
 This is an incomplete list of the authors of the chaos operating system, sorted alphabetically on last name. If you feel your name should be on this list but you aren't - please let us know.
