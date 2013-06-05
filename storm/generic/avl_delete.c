@@ -1,3 +1,4 @@
+// Abstract: Methods for deleting nodes from an AVL tree.
 // Author: Anders Ohrt <doa@chaosdev.org>
 //
 // © Copyright 2000, 2007, 2013 chaos development.
