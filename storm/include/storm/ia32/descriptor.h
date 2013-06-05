@@ -29,31 +29,31 @@ typedef struct
     u8 base_hi;
 
     // Segment type.
-    u8 type: 4;
+    u8 type                  : 4;
 
     // 0 = system, 1 = code or data.
-    u8 descriptor_type: 1;
+    u8 descriptor_type       : 1;
 
     // Descriptor privilege level.
-    u8 dpl: 2;
+    u8 dpl                   : 2;
 
     // Zero if segment isn't used.
-    u8 segment_present: 1;
+    u8 segment_present       : 1;
 
     // High four bits of segment limit.
-    u8 limit_hi: 4;
+    u8 limit_hi              : 4;
 
     // Intel is being 'smart' as usual...
-    u8 unused: 1;
+    u8 unused                : 1;
 
     // Always zero!
-    u8 zero: 1;
+    u8 zero                  : 1;
 
     // 0 = 16-bit, 1 = 32-bit.
-    u8 operation_size: 1;
+    u8 operation_size        : 1;
 
     // If 1, segment limit is multiplied by 4096.
-    u8 granularity: 1;
+    u8 granularity           : 1;
 
     // Bits 24-31 of base address.
     u8 base_hi2;
@@ -67,18 +67,18 @@ typedef struct
     u16 segment_selector;
 
     // Zero if not type == 12.
-    u8 params: 5;
+    u8 params                : 5;
 
     // Zero
-    u8 zero: 3;
+    u8 zero                  : 3;
 
-    u8 type: 5;
+    u8 type                  : 5;
 
     // Descriptor privilege level.
-    u8 dpl: 2;
+    u8 dpl                   : 2;
 
     // If zero, this descriptor isn't used.
-    u8 present: 1;
+    u8 present               : 1;
 
     // High 16 bits of offset.
     u16 offset_hi;
