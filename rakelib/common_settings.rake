@@ -6,5 +6,5 @@ CC = ENV['CC'] || 'x86_64-pc-linux-gcc'
 AR = ENV['AR'] || 'x86_64-pc-linux-ar'
 
 TARGET_ARCH = 'ia32'
-RAKE_COMMAND = "rake -s -R #{Rake.application.options.rakelib}"
+RAKE_COMMAND = "rake -s -R #{Rake.application.options.rakelib.first}"
 INSTALL_ROOT = '/Volumes/chaos'
