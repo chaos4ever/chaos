@@ -1,0 +1,43 @@
+libraries = %w(
+  string
+)
+
+# These haven't been upgraded to work w/ Rake yet.
+#  system
+#  ipc
+#  execute_elf
+#  memory
+#  unicode
+#  ipv4
+#  video
+#  serial
+#  console
+#  random
+#  log
+#  file
+#  math
+#  checksum
+#  mutex
+#  pci
+#  time
+#  list
+#  sound
+
+
+task :default => libraries do |t|
+  t.prerequisites.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND}"
+  end
+end
+
+task :clean do
+  libraries.each do |folder|
+    sh "cd #{folder} && rake -N clean"
+  end
+end
+
+task :install => :default do
+  libraries.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND} install"
+  end
+end
