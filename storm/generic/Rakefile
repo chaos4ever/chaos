@@ -11,10 +11,11 @@ CFLAGS = COMMON_CFLAGS +
 -Wstrict-prototypes"
 CCFLAGS = COMMON_CFLAGS + "--std=gnu++11 " #-Wno-c++0x-compat"
 
-INCLUDES =
-"-I../include \
--I.. \
--I."
+INCLUDES = %w(
+  -I../include
+  -I..
+  -I.
+)
 
 OBJECTS = %w(
   arguments.o

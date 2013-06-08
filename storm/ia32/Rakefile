@@ -7,10 +7,11 @@ CFLAGS =
 -Werror -pipe -O3 -fno-builtin -funsigned-char \
 -g -m32 -fomit-frame-pointer -ffreestanding --std=gnu99 #{ENV['EXTRA_CFLAGS']} #{DEFINES}"
 
-INCLUDES =
-"-I../include \
--I.. \
--I."
+INCLUDES = %w(
+  -I../include
+  -I..
+  -I.
+)
 
 OBJECTS = %w(
   cluster.o
