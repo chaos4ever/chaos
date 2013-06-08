@@ -16,5 +16,5 @@ else
 end
 
 TARGET_ARCH = 'ia32'
-RAKE_COMMAND = "rake -s -R #{Rake.application.options.rakelib.first}"
+RAKE_COMMAND = "rake -s -N -R #{Rake.application.options.rakelib.first}"
 INSTALL_ROOT = '/Volumes/chaos'
