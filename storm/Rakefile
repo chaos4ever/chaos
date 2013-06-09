@@ -1,3 +1,5 @@
+Rake.application.options.rakelib = pwd + "/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+
 task :default => [ 'current-arch', 'include/storm/current-arch' ] do
   [ 'generic', 'current-arch' ].each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND}"
