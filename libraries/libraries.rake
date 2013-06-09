@@ -1,5 +1,7 @@
 # Common settings and Rake rules for all libraries.
 
+Rake.application.options.rakelib = "#{File.dirname(__FILE__)}/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+
 DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\""
 
 COMMON_CFLAGS =
