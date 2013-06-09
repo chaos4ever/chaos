@@ -1,7 +1,7 @@
 // Abstract: Inline functions for swapping byte order.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// Copyright 1999-2000, 2007, 2013 chaos development.
+// © Copyright 1999-2000, 2007, 2013 chaos development.
 
 #pragma once
 
