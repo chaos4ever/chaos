@@ -3,10 +3,10 @@ Rake.application.options.rakelib = pwd + "/../rakelib" if Rake.application.optio
 libraries = %w(
   string
   system
+  ipc
 )
 
 # These haven't been upgraded to work w/ Rake yet.
-#  ipc
 #  execute_elf
 #  memory
 #  unicode

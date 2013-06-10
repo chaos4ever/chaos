@@ -1,0 +1,12 @@
+INCLUDES = %w(
+  -I../../storm/include
+  -I..
+)
+
+OBJECTS = %w(
+  ipc.o
+)
+
+OUTPUT = 'library_ipc.a'
+
+load '../libraries.rake'
