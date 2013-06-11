@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Öhrt <doa@chaosdev.org>
-
+//
 // © Copyright 1998-2000, 2013 chaos development.
 
 #pragma once
