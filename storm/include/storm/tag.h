@@ -11,5 +11,5 @@ typedef struct
     unsigned int type;
 
     unsigned int length;
-    const char data[0];
+    const char data[];
 } tag_type;
