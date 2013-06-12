@@ -23,7 +23,7 @@
 extern descriptor_type *gdt;
 
 extern void gdt_add_entry(u16 number, descriptor_type *descriptor) INIT_CODE;
-extern void gdt_setup_call_gate(u8 number, u16 selector, void *address, u8 dpl, u8 params) INIT_CODE;
+extern void gdt_setup_call_gate(u8 number, u16 selector, function_type handler, u8 dpl, u8 params) INIT_CODE;
 extern void gdt_setup_tss_descriptor(u16 selector, void *address, int dpl, int limit);
 
 #define GDT(n, p) (((n) << 3) + p)

@@ -17,6 +17,9 @@ typedef struct
     u8 arguments;
 } system_call_type;
 
-extern const system_call_type system_call[];
+C_EXTERN_BEGIN
 
+extern const system_call_type system_call[];
 extern void system_calls_init(void) INIT_CODE;
+
+C_EXTERN_END

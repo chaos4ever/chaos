@@ -1,8 +1,8 @@
 // Abstract: Functions for setting up the system calls.
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
-
-// Copyright 1999-2000, 2013 chaos development.
+//
+// © Copyright 1999-2000, 2013 chaos development.
 
 #include <storm/ia32/defines.h>
 #include <storm/ia32/gdt.h>
@@ -11,12 +11,9 @@
 
 void system_calls_init (void)
 {
-  u32 counter;
-  
-  for (counter = 0; counter < SYSTEM_CALLS; counter++)
-  {
-    gdt_setup_call_gate (system_call[counter].number, SELECTOR_KERNEL_CODE,
-			 system_call[counter].handler, 3,
-                         system_call[counter].arguments);
-  }
+    for (auto counter = 0; counter < SYSTEM_CALLS; counter++)
+    {
+        gdt_setup_call_gate(system_call[counter].number, SELECTOR_KERNEL_CODE, system_call[counter].handler, 3,
+                            system_call[counter].arguments);
+    }
 }
