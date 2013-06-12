@@ -20,7 +20,7 @@ void gdt_add_entry(u16 number, descriptor_type *descriptor)
     memory_copy(&gdt[number], descriptor, 8);
 }
 
-void gdt_setup_call_gate(u8 number, u16 selector, void *address, u8 dpl, u8 params)
+void gdt_setup_call_gate(u8 number, u16 selector, function_type address, u8 dpl, u8 params)
 {
     gate_descriptor_type gate_descriptor;
 
