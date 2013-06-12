@@ -47,21 +47,21 @@ return_type system_sleep_microseconds(unsigned int time)
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_process_name_set(char *name)
+return_type system_process_name_set(const char *name)
 {
     system_call_process_name_set(name);
 
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_cluster_name_set(char *name UNUSED)
+return_type system_cluster_name_set(const char *name UNUSED)
 {
     // FIXME: Do something here. I guess we need a conforming system call first...
 
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_thread_name_set(char *name)
+return_type system_thread_name_set(const char *name)
 {
     system_call_thread_name_set(name);
 
@@ -95,7 +95,7 @@ return_type system_thread_create(void)
 // terminated)
 // FIXME: Maybe have a flag that says whether we should wait or not?
 // FIXME: Should we open a connection to the VFS on startup, or...?
-return_type system_execute(char *program UNUSED)
+return_type system_execute(const char *program UNUSED)
 {
     return SYSTEM_RETURN_SUCCESS;
 }
