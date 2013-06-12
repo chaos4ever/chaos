@@ -1,21 +1,18 @@
-/* $Id$ */
-/* Abstract: Function prototypes. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+// Abstract: Function prototypes.
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 2000, 2007, 2013 chaos development.
 
-/* Copyright 2000 chaos development. */
-/* Copyright 2007 chaos development. */
+#pragma once
 
-#ifndef __LIBRARY_SYSTEM_FUNCTIONS_H__
-#define __LIBRARY_SYSTEM_FUNCTIONS_H__
+#include <storm/defines.h>
 
-extern return_type system_cluster_name_set (char *name);
-extern return_type system_execute (char *program);
-extern void system_exit (void) __attribute__ ((noreturn));
-extern return_type system_process_name_set (char *name);
-extern void system_shutdown (void) __attribute__ ((noreturn));
-extern return_type system_sleep (unsigned int time);
-extern return_type system_sleep_microseconds (unsigned int time);
-extern return_type system_thread_create (void);
-extern return_type system_thread_name_set (char *name);
-
-#endif /* !defined __LIBRARY_SYSTEM_FUNCTIONS_H__ */
+extern return_type system_cluster_name_set(char *name);
+extern return_type system_execute(char *program);
+extern void system_exit(void) NORETURN;
+extern return_type system_process_name_set(char *name);
+extern void system_shutdown(void) NORETURN;
+extern return_type system_sleep(unsigned int time);
+extern return_type system_sleep_microseconds(unsigned int time);
+extern return_type system_thread_create(void);
+extern return_type system_thread_name_set(char *name);
