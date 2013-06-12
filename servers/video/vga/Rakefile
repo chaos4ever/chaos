@@ -1,0 +1,11 @@
+INCLUDES = %w(
+)
+
+OBJECTS = %w(
+  vga.o
+  vgalib.o
+)
+
+OUTPUT = 'vga'
+
+load '../../servers.rake'

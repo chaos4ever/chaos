@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have merged their build process to rake also.
-folders = [ :storm, :libraries ] #, :servers, :programs ]
+folders = [ :storm, :libraries, :servers ]#, :programs ]
 
 verbose false
 
@@ -37,9 +37,9 @@ task :libraries => [ :storm ] do |folder|
   sh "cd #{folder} && #{RAKE_COMMAND}"
 end
 
-#task :servers do |folder|
-#  system "cd #{folder} && rake"
-#end
+task :servers do |folder|
+  system "cd #{folder} && rake"
+end
 
 #task :programs do |folder|
 #  system "cd #{folder} && rake"
