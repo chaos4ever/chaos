@@ -59,27 +59,19 @@
                                  ((x) / SIZE_PAGE) + 1 : \
                                  ((x) / SIZE_PAGE))
 
-// Use this define to attribute that the function will not ever return.
-
 #define NORETURN                __attribute__ ((noreturn))
 #define UNUSED                  __attribute__ ((unused))
 #define PACKED                  __attribute__ ((packed))
 
 #ifdef __cplusplus
 #  define C_EXTERN extern "C"
-#endif
-
-#ifdef __cplusplus
 #  define C_EXTERN_BEGIN        \
 extern "C"                      \
 {
-#else
-#  define C_EXTERN_BEGIN
-#endif
 
-#ifdef __cplusplus
 #  define C_EXTERN_END          \
 }
 #else
+#  define C_EXTERN_BEGIN
 #  define C_EXTERN_END
 #endif
