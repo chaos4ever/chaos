@@ -10,6 +10,8 @@
 #include <storm/ia32/types.h>
 #include <storm/ia32/descriptor.h>
 
+#define GDT(n, p)                       (((n) << 3) + p)
+
 #define SELECTOR_KERNEL_CODE            GDT(1, 0)
 #define SELECTOR_KERNEL_DATA            GDT(2, 0)
 #define SELECTOR_PROCESS_CODE           GDT(3, 3)
@@ -22,8 +24,10 @@
 
 extern descriptor_type *gdt;
 
+C_EXTERN_BEGIN
+
 extern void gdt_add_entry(u16 number, descriptor_type *descriptor) INIT_CODE;
 extern void gdt_setup_call_gate(u8 number, u16 selector, function_type handler, u8 dpl, u8 params) INIT_CODE;
 extern void gdt_setup_tss_descriptor(u16 selector, void *address, int dpl, int limit);
 
-#define GDT(n, p) (((n) << 3) + p)
+C_EXTERN_END
