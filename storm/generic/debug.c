@@ -602,7 +602,7 @@ void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss)
     debug_print("Kernel:\n");
 
     debug_print("  Alert: %s!\n", message);
-    debug_print("  Version: %s %s.\n", PACKAGE, VERSION);
+    debug_print("  Version: %s %s.\n", PACKAGE, REVISION);
     debug_print("  Uptime: %u timeslices (%u h, %u m and %u s).\n", timeslice, seconds / (60 * 60), (seconds / 60) % 60,
                 seconds % 60);
 
