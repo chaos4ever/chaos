@@ -93,7 +93,7 @@ static inline return_type system_call_irq_acknowledge(unsigned int irq_number)
 }
 
 // Register a port range (one or more ports) for usage by the process.
-static inline return_type system_call_port_range_register(u32 start, u32 length, char *description)
+static inline return_type system_call_port_range_register(u32 start, u32 length, const char *description)
 {
     return_type return_value;
 
