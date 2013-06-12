@@ -1,18 +1,3 @@
-DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\" -DCREATOR=\\\"`whoami`@`hostname`\\\""
-
-CFLAGS = 
-"-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wstrict-prototypes \
--Wredundant-decls -Winline -Wmissing-prototypes -Wcast-align \
--Wbad-function-cast -Wmissing-declarations -Wmissing-noreturn -Wnested-externs \
--Werror -pipe -O3 -fno-builtin -funsigned-char \
--g -m32 -fomit-frame-pointer -ffreestanding --std=gnu99 #{ENV['EXTRA_CFLAGS']} #{DEFINES}"
-
-INCLUDES = %w(
-  -I../include
-  -I..
-  -I.
-)
-
 OBJECTS = %w(
   cluster.o
   cpuid.o
@@ -47,13 +32,11 @@ OBJECTS = %w(
   compiler_rt/umoddi3.o
 )
 
-OUTPUT_LIB = 'libstorm_ia32.a'
-OUTPUT = 'storm'
+OUTPUT = 'libstorm_ia32.a'
+KERNEL_OUTPUT = 'storm'
 LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
 
-task :default => [ :banner, :storm ] + OBJECTS do
-  puts
-end
+task :default => [ :banner, :storm ] + OBJECTS
 
 task :banner do
   print "Compiling ".bold
@@ -63,16 +46,12 @@ task :banner do
   print "    "
 end
 
-# TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
-task :clean do
-  rm_f OBJECTS
-end
-
 task :install => [ :default ] do
   sh "install #{OUTPUT} #{INSTALL_ROOT}"
+  puts "    Installed #{OUTPUT} in #{INSTALL_ROOT}".gray
 end
 
-file OUTPUT => [ OUTPUT_LIB ] do |t|
+file KERNEL_OUTPUT => [ OUTPUT ] do |t|
   begin
     puts '    Linking...'.blue.bold
 
@@ -86,8 +65,4 @@ file OUTPUT => [ OUTPUT_LIB ] do |t|
   end
 end
 
-file OUTPUT_LIB => OBJECTS do |t|
-  puts
-  puts '    Creating archive...'.blue.bold
-  sh "#{AR} r --target=elf32-i386 #{t.name} #{t.prerequisites.join ' '}"
-end
+load '../storm.rake'

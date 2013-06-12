@@ -30,4 +30,8 @@ class String
   def cyan
     colorize 36
   end
+
+  def gray
+    colorize 37
+  end
 end
