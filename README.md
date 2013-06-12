@@ -11,6 +11,7 @@ Having that said, there are a number of issues with the codebase which made us s
 Prerequisites:
 
 - A recent version of GCC (4.7 or newer recommended). If you are using Mac OS X, try [this link](http://crossgcc.rts-software.org/doku.php?id=compiling_for_linux). The 64-bit package is the one that you will need; it can compile 32-bit parts also.
+- [NASM](http://www.nasm.us), the Netwide Assembler. The version provided with OS X works fine.
 - Ruby (either [MRI](http://www.ruby-lang.org/) or [JRuby](http://www.jruby.org) should do). If you are using OS X, this is already included with the OS.
 
 Compiling:
