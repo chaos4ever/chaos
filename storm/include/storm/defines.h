@@ -7,8 +7,7 @@
 
 #pragma once
 
-#if (defined __i386__) || (defined __i486__) || (defined __i586__) || \
-    (defined __i686__)
+#if (defined __i386__) || (defined __i486__) || (defined __i586__) || (defined __i686__)
 #  define SIZE_PAGE 4096
 #else
 #  error Your processor seems not to be supported by chaos.

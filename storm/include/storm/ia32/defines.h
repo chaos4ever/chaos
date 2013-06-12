@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <storm/defines.h>
 #include <storm/generic/limits.h>
 #include <storm/generic/types.h>
 
