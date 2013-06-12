@@ -146,7 +146,7 @@ return_type main(int arguments, char *argument[])
     // Print startup message.
     debug_print("Starting %s (process ID %u).\n", argument[0], PROCESS_ID_KERNEL);
     debug_print("%s %s booting...\n", PACKAGE_NAME, PACKAGE_VERSION);
-    debug_print("Compiled by %s on %s %s.\n", CREATOR, __DATE__, __TIME__);
+    debug_print("Compiled by %s on %s %s (revision %s).\n", CREATOR, __DATE__, __TIME__, REVISION);
 
     // Check if at least one server is to be started.
     if (multiboot_info.has_module_info == 0 ||

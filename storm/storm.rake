@@ -1,4 +1,4 @@
-DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"`git rev-list HEAD | head -1`\\\" -DCREATOR=\\\"`whoami`@`hostname`\\\""
+DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DREVISION=\\\"`git rev-list HEAD --max-count 1 --abbrev-commit`\\\" -DCREATOR=\\\"`whoami`@`hostname -s`\\\""
 
 COMMON_CFLAGS =
 "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
