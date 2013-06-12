@@ -15,7 +15,7 @@ task :clean do
   rm_f [ 'current-arch', 'include/storm/' + TARGET_ARCH ]
 end
 
-task :install do
+task :install => :default do
   sh "cd #{TARGET_ARCH} && #{RAKE_COMMAND} install"
 end
 
