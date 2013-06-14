@@ -2,29 +2,18 @@
 
 Rake.application.options.rakelib = "#{File.dirname(__FILE__)}/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
 
-DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE=\\\"storm\\\" -DVERSION=\\\"git\\\""
-
-COMMON_CFLAGS =
-"-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
--Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
--Wmissing-noreturn -pipe -O3 -fno-builtin -funsigned-char \
--g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} "
-
-CFLAGS = COMMON_CFLAGS + 
-"--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \
--Wstrict-prototypes"
-CCFLAGS = COMMON_CFLAGS + "--std=gnu++11 " #-Wno-c++0x-compat"
+load "#{File.dirname(__FILE__)}/constants.rake"
 
 task :default => [ :banner, OUTPUT ] do
   puts
 end
 
 task :banner do
-  print "Compiling ".bold
+  print 'Compiling '.bold
   print OUTPUT.sub('.a', '').cyan.bold
-  puts "..."
+  puts '...'
 
-  print "    "
+  print '    '
 end
 
 file OUTPUT => OBJECTS do |t|
