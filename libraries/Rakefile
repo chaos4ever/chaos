@@ -25,17 +25,37 @@ libraries = %w(
 #  list
 #  sound
 
+load 'constants.rake'
 
-task :default => libraries do |t|
-  t.prerequisites.each do |folder|
+INCLUDES = %w(
+  -I.
+  -I../storm/include
+)
+
+task :default => libraries + [ :startup ] do |t|
+  libraries.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND}"
   end
+end
+
+task :startup => [ :banner, 'startup.o' ] do
+  puts
+end
+
+task :banner do
+  print 'Compiling '.bold
+  print 'startup.o'.cyan.bold
+  puts '...'
+
+  print '    '
 end
 
 task :clean do
   libraries.each do |folder|
     sh "cd #{folder} && rake -N clean"
   end
+
+  rm_f 'startup.o'
 end
 
 task :install => :default do
