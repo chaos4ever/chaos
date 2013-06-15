@@ -62,7 +62,7 @@ u16 idtr[] UNUSED INIT_DATA =
     HIGH_U16(BASE_IDT)
 };
 
-u16 gdtr[] __attribute__ ((unused)) INIT_DATA =
+u16 gdtr[] UNUSED INIT_DATA =
 {
     // GDT limit, 256 GDT entries.
     0x7FF,
@@ -85,7 +85,7 @@ void _start (void) INIT_CODE;
 extern int main (int arguments, char *argument[]);
 
 // This is the kernel. :)
-static void INIT_CODE kernel_entry (void) __attribute__ ((noreturn));
+static void INIT_CODE kernel_entry (void) NORETURN;
 static void INIT_CODE kernel_entry(void)
 {
     multiboot_init();
