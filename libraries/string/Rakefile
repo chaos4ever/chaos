@@ -7,6 +7,6 @@ OBJECTS = %w(
   string.o
 )
 
-OUTPUT = 'library_string.a'
+OUTPUT = 'libstring.a'
 
 load '../libraries.rake'

@@ -7,6 +7,6 @@ OBJECTS = %w(
   system.o
 )
 
-OUTPUT = 'library_system.a'
+OUTPUT = 'libsystem.a'
 
 load '../libraries.rake'

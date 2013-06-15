@@ -7,6 +7,6 @@ OBJECTS = %w(
   ipc.o
 )
 
-OUTPUT = 'library_ipc.a'
+OUTPUT = 'libipc.a'
 
 load '../libraries.rake'

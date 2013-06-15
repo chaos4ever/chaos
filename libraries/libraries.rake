@@ -10,8 +10,9 @@ end
 
 task :banner do
   print 'Compiling '.bold
-  print OUTPUT.sub('.a', '').cyan.bold
-  puts '...'
+  library = (/lib(.+)\.a/.match OUTPUT)
+  print library[1].cyan.bold
+  puts ' library...'.bold
 
   print '    '
 end
