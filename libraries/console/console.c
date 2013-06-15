@@ -213,7 +213,6 @@ return_type console_print(console_structure_type *console_structure, const char 
 return_type console_print_formatted(console_structure_type *console_structure, const char *format_string, ...)
 {
     va_list arguments;
-    return_type return_value;
 
     // FIXME: Don't have a hardwired buffer like this!
     char output[1024];
@@ -226,7 +225,7 @@ return_type console_print_formatted(console_structure_type *console_structure, c
     }
 
     va_start(arguments, format_string);
-    return_value = string_print_va(output, format_string, arguments);
+    string_print_va(output, format_string, arguments);
     va_end(arguments);
 
     return console_print(console_structure, output);
