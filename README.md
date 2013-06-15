@@ -1,6 +1,6 @@
 # README
 
-![](https://secure.gravatar.com/avatar/bf6638f5df4bc6c990639570f52a7c7a?s=420)
+![](https://raw.github.com/chaos4ever/chaos/master/misc/chaos-logo.png)
 
 Welcome to chaos. chaos is an operating system developed around the year 2000 for the x86 (also referred to as "ia32" in the codebase) platform. It contains working protected mode/virtual memory initialization, processes and threads, interrupt support, PCI, text-based VGA and a simple IPv4 stack (supporting UDP, ARP and ICMP). Naturally, given the hobbyist nature of the project, none of the features we just mentioned is "complete" in the sense that it supports all features of the PCI bus, or all features of UDP, ICMP etc. Nonetheless, the system was at an earlier point stable to the point where it possible to e.g. use it for network bridging - you could run e.g. ssh "through" a machine running chaos.
 
