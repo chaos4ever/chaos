@@ -1,9 +1,10 @@
 Rake.application.options.rakelib = pwd + "/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
 
 libraries = %w(
+  console
+  ipc
   string
   system
-  ipc
 )
 
 # These haven't been upgraded to work w/ Rake yet.
@@ -13,7 +14,6 @@ libraries = %w(
 #  ipv4
 #  video
 #  serial
-#  console
 #  random
 #  log
 #  file

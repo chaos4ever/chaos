@@ -1,0 +1,12 @@
+INCLUDES = %w(
+  -I../../storm/include
+  -I..
+)
+
+OBJECTS = %w(
+  console.o
+)
+
+OUTPUT = 'libconsole.a'
+
+load '../libraries.rake'
