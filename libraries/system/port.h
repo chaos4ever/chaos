@@ -37,7 +37,7 @@ static inline void system_port_out_u32(u16 port, u32 data)
 }
 
 // 'Pausing' version of the above.
-static void system_port_out_u8_pause(u16 port, u8 data)
+static inline void system_port_out_u8_pause(u16 port, u8 data)
 {
     asm("outb %1, %0\n"
          "jmp 1f\n"
