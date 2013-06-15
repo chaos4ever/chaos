@@ -40,6 +40,7 @@ end
 
 task :startup => [ :banner, 'startup.o' ] do
   puts
+  puts # TODO: Should only get run sometimes...
 end
 
 task :banner do
@@ -56,6 +57,7 @@ task :clean do
   end
 
   rm_f 'startup.o'
+  rm_f Dir['*.a']
 end
 
 task :install => :default do
