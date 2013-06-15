@@ -1,9 +1,13 @@
-INCLUDES = %w(
-)
-
 OBJECTS = %w(
   vga.o
   vgalib.o
+)
+
+LIBRARIES = %w(
+  -lconsole
+  -lipc
+  -lmemory
+  -lsystem
 )
 
 OUTPUT = 'vga'

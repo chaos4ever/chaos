@@ -160,46 +160,36 @@ static void vga_font_set(u8 *font_data, unsigned int length)
     memory_copy(graphic_video_memory, font_data, length);
 
     // First, the sequencer.
-
     // Synchronous reset.
-
     system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
     system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x01);
 
     // CPU writes to maps 0 and 1.
-
     system_port_out_u8_pause( VGA_SEQUENCER_REGISTER, 0x02);
     system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Odd-even addressing.
-
     system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x04);
     system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Character Map Select.
-
     system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x03);
     system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0);
 
     // Clear synchronous reset.
-
     system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
     system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Now, the graphics controller.
-
     // Select map 0 for CPU.
-
     system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x04);
     system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x00);
 
     // Enable even-odd addressing.
-
     system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x05);
     system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x10);
 
     // Map starts at B8000.
-
     system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x06);
     system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x0E);
 }
@@ -219,12 +209,10 @@ static void vga_cursor_place(int x, int y)
         position = y * current_mode->width + x;
 
         // Cursor position high.
-
         system_port_out_u8(0x3D4, 0x0E);
         system_port_out_u8(0x3D5, position / 256);
 
         // Cursor position low.
-
         system_port_out_u8(0x3D4, 0x0F);
         system_port_out_u8(0x3D5, position % 256);
     }
@@ -234,7 +222,6 @@ static void vga_cursor_place(int x, int y)
 
 static void handle_connection(ipc_structure_type *ipc_structure)
 {
-    message_parameter_type message_parameter;
     bool done = FALSE;
     u32 *data;
     unsigned int data_size = 8192;
@@ -242,7 +229,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
     memory_allocate((void **) &data, data_size);
 
     // Accept the connection.
-
+    message_parameter_type message_parameter;
     message_parameter.data = data;
     message_parameter.block = TRUE;
     message_parameter.protocol = IPC_PROTOCOL_VIDEO;
@@ -252,33 +239,26 @@ static void handle_connection(ipc_structure_type *ipc_structure)
         message_parameter.message_class = IPC_CLASS_NONE;
         message_parameter.length = data_size;
 
-        if (ipc_receive(ipc_structure->input_mailbox_id, &message_parameter,
-                        &data_size) != STORM_RETURN_SUCCESS)
+        if (ipc_receive(ipc_structure->input_mailbox_id, &message_parameter, &data_size) != STORM_RETURN_SUCCESS)
         {
             continue;
         }
 
         switch (message_parameter.message_class)
         {
-
             // Place the text mode cursor.
-
             case IPC_VIDEO_CURSOR_PLACE:
             {
-                video_cursor_type *cursor =
-                    (video_cursor_type *) message_parameter.data;
+                video_cursor_type *cursor = (video_cursor_type *) message_parameter.data;
 
                 vga_cursor_place(cursor->x, cursor->y);
                 break;
             }
 
             // Set the font.
-
             case IPC_VIDEO_FONT_SET:
             {
-
                 // FIXME: Do security checks here.
-
                 vga_font_set((u8 *) data, message_parameter.length);
                 break;
             }
@@ -293,14 +273,11 @@ static void handle_connection(ipc_structure_type *ipc_structure)
                 {
                     message_parameter.length = sizeof (return_type);
 
-                    if (mode_set(video_mode->width, video_mode->height,
-                                 video_mode->depth, video_mode->mode_type))
+                    if (mode_set(video_mode->width, video_mode->height, video_mode->depth, video_mode->mode_type))
                     {
                         if (video_mode->mode_type == VIDEO_MODE_TYPE_TEXT)
                         {
-                            int index;
-
-                            for (index = 0; index < 16; index++)
+                            for (auto index = 0; index < 16; index++)
                             {
                                 vga_palette_set_entry(index, &text_palette[index]);
                             }
@@ -308,9 +285,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
                         else if (video_mode->mode_type == VIDEO_MODE_TYPE_GRAPHIC &&
                                  video_mode->depth == 8)
                         {
-                            int index;
-
-                            for (index = 0; index < 256; index++)
+                            for (auto index = 0; index < 256; index++)
                             {
                                 vga_palette_entry_type entry;
 
@@ -341,7 +316,6 @@ static void handle_connection(ipc_structure_type *ipc_structure)
             }
 
             // Set the palette.
-
             case IPC_VIDEO_PALETTE_SET:
             {
                 vga_palette_set((vga_palette_entry_type *) data);
