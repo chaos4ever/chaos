@@ -42,6 +42,7 @@ This is an incomplete list of the authors of the chaos operating system, sorted 
 
 The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
 
+* [libraries/string/inlines.h](libraries/string/inlines.h) (should be fixed).
 * servers/system/pci
 * servers/network/3c509
 * servers/network/ne2000
