@@ -5,6 +5,7 @@ INCLUDES = %w(
 
 OBJECTS = %w(
   memory.o
+  slab.o
 )
 
 OUTPUT = 'libmemory.a'
