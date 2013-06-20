@@ -3,13 +3,13 @@ Rake.application.options.rakelib = pwd + "/../rakelib" if Rake.application.optio
 libraries = %w(
   console
   ipc
+  memory
   string
   system
 )
 
 # These haven't been upgraded to work w/ Rake yet.
 #  execute_elf
-#  memory
 #  unicode
 #  ipv4
 #  video
@@ -53,7 +53,7 @@ end
 
 task :clean do
   libraries.each do |folder|
-    sh "cd #{folder} && rake -N clean"
+    sh "cd #{folder} && #{RAKE_COMMAND} clean"
   end
 
   rm_f 'startup.o'
