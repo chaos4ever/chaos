@@ -20,7 +20,7 @@ end
 
 task :clean do
   subfolders.each do |folder|
-    sh "cd #{folder} && rake -N clean"
+    sh "cd #{folder} && #{RAKE_COMMAND} clean"
   end
 end
 
