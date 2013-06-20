@@ -8,6 +8,8 @@
 #include <system/system.h>
 #include <console/console.h>
 
+C_EXTERN_BEGIN
+
 extern return_type console_init(console_structure_type *console_structure, tag_type *tag, unsigned int connection_class);
 extern return_type console_open(console_structure_type *console_structure, unsigned int width, unsigned int height,
   unsigned int depth, int mode_type);
@@ -25,3 +27,5 @@ extern return_type console_cursor_appearance_set(console_structure_type *console
 extern return_type console_use_keyboard(console_structure_type *console_structure, bool which, int type);
 extern return_type console_use_mouse(console_structure_type *console_structure, bool which);
 extern return_type console_event_wait(console_structure_type *console_structure, void *event_data, int *type, bool block);
+
+C_EXTERN_END

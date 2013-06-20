@@ -7,6 +7,8 @@
 
 #include <storm/defines.h>
 
+C_EXTERN_BEGIN
+
 extern return_type system_cluster_name_set(const char *name);
 extern return_type system_execute(const char *program);
 extern void system_exit(void) NORETURN;
@@ -16,3 +18,5 @@ extern return_type system_sleep(unsigned int time);
 extern return_type system_sleep_microseconds(unsigned int time);
 extern return_type system_thread_create(void);
 extern return_type system_thread_name_set(const char *name);
+
+C_EXTERN_END
