@@ -4,7 +4,11 @@
 //
 // © Copyright 1999-2000, 2013 chaos development.
 
-#include "config.h"
+#include <console/console.h>
+#include <ipc/ipc.h>
+#include <memory/memory.h>
+#include <video/video.h>
+
 #include "font_8x8.h"
 #include "vga.h"
 
