@@ -19,6 +19,8 @@ Compiling:
     rake
     rake install
 
+(Not all parts of the system has been converted to the rake-based compilation process yet. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
+
 ## Authors
 
 This is an incomplete list of the authors of the chaos operating system, sorted alphabetically on last name. If you feel your name should be on this list but you aren't - please let us know.
@@ -38,7 +40,7 @@ This is an incomplete list of the authors of the chaos operating system, sorted 
 
 ## License
 
-(This license is commonly known as the BSD license. The subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately!)
+(This license is commonly known as the BSD license, without advertising clause. The subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately!)
 
 The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
 
@@ -47,6 +49,8 @@ The code in the following directories/files are to be treated as licensed under 
 * servers/network/3c509
 * servers/network/ne2000
 * [storm/ia32/cpuid.c](storm/ia32/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
+
+We encourage code that is written for chaos (servers, programs, libraries) to use the license below. This license allows us, and anyone else for that matter, to use your code freely, incorporate it in future versions of chaos and similar. However, unlike with the GNU GPL, we don't force this choice upon you. The freedom is yours. Use it wisely.
 
 ---------------------------------------------------
 
