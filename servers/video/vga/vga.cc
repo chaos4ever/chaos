@@ -11,7 +11,7 @@
 // Define this to get some debug information.
 #undef DEBUG
 
-extern void vga_set_mode(u32 mode);
+C_EXTERN void vga_set_mode(u32 mode);
 
 typedef struct
 {

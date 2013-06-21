@@ -48,7 +48,7 @@ file OUTPUT => OBJECTS do |t|
   begin
     puts
     puts "    Linking binary '#{OUTPUT}'...".blue.bold
-    command = "#{CC} -o #{t.name} #{t.prerequisites.join ' '} #{LDFLAGS.join(' ')} #{LIBRARIES.join(' ')}"
+    command = "#{CC} -o #{t.name} #{t.prerequisites.join ' '} #{LDFLAGS.join(' ')} -l#{LIBRARIES.join(' -l')}"
     sh command
   rescue
     puts "Error linking #{t.source}. Full command line was: #{command}"

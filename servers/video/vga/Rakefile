@@ -4,10 +4,11 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
-  -lconsole
-  -lipc
-  -lmemory
-  -lsystem
+  console
+  ipc
+  memory
+  string
+  system
 )
 
 OUTPUT = 'vga'
