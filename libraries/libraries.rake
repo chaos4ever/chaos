@@ -32,3 +32,7 @@ task :clean do
   rm_f OBJECTS
   rm_f OUTPUT
 end
+
+# The libraries aren't really "installed", but we need to support this target anyway so that you can run a top-level
+# "rake install" to get it all installed.
+task :install 
