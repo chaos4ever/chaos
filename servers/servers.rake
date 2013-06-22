@@ -59,6 +59,7 @@ end
 # TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
 task :clean do
   rm_f OBJECTS
+  rm_f OUTPUT
 end
 
 task :install => OUTPUT do
