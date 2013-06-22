@@ -40,6 +40,8 @@ This is an incomplete list of the authors of the chaos operating system, sorted 
 
 ## License
 
+### General
+
 (The license we use is commonly known as the BSD license, without advertising clause (also known as "3-clause"). Some  subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this license change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately and we will work something out.)
 
 The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
