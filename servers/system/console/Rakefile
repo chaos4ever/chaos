@@ -9,6 +9,7 @@ LIBRARIES = %w(
   memory
   string
   system
+  unicode
   video
 )
 

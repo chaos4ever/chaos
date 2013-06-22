@@ -3,6 +3,9 @@
 //
 // © Copyright 2000, 2007, 2013 chaos development.
 
+#include <memory/memory.h>
+#include <video/video.h>
+
 #include "console.h"
 #include "console_output.h"
 

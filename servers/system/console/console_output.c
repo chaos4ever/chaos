@@ -3,6 +3,9 @@
 //
 // © Copyright 2000, 2013 chaos development.
 
+#include <memory/memory.h>
+#include <unicode/unicode.h>
+
 #include "console_output.h"
 #include "console.h"
 
@@ -603,7 +606,7 @@ void console_output(console_type *console, const char *string)
                     // Set attribute.
                     case 'm':
                     {
-                        for (uint counter = 0; counter < console->numeric_argument_index + 1; counter++)
+                        for (unsigned int counter = 0; counter < console->numeric_argument_index + 1; counter++)
                         {
                             switch (console->numeric_argument[counter])
                             {

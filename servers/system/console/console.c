@@ -4,7 +4,9 @@
 //
 // © Copyright 1999-2000, 2007, 2013 chaos development.
 
-#include "config.h"
+#include <memory/memory.h>
+#include <video/video.h>
+
 #include "console.h"
 #include "console_output.h"
 
@@ -121,7 +123,7 @@ int main(void)
     ipc_structure_type ipc_structure;
 
     memory_init();
-    system_process_name_set(PACKAGE_NAME);
+    system_process_name_set("console");
     system_thread_name_set("Initialising");
 
     if (ipc_service_create("console", &ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
@@ -130,8 +132,7 @@ int main(void)
     }
 
     character_type **screen_pointer = &screen;
-    system_call_memory_reserve(CONSOLE_VIDEO_MEMORY, CONSOLE_VIDEO_MEMORY_SIZE,
-                               (void **) screen_pointer);
+    system_call_memory_reserve(CONSOLE_VIDEO_MEMORY, CONSOLE_VIDEO_MEMORY_SIZE, (void **) screen_pointer);
 
     system_thread_name_set("Service handler");
 
