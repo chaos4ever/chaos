@@ -33,7 +33,7 @@ This is an incomplete list of the authors of the chaos operating system, sorted 
 * Erik Moren
 * Gustav Sinder
 * Johan Thim - [servers/video/vga/vgalib.asm](servers/video/vga/vgalib.asm)
-* Jonas Tärnström
+* Jonas Tärnström - did some work on the [video library](libraries/video) which was unfortunately never completed
 * Noah Williamsson
 * Andreas Zetterlund
 * Anders Öhrt - Previous core developer
