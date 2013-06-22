@@ -1,0 +1,17 @@
+OBJECTS = %w(
+  connection.o
+  console.o
+  console_output.o
+)
+
+LIBRARIES = %w(
+  ipc
+  memory
+  string
+  system
+  video
+)
+
+OUTPUT = 'console'
+
+load '../../servers.rake'
