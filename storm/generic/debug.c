@@ -20,7 +20,6 @@
 #include <storm/generic/string.h>
 #include <storm/generic/thread.h>
 #include <storm/generic/types.h>
-#include <config.h>
 
 #include <stdarg.h>
 
