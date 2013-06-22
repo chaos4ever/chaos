@@ -8,13 +8,13 @@ Having that said, there are a number of issues with the codebase which made us s
 
 ## Compiling chaos
 
-Prerequisites:
+### Prerequisites:
 
 - A recent version of GCC (4.7 or newer recommended). If you are using Mac OS X, try [this link](http://crossgcc.rts-software.org/doku.php?id=compiling_for_linux). The 64-bit package is the one that you will need; it can compile 32-bit parts also.
 - [NASM](http://www.nasm.us), the Netwide Assembler. The version provided with OS X works fine.
 - Ruby (either [MRI](http://www.ruby-lang.org/) or [JRuby](http://www.jruby.org) should do). If you are using OS X, this is already included with the OS.
 
-Compiling:
+### Compiling:
     
     rake
     rake install
@@ -40,7 +40,7 @@ This is an incomplete list of the authors of the chaos operating system, sorted 
 
 ## License
 
-(This license is commonly known as the BSD license, without advertising clause. The subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately!)
+(The license we use is commonly known as the BSD license, without advertising clause (also known as "3-clause"). Some  subdirectories in this directory may still contain references to the GPL since this is the license we used previously. However, the code can now be used under the BSD license - to the best of our knowledge, all major copyright holders have agreed to this license change. If you hold the copyright to some of the code herein and are in disagreement to this, please notify us immediately and we will work something out.)
 
 The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
 
@@ -54,7 +54,9 @@ We encourage code that is written for chaos (servers, programs, libraries) to us
 
 ---------------------------------------------------
 
-Copyright © 2000, 2006, 2007, 2013 chaos development.<br/>
+### chaos License (3-clause BSD)
+
+Copyright © 1999-2000, 2006-2007, 2013 chaos development.<br/>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
