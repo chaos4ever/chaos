@@ -6,12 +6,12 @@ libraries = %w(
   memory
   string
   system
+  unicode
   video
 )
 
 # These haven't been upgraded to work w/ Rake yet.
 #  execute_elf
-#  unicode
 #  ipv4
 #  serial
 #  random
