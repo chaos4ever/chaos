@@ -201,30 +201,37 @@ return_type main(int arguments, char *argument[])
 
     // Set up paging and map global memory.
     memory_virtual_enable();
+    debug_print("VM subsystem initialized.\n");
 
     // Initialise global memory allocation.
     memory_global_init();
+    debug_print("Global memory initialized.\n");
 
     // Make the debug go to the log.
     debug_log_enable = TRUE;
 
     // Set up a list holding allocated port-ranges.
     port_init();
+    debug_print("ISA-based I/O initialized.\n");
 
     // Initialise the DMA support.
     dma_init();
+    debug_print("DMA initialized.\n");
 
     // Initialise the mailbox system.
     mailbox_init();
+    debug_print("IPC initialized.\n");
 
     // Initialise the thread code. Must be done before any threads are started.
     thread_init();
+    debug_print("Thread sybsystem initialized.\n");
 
     // Set up structures used for holding task information.
     process_init();
+    debug_print("Process sybsystem initialized.\n");
 
     // Now, kickstart some servers.
-    for (u32 index = 0; index < multiboot_info.number_of_modules; index++)
+    for (unsigned int index = 0; index < multiboot_info.number_of_modules; index++)
     {
         // Map the ELF-image.
         memory_virtual_map(GET_PAGE_NUMBER(BASE_MODULE),
