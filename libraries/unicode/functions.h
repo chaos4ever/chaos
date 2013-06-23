@@ -1,7 +1,7 @@
 // Abstract: Function prototypes for the Unicode library.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// ©Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 2000, 2007, 2013 chaos development.
 
 #pragma once
 
