@@ -38,7 +38,6 @@
 #include <storm/ia32/timer.h>
 #include <storm/ia32/trap.h>
 #include <storm/ia32/tss.h>
-#include <config.h>
 
 // Global variables.
 bool initialised = FALSE;
