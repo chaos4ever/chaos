@@ -15,7 +15,8 @@ Having that said, there are a number of issues with the codebase which made us s
 - Ruby (either [MRI](http://www.ruby-lang.org/) or [JRuby](http://www.jruby.org) should do). If you are using OS X, this is already included with the OS.
 
 ### Compiling:
-    
+
+    hdiutil attach -mountpoint /Volumes/chaos floppy.img # Or equivalent if not OS X.    
     rake
     rake install
 
