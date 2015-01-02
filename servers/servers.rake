@@ -1,11 +1,11 @@
 # Common settings and Rake rules for all libraries.
 
-Rake.application.options.rakelib = "#{File.dirname(__FILE__)}/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 
 LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries"
 
 COMMON_CFLAGS = %w(
-  -Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls -Winline -Werror -Wcast-align -Wsign-compare 
+  -Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls -Winline -Werror -Wcast-align -Wsign-compare
   -Wmissing-declarations -Wmissing-noreturn -pipe -O3 -fno-builtin -funsigned-char -g -m32 -fomit-frame-pointer -ffreestanding
  )
 

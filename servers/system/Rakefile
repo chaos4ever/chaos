@@ -1,7 +1,7 @@
-Rake.application.options.rakelib = pwd + "/../../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w(
-  console  
+  console
 )
 
 # Not yet converted to Rake:

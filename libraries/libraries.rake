@@ -1,6 +1,6 @@
 # Common settings and Rake rules for all libraries.
 
-Rake.application.options.rakelib = "#{File.dirname(__FILE__)}/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 
 load "#{File.dirname(__FILE__)}/constants.rake"
 
@@ -35,4 +35,4 @@ end
 
 # The libraries aren't really "installed", but we need to support this target anyway so that you can run a top-level
 # "rake install" to get it all installed.
-task :install 
+task :install
