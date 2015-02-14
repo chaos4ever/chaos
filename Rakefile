@@ -1,6 +1,6 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
-# TODO: Uncomment the rest here as soon as we have merged their build process to rake also.
+# TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
 folders = [:storm, :libraries, :servers]#, :programs]
 
 verbose false
