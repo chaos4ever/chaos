@@ -47,7 +47,7 @@ task :banner do
 end
 
 task :install do
-  sh "install #{KERNEL_OUTPUT} #{INSTALL_ROOT}"
+  sh "#{INSTALL_COMMAND} #{KERNEL_OUTPUT} #{INSTALL_ROOT}"
   puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
 end
 

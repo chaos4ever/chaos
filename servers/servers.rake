@@ -65,7 +65,6 @@ end
 task :install => OUTPUT do
   target_path = INSTALL_ROOT + '/servers'
 
-  sh "install -d #{target_path}"
-  sh "install #{OUTPUT} #{target_path}"
+  sh "#{INSTALL_COMMAND} #{OUTPUT} #{target_path}"
   puts "    Installed #{OUTPUT} in #{target_path}".gray
 end
