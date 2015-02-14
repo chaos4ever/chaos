@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
-# TODO: Uncomment the rest here as soon as we have merged their build process to rake also.
-folders = [ :storm, :libraries, :servers ]#, :programs ]
+# TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
+folders = [:storm, :libraries, :servers]#, :programs]
 
 verbose false
 
@@ -9,7 +9,7 @@ root = pwd()
 
 # Need to set this up using a fully qualified path name, since the Rakefiles in the subfolders won't be able to find the custom
 # .rake files otherwise.
-Rake.application.options.rakelib = "#{root}/rakelib"
+Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc "Compiles chaos"
 task :default => folders

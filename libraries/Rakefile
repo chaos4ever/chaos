@@ -1,4 +1,4 @@
-Rake.application.options.rakelib = pwd + "/../rakelib" if Rake.application.options.rakelib.first == 'rakelib'
+Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 libraries = %w(
   console
