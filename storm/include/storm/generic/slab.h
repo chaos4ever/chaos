@@ -1,7 +1,7 @@
 // Abstract: Slab structures.
 // Author: Per Lundberg <per@halleluja.nu>
-
-// Copyright 2000, 2013 chaos development.
+//
+// © Copyright 2000, 2013 chaos development.
 
 #pragma once
 
