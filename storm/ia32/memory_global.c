@@ -5,8 +5,9 @@
 // © Copyright 2000, 2013 chaos development.
 
 // If DEBUG is TRUE, lots of debug information will be printed.
+// TODO: Seems to cause exceptions.
 
-#define DEBUG TRUE
+#define DEBUG FALSE
 
 // Define this if you want to check the data structures all the
 //   time. Slow, but good for debugging.
