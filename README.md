@@ -4,23 +4,36 @@
 
 Welcome to chaos. chaos is an operating system developed around the year 2000 for the x86 platform (also referred to as "ia32" in the codebase). It contains working protected mode/virtual memory initialization, processes and threads, interrupt support, PCI, text-based VGA and a simple IPv4 stack (supporting UDP, ARP and ICMP). Naturally, given the hobbyist nature of the project, none of the features we just mentioned is "complete" in the sense that it supports all features of the PCI bus, or all features of UDP, ICMP etc. Nonetheless, the system was at an earlier point stable to the point where it possible to e.g. use it for network bridging - you could run e.g. ssh "through" a machine running chaos. It would also reply to ICMP echo (i.e. "ping") packets, as well as support outgoing ping packets to other machines.
 
-Having that said, there are a number of issues with the codebase which made us start the development of the new [stormG3](https://github.com/chaos4ever/stormG3) kernel (which would replace the existing storm "G1" kernel. There was also a [stormG2](https://github.com/chaos4ever/stormG2) project being undertaken but it was abandoned before being completed). The most critical issue with stormG1 is that the kernel leaks memory; the number of free pages decrease gradually over time. Because of this and the general feeling that the system would benefit from a major refactoring (hey, isn't it always fun to rewrite your code? :wink:) the storm G3 project was initiated, where we attempted to Do Things Right&trade; to a greater point than had been earlier done. Like many hobby/spare-time projects, the project was never finished and storm G3 is therefore currently in a very unfinished state. You can still find the code for it at our old [Sourceforge site](https://sourceforge.net/projects/chaos/); we may possibly put the code up here on github also sometime in the future if there are people willing to try to fill in the gaps and finish the work to make that kernel be generally usable.
+Having that said, there are a number of issues with the codebase which made us start the development of the new [stormG3](https://github.com/chaos4ever/stormG3) kernel (which would replace the existing storm "G1" kernel. There was also a [stormG2](https://github.com/chaos4ever/stormG2) project being undertaken but it was abandoned before being completed). The most critical issue with stormG1 is that the kernel leaks memory; the number of free pages decrease gradually over time. Because of this and the general feeling that the system would benefit from a major refactoring (hey, isn't it always fun to rewrite your code, trying to get things better done the second time? :wink:) the storm G3 project was initiated, where we attempted to Do Things Right&trade; to a greater point than had been earlier done. Like many hobby/spare-time projects, the project was never finished and storm G3 is therefore currently in a very unfinished state. Nonetheless, feel free to check it out if you like.
 
 ## Compiling chaos
 
 ### Prerequisites:
 
-- A recent version of GCC (4.7 or newer recommended). If you are using Mac OS X, try [this link](http://crossgcc.rts-software.org/doku.php?id=compiling_for_linux). The 64-bit package is the one that you will need; it can compile 32-bit parts also.
-- [NASM](http://www.nasm.us), the Netwide Assembler. The version provided with OS X works fine.
-- Ruby (either [MRI](http://www.ruby-lang.org/) or [JRuby](http://www.jruby.org) should do). If you are using OS X, this is already included with the OS.
+- Linux, Mac OSX or Windows.
+- [Vagrant](https://www.vagrantup.com/). If you don't know what this is, go check out their web page. It makes things like this much easier and smoother.
+
+### Setting up the dev environment
+
+    vagrant up
+    vagrant ssh
 
 ### Compiling:
 
-    hdiutil attach -mountpoint /Volumes/chaos floppy.img # Or equivalent if not OS X.    
     rake
     rake install
 
-(Not all parts of the system has been converted to the rake-based compilation process yet. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
+(Not all parts of the system has been converted to the rake-based compilation process yet, but we're working on it. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
+
+### Running the compiled result.
+
+* Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do)
+* Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `floppy.img` file from the project attached as the primary floppy drive.
+* Launch it. If all went well, you should get an image like this:
+
+![chaos running in Parallels](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-in-parallels.png)
+
+That's all there is to it, *for now*. There's lot of stuff more that "used to work" at some point, but for whatever reason (new gcc versions being introduced, code being unmaintained for many years and then suddenly refactored/cleaned up in some areas) most of what "used to be", like our nice shell, IP stack etc is not (yet!) working again. Want to help us out? Fork the project and start hacking away! :smile:
 
 ## Authors
 
