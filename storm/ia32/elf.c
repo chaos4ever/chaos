@@ -120,7 +120,7 @@ return_type elf_execute(u8 *image, char *parameter_string, process_id_type *proc
                     // .data
                     case ELF_SECTION_FLAG_WRITE | ELF_SECTION_FLAG_ALLOCATE:
                     {
-
+                        DEBUG_MESSAGE(DEBUG, ".data is section %d", index);
                         data_section_size = section_header->size;
                         data_section_base = section_header->address;
                         data_section_address = (u8 *) image + section_header->offset;
@@ -131,6 +131,7 @@ return_type elf_execute(u8 *image, char *parameter_string, process_id_type *proc
                     // .code
                     case ELF_SECTION_FLAG_ALLOCATE | ELF_SECTION_FLAG_EXECUTE:
                     {
+                        DEBUG_MESSAGE(DEBUG, ".code is section %d", index);
                         code_section_size = section_header->size;
                         code_section_base = section_header->address;
                         code_section_address = (u8 *) image + section_header->offset;
