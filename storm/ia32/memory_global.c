@@ -101,11 +101,8 @@ void memory_global_init(void)
 
     memory_physical_allocate(&physical_page, 1, "Global SLAB heap.");
 
-    debug_print_simple("at line 103");
     memory_virtual_map(GET_PAGE_NUMBER(global_slab_heap), physical_page, 1, PAGE_KERNEL);
-    debug_print_simple("at line 105");
     slab_heap_init(global_slab_heap);
-    debug_print_simple("at line 107");
 }
 
 // Allocates a page region in the global memory area.
