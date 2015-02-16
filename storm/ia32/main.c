@@ -269,7 +269,7 @@ return_type main(int arguments, char *argument[])
             // One or more of the sections was improperly page aligned.
             case STORM_RETURN_UNALIGNED_SECTION:
             {
-                debug_print("Error: %s has sections badly aligned.\n",
+                debug_print("Error: %s has either the .code or .data section (or both) incorrectly aligned.\n",
                             multiboot_module_info[index].name);
                 break;
             }
