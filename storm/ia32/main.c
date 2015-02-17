@@ -233,7 +233,6 @@ return_type main(int arguments, char *argument[])
     // Now, kickstart some servers.
     for (unsigned int index = 0; index < multiboot_info.number_of_modules; index++)
     {
-        // Map the ELF-image.
         memory_virtual_map(GET_PAGE_NUMBER(BASE_MODULE),
                            GET_PAGE_NUMBER(multiboot_module_info[index].start),
                            SIZE_IN_PAGES(multiboot_module_info[index].end -
