@@ -163,6 +163,8 @@ return_type process_create(process_create_type *process_data)
     if (process_data->code_section_base % SIZE_PAGE != 0 ||
         process_data->data_section_base % SIZE_PAGE != 0)
     {
+        DEBUG_MESSAGE(TRUE, "code_section_base: %x, data_section_base: %x",
+          process_data->code_section_base, process_data->data_section_base)
         return STORM_RETURN_UNALIGNED_SECTION;
     }
 
