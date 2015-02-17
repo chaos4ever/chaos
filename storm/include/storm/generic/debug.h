@@ -89,7 +89,8 @@ extern void debug_run(void);
         debug_print(#message); \
         debug_print(" (%s:%u, process = %s (%u), thread = %s (%u)\n", \
                     __FILE__, __LINE__, \
-                    ((process_info_type *) current_tss->process_info)->name, \
+                    current_tss == NULL || current_tss->process_info == NULL ? \
+                      "null" : ((process_info_type *) current_tss->process_info)->name, \
                     current_tss->process_id, current_tss->thread_name, \
                     current_tss->thread_id); \
         irq_enable(0); \
