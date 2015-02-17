@@ -5,7 +5,6 @@
 // © Copyright 2000, 2013, 2015 chaos development.
 
 // If DEBUG is TRUE, lots of debug information will be printed.
-// TODO: Seems to cause exceptions.
 
 #define DEBUG FALSE
 
