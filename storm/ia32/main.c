@@ -288,7 +288,8 @@ return_type main(int arguments, char *argument[])
 
             default:
             {
-                DEBUG_MESSAGE(DEBUG, "Failed to start the server.");
+                debug_print("Error: Failed to start server.");
+                debug_run();
             }
         }
     }
