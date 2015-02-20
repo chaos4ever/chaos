@@ -246,6 +246,7 @@ return_type main(int arguments, char *argument[])
             {
                 debug_print("Error: %s is not a supported ELF.\n",
                             multiboot_module_info[index].name);
+                debug_run();
                 break;
             }
 
@@ -254,6 +255,7 @@ return_type main(int arguments, char *argument[])
             {
                 debug_print("Error: %s is not ELF.\n",
                             multiboot_module_info[index].name);
+                debug_run();
                 break;
             }
 
@@ -262,6 +264,7 @@ return_type main(int arguments, char *argument[])
             {
                 debug_print("Error: %s has sections outside allowed limits.\n",
                             multiboot_module_info[index].name);
+                debug_run();
                 break;
             }
 
@@ -270,6 +273,7 @@ return_type main(int arguments, char *argument[])
             {
                 debug_print("Error: %s has either the .text or .data section (or both) incorrectly aligned.\n",
                             multiboot_module_info[index].name);
+                debug_run();
                 break;
             }
 
