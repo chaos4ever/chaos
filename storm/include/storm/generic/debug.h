@@ -67,12 +67,12 @@ extern void debug_run(void);
 
 // Debug macros.
 // FIXME: Don't do irq_disable here!!!
-#define DEBUG_SDB(debug, message ...) \
+#define DEBUG_SDB(debug, message, ...) \
     if (debug) \
     { \
         cpu_interrupts_disable(); \
         debug_print("%s: ", __FUNCTION__); \
-        debug_print(#message); \
+        debug_print(message, ## __VA_ARGS__); \
         debug_print(" (%s:%u, process = %s (%u), thread = %s (%u)\n\n" \
                     "Going into kernel debugger.\n\n", __FILE__, __LINE__, \
                     ((process_info_type *) current_tss->process_info)->name, \
@@ -81,12 +81,12 @@ extern void debug_run(void);
         debug_run(); \
     }
 
-#define DEBUG_MESSAGE(debug, message ...) \
+#define DEBUG_MESSAGE(debug, message, ...) \
     if (debug) \
     { \
         irq_disable(0); \
         debug_print("%s: ", __FUNCTION__); \
-        debug_print(#message); \
+        debug_print(message, ## __VA_ARGS__); \
         debug_print(" (%s:%u, process = %s (%u), thread = %s (%u)\n", \
                     __FILE__, __LINE__, \
                     current_tss == NULL || current_tss->process_info == NULL ? \
@@ -96,10 +96,10 @@ extern void debug_run(void);
         irq_enable(0); \
     }
 
-#define DEBUG_HALT(message ...) \
+#define DEBUG_HALT(message, ...) \
     cpu_interrupts_disable(); \
     debug_print("[KERNEL BUG] %s: ", __FUNCTION__); \
-    debug_print(#message); \
+    debug_print(message, ## __VA_ARGS__); \
     debug_print(" (%s:%u, process = %s (%u), thread = %s (%u)\n\n" \
                 "Going into kernel debugger.\n\n", __FILE__, __LINE__, \
                 ((process_info_type *) current_tss->process_info)->name, \
