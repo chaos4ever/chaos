@@ -2,7 +2,7 @@
  * Abstract: chaos linker script.
  * Author: Per Lundberg <per@halleluja.nu>
  *
- * © Copyright 1999-2000, 2013, 2015 chaos development. 
+ * © Copyright 1999-2000, 2013, 2015 chaos development.
  */
 
 OUTPUT_FORMAT("elf32-i386", "elf32-i386", "elf32-i386")
