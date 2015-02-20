@@ -37,6 +37,10 @@ enum
     // One, or more, of the sections in this ELF image is not placed in the regions reserved for data and code.
     RETURN_ELF_SECTION_MISPLACED,
 
+    // There are multiple instances of the same section type (i.e. multiple
+    // .data sections)
+    RETURN_ELF_SECTION_MULTIPLE_INSTANCES,
+
     // "Couldn't get a free page" :-)
     RETURN_OUT_OF_MEMORY,
 

@@ -277,6 +277,13 @@ return_type main(int arguments, char *argument[])
                 break;
             }
 
+            case RETURN_ELF_SECTION_MULTIPLE_INSTANCES:
+            {
+              debug_print("Error: There are multiple code or data sections in the ELF binary. This is not currently supported.\n");
+              debug_run();
+              break;
+            }
+
             // The ELF was successfully executed.
             case STORM_RETURN_SUCCESS:
             {
