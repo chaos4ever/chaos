@@ -5,16 +5,39 @@ Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if R
 LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries"
 
 COMMON_CFLAGS = %w(
-  -Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls -Winline -Werror -Wcast-align -Wsign-compare
-  -Wmissing-declarations -Wmissing-noreturn -pipe -O3 -fno-builtin -funsigned-char -g -m32 -fomit-frame-pointer -ffreestanding
+  -Wall
+  -Wextra
+  -Wshadow
+  -Wpointer-arith
+  -Waggregate-return
+  -Wredundant-decls
+  -Winline
+  -Werror
+  -Wcast-align
+  -Wsign-compare
+  -Wmissing-declarations
+  -Wmissing-noreturn
+  -pipe
+  -O3
+  -fno-builtin
+  -funsigned-char
+  -g
+  -m32
+  -fomit-frame-pointer
+  -ffreestanding
  )
 
 # TODO: Consider changing the rules in common_rules to presume that these are actually arrays. That requires us to modify all Rakefiles though.
 CFLAGS = (COMMON_CFLAGS + %w(
-  --std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs -Wstrict-prototypes
+  --std=gnu99
+  -Wbad-function-cast
+  -Wmissing-prototypes
+  -Wnested-externs
+  -Wstrict-prototypes
 )).join(' ')
 CCFLAGS = (COMMON_CFLAGS + %w(
-  --std=gnu++11 -Wno-inline
+  --std=gnu++11
+  -Wno-inline
 )).join(' ')
 
 LDFLAGS = %W(
