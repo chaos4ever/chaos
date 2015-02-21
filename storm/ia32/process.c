@@ -168,19 +168,16 @@ return_type process_create(process_create_type *process_data)
         return STORM_RETURN_UNALIGNED_SECTION;
     }
 
-    // Get the next PROCESS_ID.
     *process_data->process_id = process_get_free_id();
 
-    // Create a TSS for the new process. This must be done before we set up the page directory, so we can set the CR3. (used by
+    // This must be done before we set up the page directory, so we can set the CR3. (used by
     // memory_virtual_map_other)
     DEBUG_MESSAGE(DEBUG, "Allocating memory for the process TSS.");
 
     process_tss = (storm_tss_type *) memory_global_allocate(sizeof (storm_tss_type));
-
-    // Zap it.
     memory_set_u8((u8 *) process_tss, 0, sizeof (storm_tss_type));
 
-    // Add this thread to the TSS structures.
+    DEBUG_MESSAGE(DEBUG, "Adding thread to TSS structures.");
     mutex_kernel_wait(&tss_tree_mutex);
     process_tss->thread_id = thread_get_free_id();
     thread_link(process_tss);
@@ -189,7 +186,6 @@ return_type process_create(process_create_type *process_data)
 
     mutex_kernel_signal(&tss_tree_mutex);
 
-    // Set up a page directory for the new task.
     DEBUG_MESSAGE(DEBUG, "Setting up page_directory.");
 
     // FIXME: Check return value.
