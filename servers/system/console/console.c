@@ -118,8 +118,6 @@ void console_flip(console_type *console)
     current_console = console;
 }
 
-int main(void)  __attribute ((section (".text")));
-
 int main(void)
 {
     ipc_structure_type ipc_structure;
