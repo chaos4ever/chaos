@@ -28,7 +28,6 @@
 #define IDT_ENTRY(a)                    (BASE_IRQ + a)
 
 irq_type irq[IRQ_LEVELS];
-//static mutex_kernel_type irq_mutex = MUTEX_UNLOCKED;
 
 /* Just a short delay, to wait for the IRQ controller. */
 
