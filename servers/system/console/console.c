@@ -136,10 +136,8 @@ int main(void)
 
     system_thread_name_set("Service handler");
 
-    // Let the other processes run now.
     system_call_process_parent_unblock();
 
-    // Main loop.
     while (TRUE)
     {
         mailbox_id_type reply_mailbox_id;
