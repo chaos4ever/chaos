@@ -139,15 +139,12 @@ return_type main(int arguments, char *argument[])
         cpu_halt();
     }
 
-    // Initialise physical memory allocation system.
     memory_physical_init();
 
-    // Print startup message.
     debug_print("Starting %s (process ID %u).\n", argument[0], PROCESS_ID_KERNEL);
     debug_print("%s %s booting...\n", PACKAGE_NAME, PACKAGE_VERSION);
     debug_print("Compiled by %s on %s %s (revision %s).\n", CREATOR, __DATE__, __TIME__, REVISION);
 
-    // Check if at least one server is to be started.
     if (multiboot_info.has_module_info == 0 ||
         multiboot_info.number_of_modules == 0)
     {
@@ -155,25 +152,18 @@ return_type main(int arguments, char *argument[])
         cpu_halt();
     }
 
-    // Initalise all other parts of the kernel.
     // Prepare paging structures. Paging is not enabled yet though.
     memory_virtual_init();
 
-    // Init exceptions. MUST be executed after memory_virtual_init!
+    // This MUST not be executed before memory_virtual_init, since it relies on stuff that it sets up.
     trap_init();
 
     avl_debug_tree_check(page_avl_header, page_avl_header->root);
 
-    // Initialise the timer circuit, and set it to our defined task switch rate.
     timer_init();
-
-    // Read the CMOS time.
     time_init();
-
-    // Set up system calls.
     system_calls_init();
 
-    // Print out some information about the machine we're on.
     if (cpu_info.flags.flags.tsc)
     {
         debug_print("Machine: %s at %u Hz (~%u MHz).\n",
@@ -185,7 +175,6 @@ return_type main(int arguments, char *argument[])
         debug_print("Machine: %s.\n", parsed_cpu.name);
     }
 
-    // And memory.
     // FIXME: Report the correct memory sizes back to the enterprise.
     debug_print("Memory: Total %u MB, kernel %u KB, "
                 "reserved 384 KB, free %u KB.\n",
@@ -203,22 +192,17 @@ return_type main(int arguments, char *argument[])
     memory_virtual_enable();
     debug_print("VM subsystem initialized.\n");
 
-    // Initialise global memory allocation.
     memory_global_init();
     debug_print("Global memory initialized.\n");
 
-    // Make the debug go to the log.
     debug_log_enable = TRUE;
 
-    // Set up a list holding allocated port-ranges.
     port_init();
     debug_print("ISA-based I/O initialized.\n");
 
-    // Initialise the DMA support.
     dma_init();
     debug_print("DMA initialized.\n");
 
-    // Initialise the mailbox system.
     mailbox_init();
     debug_print("IPC initialized.\n");
 
@@ -226,11 +210,9 @@ return_type main(int arguments, char *argument[])
     thread_init();
     debug_print("Thread subsystem initialized.\n");
 
-    // Set up structures used for holding task information.
     process_init();
     debug_print("Process subsystem initialized.\n");
 
-    // Now, kickstart some servers.
     for (unsigned int index = 0; index < multiboot_info.number_of_modules; index++)
     {
         memory_virtual_map(GET_PAGE_NUMBER(BASE_MODULE),
@@ -238,7 +220,6 @@ return_type main(int arguments, char *argument[])
                            SIZE_IN_PAGES(multiboot_module_info[index].end -
                            multiboot_module_info[index].start), PAGE_KERNEL);
 
-        // Check that the startup worked as expected.
         switch (elf_execute((void *) BASE_MODULE, (char *) multiboot_module_info[index].name, &server_process_id))
         {
             // The given image was not a valid IA32 ELF.
@@ -317,6 +298,5 @@ return_type main(int arguments, char *argument[])
     // Enable the task switcher. The code following the next line will be executed when the idle task is being dispatched.
     irq_init();
 
-    // Kernel initialisation done. Over and out.
     return 0;
 }
