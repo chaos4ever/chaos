@@ -224,11 +224,11 @@ return_type main(int arguments, char *argument[])
 
     // Initialise the thread code. Must be done before any threads are started.
     thread_init();
-    debug_print("Thread sybsystem initialized.\n");
+    debug_print("Thread subsystem initialized.\n");
 
     // Set up structures used for holding task information.
     process_init();
-    debug_print("Process sybsystem initialized.\n");
+    debug_print("Process subsystem initialized.\n");
 
     // Now, kickstart some servers.
     for (unsigned int index = 0; index < multiboot_info.number_of_modules; index++)
