@@ -5,8 +5,7 @@
 // © Copyright 2013 chaos development
 // © Copyright 2015 chaos development
 
-#ifndef __STORM_IA32_MUTEX_H__
-#define __STORM_IA32_MUTEX_H__
+#pragma once
 
 #include <storm/generic/mutex.h>
 
@@ -32,5 +31,3 @@ static inline void mutex_spin_unlock(spinlock_type *spinlock)
     //  DEBUG_MESSAGE ("Called");
     *spinlock = MUTEX_SPIN_UNLOCKED;
 }
-
-#endif /* !__STORM_IA32_MUTEX_H__ */
