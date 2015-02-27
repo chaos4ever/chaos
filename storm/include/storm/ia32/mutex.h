@@ -9,23 +9,16 @@
 
 #include <storm/generic/mutex.h>
 
-// Lock the given spinlock. This function loops until it may access the semaphores, and then locks them. 
-static inline void mutex_spin_lock(spinlock_type spinlock)
+static inline void mutex_spin_lock(spinlock_type *spinlock)
 {
-    unsigned int eax;
-
     //  DEBUG_MESSAGE ("Called");
 
-    asm volatile
-    ("movl $0, %%eax \n\
-0:    xchgl %%eax, %0 \n\
-      cmpl $0, %%eax \n\
-      je 0b"
-      : "=g" (spinlock), "=a" (eax)
-      : "bcdDS" (spinlock));         // BCD is faster than integers -- Martim.
+    // Based on a suggestion from SO: http://stackoverflow.com/a/1383501/227779
+    // We used to have this in inline asm, but since GCC has a builtin for this we might as well not reinvent the wheel.
+    while (__sync_lock_test_and_set(spinlock, MUTEX_SPIN_LOCKED))
+        while (*spinlock);
 }
 
-// Unlock a mutex which has previously been locked with mutex_spin_lock.
 static inline void mutex_spin_unlock(spinlock_type *spinlock)
 {
     //  DEBUG_MESSAGE ("Called");

@@ -92,7 +92,7 @@ return_type mutex_kernel_wait(mutex_kernel_type *mutex)
         DEBUG_HALT("Kernel tried to lock a mutex in a situation where tss_tree_mutex was already locked.");
     }
 
-    mutex_spin_lock(mutex_spinlock);
+    mutex_spin_lock(&mutex_spinlock);
 
     // Can we access the mutex?
     if (*mutex == MUTEX_LOCKED)
@@ -129,7 +129,7 @@ return_type mutex_kernel_signal(mutex_kernel_type *mutex)
     }
 #endif
 
-    mutex_spin_lock(mutex_spinlock);
+    mutex_spin_lock(&mutex_spinlock);
 
     // If no threads were unblocked because of this, no thread were waiting for the mutex. Set it free.
     if (thread_unblock_kernel_mutex(mutex) == RETURN_NO_THREAD_UNBLOCKED)

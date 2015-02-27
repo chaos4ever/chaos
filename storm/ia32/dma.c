@@ -376,8 +376,7 @@ return_type dma_register(unsigned int channel, void **dma_buffer)
         return STORM_RETURN_INVALID_DMA_CHANNEL;
     }
 
-    // Lock this channel's mutex.
-    mutex_spin_lock(dma_channel[channel].spinlock);
+    mutex_spin_lock(&dma_channel[channel].spinlock);
 
     // Make sure we're not trying to screw someone else.
     if (dma_channel[channel].process_id != PROCESS_ID_NONE)
@@ -501,7 +500,7 @@ return_type dma_unregister(unsigned int channel)
         return STORM_RETURN_INVALID_DMA_CHANNEL;
     }
 
-    mutex_spin_lock(dma_channel[channel].spinlock);
+    mutex_spin_lock(&dma_channel[channel].spinlock);
 
     // Make sure we're not trying to screw someone else.
     if ((dma_channel[channel].process_id != current_tss->process_id) ||
