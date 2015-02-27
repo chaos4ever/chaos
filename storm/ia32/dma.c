@@ -1,7 +1,8 @@
 // Abstract: Management of the DMA hardware. It is used for transferring memory blocks to and from hardware.
 // Author: Anders Ohrt <doa@chaosdev.org>
 
-// Copyright 1999-2000 chaos development.
+// © Copyright 1999-2000 chaos development.
+// © Copyright 2015 chaos development.
 
 #include <storm/generic/defines.h>
 #include <storm/generic/dispatch.h>
