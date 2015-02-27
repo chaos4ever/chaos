@@ -6,9 +6,9 @@
 // © Copyright 1999-2000 chaos development.
 // © Copyright 2007 chaos development.
 // © Copyright 2013 chaos development.
+// © Copyright 2015 chaos development.
 
 // Define this as TRUE if you want lots of debug information.
-
 #define DEBUG FALSE
 
 #include <storm/generic/debug.h>
@@ -43,7 +43,6 @@ typedef struct
 } __attribute__ ((packed)) mutex_user_type;
 
 // Mutex lock variable. When zero (locked), no-one may access the mutex system.
-
 spinlock_type mutex_spinlock = MUTEX_SPIN_UNLOCKED;
 
 // The ID mutex locks the next_free_id variable.
