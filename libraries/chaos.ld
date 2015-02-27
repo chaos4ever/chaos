@@ -69,7 +69,7 @@ SECTIONS
   .data    :
   {
     *(.data)
-    *(.rodata)
+    *(.rodata*)
 /*    *(.gnu.linkonce.d*)
     CONSTRUCTORS */
   }
