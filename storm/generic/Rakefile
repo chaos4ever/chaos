@@ -19,7 +19,7 @@ OBJECTS = %w(
   time.o
 )
 
-# TOOD: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
+# TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
 OUTPUT = 'libstorm_generic.a'
 
 task :default => [ :banner, OUTPUT ] do
