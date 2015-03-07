@@ -21,8 +21,7 @@ bool initialised = FALSE;
 // Initialise the slab system.
 void memory_init(void)
 {
-    slab_heap_type **heap = &memory_structure.slab_heap;
-    system_call_memory_allocate((void **) heap, 1, TRUE);
+    system_call_memory_allocate((void **) &memory_structure.slab_heap, 1, TRUE);
     memory_structure.locked = FALSE;
     slab_heap_init(memory_structure.slab_heap);
     initialised = TRUE;
