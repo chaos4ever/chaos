@@ -136,7 +136,7 @@ static inline return_type system_call_memory_allocate(void **address, u32 pages,
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (*address)
+                   "=g" (address)
                  : "g" (cacheable),
                    "g" (pages),
                    "g" (address),
