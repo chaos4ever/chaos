@@ -3,6 +3,8 @@
 //
 // © Copyright 2000, 2013 chaos development.
 
+#include <memory/memory.h>
+
 #include "config.h"
 #include "slab.h"
 
@@ -30,11 +32,7 @@ int slab_heap_index(unsigned int buffer_size)
 // Initialise a slab heap.
 bool slab_heap_init(slab_heap_type *heap)
 {
-    for (unsigned int counter = 0; counter < SIZE_PAGE / sizeof(slab_superblock_type *); counter++)
-    {
-        heap->block[counter] = NULL;
-    }
-
+    memory_set_u32((u32 *) heap, (u32) NULL, SIZE_PAGE / sizeof(slab_superblock_type *));
     return TRUE;
 }
 
