@@ -89,7 +89,7 @@ return_type mutex_kernel_wait(mutex_kernel_type *mutex)
 
     if (tss_tree_mutex == MUTEX_LOCKED)
     {
-        DEBUG_HALT("Kernel tried to lock a mutex in a situation where tss_tree_mutex was already locked.");
+        DEBUG_HALT("Kernel tried to lock mutex %x in a situation where tss_tree_mutex (%x) was already locked.", mutex, &tss_tree_mutex);
     }
 
     mutex_spin_lock(&mutex_spinlock);
