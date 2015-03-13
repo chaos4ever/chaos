@@ -1,7 +1,8 @@
 // Abstract: Support for services.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 2000, 2013 chaos development.
+// © Copyright 2000 chaos development
+// © Copyright 2013-2015 chaos development
 
 // The services are used for getting information about how to communicate with a server of a specific type. The types are not
 // regulated by the kernel. Instead, when a server registers its service, the kernel creates the given class. This gives a great
