@@ -2,7 +2,9 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 1999-2000, 2007, 2013, 2015 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013-2015 chaos development
 
 // FIXME: Most of this should be put into the generic subdirectory.
 
