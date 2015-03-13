@@ -1,1 +1,1 @@
-sudo: false
+script: sudo apt-get install g++-4.7
