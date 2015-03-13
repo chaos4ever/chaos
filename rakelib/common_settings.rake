@@ -7,9 +7,7 @@ UNAME = `uname`.strip
 
 case UNAME
 when 'Darwin' then
-  # Need to use special tools on OSX (a.k.a. Darwin) since the built-in gcc cannot generate ELF binaries.
-  CC = ENV['CC'] || 'x86_64-pc-linux-gcc'
-  AR = ENV['AR'] || 'x86_64-pc-linux-ar'
+  abort 'Error: OS X is not supported as a build host.'
 else
   CC = ENV['CC'] || 'gcc'
   AR = ENV['AR'] || 'ar'
