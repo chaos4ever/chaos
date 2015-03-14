@@ -171,6 +171,7 @@ return_type service_get(const char *protocol_name, service_parameter_type *servi
         service_parameter == NULL ||
         identification_mask == NULL)
     {
+        DEBUG_MESSAGE(DEBUG, "STORM_RETURN_INVALID_ARGUMENT (%x, %x, %x)", protocol_name, service_parameter, identification_mask);
         mutex_kernel_signal(&tss_tree_mutex);
         return STORM_RETURN_INVALID_ARGUMENT;
     }
