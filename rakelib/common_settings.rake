@@ -9,7 +9,7 @@ case UNAME
 when 'Darwin' then
   abort 'Error: OS X is not supported as a build host.'
 else
-  CC = ENV['CC'] || 'gcc'
+  CC = ENV['CC'] || 'gcc-4.7'
   AR = ENV['AR'] || 'ar'
 end
 
