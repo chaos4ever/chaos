@@ -2,12 +2,13 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>,
 //          Per Lundberg <per@halleluja.nu>
 
-// Copyright 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
-/* FIXME: Move most of this to the generic subdirectory. */
+// FIXME: Move most of this to the generic subdirectory.
 
-/* Define this as TRUE when debugging this part of the kernel. */
-
+// Define this as TRUE when debugging this part of the kernel.
 #define DEBUG FALSE
 
 #include <storm/state.h>
