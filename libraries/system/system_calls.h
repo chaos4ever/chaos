@@ -28,7 +28,7 @@ static inline return_type system_call_timer_read(time_type *timer)
                  "lcall %3, $0"
                  : "=a" (return_value),
                    "=m" (*timer)
-                 : "g" (timer),
+                 : "ri" (timer),
                    "n" (SYSTEM_CALL_TIMER_READ << 3));
 
     return return_value;
@@ -43,8 +43,8 @@ static inline return_type system_call_irq_register(unsigned int irq_number, char
                  "pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value)
-                 : "g" (description),
-                   "g" (irq_number),
+                 : "ri" (description),
+                   "ri" (irq_number),
                    "n" (SYSTEM_CALL_IRQ_REGISTER << 3));
 
     return return_value;
@@ -58,7 +58,7 @@ static inline return_type system_call_irq_unregister(unsigned int irq_number)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (irq_number),
+                 : "ri" (irq_number),
                    "n" (SYSTEM_CALL_IRQ_UNREGISTER << 3));
 
     return return_value;
@@ -72,7 +72,7 @@ static inline return_type system_call_irq_wait(unsigned int irq_number)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (irq_number),
+                 : "ri" (irq_number),
                    "n" (SYSTEM_CALL_IRQ_WAIT << 3));
 
     return return_value;
@@ -86,7 +86,7 @@ static inline return_type system_call_irq_acknowledge(unsigned int irq_number)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (irq_number),
+                 : "ri" (irq_number),
                    "n" (SYSTEM_CALL_IRQ_ACKNOWLEDGE << 3));
 
     return return_value;
@@ -102,9 +102,9 @@ static inline return_type system_call_port_range_register(u32 start, u32 length,
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value)
-                 : "g" (description),
-                   "g" (length),
-                   "g" (start),
+                 : "ri" (description),
+                   "ri" (length),
+                   "ri" (start),
                    "n" (SYSTEM_CALL_PORT_RANGE_REGISTER << 3));
 
     return return_value;
@@ -118,7 +118,7 @@ static inline return_type system_call_port_range_unregister(u32 start)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (start),
+                 : "ri" (start),
                    "n" (SYSTEM_CALL_PORT_RANGE_UNREGISTER << 3));
 
     return return_value;
@@ -136,10 +136,10 @@ static inline return_type system_call_memory_allocate(void **address, u32 pages,
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (address)
-                 : "g" (cacheable),
-                   "g" (pages),
-                   "g" (address),
+                   "=m" (*address)
+                 : "ri" (cacheable),
+                   "ri" (pages),
+                   "ri" (address),
                    "n" (SYSTEM_CALL_MEMORY_ALLOCATE << 3));
 
     return return_value;
@@ -152,8 +152,8 @@ static inline return_type system_call_memory_deallocate(void **address)
     asm volatile("pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value),
-                   "=g" (*address)
-                 : "g" (address),
+                   "=ri" (*address)
+                 : "ri" (address),
                    "n" (SYSTEM_CALL_MEMORY_DEALLOCATE << 3));
 
     return return_value;
@@ -168,9 +168,9 @@ static inline return_type system_call_memory_get_physical_address(void *virtual_
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value),
-                   "=g" (*physical_address)
-                 : "g" (physical_address),
-                   "g" (virtual_address),
+                   "=ri" (*physical_address)
+                 : "ri" (physical_address),
+                   "ri" (virtual_address),
                    "n" (SYSTEM_CALL_MEMORY_GET_PHYSICAL_ADDRESS << 3));
 
     return return_value;
@@ -186,10 +186,10 @@ static inline return_type system_call_memory_reserve(address_type start, unsigne
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (*virtual_address)
-                 : "g" (virtual_address),
-                   "g" (size),
-                   "g" (start),
+                   "=ri" (*virtual_address)
+                 : "ri" (virtual_address),
+                   "ri" (size),
+                   "ri" (start),
                    "n" (SYSTEM_CALL_MEMORY_RESERVE << 3));
 
     return return_value;
@@ -205,9 +205,9 @@ static inline return_type system_call_thread_control(thread_id_type thread_id, u
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value)
-                 : "g" (parameter),
-                   "g" (control_class),
-                   "g" (thread_id),
+                 : "ri" (parameter),
+                   "ri" (control_class),
+                   "ri" (thread_id),
                    "n" (SYSTEM_CALL_THREAD_CONTROL << 3));
 
     return return_value;
@@ -245,7 +245,7 @@ static inline return_type system_call_process_name_set(const char *name)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (name),
+                 : "ri" (name),
                    "n" (SYSTEM_CALL_PROCESS_NAME_SET << 3));
 
     return return_value;
@@ -259,7 +259,7 @@ static inline return_type system_call_thread_name_set(const char *name)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (name),
+                 : "ri" (name),
                    "n" (SYSTEM_CALL_THREAD_NAME_SET << 3));
 
     return return_value;
@@ -273,8 +273,8 @@ static inline return_type system_call_kernelfs_entry_read(void *buffer)
     asm volatile("pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value),
-                   "=g" (*(int *) buffer)
-                 : "g" (buffer),
+                   "=ri" (*(int *) buffer)
+                 : "ri" (buffer),
                    "n" (SYSTEM_CALL_KERNELFS_ENTRY_READ << 3));
 
     return return_value;
@@ -305,12 +305,12 @@ static inline return_type system_call_mailbox_create(mailbox_id_type *mailbox_id
                  "pushl %6\n"
                  "lcall %7, $0"
                  : "=a" (return_value),
-                   "=g" (*mailbox_id)
-                 : "g" (user_thread_id),
-                   "g" (user_cluster_id),
-                   "g" (user_process_id),
-                   "g" (size),
-                   "g" (mailbox_id),
+                   "=ri" (*mailbox_id)
+                 : "ri" (user_thread_id),
+                   "ri" (user_cluster_id),
+                   "ri" (user_process_id),
+                   "ri" (size),
+                   "ri" (mailbox_id),
                    "n" (SYSTEM_CALL_MAILBOX_CREATE << 3));
 
     return return_value;
@@ -324,7 +324,7 @@ static inline return_type system_call_mailbox_destroy(mailbox_id_type mailbox_id
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (mailbox_id),
+                 : "ri" (mailbox_id),
                    "n" (SYSTEM_CALL_MAILBOX_DESTROY << 3));
 
     return return_value;
@@ -340,8 +340,8 @@ static inline return_type system_call_mailbox_send(mailbox_id_type mailbox_id, m
                  "lcall %4, $0"
                  : "=a" (return_value),
                    "=g" (*message_parameter)
-                 : "g" (message_parameter),
-                   "g" (mailbox_id),
+                 : "ri" (message_parameter),
+                   "ri" (mailbox_id),
                    "n" (SYSTEM_CALL_MAILBOX_SEND << 3));
 
     return return_value;
@@ -357,8 +357,8 @@ static inline return_type system_call_mailbox_receive(mailbox_id_type mailbox_id
                  "lcall %4, $0"
                  : "=a" (return_value),
                    "=g" (*message_parameter)
-                 : "g" (message_parameter),
-                   "g" (mailbox_id),
+                 : "ri" (message_parameter),
+                   "ri" (mailbox_id),
                    "n" (SYSTEM_CALL_MAILBOX_RECEIVE << 3));
 
     return return_value;
@@ -374,10 +374,10 @@ static inline return_type system_call_service_create(const char *protocol_name, 
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (*mailbox_id)
-                 : "g" (identification),
-                   "g" (mailbox_id),
-                   "g" (protocol_name),
+                   "=ri" (*mailbox_id)
+                 : "ri" (identification),
+                   "ri" (mailbox_id),
+                   "ri" (protocol_name),
                    "n" (SYSTEM_CALL_SERVICE_CREATE << 3));
 
     return return_value;
@@ -394,10 +394,10 @@ static inline return_type system_call_service_get(const char *protocol_name, ser
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (*service_parameter)
-                 : "g" (identification),
-                   "g" (service_parameter),
-                   "g" (protocol_name),
+                   "=ri" (*service_parameter)
+                 : "ri" (identification),
+                   "ri" (service_parameter),
+                   "ri" (protocol_name),
                    "n" (SYSTEM_CALL_SERVICE_GET << 3));
 
     return return_value;
@@ -411,8 +411,8 @@ static inline return_type system_call_service_protocol_get_amount(unsigned int *
     asm volatile("pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value),
-                   "=g" (number_of_protocols)
-                 : "g" (number_of_protocols),
+                   "=ri" (number_of_protocols)
+                 : "ri" (number_of_protocols),
                    "n" (SYSTEM_CALL_SERVICE_PROTOCOL_GET_AMOUNT << 3));
 
     return return_value;
@@ -427,10 +427,10 @@ static inline return_type system_call_service_protocol_get(unsigned int *maximum
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=g" (*protocol_info),
-                   "=g" (*maximum_protocols)
-                 : "g" (protocol_info),
-                   "g" (maximum_protocols),
+                   "=ri" (*protocol_info),
+                   "=ri" (*maximum_protocols)
+                 : "ri" (protocol_info),
+                   "ri" (maximum_protocols),
                    "n" (SYSTEM_CALL_SERVICE_PROTOCOL_GET << 3));
 
     return return_value;
@@ -444,7 +444,7 @@ static inline return_type system_call_process_create(process_create_type *proces
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (process_data),
+                 : "ri" (process_data),
                    "n" (SYSTEM_CALL_PROCESS_CREATE << 3));
 
     return return_value;
@@ -459,9 +459,9 @@ static inline return_type system_call_dma_register(unsigned int channel, void **
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value),
-                   "=g" (*dma_buffer)
-                 : "g" (dma_buffer),
-                   "g" (channel),
+                   "=ri" (*dma_buffer)
+                 : "ri" (dma_buffer),
+                   "ri" (channel),
                    "n" (SYSTEM_CALL_DMA_REGISTER << 3));
 
     return return_value;
@@ -475,7 +475,7 @@ static inline return_type system_call_dma_unregister(unsigned int channel)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (channel),
+                 : "ri" (channel),
                    "n" (SYSTEM_CALL_DMA_UNREGISTER << 3));
 
     return return_value;
@@ -494,11 +494,11 @@ static inline return_type system_call_dma_transfer(unsigned int channel, unsigne
                  "pushl %5\n"
                  "lcall %6, $0"
                  : "=a" (return_value)
-                 : "g" (autoinit),
-                   "g" (transfer_mode),
-                   "g" (operation),
-                   "g" (buffer_size),
-                   "g" (channel),
+                 : "ri" (autoinit),
+                   "ri" (transfer_mode),
+                   "ri" (operation),
+                   "ri" (buffer_size),
+                   "ri" (channel),
                    "n" (SYSTEM_CALL_DMA_TRANSFER << 3));
 
     return return_value;
@@ -512,7 +512,7 @@ static inline return_type dma_transfer_cancel(unsigned int channel)
     asm volatile("pushl %1\n"
                  "lcall %2, $0"
                  : "=a" (return_value)
-                 : "g" (channel),
+                 : "ri" (channel),
                    "n" (SYSTEM_CALL_DMA_TRANSFER_CANCEL << 3));
 
     return return_value;
