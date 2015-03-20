@@ -335,14 +335,14 @@ static inline return_type system_call_mailbox_send(mailbox_id_type mailbox_id, m
 {
     return_type return_value;
 
-    asm volatile("pushl %2\n"
-                 "pushl %3\n"
-                 "lcall %4, $0"
-                 : "=a" (return_value),
-                   "=g" (*message_parameter)
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
+                 "lcall %3, $0"
+                 : "=a" (return_value)
                  : "ri" (message_parameter),
                    "ri" (mailbox_id),
-                   "n" (SYSTEM_CALL_MAILBOX_SEND << 3));
+                   "n" (SYSTEM_CALL_MAILBOX_SEND << 3)
+                 : "memory");
 
     return return_value;
 }
@@ -352,14 +352,14 @@ static inline return_type system_call_mailbox_receive(mailbox_id_type mailbox_id
 {
     return_type return_value;
 
-    asm volatile("pushl %2\n"
-                 "pushl %3\n"
-                 "lcall %4, $0"
-                 : "=a" (return_value),
-                   "=g" (*message_parameter)
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
+                 "lcall %3, $0"
+                 : "=a" (return_value)
                  : "ri" (message_parameter),
                    "ri" (mailbox_id),
-                   "n" (SYSTEM_CALL_MAILBOX_RECEIVE << 3));
+                   "n" (SYSTEM_CALL_MAILBOX_RECEIVE << 3)
+                 : "memory");
 
     return return_value;
 }
@@ -369,16 +369,16 @@ static inline return_type system_call_service_create(const char *protocol_name, 
 {
     return_type return_value;
 
-    asm volatile("pushl %2\n"
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
                  "pushl %3\n"
-                 "pushl %4\n"
-                 "lcall %5, $0"
-                 : "=a" (return_value),
-                   "=ri" (*mailbox_id)
+                 "lcall %4, $0"
+                 : "=a" (return_value)
                  : "ri" (identification),
                    "ri" (mailbox_id),
                    "ri" (protocol_name),
-                   "n" (SYSTEM_CALL_SERVICE_CREATE << 3));
+                   "n" (SYSTEM_CALL_SERVICE_CREATE << 3)
+                 : "memory");
 
     return return_value;
 }
@@ -389,16 +389,16 @@ static inline return_type system_call_service_get(const char *protocol_name, ser
 {
     return_type return_value;
 
-    asm volatile("pushl %2\n"
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
                  "pushl %3\n"
-                 "pushl %4\n"
-                 "lcall %5, $0"
-                 : "=a" (return_value),
-                   "=ri" (*service_parameter)
+                 "lcall %4, $0"
+                 : "=a" (return_value)
                  : "ri" (identification),
                    "ri" (service_parameter),
                    "ri" (protocol_name),
-                   "n" (SYSTEM_CALL_SERVICE_GET << 3));
+                   "n" (SYSTEM_CALL_SERVICE_GET << 3)
+                 : "memory");
 
     return return_value;
 }
