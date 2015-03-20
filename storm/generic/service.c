@@ -195,6 +195,7 @@ return_type service_get(const char *protocol_name, service_parameter_type *servi
         if (tag_masked_compare(service->identification, identification_mask))
         {
             service_parameter->mailbox_id[index] = service->mailbox_id;
+            DEBUG_MESSAGE(DEBUG, "Got mailbox_id %u for protocol %s", service_parameter->mailbox_id[index], protocol_name);
             index++;
 
             // Make sure there is space for all those services.
@@ -210,7 +211,6 @@ return_type service_get(const char *protocol_name, service_parameter_type *servi
             }
         }
         service = (service_type *) service->next;
-        DEBUG_MESSAGE(DEBUG, "Got mailbox_id %u for protocol %s", service_parameter->mailbox_id[index], protocol_name);
     }
 
     service_parameter->max_services = index;
