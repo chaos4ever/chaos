@@ -270,12 +270,12 @@ static inline return_type system_call_kernelfs_entry_read(void *buffer)
 {
     return_type return_value;
 
-    asm volatile("pushl %2\n"
-                 "lcall %3, $0"
-                 : "=a" (return_value),
-                   "=ri" (*(int *) buffer)
+    asm volatile("pushl %1\n"
+                 "lcall %2, $0"
+                 : "=a" (return_value)
                  : "ri" (buffer),
-                   "n" (SYSTEM_CALL_KERNELFS_ENTRY_READ << 3));
+                   "n" (SYSTEM_CALL_KERNELFS_ENTRY_READ << 3)
+                 : "memory");
 
     return return_value;
 }
