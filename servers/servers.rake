@@ -48,6 +48,8 @@ LDFLAGS = %W(
   -L#{LIBRARIES_DIR}
 )
 
+LIBRARY_FILES = LIBRARIES.map { |l| "#{LIBRARIES_DIR}/lib#{l}.a" }
+
 servers_dir = File.dirname(__FILE__)
 
 INCLUDES = %W(
@@ -67,7 +69,7 @@ task :banner do
   print "    "
 end
 
-file OUTPUT => OBJECTS do |t|
+file OUTPUT => OBJECTS + LIBRARY_FILES do |t|
   begin
     puts
     puts "    Linking binary '#{OUTPUT}'...".blue.bold
