@@ -147,7 +147,7 @@ return_type service_create(const char *protocol_name, mailbox_id_type *mailbox_i
 
     *mailbox_id = service->mailbox_id;
 
-    DEBUG_MESSAGE(DEBUG, "Handing out mailbox ID %u (%x) %u.", service->mailbox_id, mailbox_id, *mailbox_id);
+    DEBUG_MESSAGE(DEBUG, "Handing out mailbox ID %u (mailbox_id = %x).", service->mailbox_id, mailbox_id);
 
     // Insert the node at the beginning of the list. Since everything is dynamic, this is not a problem.
     protocol->service = (struct service_type *) service;
