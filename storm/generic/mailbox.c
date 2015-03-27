@@ -1,11 +1,11 @@
 // Abstract: Mailbox functions for the LPC (local process communication).
 // Authors: Henrik Hallin <hal@chaosdev.org>
-//          Anders Öhrt <doa@chaosdev.org>
+//          Anders Ã–hrt <doa@chaosdev.org>
 //          Per Lundberg <per@halleluja.nu>
 
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// Â© Copyright 1999-2000 chaos development
+// Â© Copyright 2013 chaos development
+// Â© Copyright 2015 chaos development
 
 // Define this as TRUE if you are debugging this module.
 #define DEBUG           TRUE
