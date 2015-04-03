@@ -57,7 +57,6 @@ return_type log_init(log_structure_type *log_structure, char *class, tag_type *t
 return_type log_print_formatted(log_structure_type *log_structure, unsigned int urgency, const char *format_string, ...)
 {
     va_list arguments;
-    return_type return_value;
     ipc_log_print_type ipc_log_print;
 
     // FIXME!
@@ -69,7 +68,7 @@ return_type log_print_formatted(log_structure_type *log_structure, unsigned int 
     }
 
     va_start(arguments, format_string);
-    return_value = string_print_va(output, format_string, arguments);
+    string_print_va(output, format_string, arguments);
     va_end(arguments);
 
     ipc_log_print.urgency = urgency;
