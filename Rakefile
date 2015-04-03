@@ -38,7 +38,7 @@ task :libraries => [ :storm ] do |folder|
 end
 
 task :servers do |folder|
-  system "cd #{folder} && rake"
+  sh "cd #{folder} && rake"
 end
 
 #task :programs do |folder|
