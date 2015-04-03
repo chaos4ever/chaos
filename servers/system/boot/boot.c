@@ -26,7 +26,6 @@ int main(void)
     mailbox_id_type mailbox_id[10];
     ipc_structure_type vfs_structure;
     message_parameter_type message_parameter;
-    file_read_type read;
     file_handle_type handle;
     file_verbose_directory_entry_type directory_entry;
     u8 *buffer;
@@ -144,9 +143,6 @@ int main(void)
 
         // Open the file.
         file_open(&vfs_structure, server[server_number], FILE_MODE_READ, &handle);
-        read.file_handle = handle;
-
-        bytes_read = 0;
 
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
                             "Allocating %lu bytes for %s.",
@@ -156,6 +152,7 @@ int main(void)
 
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "Buffer is at %p.", buffer);
 
+        bytes_read = 0;
         while (bytes_read < directory_entry.size)
         {
             unsigned int bytes;
