@@ -1,0 +1,10 @@
+OBJECTS = %w(
+  boot.o
+)
+
+LIBRARIES = %w(
+)
+
+OUTPUT = 'boot'
+
+load '../../servers.rake'
