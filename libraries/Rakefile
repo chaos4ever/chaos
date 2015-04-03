@@ -2,6 +2,8 @@ Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.opt
 
 libraries = %w(
   console
+  execute_elf
+  file
   ipc
   memory
   string
@@ -11,12 +13,10 @@ libraries = %w(
 )
 
 # These haven't been upgraded to work w/ Rake yet.
-#  execute_elf
 #  ipv4
 #  serial
 #  random
 #  log
-#  file
 #  math
 #  checksum
 #  mutex
