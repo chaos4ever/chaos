@@ -6,6 +6,7 @@ LIBRARIES = %w(
   execute_elf
   file
   ipc
+  log
   memory
   system
 )

@@ -5,6 +5,7 @@ libraries = %w(
   execute_elf
   file
   ipc
+  log
   memory
   string
   system
@@ -16,7 +17,6 @@ libraries = %w(
 #  ipv4
 #  serial
 #  random
-#  log
 #  math
 #  checksum
 #  mutex
