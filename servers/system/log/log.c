@@ -124,15 +124,15 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
         switch (message_parameter.message_class)
         {
-        case IPC_LOG_PRINT:
-        {
-            ipc_log_print_type *ipc_log_print = (ipc_log_print_type *) data;
+            case IPC_LOG_PRINT:
+            {
+                ipc_log_print_type *ipc_log_print = (ipc_log_print_type *) data;
 
-            log_add(&console_structure_server,  " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.",
-                    ipc_log_print);
+                log_add(&console_structure_server,  " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.",
+                        ipc_log_print);
 
-            break;
-        }
+                break;
+            }
         }
     }
 }
