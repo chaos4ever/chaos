@@ -9,5 +9,6 @@ Vagrant.configure(2) do |config|
      echo 'drive a: file="/vagrant/floppy.img" 1.44m mformat_only' > /etc/mtools.conf
      echo '-U' > /home/vagrant/.astylerc
      echo '-H' >> /home/vagrant/.astylerc
+     echo '-S' >> /home/vagrant/.astylerc
   SHELL
 end
