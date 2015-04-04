@@ -1,0 +1,16 @@
+OBJECTS = %w(
+  log.o
+)
+
+LIBRARIES = %w(
+  console
+  ipc
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'log'
+
+load '../../servers.rake'

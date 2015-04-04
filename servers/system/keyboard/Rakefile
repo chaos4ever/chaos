@@ -1,0 +1,20 @@
+OBJECTS = %w(
+  common.o
+  controller.o
+  init.o
+  keyboard.o
+  mouse.o
+)
+
+LIBRARIES = %w(
+  console
+  ipc
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'keyboard'
+
+load '../../servers.rake'
