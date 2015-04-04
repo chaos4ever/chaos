@@ -138,10 +138,99 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
     }
 }
 
+static return_type handle_server_logging(void)
+{
+    // Open a new console for the log.
+    if (console_init(&console_structure_server, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
+            CONSOLE_RETURN_SUCCESS)
+    {
+        return -1;
+    }
+
+    ipc_structure_type ipc_structure;
+    if (ipc_service_create("log", &ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
+    {
+        return -1;
+    }
+
+    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
+            CONSOLE_RETURN_SUCCESS)
+    {
+        return -1;
+    }
+
+    console_clear(&console_structure_server);
+
+    // Print the titlebar.
+    console_attribute_set(&console_structure_server, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
+    console_print(&console_structure_server, " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.\e[K\n");
+
+    // Main loop.
+    system_thread_name_set("Service handler");
+
+    while (TRUE)
+    {
+        mailbox_id_type reply_mailbox_id;
+
+        ipc_service_connection_wait(&ipc_structure);
+        reply_mailbox_id = ipc_structure.output_mailbox_id;
+
+        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
+        {
+            system_thread_name_set("Handling connection");
+            handle_connection(reply_mailbox_id);
+        }
+    }
+}
+
+static return_type handle_kernel_logging(void)
+{
+    kernelfs_log_type kernelfs_log;
+    ipc_log_print_type *ipc_log_print;
+    ipc_log_print_type **ipc_log_print_pointer = &ipc_log_print;
+
+    memory_allocate((void **) ipc_log_print_pointer, 1000);
+
+    kernelfs_log.block = TRUE;
+    kernelfs_log.kernelfs_class = KERNELFS_CLASS_LOG_READ;
+    kernelfs_log.max_string_length = 1000;
+    kernelfs_log.string = ipc_log_print->message;
+
+    ipc_log_print->urgency = LOG_URGENCY_KERNEL;
+    string_copy(ipc_log_print->log_class, "storm");
+
+    system_thread_name_set("Kernel log handler");
+
+    // Open a new console for the log.
+    if (console_init(&console_structure_kernel, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
+            CONSOLE_RETURN_SUCCESS)
+    {
+        return -1;
+    }
+
+    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
+            CONSOLE_RETURN_SUCCESS)
+    {
+        return -1;
+    }
+
+    console_clear(&console_structure_kernel);
+
+    // Print the titlebar.
+    console_attribute_set(&console_structure_kernel, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
+    console_print(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.\e[K\n");
+
+    while (TRUE)
+    {
+        system_call_kernelfs_entry_read(&kernelfs_log);
+
+        log_add(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.",
+                ipc_log_print);
+    }
+}
+
 return_type main(void)
 {
-    ipc_structure_type ipc_structure;
-
     // Initialise the memory library.
     memory_init();
 
@@ -155,91 +244,10 @@ return_type main(void)
     // Create another thread to handle the server logging.
     if (system_thread_create() == SYSTEM_RETURN_THREAD_OLD)
     {
-        // Open a new console for the log.
-        if (console_init(&console_structure_server, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
-                CONSOLE_RETURN_SUCCESS)
-        {
-            return -1;
-        }
-
-        if (ipc_service_create("log", &ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
-        {
-            return -1;
-        }
-
-        if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-                CONSOLE_RETURN_SUCCESS)
-        {
-            return -1;
-        }
-
-        console_clear(&console_structure_server);
-
-        // Print the titlebar.
-        console_attribute_set(&console_structure_server, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
-        console_print(&console_structure_server, " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.\e[K\n");
-
-        // Main loop.
-        system_thread_name_set("Service handler");
-
-        while (TRUE)
-        {
-            mailbox_id_type reply_mailbox_id;
-
-            ipc_service_connection_wait(&ipc_structure);
-            reply_mailbox_id = ipc_structure.output_mailbox_id;
-
-            if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-            {
-                system_thread_name_set("Handling connection");
-                handle_connection(reply_mailbox_id);
-            }
-        }
+        return handle_server_logging();
     }
-    // Kernel log handling thread.
     else
     {
-        kernelfs_log_type kernelfs_log;
-        ipc_log_print_type *ipc_log_print;
-        ipc_log_print_type **ipc_log_print_pointer = &ipc_log_print;
-
-        memory_allocate((void **) ipc_log_print_pointer, 1000);
-
-        kernelfs_log.block = TRUE;
-        kernelfs_log.kernelfs_class = KERNELFS_CLASS_LOG_READ;
-        kernelfs_log.max_string_length = 1000;
-        kernelfs_log.string = ipc_log_print->message;
-
-        ipc_log_print->urgency = LOG_URGENCY_KERNEL;
-        string_copy(ipc_log_print->log_class, "storm");
-
-        system_thread_name_set("Kernel log handler");
-
-        // Open a new console for the log.
-        if (console_init(&console_structure_kernel, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
-                CONSOLE_RETURN_SUCCESS)
-        {
-            return -1;
-        }
-
-        if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-                CONSOLE_RETURN_SUCCESS)
-        {
-            return -1;
-        }
-
-        console_clear(&console_structure_kernel);
-
-        // Print the titlebar.
-        console_attribute_set(&console_structure_kernel, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
-        console_print(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.\e[K\n");
-
-        while (TRUE)
-        {
-            system_call_kernelfs_entry_read(&kernelfs_log);
-
-            log_add(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.",
-                    ipc_log_print);
-        }
+        return handle_kernel_logging();
     }
 }
