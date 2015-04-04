@@ -31,7 +31,7 @@ Having that said, there are a number of issues with the codebase which made us s
 
 * Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do)
 * Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `floppy.img` file from the project attached as the primary floppy drive.
-* Launch it. If all went well, you should get an image like this:
+* Launch it. If all went well, you shhould get an image like this:
 
 ![chaos running in Parallels](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-in-parallels.png)
 
@@ -42,7 +42,7 @@ That's all there is to it, *for now*. There's lot of stuff more that "used to wo
 This is an incomplete list of the authors of the chaos operating system, sorted alphabetically on last name. If you feel your name should be on this list but you aren't - please let us know.
 
 * Martin Alvarez
-* Henrik Hallin - Previous core developer
+* [Henrik Hallin](http://github.com/CaspecoHenrik) - Previous core developer
 * John Hennessy
 * [Johannes Lundberg](http://github.com/johannesl)
 * [Per Lundberg](http://github.com/perlun) - Previous core developer
