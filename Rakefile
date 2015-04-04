@@ -26,6 +26,8 @@ task :install do
   folders.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end
+
+  sh "mcopy -o grub.cfg a:/grub"
 end
 
 desc "Compiles the 'storm' kernel."
