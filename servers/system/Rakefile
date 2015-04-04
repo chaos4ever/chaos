@@ -3,13 +3,12 @@ Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.
 subfolders = %w(
   boot
   console
+  keyboard
+  log
 )
 
 # Not yet converted to Rake:
 #
-# boot
-# keyboard
-# log
 # pci
 
 task :default => subfolders do |t|
