@@ -305,7 +305,7 @@ static inline return_type system_call_mailbox_create(mailbox_id_type *mailbox_id
                  "pushl %6\n"
                  "lcall %7, $0"
                  : "=a" (return_value),
-                   "=ri" (*mailbox_id)
+                   "=m" (mailbox_id)
                  : "ri" (user_thread_id),
                    "ri" (user_cluster_id),
                    "ri" (user_process_id),
