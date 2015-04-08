@@ -89,6 +89,11 @@ static int update_data(void)
         DEBUG_HALT("tss_node == NULL");
     }
 
+    if (tss_list == NULL)
+    {
+        DEBUG_HALT("tss_list == NULL");
+    }
+
     // Search for the next task waiting to be dispatched.
     do
     {
@@ -110,7 +115,7 @@ static int update_data(void)
         counter++;
         tss_node = (tss_list_type *) tss_node->next;
         if (tss_node == NULL)
-        {
+        {            
             tss_node = tss_list;
         }
     } while (tss_node->tss->state != STATE_DISPATCH);
