@@ -2,7 +2,9 @@
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #include <console/console.h>
 #include <ipc/ipc.h>
@@ -223,7 +225,6 @@ static void vga_cursor_place(int x, int y)
 }
 
 // Handle the connection to the console service.
-
 static void handle_connection(ipc_structure_type *ipc_structure)
 {
     bool done = FALSE;
