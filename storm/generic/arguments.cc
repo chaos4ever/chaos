@@ -15,17 +15,17 @@ static int find_number_of_arguments (char *source);
 // Split the command line parameters in words (separated by one or more spaces).
 C_EXTERN u32 arguments_parse(char *source, char *destination, u32 delta)
 {
-    auto number_of_arguments = find_number_of_arguments(source);
+    int number_of_arguments = find_number_of_arguments(source);
 
     *((u32 *) destination) = number_of_arguments;
 
     // Now, go through the string again and copy the parameters into the data area and set the pointers correctly.
     // FIXME: Avoid pointer arithmetic. We should have a pure structure for this. I'm not sure if it is possible to write this
     // in a clean and nice way at all at the moment...
-    auto word_pointer = (char **) (destination + 4);
-    auto word = (char *) (destination + 4 + sizeof (char *) * number_of_arguments);
+    char **word_pointer = (char **) (destination + 4);
+    char *word = (char *) (destination + 4 + sizeof (char *) * number_of_arguments);
 
-    for (auto position = 0, current_arg = 0; source[position] != '\0'; position++)
+    for (int position = 0, current_arg = 0; source[position] != '\0'; position++)
     {
         while (source[position] == ' ')
         {
@@ -34,7 +34,7 @@ C_EXTERN u32 arguments_parse(char *source, char *destination, u32 delta)
 
         if (source[position] != '\0')
         {
-            auto word_length = 0;
+            int word_length = 0;
             while (source[position + word_length] != ' ' &&
                    source[position + word_length] != '\0')
             {
