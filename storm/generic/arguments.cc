@@ -13,7 +13,7 @@ char arguments_kernel[MAX_KERNEL_PARAMETER_LENGTH];
 static int find_number_of_arguments (char *source);
 
 // Split the command line parameters in words (separated by one or more spaces).
-C_EXTERN u32 arguments_parse(char *source, char *destination, u32 delta)
+u32 arguments_parse(char *source, char *destination, u32 delta)
 {
     int number_of_arguments = find_number_of_arguments(source);
 

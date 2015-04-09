@@ -17,7 +17,7 @@
 // Define this to get some debug information.
 #undef DEBUG
 
-C_EXTERN void vga_set_mode(u32 mode);
+void vga_set_mode(u32 mode);
 
 typedef struct
 {
@@ -331,9 +331,9 @@ static void handle_connection(ipc_structure_type *ipc_structure)
     }
 }
 
-C_EXTERN return_type main(void);
+return_type main(void);
 
-C_EXTERN return_type main(void)
+return_type main(void)
 {
     console_structure_type console_structure;
 
