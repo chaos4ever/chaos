@@ -17,7 +17,7 @@
 // Define this to get some debug information.
 #undef DEBUG
 
-C_EXTERN void vga_set_mode(u32 mode);
+void vga_set_mode(u32 mode);
 
 typedef struct
 {
@@ -41,7 +41,7 @@ vga_mode_type mode[] =
 
 const int num_video_modes = (sizeof(mode) / sizeof(vga_mode_type));
 
-auto current_mode = (vga_mode_type *) NULL;
+vga_mode_type *current_mode = (vga_mode_type *) NULL;
 
 vga_palette_entry_type text_palette[] =
 {
@@ -87,7 +87,7 @@ vga_palette_entry_type text_palette[] =
     { 0x38, 0x38, 0x38 }
 };
 
-auto graphic_video_memory = (u8 *) NULL;
+u8 *graphic_video_memory = (u8 *) NULL;
 
 // FIXME: This one is defined in lots of files. We should try to come up with a better mechanism for it.
 static tag_type empty_tag =
@@ -98,7 +98,7 @@ static tag_type empty_tag =
 // Set up the given video mode.
 static bool mode_set(unsigned int width, unsigned int height, unsigned int bpp, unsigned int type)
 {
-    for (auto search = 0; search < num_video_modes; search++)
+    for (int search = 0; search < num_video_modes; search++)
     {
         if (width == mode[search].width &&
             height == mode[search].height &&
@@ -282,7 +282,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
                     {
                         if (video_mode->mode_type == VIDEO_MODE_TYPE_TEXT)
                         {
-                            for (auto index = 0; index < 16; index++)
+                            for (int index = 0; index < 16; index++)
                             {
                                 vga_palette_set_entry(index, &text_palette[index]);
                             }
@@ -290,7 +290,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
                         else if (video_mode->mode_type == VIDEO_MODE_TYPE_GRAPHIC &&
                                  video_mode->depth == 8)
                         {
-                            for (auto index = 0; index < 256; index++)
+                            for (int index = 0; index < 256; index++)
                             {
                                 vga_palette_entry_type entry;
 
@@ -331,9 +331,9 @@ static void handle_connection(ipc_structure_type *ipc_structure)
     }
 }
 
-C_EXTERN return_type main(void);
+return_type main(void);
 
-C_EXTERN return_type main(void)
+return_type main(void)
 {
     console_structure_type console_structure;
 

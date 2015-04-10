@@ -1,10 +1,12 @@
 // Abstract: Function prototypes and structure definitions of port in-and output.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// Probably a bit based on Linux or similar (to know the gcc syntax
-//   for inline assembly).
+// Probably a bit based on Linux or similar (to know the gcc syntax for inline assembly).
 //
-// © Copyright 1998-2000, 2007, 2013 chaos development.
+// © Copyright 1998-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
@@ -12,6 +14,11 @@
 
 // Inlines.
 // I/O functions.
+static inline void system_port_pause(void)
+{
+    asm ("outb %al, $0x80");
+}
+
 static inline void system_port_out_u8(u16 port, u8 data)
 {
     asm("outb %1, %0"
@@ -40,39 +47,31 @@ static inline void system_port_out_u32(u16 port, u32 data)
 static inline void system_port_out_u8_pause(u16 port, u8 data)
 {
     asm("outb %1, %0\n"
-         "jmp 1f\n"
-         "1: jmp 2f\n"
-         "2:"
          :
          : "Nd" (port),
            "a" (data));
-    system_sleep(1);
+    system_port_pause();
 }
 
 static inline void system_port_out_u16_pause(u16 port, u16 data)
 {
     asm ("outw %1, %0\n"
-         "jmp 1f\n"
-         "1: jmp 2f\n"
-         "2:"
          :
          : "Nd" (port),
            "a" (data));
+    system_port_pause();
 }
 
 static inline void system_port_out_u32_pause(u16 port, u32 data)
 {
     asm("outl %1, %0\n"
-        "jmp 1f\n"
-        "1: jmp 2f\n"
-        "2:"
         :
         : "Nd" (port),
           "a" (data));
+    system_port_pause();
 }
 
 // Input operations.
-
 static inline u8 system_port_in_u8(u16 port)
 {
     u8 return_value;
