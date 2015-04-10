@@ -1,6 +1,6 @@
 # README
 
-![](https://raw.github.com/chaos4ever/chaos/master/misc/chaos-logo.svg)
+![](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-logo.svg)
 
 [![Build Status](https://travis-ci.org/chaos4ever/chaos.svg?branch=master)](https://travis-ci.org/chaos4ever/chaos)
 
