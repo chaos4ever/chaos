@@ -1,10 +1,12 @@
 // Abstract: Function prototypes and structure definitions of port in-and output.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// Probably a bit based on Linux or similar (to know the gcc syntax
-//   for inline assembly).
+// Probably a bit based on Linux or similar (to know the gcc syntax for inline assembly).
 //
-// © Copyright 1998-2000, 2007, 2013 chaos development.
+// © Copyright 1998-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
