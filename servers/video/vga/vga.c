@@ -17,10 +17,6 @@
 // Define this to get some debug information.
 #undef DEBUG
 
-// FIXME: Pedantic GCC settings work against us here. Per, can you fix this?
-//        Better to put a tweak here than to to un-inline in port.h
-#define system_port_out_u8_pause system_port_out_u8
-
 void vga_set_mode(u32 mode);
 
 typedef struct
