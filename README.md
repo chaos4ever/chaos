@@ -1,6 +1,6 @@
 # README
 
-<img src="https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-logo.png" style="width: 500px;">
+<img src="https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-logo.png" width="500">
 
 [![Build Status](https://travis-ci.org/chaos4ever/chaos.svg?branch=master)](https://travis-ci.org/chaos4ever/chaos)
 
