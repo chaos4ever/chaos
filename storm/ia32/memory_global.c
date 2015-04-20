@@ -2,7 +2,9 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 2000, 2013, 2015 chaos development.
+// © Copyright 2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 // If DEBUG is TRUE, lots of debug information will be printed.
 
