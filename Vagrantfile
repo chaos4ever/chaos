@@ -11,6 +11,18 @@ Vagrant.configure(2) do |config|
       nasm \
       qemu \
       rake 
+
+    cd /tmp
+    rm -rf cmocka*
+    wget https://cmocka.org/files/1.0/cmocka-1.0.1.tar.xz
+    tar xf cmocka-1.0.1.tar.xz 
+    cd cmocka-1.0.1
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make install
+    
     cd /vagrant && bzip2 -dc misc/grub.img.bz2 > floppy.img
     echo 'drive a: file="/vagrant/floppy.img" 1.44m mformat_only' > /etc/mtools.conf
     echo 'cd /vagrant' >> /home/vagrant/.bashrc
