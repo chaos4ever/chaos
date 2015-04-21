@@ -1,8 +1,5 @@
 verbose false
 
-# FIXME: Should consider supporting a toplevel Rakefile.local or something where you can define this, so you don't have to
-# modify a version-controlled file.
-
 UNAME = `uname`.strip
 
 case UNAME
