@@ -6,6 +6,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y \
       astyle \
       cmake \
+      gcc-multilib \
       git \
       mtools \
       nasm \
