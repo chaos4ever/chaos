@@ -1,0 +1,23 @@
+Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
+
+subfolders = %w(
+  ia32 
+)
+
+task :default => subfolders do |t|
+  t.prerequisites.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND}"
+  end
+end
+
+task :clean do
+  subfolders.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND} clean"
+  end
+end
+
+task :tests => :default do
+  subfolders.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND} tests"
+  end
+end

@@ -1,0 +1,38 @@
+OBJECTS = %w(
+  main.o
+  memory_global_test.o
+)
+
+LDFLAGS = %w(
+  -m32
+  -L/usr/local/lib
+)
+
+LIBRARIES = %w(
+  cmocka
+)
+
+task :default => [ :banner, :ia32_tests ]
+
+task :banner do
+  print 'Compiling '.bold
+  print 'storm_tests/ia32'.cyan.bold
+  puts '...'
+
+  print '    '
+end
+
+file :ia32_tests => OBJECTS do |t|
+  begin
+    puts '    Linking...'.blue.bold
+
+    inputs = OBJECTS.join(' ')
+    command = "#{CC} -o #{t.name} #{inputs} #{LDFLAGS.join ' '} -l#{LIBRARIES.join(' -l')}"
+    sh command
+  rescue
+    puts "Error linking kernel. Full command line was: #{command}"
+    raise
+  end
+end
+
+load '../storm_tests.rake'
