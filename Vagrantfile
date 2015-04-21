@@ -20,7 +20,7 @@ Vagrant.configure(2) do |config|
     cd cmocka-1.0.1
     mkdir build
     cd build
-    cmake ..
+    cmake -DCMAKE_C_FLAGS=-m32 ..
     make
     make install
     
