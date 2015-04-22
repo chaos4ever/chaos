@@ -9,4 +9,4 @@ mkdir build
 cd build
 cmake -DCMAKE_C_FLAGS=-m32 ..
 make
-make install
+sudo make install
