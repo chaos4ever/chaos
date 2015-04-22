@@ -40,6 +40,11 @@ task :storm_tests do |folder|
   sh "cd #{folder} && #{RAKE_COMMAND}"
 end
 
+desc 'Runs the unit tests'
+task :run_tests => [:storm_tests] do
+  sh "cd storm_tests && #{RAKE_COMMAND} run_tests"
+end
+
 task :libraries => [ :storm ] do |folder|
   sh "cd #{folder} && #{RAKE_COMMAND}"
 end

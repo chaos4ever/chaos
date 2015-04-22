@@ -39,6 +39,11 @@ file OUTPUT => OBJECTS do |t|
   end
 end
 
+task :run_tests do
+  puts
+  run_test OUTPUT
+end
+
 # TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
 task :clean do
   rm_f OBJECTS

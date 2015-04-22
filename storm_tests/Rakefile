@@ -21,3 +21,9 @@ task :tests => :default do
     sh "cd #{folder} && #{RAKE_COMMAND} tests"
   end
 end
+
+task :run_tests do
+  subfolders.each do |folder|
+    sh "cd #{folder} && #{RAKE_COMMAND} run_tests"
+  end
+end

@@ -32,3 +32,7 @@ CFLAGS = COMMON_CFLAGS + %w(
 INCLUDES = %W(
   -I..
 )
+
+def run_test(test)
+  sh "./#{test} 2>&1 | #{Rake.application.options.rakelib.first}/../tools/colorize.rb"
+end
