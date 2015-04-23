@@ -1,5 +1,5 @@
 before_script:
- - sudo sh -c 'echo deb http://mirrors.kernel.org/debian wheezy main > /etc/apt/sources.list'
+ - sudo sh -c 'echo deb http://mirrors.kernel.org/debian unstable main > /etc/apt/sources.list'
  - sudo apt-get update
- - sudo apt-get install gcc-4.7 gcc-multilib ia32-libs nasm
+ - sudo apt-get install gcc-4.7 gcc-multilib nasm
  - ./install_cmocka.sh
