@@ -1,11 +1,14 @@
+.vagrant
+floppy.img
+
 *.dep
 *.o
 *.a
-floppy.img
+
 storm/current-arch
 storm/ia32/storm
 storm/include/storm/current-arch
-.vagrant
+storm_tests/ia32/ia32_tests
 
 servers/system/boot/boot
 servers/system/console/console
