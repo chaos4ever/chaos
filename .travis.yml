@@ -4,4 +4,4 @@ before_script:
  - ./install_cmocka.sh
 script:
  - CC=gcc rake
- - rake run_tests
+ - rake tests
