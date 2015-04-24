@@ -1,7 +1,8 @@
+env: CC=gcc
 before_script:
  - sudo apt-get update
  - sudo apt-get install gcc-multilib nasm
  - ./install_cmocka.sh
 script:
- - CC=gcc rake
+ - rake
  - rake tests
