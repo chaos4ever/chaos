@@ -16,14 +16,14 @@ task :clean do
   end
 end
 
-task :tests => :default do
+task :build_tests => :default do
   subfolders.each do |folder|
-    sh "cd #{folder} && #{RAKE_COMMAND} tests"
+    sh "cd #{folder} && #{RAKE_COMMAND} build_tests"
   end
 end
 
-task :run_tests do
+task :tests do
   subfolders.each do |folder|
-    sh "cd #{folder} && #{RAKE_COMMAND} run_tests"
+    sh "cd #{folder} && #{RAKE_COMMAND} tests"
   end
 end

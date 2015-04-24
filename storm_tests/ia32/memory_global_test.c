@@ -9,4 +9,5 @@ void test_memory_global_deallocate(void **state);
 
 void test_memory_global_deallocate(void **state __attribute__ ((unused)))
 {
+    assert_true(1 == 0);
 }

@@ -36,13 +36,13 @@ task :storm do |folder|
 end
 
 desc "Compiles the unit tests for the 'storm' kernel."
-task :storm_tests do |folder|
-  sh "cd #{folder} && #{RAKE_COMMAND}"
+task :build_storm_tests do
+  sh "cd storm_tests && #{RAKE_COMMAND}"
 end
 
 desc 'Runs the unit tests'
-task :run_tests => [:storm_tests] do
-  sh "cd storm_tests && #{RAKE_COMMAND} run_tests"
+task :tests => [:build_storm_tests] do
+  sh "cd storm_tests && #{RAKE_COMMAND} tests"
 end
 
 task :libraries => [ :storm ] do |folder|

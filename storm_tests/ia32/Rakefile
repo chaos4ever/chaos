@@ -39,7 +39,7 @@ file OUTPUT => OBJECTS do |t|
   end
 end
 
-task :run_tests do
+task :tests do
   puts
   run_test OUTPUT
 end
