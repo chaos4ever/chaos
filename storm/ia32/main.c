@@ -120,9 +120,9 @@ static void INIT_CODE parse_kernel_arguments(unsigned int arguments, char *argum
 }
 
 // This is where the fun begins. Oh, yeah, we're going to Disneyland... blah blah. Terminator 2 RULEZ!
-return_type main(int arguments, char *argument[]) INIT_CODE;
+return_type kernel_main(int arguments, char *argument[]) INIT_CODE;
 
-return_type main(int arguments, char *argument[])
+return_type kernel_main(int arguments, char *argument[])
 {
     int servers_started = 0;
 

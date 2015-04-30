@@ -82,19 +82,8 @@ u32 multiboot_header[] __attribute__ ((section(".init.pre"), unused)) =
 
 // FIXME: Put those in another file. We should have a better system for local include files...
 void _start (void) INIT_CODE;
-extern int main (int arguments, char *argument[]);
-
-// This is the kernel. :)
 static void INIT_CODE kernel_entry (void) NORETURN;
-static void INIT_CODE kernel_entry(void)
-{
-    multiboot_init();
-
-    main(((u8 *) arguments_kernel)[0], (char **) &arguments_kernel[4]);
-
-    // This code should never really get called.
-    idle();
-}
+extern int kernel_main (int arguments, char *argument[]);
 
 // This is the kernel entry point.
 // FIXME: Use memory_copy and memory_set instead of inline assembler. The current way is very hard to optomize for e.g.
@@ -163,4 +152,16 @@ void _start(void)
          :
          : "n" (SELECTOR_KERNEL_CODE),
          "p" (&kernel_entry));
+}
+
+// When this gets called, the new (temporary) GDT has been set up and the segment selectors have been initialized with
+// their new values.
+static void INIT_CODE kernel_entry(void)
+{
+    multiboot_init();
+
+    kernel_main(((u8 *) arguments_kernel)[0], (char **) &arguments_kernel[4]);
+
+    // This code should never really get called.
+    idle();
 }
