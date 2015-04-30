@@ -7,16 +7,12 @@
 // © Copyright 2015 chaos development
 
 // If DEBUG is TRUE, lots of debug information will be printed.
-
 #define DEBUG FALSE
 
-// Define this if you want to check the data structures all the
-//   time. Slow, but good for debugging.
-
+// Define this if you want to check the data structures all the time. Slow, but good for debugging.
 #define CHECK TRUE
 
 // Define this if you want to enable deallocation of memory.
-
 #undef DEALLOCATE
 
 #include <storm/generic/avl.h>
