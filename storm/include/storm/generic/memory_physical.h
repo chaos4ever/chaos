@@ -1,7 +1,9 @@
 // Abstract: Function prototypes and structure definitions for the physical memory allocation system.
 // Author: Per Lundberg <per@halleluja.nu>
 
-// © Copyright 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
