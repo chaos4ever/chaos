@@ -31,6 +31,7 @@ CFLAGS = COMMON_CFLAGS + %w(
 
 INCLUDES = %W(
   -I..
+  -I../../storm/include
 )
 
 def run_test(test)
