@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-folders = [:storm, :storm_tests, :libraries, :servers]#, :programs]
+folders = [:storm, :libraries, :servers]#, :programs]
 
 verbose false
 
@@ -36,7 +36,7 @@ task :storm do |folder|
 end
 
 desc "Compiles the unit tests for the 'storm' kernel."
-task :build_storm_tests do
+task :build_storm_tests => :storm do
   sh "cd storm_tests && #{RAKE_COMMAND}"
 end
 
