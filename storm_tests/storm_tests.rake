@@ -25,6 +25,7 @@ CFLAGS = COMMON_CFLAGS + %w(
   --std=gnu99
   -Wbad-function-cast
   -Wno-missing-declarations
+  -Wno-unused-parameter
   -Wnested-externs
   -Wstrict-prototypes
 )
