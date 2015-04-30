@@ -38,13 +38,9 @@ file OUTPUT => OBJECTS do |t|
     puts '    Linking...'.blue.bold
 
     inputs = OBJECTS.join(' ')
-    command = [
-      CC,
-      "-o #{t.name}",
-      inputs,
-      LDFLAGS.join(' '),
-      "-l#{LIBRARIES.join(' -l')}"
-    ].join(' ')
+    command = " \
+      #{CC} -o #{t.name} #{inputs} \
+      #{LDFLAGS.join(' ')} -l#{LIBRARIES.join(' -l')}"
     sh command
   rescue
     puts "Error linking kernel. Full command line was: #{command}"
