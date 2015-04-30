@@ -8,10 +8,17 @@ OUTPUT = :ia32_tests
 LDFLAGS = %w(
   -m32
   -L/usr/local/lib
+  -L../../storm/generic
+  -L../../storm/ia32
 )
 
+  # Need to provide the same name twice for linking to succeed. (circular dependency?)
 LIBRARIES = %w(
   cmocka
+
+  storm_ia32
+  storm_generic
+  storm_ia32
 )
 
 task :default => [ :banner, OUTPUT ]
@@ -31,7 +38,13 @@ file OUTPUT => OBJECTS do |t|
     puts '    Linking...'.blue.bold
 
     inputs = OBJECTS.join(' ')
-    command = "#{CC} -o #{t.name} #{inputs} #{LDFLAGS.join ' '} -l#{LIBRARIES.join(' -l')}"
+    command = [
+      CC,
+      "-o #{t.name}",
+      inputs,
+      LDFLAGS.join(' '),
+      "-l#{LIBRARIES.join(' -l')}"
+    ].join(' ')
     sh command
   rescue
     puts "Error linking kernel. Full command line was: #{command}"
