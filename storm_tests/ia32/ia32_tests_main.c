@@ -5,12 +5,14 @@
 
 #include "test_helper.h"
 
+extern void test_memory_global_allocate(void **state);
 extern void test_memory_global_deallocate(void **state);
 
 int main(void)
 {
     const struct CMUnitTest tests[] =
     {
+        cmocka_unit_test(test_memory_global_allocate),
         cmocka_unit_test(test_memory_global_deallocate),
     };
     return cmocka_run_group_tests(tests, NULL, NULL);
