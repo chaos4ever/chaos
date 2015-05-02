@@ -1,6 +1,7 @@
 OBJECTS = %w(
   ia32_tests_main.o
   memory_global_test.o
+  string_tests.o
 )
 
 OUTPUT = :ia32_tests
