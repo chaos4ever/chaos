@@ -14,7 +14,10 @@ def green(s)
   colorize s, 32
 end
 
+line_count = 0
+
 while gets
+  line_count = line_count + 1
   $_.gsub!(/ OK /) { |s| green s }
   $_.gsub!(/  PASSED/) { |s| green s }
   $_.gsub!(/  FAILED/) { |s| $return_value = 1; red s; }
@@ -22,5 +25,8 @@ while gets
 
   puts $_
 end
+
+# No lines received = something went wrong with the test running.
+exit 1 if line_count == 0
 
 exit $return_value
