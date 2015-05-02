@@ -103,3 +103,4 @@
 #define INIT_DATA                       __attribute__ ((section(".data.init")))
 
 #define NORETURN                        __attribute__ ((noreturn))
+#define WEAK                            __attribute__ ((weak))

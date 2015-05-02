@@ -1,0 +1,63 @@
+OBJECTS = %w(
+  ia32_tests_main.o
+  memory_global_test.o
+  string_tests.o
+)
+
+OUTPUT = :ia32_tests
+
+LDFLAGS = %w(
+  -m32
+  -L/usr/local/lib
+  -L../../storm/generic
+  -L../../storm/ia32
+)
+
+  # Need to provide the same name twice for linking to succeed. (circular dependency?)
+LIBRARIES = %w(
+  cmocka
+
+  storm_ia32
+  storm_generic
+  storm_ia32
+)
+
+task :default => [ :banner, OUTPUT ]
+
+task :banner do
+  print 'Compiling '.bold
+  print 'storm_tests/ia32'.cyan.bold
+  puts '...'
+
+  print '    '
+end
+
+file OUTPUT => OBJECTS do |t|
+  begin
+    puts
+    puts
+    puts '    Linking...'.blue.bold
+
+    inputs = OBJECTS.join(' ')
+    command = " \
+      #{CC} -o #{t.name} #{inputs} \
+      #{LDFLAGS.join(' ')} -l#{LIBRARIES.join(' -l')}"
+    sh command
+  rescue
+    puts "Error linking kernel. Full command line was: #{command}"
+    raise
+  end
+end
+
+task :tests do
+  puts
+  run_test OUTPUT
+end
+
+# TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
+task :clean do
+  rm_f OBJECTS
+  rm_f OUTPUT.to_s
+end
+
+load '../storm_tests.rake'

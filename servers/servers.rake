@@ -1,4 +1,4 @@
-# Common settings and Rake rules for all libraries.
+# Common settings and Rake rules for all servers.
 
 Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 

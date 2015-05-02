@@ -7,16 +7,12 @@
 // © Copyright 2015 chaos development
 
 // If DEBUG is TRUE, lots of debug information will be printed.
-
 #define DEBUG FALSE
 
-// Define this if you want to check the data structures all the
-//   time. Slow, but good for debugging.
-
+// Define this if you want to check the data structures all the time. Slow, but good for debugging.
 #define CHECK TRUE
 
 // Define this if you want to enable deallocation of memory.
-
 #undef DEALLOCATE
 
 #include <storm/generic/avl.h>
@@ -35,13 +31,11 @@
 #include <storm/generic/thread.h>
 
 // Globals.
-
 static slab_heap_type *global_slab_heap;
 avl_header_type *global_avl_header;
 u32 global_memory_left;
 
 // Locals.
-
 static return_type memory_global_deallocate_page(u32 page_number) __attribute__ ((unused));
 static u32 memory_global_allocate_page(u32 length);
 
@@ -81,25 +75,19 @@ void memory_global_init(void)
     global_avl_header->number_of_nodes = 1;
 
     // Clear the bitmap, marking all slots as free.
-
-    memory_set_u8((u8 *) global_avl_header->bitmap, 0,
-                  SIZE_PAGE - sizeof (avl_header_type));
+    memory_set_u8((u8 *) global_avl_header->bitmap, 0, SIZE_PAGE - sizeof (avl_header_type));
 
     // Initialise the tree, starting with an empty entry.
-
     avl_node_reset(global_avl_header->root, GET_PAGE_NUMBER(BASE_GLOBAL_HEAP),
                    0, SIZE_IN_PAGES(SIZE_GLOBAL_HEAP), NULL);
 
     // And mark that entry as used in the bitmap.
-
     global_avl_header->bitmap[0] = 1;
 
     // Set up the slab heap.
-
     global_slab_heap = (slab_heap_type *) (memory_global_allocate_page(1) * SIZE_PAGE);
 
     // FIXME: Check return value.
-
     memory_physical_allocate(&physical_page, 1, "Global SLAB heap.");
 
     memory_virtual_map(GET_PAGE_NUMBER(global_slab_heap), physical_page, 1, PAGE_KERNEL);
@@ -107,7 +95,6 @@ void memory_global_init(void)
 }
 
 // Allocates a page region in the global memory area.
-
 static u32 memory_global_allocate_page(u32 length)
 {
     avl_node_type *node;
@@ -119,14 +106,12 @@ static u32 memory_global_allocate_page(u32 length)
 #endif
 
     // First check for invalid parameters.
-
     if (length == 0)
     {
         DEBUG_HALT("length must be > 0!");
     }
 
     // Get the root node.
-
     node = global_avl_header->root;
 
     while (node != NULL)
@@ -137,9 +122,7 @@ static u32 memory_global_allocate_page(u32 length)
         }
         else if (node->free_length >= length)
         {
-
             // We found a space big enough. Conquer it!
-
             if (node->busy_length == 0)
             {
                 node->busy_length = length;
@@ -184,8 +167,7 @@ static u32 memory_global_allocate_page(u32 length)
     DEBUG_HALT("No block found, but nodes said there was one. Tree broken.");
 }
 
-// Deallocate the given range, startig at page_number.
-
+// Deallocate the given range, starting at page_number.
 static return_type memory_global_deallocate_page(u32 page_number)
 {
     avl_node_type *node;
@@ -224,7 +206,6 @@ static return_type memory_global_deallocate_page(u32 page_number)
     free_length = node->busy_length;
 
     // Alright. We have the node to delete. Find the less-adjacent node.
-
     if (node->less == NULL)
     {
         adjacent_node = node;
@@ -251,7 +232,6 @@ static return_type memory_global_deallocate_page(u32 page_number)
     }
 
     // We have the adjacent node or NULL if there was none.
-
     if (adjacent_node == NULL)
     {
         node->free_length += node->busy_length;
@@ -277,7 +257,6 @@ static return_type memory_global_deallocate_page(u32 page_number)
 }
 
 // Get the number of pages allocated for the given data block
-
 static u32 memory_global_get_size(void *data)
 {
     avl_node_type *node;
@@ -316,21 +295,18 @@ static u32 memory_global_get_size(void *data)
 }
 
 // Get the amount of global memory currently in use.
-
 unsigned int memory_global_get_used(void)
 {
     return SIZE_GLOBAL_HEAP - global_memory_left;
 }
 
 // Get the amount of global memory currently unallocated.
-
 unsigned int memory_global_get_free(void)
 {
     return global_memory_left;
 }
 
 // Allocate memory from the global heap.
-
 void *memory_global_allocate(unsigned int length)
 {
     int index = slab_heap_index(length);
@@ -346,24 +322,18 @@ void *memory_global_allocate(unsigned int length)
 
     DEBUG_MESSAGE(DEBUG, "Called (length = %u)", length);
 
-    // If index now is -1, it means we tried to allocate more than 1024
-    //     byte, and in this system, that gets rounded to the closest upper
-    //     page boundary.
-
+    // If index now is -1, it means we tried to allocate more than 1024 bytes, and in this system, that gets rounded to
+    // the closest upper page boundary.
     if (index == -1)
     {
         u32 virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
         u32 physical_page;
 
         // FIXME: Check return value.
-
-        memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length),
-                                 "Global memory data structure");
+        memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
 
         // So, map this memory, and return a pointer to it.
-
-        memory_virtual_map(virtual_page, physical_page, SIZE_IN_PAGES(length),
-                           PAGE_KERNEL);
+        memory_virtual_map(virtual_page, physical_page, SIZE_IN_PAGES(length), PAGE_KERNEL);
 
         DEBUG_MESSAGE(DEBUG, "Leaving through path 1");
         global_memory_left -= PAGE_ALIGN(length);
@@ -376,14 +346,11 @@ void *memory_global_allocate(unsigned int length)
         slab_superblock_type *superblock;
         slab_block_type *next;
 
-        // Now, we know which entry in the slab heap to use. Check if
-        //       there is already a slab superblock we can use. Otherwise, we
-        //       will have to create one.
-
+        // Now, we know which entry in the slab heap to use. Check if there is already a slab superblock we can use.
+        // Otherwise, we will have to create one.
         superblock = global_slab_heap->block[index];
 
         // Walk the list of slab superblocks with free blocks.
-
         while (superblock != NULL &&
                superblock->header.free_blocks == 0)
         {
@@ -392,29 +359,23 @@ void *memory_global_allocate(unsigned int length)
         }
 
         // No, we were out of luck.
-
         if (superblock == NULL)
         {
             u32 virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
             u32 physical_page;
 
             // FIXME: Check return value.
-
-            memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length),
-                                     "Global memory data structure");
+            memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
 
             superblock = (slab_superblock_type *) (virtual_page * SIZE_PAGE);
             memory_virtual_map(virtual_page, physical_page, 1, PAGE_KERNEL);
 
             // Initialise this newly created slab superblock.
-
             slab_superblock_init(superblock, global_slab_heap, index);
             global_slab_heap->block[index] = superblock;
         }
 
-        // Now, we have our superblock. Get the block we want, and update
-        //       the structures.
-
+        // Now, we have our superblock. Get the block we want, and update the structures.
         block = superblock->header.free_list;
 
         if (block == NULL)
@@ -433,8 +394,7 @@ void *memory_global_allocate(unsigned int length)
         superblock->header.free_list = next;
         superblock->header.free_blocks--;
 
-        DEBUG_MESSAGE(DEBUG, "Leaving through path 2. Block allocated: %x",
-                      block);
+        DEBUG_MESSAGE(DEBUG, "Leaving through path 2. Block allocated: %x", block);
 
         //    debug_print ("%p %u ", block, slab_block_size[index]);
 
@@ -446,24 +406,19 @@ void *memory_global_allocate(unsigned int length)
 }
 
 // Deallocate memory from the global heap.
-
 return_type memory_global_deallocate(void *data)
 {
-    slab_superblock_type *superblock =
-        (slab_superblock_type *) ((u32) data & 0xFFFFF000);
+    slab_superblock_type *superblock = (slab_superblock_type *) ((u32) data & 0xFFFFF000);
     slab_block_type *block = (slab_block_type *) data;
     int index = slab_heap_index(superblock->header.buffer_size);
 
-    // FIXME: Make sure that all code that uses this function has locked
-    //     the tss_tree_mutex.
+    // FIXME: Make sure that all code that uses this function has locked the tss_tree_mutex.
 
     //  mutex_kernel_wait (&memory_mutex);
 
     DEBUG_MESSAGE(DEBUG, "Called (data = %p)", data);
 
-    // If the data address is page aligned, it is not a slab block, so
-    //     handle it specially.
-
+    // If the data address is page aligned, it is not a slab block, so handle it specially.
     if (data == superblock)
     {
         u32 pages = memory_global_get_size(data);
@@ -479,7 +434,6 @@ return_type memory_global_deallocate(void *data)
         memory_global_deallocate_page(GET_PAGE_NUMBER((u32) data));
 
         // Find the physical adress for this virtual address.
-
         page_table_entry *page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES +
                                                              ((u32) data) / (4 * MB));
         u32 physical_page = page_table[GET_PAGE_NUMBER((u32) data) % 1024].page_base;
@@ -487,8 +441,8 @@ return_type memory_global_deallocate(void *data)
         memory_physical_deallocate(physical_page);
 #endif
 
-        // FIXME: Unmap this memory, too. Fairly trivial, but we must take
-        //       care of regions spanning several page tables...
+        // FIXME: Unmap this memory, too. Fairly trivial, but we must take care of regions spanning several
+        // page tables...
 
         //    mutex_kernel_signal (&memory_mutex);
 
@@ -501,7 +455,6 @@ return_type memory_global_deallocate(void *data)
         slab_block_type *free_list;
 
         // Add this block to the free list.
-
         free_list = superblock->header.free_list;
         block->previous = NULL;
         block->next = free_list;
@@ -516,11 +469,8 @@ return_type memory_global_deallocate(void *data)
 
         if (superblock->header.free_blocks == 1)
         {
-
-            // This superblock was all-allocated, so add it into the
-            //         heap. We put it last, since that's probably the most
-            //         optimised thing to do.
-
+            // This superblock was all-allocated, so add it into the heap. We put it last, since that's probably the most
+            // optimised thing to do.
             slab_superblock_type *new_superblock = global_slab_heap->block[index];
 
             while (new_superblock->header.next_superblock != NULL)
@@ -534,18 +484,14 @@ return_type memory_global_deallocate(void *data)
             superblock->header.next_superblock = NULL;
         }
 
-        // FIXME: This code will make things a little more optimised, but
-        //       it is not yet finished.
+        // FIXME: This code will make things a little more optimised, but it is not yet finished.
 
 #if FALSE
         else if (superblock->header.free_blocks ==
                  superblock->header.total_blocks)
         {
-
-            // Move this superblock from its current location to the end of
-            //         the heap. We want it in the end, so for this, we'll have to
-            //         traverse the list some...
-
+            // Move this superblock from its current location to the end of the heap. We want it in the end, so for
+            // this, we'll have to traverse the list some...
             slab_superblock_type *new_superblock;
 
             new_superblock = global_slab_heap->block[index];

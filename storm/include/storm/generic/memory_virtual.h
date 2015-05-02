@@ -19,7 +19,7 @@ extern void memory_virtual_enable(void) INIT_CODE;
 extern return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_directory, u32 virtual_page, u32 physical_page,
                                              u32 pages, u32 flags) INIT_CODE;
 extern return_type memory_virtual_map_other(storm_tss_type *tss, u32 virtual_page, u32 physical_page, u32 pages, u32 flags);
-extern return_type memory_virtual_map(u32 virtual_page, u32 physical_page, u32 pages, u32 flags);
+extern return_type memory_virtual_map(u32 virtual_page, u32 physical_page, u32 pages, u32 flags) WEAK;
 extern void memory_virtual_unmap(u32 virtual_page, u32 pages);
 extern return_type map(process_id_type pid, u32 linear_page, u32 physical_page, u32 pages);
 
