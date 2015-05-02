@@ -11,3 +11,4 @@ cmake -DCMAKE_C_FLAGS=-m32 ..
 make
 sudo make install
 sudo sh -c 'echo /usr/local/lib >> /etc/ld.so.conf'
+sudo /sbin/ldconfig
