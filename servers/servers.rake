@@ -35,10 +35,6 @@ CFLAGS = (COMMON_CFLAGS + %w(
   -Wnested-externs
   -Wstrict-prototypes
 )).join(' ')
-CCFLAGS = (COMMON_CFLAGS + %w(
-  --std=gnu++11
-  -Wno-inline
-)).join(' ')
 
 LDFLAGS = %W(
   #{LIBRARIES_DIR}/startup.o
