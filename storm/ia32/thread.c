@@ -339,6 +339,7 @@ return_type thread_create(void)
     new_tss->timeslices = 0;
     string_copy(new_tss->thread_name, "unnamed");
 
+    mutex_kernel_wait(&memory_mutex);
     mutex_kernel_wait(&tss_tree_mutex);
     process_info = (process_info_type *) new_tss->process_info;
     thread_link_list(&process_info->thread_list, new_tss);
@@ -348,6 +349,7 @@ return_type thread_create(void)
     process_info->number_of_threads++;
 
     mutex_kernel_signal(&tss_tree_mutex);
+    mutex_kernel_signal(&memory_mutex);
 
 new_thread_entry:
 
