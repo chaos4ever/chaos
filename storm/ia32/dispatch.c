@@ -80,15 +80,8 @@ static int update_data(void)
     }
 #endif
 
-    if (tss_node == NULL)
-    {
-        DEBUG_HALT("tss_node == NULL");
-    }
-
-    if (tss_list == NULL)
-    {
-        DEBUG_HALT("tss_list == NULL");
-    }
+    assert(tss_node != NULL, "tss_node == NULL");
+    assert(tss_list != NULL, "tss_list == NULL");
 
     // Search for the next task waiting to be dispatched.
     do
