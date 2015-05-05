@@ -42,11 +42,7 @@ tss_list_type *current_tss_node;
 
 void dispatch_init(void)
 {
-    if (idle_tss_node == NULL)
-    {
-        DEBUG_HALT("idle_tss_node == NULL");
-    }
-
+    assert(idle_tss_node != NULL, "idle_tss_node == NULL");
     current_tss_node = idle_tss_node;
 }
 
