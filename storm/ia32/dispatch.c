@@ -142,6 +142,9 @@ static int update_data(void)
     current_tss_node = tss_node;
     current_tss = current_tss_node->tss;
 
+    assert(current_tss->eip >= BASE_KERNEL &&
+           current_tss->eip <= BASE_PROCESS_SPACE_END, "EIP outside allowed range for processes. Possible TSS corruption?");
+
     // Update information about the current process.
     current_process_id = current_tss->process_id;
     current_cluster_id = current_tss->cluster_id;
