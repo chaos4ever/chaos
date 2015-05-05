@@ -126,8 +126,8 @@ return_type kernel_main(int arguments, char *argument[])
 {
     // We have seen cases where these were corrupted this early, so hence these assertions. Better safe than sorry;
     // fail-fast is definitely preferable if memory regions have been corrupted somehow.
-    assert(tss_tree_mutex == MUTEX_LOCKED, "tss_tree_mutex != MUTEX_LOCKED");
-    assert(memory_mutex == MUTEX_LOCKED, "memory_mutex != MUTEX_LOCKED");
+    assert(tss_tree_mutex == MUTEX_UNLOCKED, "tss_tree_mutex != MUTEX_UNLOCKED");
+    assert(memory_mutex == MUTEX_UNLOCKED, "memory_mutex != MUTEX_UNLOCKED");
 
     int servers_started = 0;
 
