@@ -9,7 +9,6 @@ COMMON_CFLAGS =
 CFLAGS = COMMON_CFLAGS + 
 "--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \
 -Wstrict-prototypes"
-CCFLAGS = COMMON_CFLAGS + "--std=gnu++11 " #-Wno-c++0x-compat"
 
 INCLUDES = %w(
   -I../include
