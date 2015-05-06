@@ -69,7 +69,9 @@ tss_list_type *thread_link_list(tss_list_type **list, storm_tss_type *tss)
     DEBUG_MESSAGE(DEBUG, "list = %p", list);
 
     // Add this entry into the list.
-    tss_list_node = memory_global_allocate(sizeof (tss_list_type));
+    tss_list_node = memory_global_allocate(sizeof(tss_list_type));
+    assert(tss_list_node != NULL, "memory_global_allocate returned a NULL pointer.");
+
     tss_list_node->thread_id = tss->thread_id;
     tss_list_node->next = (struct tss_list_type *) (*list);
     tss_list_node->previous = NULL;
