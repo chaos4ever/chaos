@@ -19,7 +19,7 @@ extern return_type system_process_name_set(const char *name);
 extern void system_shutdown(void) NORETURN;
 extern return_type system_sleep(unsigned int time);
 extern return_type system_sleep_microseconds(unsigned int time);
-extern return_type system_thread_create(void);
+extern return_type system_thread_create(void *(*start_routine)(void *), void *argument);
 extern return_type system_thread_name_set(const char *name);
 
 C_EXTERN_END

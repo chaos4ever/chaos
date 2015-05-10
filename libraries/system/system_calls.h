@@ -220,13 +220,17 @@ static inline return_type system_call_thread_control(thread_id_type thread_id, u
 }
 
 // fork() on steroids. ;-)
-static inline return_type system_call_thread_create(void)
+static inline return_type system_call_thread_create(void *(*start_routine)(void *), void *argument)
 {
     return_type return_value;
 
-    asm volatile("lcall %1, $0"
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
+                 "lcall %3, $0"
                  : "=a" (return_value)
-                 : "n" (SYSTEM_CALL_THREAD_CREATE << 3));
+                 : "ri" (start_routine),
+                   "ri" (argument),
+                   "n" (SYSTEM_CALL_THREAD_CREATE << 3));
 
     return return_value;
 }

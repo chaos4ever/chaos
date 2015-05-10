@@ -71,18 +71,13 @@ return_type system_thread_name_set(const char *name)
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_thread_create(void)
+return_type system_thread_create(void *(*start_routine)(void *), void *argument)
 {
-    switch (system_call_thread_create())
+    switch(system_call_thread_create(start_routine, argument))
     {
-        case STORM_RETURN_THREAD_NEW:
+        case STORM_RETURN_SUCCESS:
         {
-            return SYSTEM_RETURN_THREAD_NEW;
-        }
-
-        case STORM_RETURN_THREAD_OLD:
-        {
-            return SYSTEM_RETURN_THREAD_OLD;
+            return SYSTEM_RETURN_SUCCESS;
         }
 
         // Someone has added a return code in thread.c in the kernel without handling it in the system library. Please fix this in

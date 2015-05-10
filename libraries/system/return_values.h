@@ -8,18 +8,9 @@
 
 enum
 {
-  /* The call completed successfully. */
+    // The call completed successfully.
+    SYSTEM_RETURN_SUCCESS,
 
-  SYSTEM_RETURN_SUCCESS,
-
-  /* Those are returned by system_thread_create (), so that the caller
-     knows how to distinguish between the old and the new thread. */
-
-  SYSTEM_RETURN_THREAD_NEW,
-  SYSTEM_RETURN_THREAD_OLD,
-
-  /* Something went wrong in system_call_thread_create (), and we do
-     not yet handle it properly. Please fix. */
-
-  SYSTEM_RETURN_THREAD_CREATE_FAILED,
+    // Something went wrong in system_call_thread_create (), and we do not yet handle it properly. Please fix.
+    SYSTEM_RETURN_THREAD_CREATE_FAILED,
 };
