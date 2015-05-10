@@ -77,10 +77,10 @@ void wrapper_#{system_call}(void)
 {
   asm ("pushal\\n\"]
 
-      file.puts "
-                /* Push all arguments. This is pretty smart... */
-
-    "
+      file.puts %Q[
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      ]
 
       for parameter in 0..num_parameters - 1 do
         file.puts "                \"pushl  32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
@@ -91,21 +91,18 @@ void wrapper_#{system_call}(void)
 
                 "addl  \$4 * #{num_parameters}, %esp\\n"
 
-               /* Simulate a popa, without overwriting EAX. */
-
+               // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
                "popl   %edi\\n"
                "popl   %esi\\n"
                "popl   %ebp\\n"
 
-               /* ESP can't be popped for obvious reasons. */
-
+               // ESP can't be popped for obvious reasons.
                "addl   \$4, %esp\\n"
                "popl   %ebx\\n"
                "popl   %edx\\n"
                "popl   %ecx\\n"
 
-               /* EAX shall not be changed, since it is our return value. */
-
+               // Adjust the stack for the fact that EAX isn't being popped.
                "addl   \$4, %esp\\n"
                "lret   \$4 * #{num_parameters}\\n");
 }
