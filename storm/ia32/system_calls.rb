@@ -114,7 +114,7 @@ end
 def create_include_storm_system_calls_h(system_calls)
   File.open('../include/storm/system_calls.h', 'wb') do |file|
     file.puts(
-"// Generated automatically by system_calls.pl. Do not modify!
+"// Generated automatically by system_calls.rb. Do not modify!
 
 #pragma once
 
@@ -134,7 +134,7 @@ end
 
 def create_system_calls_auto_c(system_calls)
   File.open('system_calls-auto.c', 'wb') do |file|
-    file.puts "/* Generated automatically by system_calls.pl */
+    file.puts "// Generated automatically by system_calls.rb. Do not modify!
 
 #include <storm/ia32/system_calls.h>
 #include <storm/ia32/wrapper.h>
