@@ -40,7 +40,7 @@ GENERIC_OUTPUT = '../generic/libstorm_generic.a'
 KERNEL_OUTPUT = 'storm'
 LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
 
-task :default => [ :banner, :storm ] + OBJECTS
+task :default => [ :banner, :prepare, :storm ] + OBJECTS
 
 task :banner do
   print "Compiling ".bold
@@ -53,6 +53,21 @@ end
 task :install do
   sh "#{INSTALL_COMMAND} #{KERNEL_OUTPUT} #{INSTALL_ROOT}"
   puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
+end
+
+task :prepare => ['wrapper.c', 'system_calls-auto.c']
+
+# TODO: I guess the header files should be listed here also.
+file 'wrapper.c' => 'system_calls.rb' do |t|
+  script = t.prerequisites.first
+  print((script + ' ').cyan)
+  sh './' + script
+end
+
+file 'system_calls-auto.c' => 'system_calls.rb' do |t|
+  script = t.prerequisites.first
+  print((script + ' ').cyan)
+  sh './' + script
 end
 
 file KERNEL_OUTPUT => [ OUTPUT, GENERIC_OUTPUT ] do |t|
