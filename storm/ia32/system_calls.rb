@@ -132,6 +132,25 @@ def create_include_storm_system_calls_h(system_calls)
   end
 end
 
+def create_system_calls_auto_c(system_calls)
+  File.open('system_calls-auto.c', 'wb') do |file|
+    file.puts "/* Generated automatically by system_calls.pl */
+
+#include <storm/ia32/system_calls.h>
+#include <storm/ia32/wrapper.h>
+
+const system_call_type system_call[] =
+{
+"
+
+    system_calls.each do |system_call, num_parameters|
+      file.puts "  { SYSTEM_CALL_#{system_call.upcase}, wrapper_#{system_call}, #{num_parameters} },\n"
+    end
+
+    file.puts "};\n"
+  end
+end
+
 def create_include_storm_ia32_wrapper_h(system_calls)
   File.open('../include/storm/ia32/wrapper.h', 'wb') do |file|
     file.puts "// Generated automatically by system_calls.rb. Do not modify!
@@ -149,23 +168,5 @@ Dir.chdir($0) or fail "Couldn't change directory: $!"
 
 create_wrapper_c system_calls
 create_include_storm_system_calls_h system_calls
-
-file = File.open('system_calls-auto.c', 'wb') or fail "Couldn't create system_call-auto.c"
-
-file.puts "/* Generated automatically by system_calls.pl */
-
-#include <storm/ia32/system_calls.h>
-#include <storm/ia32/wrapper.h>
-
-const system_call_type system_call[] =
-{
-"
-
-system_calls.each { |system_call, num_parameters|
-  file.puts "  { SYSTEM_CALL_#{system_call.upcase}, wrapper_#{system_call}, #{num_parameters} },\n"
-}
-
-file.puts "};\n"
-file.close
-
+create_system_calls_auto_c system_calls
 create_include_storm_ia32_wrapper_h system_calls
