@@ -254,15 +254,6 @@ return_type kernel_main(int arguments, char *argument[])
                 break;
             }
 
-            // One or more of the sections was improperly page aligned.
-            case STORM_RETURN_UNALIGNED_SECTION:
-            {
-                debug_print("Error: %s has either the .text or .data section (or both) incorrectly aligned.\n",
-                            multiboot_module_info[index].name);
-                debug_run();
-                break;
-            }
-
             case RETURN_ELF_SECTION_MULTIPLE_INSTANCES:
             {
               debug_print("Error: There are multiple code or data sections in the ELF binary. This is not currently supported.\n");
@@ -271,7 +262,7 @@ return_type kernel_main(int arguments, char *argument[])
             }
 
             // The ELF was successfully executed.
-            case STORM_RETURN_SUCCESS:
+            case RETURN_SUCCESS:
             {
                 servers_started++;
                 debug_print("Started %s (process ID %u).\n",
