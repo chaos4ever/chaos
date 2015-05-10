@@ -40,7 +40,7 @@ GENERIC_OUTPUT = '../generic/libstorm_generic.a'
 KERNEL_OUTPUT = 'storm'
 LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
 
-task :default => [ :banner, :prepare, :storm ] + OBJECTS
+task :default => [:banner, :prepare, :storm] + OBJECTS
 
 task :banner do
   print "Compiling ".bold
@@ -70,7 +70,7 @@ file 'system_calls-auto.c' => 'system_calls.rb' do |t|
   sh './' + script
 end
 
-file KERNEL_OUTPUT => [ OUTPUT, GENERIC_OUTPUT ] do |t|
+file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
   begin
     puts '    Linking...'.blue.bold
 
