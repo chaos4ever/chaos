@@ -6,7 +6,7 @@
 # Author: Per Lundberg <per@halleluja.nu>
 
 # The lowest entry in the GDT we may use.
-gdt_start = 48
+$gdt_start = 48
 
 # Always add things at the END of this list! Otherwise, you'll have to recompile all programs, libraries and
 # everything... so please, don't.
@@ -61,6 +61,29 @@ system_calls = Hash[
 
  'dispatch_next',                 0,
 ]
+
+def create_include_storm_system_calls_h(system_calls)
+  file = File.open('../include/storm/system_calls.h', 'wb') or fail "Couldn't create storm/system_calls.h"
+
+  file.puts(
+"// Generated automatically by system_calls.pl. Do not modify!
+
+#pragma once
+
+#define SYSTEM_CALLS #{system_calls.keys.count}
+
+")
+    
+  file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{$gdt_start},\n"
+
+  system_calls.keys[1...system_calls.keys.count].each do |system_call|
+    file.puts "  SYSTEM_CALL_#{system_call.upcase},\n"
+  end
+
+  file.puts "};\n"
+    
+  file.close
+end
 
 $0.sub! 'system_calls.rb', ''
 Dir.chdir($0) or fail "Couldn't change directory: $!"
@@ -117,26 +140,7 @@ end
 
 file.close
 
-file = File.open('../include/storm/system_calls.h', 'wb') or fail "Couldn't create storm/system_calls.h"
-
-file.puts(
-  "// Generated automatically by system_calls.pl. Do not modify!
-
-#pragma once
-
-#define SYSTEM_CALLS #{system_calls.keys.count}
-
-")
-  
-file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{gdt_start},\n"
-
-system_calls.keys[1...system_calls.keys.count].each do |system_call|
-  file.puts "  SYSTEM_CALL_#{system_call.upcase},\n"
-end
-
-file.puts "};\n"
-  
-file.close
+create_include_storm_system_calls_h system_calls
 
 file = File.open('system_calls-auto.c', 'wb') or fail "Couldn't create system_call-auto.c"
 
