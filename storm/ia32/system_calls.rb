@@ -1,28 +1,16 @@
-#!/usr/bin/perl
+#!/usr/bin/env ruby
 
-# $Id: system_calls.pl,v 1.8 2000/10/22 21:38:16 plundis Exp $
-
-# Abstract: Generate files with system call stuff. Since they are a
-# bunch, updating them all manually was a little
-# uncomfortable. Ideally, the architecture independant parts of this
-# file should be in a generic directory.
+# Abstract: Generate files with system call stuff. Since they are a bunch, updating them all manually was a little
+# uncomfortable. Ideally, the architecture independant parts of this file should be in a generic directory.
+#
 # Author: Per Lundberg <per@halleluja.nu>
 
-# C-emulation. :)
-
-use strict;
-
 # The lowest entry in the GDT we may use.
+gdt_start = 48
 
-my $gdt_start = 48;
-
-my $count;
-
-# Always add things at the END of this list! Otherwise, you'll have to
-# recompile all programs, libraries and everything... so please, don't.
-
-my @system_call =  
-(
+# Always add things at the END of this list! Otherwise, you'll have to recompile all programs, libraries and
+# everything... so please, don't.
+system_calls = Hash[
  'init',                          0,
  'kernelfs_entry_read',           1,
  
@@ -72,137 +60,110 @@ my @system_call =
  # continues the task switching.
 
  'dispatch_next',                 0,
-);
+]
 
-my $system_calls = scalar @system_call / 2;
+$0.sub! 'system_calls.rb', ''
+Dir.chdir($0) or fail "Couldn't change directory: $!"
 
-# Subroutine for converting a string to all uppercase.
+file = File.open('wrapper.c', 'wb') or fail "Couldn't create wrapper.c"
 
-sub toupper
-{
-  my $string = shift;
- $string =~ tr/a-z/A-Z/;
-  return $string;
-};
-
-# First of all, switch to the directory where $0 is located.
-
-$0 =~ s/system_calls.pl//;
-chdir ($0) or die "Couldn't change directory: $!";
-
-# Start with wrapper.c
-
-my $FILE;
-
-open (FILE, ">wrapper.c") or die ("Couldn't create wrapper.c");
-
-print (FILE 
-"/* Generated automatically by system_calls.pl. Don't change. */
+file.puts
+"/* Generated automatically by system_calls.rb. Don't change. */
 
 #include <storm/ia32/defines.h>
 #include <storm/ia32/wrapper.h>
-");
+"
 
-for ($count = 0; $count < $system_calls; $count++)
+system_calls.each do |system_call, num_parameters|
+  file.puts "\
+void wrapper_#{system_call}(void)
 {
-  print (FILE "\
-void wrapper_$system_call[$count * 2] (void)
-{
-  asm (\"pushal\\n\"");
+  asm (\"pushal\\n\""
 
-  print (FILE "\
+  file.puts "\
                 /* Push all arguments. This is pretty smart... */
 
-");
+"
 
-  for (my $variables = 0; $variables < $system_call[$count * 2 + 1];
-       $variables++)
-  {
-    print (FILE "                \"pushl  32 + 4 + $system_call[$count * 2 + 1] * 4(%esp)\\n\"\n");
-  }
-  print (FILE "\
-                \"call	system_call_$system_call[$count * 2]\\n\"
+  for parameter in 0..num_parameters do
+    file.puts "                \"pushl  32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
+  end
 
-                \"addl	\$4 * $system_call[$count * 2 + 1], %esp\\n\"
+  file.puts "\
+                ""call  system_call_#{system_call}\\n""
 
-		/* Simulate a popa, without overwriting EAX. */
+                ""addl  \$4 * #{num_parameters}, %esp\\n""
 
-		\"popl	%edi\\n\"
-		\"popl	%esi\\n\"
-		\"popl	%ebp\\n\"
+    /* Simulate a popa, without overwriting EAX. */
 
-		/* ESP can't be popped for obvious reasons. */
+    ""popl  %edi\\n""
+    ""popl  %esi\\n""
+    ""popl  %ebp\\n""
 
-		\"addl	\$4, %esp\\n\"
-		\"popl	%ebx\\n\"
-		\"popl	%edx\\n\"
-		\"popl	%ecx\\n\"
+    /* ESP can't be popped for obvious reasons. */
 
-		/* EAX shall not be changed, since it is our return
-          	  value. */
+    ""addl  \$4, %esp\\n""
+    ""popl  %ebx\\n""
+    ""popl  %edx\\n""
+    ""popl  %ecx\\n""
 
-		\"addl	\$4, %esp\\n\"
-		\"lret	\$4 * $system_call[$count * 2 + 1]\\n\");
+    /* EAX shall not be changed, since it is our return value. */
+
+    ""addl  \$4, %esp\\n""
+    ""lret  \$4 * #{num_parameters}\\n"");
 }
-");
-}
+"
+end
 
-close (FILE);
+file.close
 
-# ...and continue to include/storm/system_calls.h
+file = File.open('../include/storm/system_calls.h', 'wb') or fail "Couldn't create storm/system_calls.h"
 
-open (FILE, ">../include/storm/system_calls.h") or die ("Couldn't create storm/system_calls.h");
+file.puts
+"/* Generated automatically by system_calls.pl */
 
-print (FILE "/* Generated automatically by system_calls.pl */\n\n");
+#pragma once
 
-printf (FILE "#ifndef __STORM_SYSTEM_CALLS_H__\
-#define __STORM_SYSTEM_CALLS_H__\n\
-#define SYSTEM_CALLS %u\n\n", $system_calls);
+#define SYSTEM_CALLS #{system_calls.keys.count}
+
+"
   
-printf (FILE "enum\n{\n  SYSTEM_CALL_%s = $gdt_start,\n", toupper ($system_call[0]));
+file.puts "enum\n{\n  SYSTEM_CALL_%s = gdt_start,\n", system_calls.keys.first.upcase
 
-for ($count = 1; $count < $system_calls; $count++)
-{
-  printf (FILE "  SYSTEM_CALL_%s,\n", toupper ($system_call[$count * 2]))
-};
+system_calls.each { |system_call, num_parameters| file.puts "  SYSTEM_CALL_%s,\n", system_call.upcase }
 
-print (FILE "};\n\
-#endif /* !__STORM_SYSTEM_CALL_H__ */\n");
+file.puts "};\n"
   
-close (FILE);
+file.close
 
-# Now, let's create system_calls-auto.c.
+file = File.open('system_calls-auto.c', 'wb') or fail "Couldn't create system_call-auto.c"
 
-open (FILE, ">system_calls-auto.c") or die ("Couldn't create system_call-auto.c");
+file.puts "/* Generated automatically by system_calls.pl */
 
-print (FILE "/* Generated automatically by system_calls.pl */\n\
-#include <storm/ia32/system_calls.h>\
-#include <storm/ia32/wrapper.h>\n\
-const system_call_type system_call[] =\n{\n");
+#include <storm/ia32/system_calls.h>
+#include <storm/ia32/wrapper.h>
 
-for ($count = 0; $count < $system_calls; $count++)
+const system_call_type system_call[] =
 {
-  printf (FILE "  { SYSTEM_CALL_%s, wrapper_%s, $system_call[$count * 2 + 1] },\n",
-	  toupper ($system_call[$count * 2]), $system_call[$count * 2]);
+"
+
+system_calls.each { |system_call, num_parameters|
+  file.puts "  { SYSTEM_CALL_#{system_call.upcase}, wrapper_#{system_call}, #{num_parameters} },\n"
 }
 
-print (FILE "};\n");
-close (FILE);
+file.puts "};\n"
+file.close
 
-# ...and include/storm/wrapper.h
+file = File.open('../include/storm/ia32/wrapper.h', 'wb') or fail "Couldn't create wrapper.h"
 
-open (FILE, ">../include/storm/ia32/wrapper.h") or die ("Couldn't create wrapper.h");
+file.puts "/* Generated automatically by system_calls.pl */
 
-print (FILE "/* Generated automatically by system_calls.pl */\n\
-#ifndef __STORM_IA32_WRAPPER_H__\
-#define __STORM_IA32_WRAPPER_H__\n\n");
+#pragma once
 
-for ($count = 0; $count < $system_calls; $count++)
-{
-  print (FILE "void wrapper_$system_call[$count * 2] (void);\n")
+"
+
+system_calls.each { |system_call|
+  file.puts "void wrapper_system_call(void);\n"
 }
 
-print (FILE "\n#endif /* !__STORM_IA32_WRAPPER_H__ */\n");
-close (FILE);
-
-# Over and out!
+file.close
