@@ -1,7 +1,6 @@
-/* Generated automatically by system_calls.pl */
+// Generated automatically by system_calls.pl. Do not modify!
 
-#ifndef __STORM_SYSTEM_CALLS_H__
-#define __STORM_SYSTEM_CALLS_H__
+#pragma once
 
 #define SYSTEM_CALLS 34
 
@@ -42,5 +41,3 @@ enum
   SYSTEM_CALL_TIMER_READ,
   SYSTEM_CALL_DISPATCH_NEXT,
 };
-
-#endif /* !__STORM_SYSTEM_CALL_H__ */
