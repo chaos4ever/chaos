@@ -299,18 +299,13 @@ return_type thread_create(void)
 
     // FIXME: Map into all sister threads address spaces when creating a new page table for a thread.
 
-    // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
     mutex_kernel_wait(&memory_mutex);
 
+    // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, 1, "Thread PL0 stack.");
-
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE),
-                       stack_physical_page, 1, PAGE_KERNEL);
-
-    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK,
-                SIZE_PAGE * 1);
-
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, 1, PAGE_KERNEL);
+    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
     memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1, PAGE_KERNEL);
 
     // Phew... Finished setting up a PL0 stack. Lets take a deep breath and do the same for the PL3 stack, which is
@@ -318,18 +313,12 @@ return_type thread_create(void)
 
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, current_tss->stack_pages, "Thread PL3 stack.");
-
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE),
-                       stack_physical_page, current_tss->stack_pages,
-                       PAGE_KERNEL);
-
-    memory_copy((u8 *) BASE_PROCESS_CREATE,
-                (u8 *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, current_tss->stack_pages, PAGE_KERNEL);
+    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
                 current_tss->stack_pages * SIZE_PAGE);
-
-    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages,
-                             stack_physical_page, current_tss->stack_pages,
+    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page, current_tss->stack_pages,
                              PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
+
     mutex_kernel_signal(&memory_mutex);
 
     new_tss->ss = new_tss->ss0;
