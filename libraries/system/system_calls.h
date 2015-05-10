@@ -11,6 +11,9 @@
 
 #include <storm/storm.h>
 
+// TODO: Should consider automatically creating this file in system_calls.rb. It feels stupid to have to maintain this manually.
+// The difficult part is the asm constraints though, can be a bit tricky...
+
 // Inlines through New York can be dangerous -- so please use a helmet!
 static inline return_type system_call_init(void)
 {
