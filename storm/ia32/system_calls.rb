@@ -63,9 +63,8 @@ system_calls = Hash[
 ]
 
 def create_include_storm_system_calls_h(system_calls)
-  file = File.open('../include/storm/system_calls.h', 'wb') or fail "Couldn't create storm/system_calls.h"
-
-  file.puts(
+  File.open('../include/storm/system_calls.h', 'wb') do |file|
+    file.puts(
 "// Generated automatically by system_calls.pl. Do not modify!
 
 #pragma once
@@ -74,29 +73,26 @@ def create_include_storm_system_calls_h(system_calls)
 
 ")
     
-  file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{$gdt_start},\n"
+    file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{$gdt_start},\n"
 
-  system_calls.keys[1...system_calls.keys.count].each do |system_call|
-    file.puts "  SYSTEM_CALL_#{system_call.upcase},\n"
+    system_calls.keys[1...system_calls.keys.count].each do |system_call|
+      file.puts "  SYSTEM_CALL_#{system_call.upcase},\n"
+    end
+
+    file.puts "};\n"
   end
-
-  file.puts "};\n"
-    
-  file.close
 end
 
 def create_include_storm_ia32_wrapper_h(system_calls)
-  file = File.open('../include/storm/ia32/wrapper.h', 'wb') or fail "Couldn't create wrapper.h"
-
-  file.puts "// Generated automatically by system_calls.rb. Do not modify!
+  File.open('../include/storm/ia32/wrapper.h', 'wb') do |file|
+    file.puts "// Generated automatically by system_calls.rb. Do not modify!
 
 #pragma once
 
 "
 
-  system_calls.keys.each { |system_call| file.puts "void wrapper_#{system_call}(void);\n" }
-
-  file.close
+    system_calls.keys.each { |system_call| file.puts "void wrapper_#{system_call}(void);\n" }
+  end
 end
 
 $0.sub! 'system_calls.rb', ''
