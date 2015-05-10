@@ -163,8 +163,8 @@ def create_include_storm_ia32_wrapper_h(system_calls)
   end
 end
 
-$0.sub! 'system_calls.rb', ''
-Dir.chdir($0) or fail "Couldn't change directory: $!"
+script_directory = $0.sub 'system_calls.rb', ''
+Dir.chdir(script_directory) or fail "Couldn't change directory: $!"
 
 create_wrapper_c system_calls
 create_include_storm_system_calls_h system_calls
