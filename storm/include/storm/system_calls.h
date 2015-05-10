@@ -1,4 +1,4 @@
-// Generated automatically by system_calls.pl. Do not modify!
+// Generated automatically by system_calls.rb. Do not modify!
 
 #pragma once
 
