@@ -217,7 +217,7 @@ thread_id_type thread_get_free_id(void)
 
 // FIXME: Some regions used by the kernel for temporary mappings need to be unique (or mutexed) to each thread under
 // a cluster. Discuss how this is best done! Right now, we lock everything, which is sub-optimal.
-return_type thread_create(void)
+return_type thread_create(void *(*start_routine) (void *), void *argument)
 {
     storm_tss_type *new_tss;
     page_directory_entry_page_table *new_page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
@@ -257,7 +257,7 @@ return_type thread_create(void)
     mutex_kernel_signal(&tss_tree_mutex);
 
     // What has changed in the TSS is the ESP/ESP0 and the EIP. We must update those fields.
-    new_tss->eip = (u32) &&new_thread_entry;
+    new_tss->eip = (u32) start_routine;
     new_tss->cr3 = page_directory_physical_page * SIZE_PAGE;
 
     //  debug_print ("thread: %u\n", new_tss->thread_id);
