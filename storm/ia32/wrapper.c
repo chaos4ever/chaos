@@ -1,1080 +1,978 @@
-/* Generated automatically by system_calls.pl. Don't change. */
+// Generated automatically by system_calls.rb. Do not modify!
 
 #include <storm/ia32/defines.h>
 #include <storm/ia32/wrapper.h>
 
-void wrapper_init (void)
+void wrapper_init(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "call   system_call_init\n"
 
-                "call	system_call_init\n"
+                "addl   $4 * 0, %esp\n"
 
-                "addl	$4 * 0, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 0\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 0\n");
 }
 
-void wrapper_kernelfs_entry_read (void)
+void wrapper_kernelfs_entry_read(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_kernelfs_entry_read\n"
 
-                "call	system_call_kernelfs_entry_read\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_mailbox_create (void)
+void wrapper_mailbox_create(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "call   system_call_mailbox_create\n"
 
-                "call	system_call_mailbox_create\n"
+                "addl   $4 * 5, %esp\n"
 
-                "addl	$4 * 5, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 5\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 5\n");
 }
 
-void wrapper_mailbox_destroy (void)
+void wrapper_mailbox_destroy(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_mailbox_destroy\n"
 
-                "call	system_call_mailbox_destroy\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_mailbox_flush (void)
+void wrapper_mailbox_flush(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_mailbox_flush\n"
 
-                "call	system_call_mailbox_flush\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_mailbox_send (void)
+void wrapper_mailbox_send(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_mailbox_send\n"
 
-                "call	system_call_mailbox_send\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_mailbox_receive (void)
+void wrapper_mailbox_receive(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_mailbox_receive\n"
 
-                "call	system_call_mailbox_receive\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_service_create (void)
+void wrapper_service_create(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_service_create\n"
 
-                "call	system_call_service_create\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_service_destroy (void)
+void wrapper_service_destroy(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_service_destroy\n"
 
-                "call	system_call_service_destroy\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_service_get (void)
+void wrapper_service_get(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_service_get\n"
 
-                "call	system_call_service_get\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_service_protocol_get (void)
+void wrapper_service_protocol_get(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_service_protocol_get\n"
 
-                "call	system_call_service_protocol_get\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_service_protocol_get_amount (void)
+void wrapper_service_protocol_get_amount(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_service_protocol_get_amount\n"
 
-                "call	system_call_service_protocol_get_amount\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_dma_transfer (void)
+void wrapper_dma_transfer(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
-                "pushl  32 + 4 + 5 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "pushl 32 + 4 + 5 * 4(%esp)\n"
+                "call   system_call_dma_transfer\n"
 
-                "call	system_call_dma_transfer\n"
+                "addl   $4 * 5, %esp\n"
 
-                "addl	$4 * 5, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 5\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 5\n");
 }
 
-void wrapper_dma_transfer_cancel (void)
+void wrapper_dma_transfer_cancel(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_dma_transfer_cancel\n"
 
-                "call	system_call_dma_transfer_cancel\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_dma_register (void)
+void wrapper_dma_register(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_dma_register\n"
 
-                "call	system_call_dma_register\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_dma_unregister (void)
+void wrapper_dma_unregister(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_dma_unregister\n"
 
-                "call	system_call_dma_unregister\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_irq_register (void)
+void wrapper_irq_register(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_irq_register\n"
 
-                "call	system_call_irq_register\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_irq_unregister (void)
+void wrapper_irq_unregister(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_irq_unregister\n"
 
-                "call	system_call_irq_unregister\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_irq_wait (void)
+void wrapper_irq_wait(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_irq_wait\n"
 
-                "call	system_call_irq_wait\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_irq_acknowledge (void)
+void wrapper_irq_acknowledge(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_irq_acknowledge\n"
 
-                "call	system_call_irq_acknowledge\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_memory_allocate (void)
+void wrapper_memory_allocate(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_memory_allocate\n"
 
-                "call	system_call_memory_allocate\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_memory_deallocate (void)
+void wrapper_memory_deallocate(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_memory_deallocate\n"
 
-                "call	system_call_memory_deallocate\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_memory_reserve (void)
+void wrapper_memory_reserve(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_memory_reserve\n"
 
-                "call	system_call_memory_reserve\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_memory_get_physical_address (void)
+void wrapper_memory_get_physical_address(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
-                "pushl  32 + 4 + 2 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "pushl 32 + 4 + 2 * 4(%esp)\n"
+                "call   system_call_memory_get_physical_address\n"
 
-                "call	system_call_memory_get_physical_address\n"
+                "addl   $4 * 2, %esp\n"
 
-                "addl	$4 * 2, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 2\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 2\n");
 }
 
-void wrapper_port_range_register (void)
+void wrapper_port_range_register(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_port_range_register\n"
 
-                "call	system_call_port_range_register\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_port_range_unregister (void)
+void wrapper_port_range_unregister(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_port_range_unregister\n"
 
-                "call	system_call_port_range_unregister\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_process_create (void)
+void wrapper_process_create(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_process_create\n"
 
-                "call	system_call_process_create\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_process_name_set (void)
+void wrapper_process_name_set(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_process_name_set\n"
 
-                "call	system_call_process_name_set\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_process_parent_unblock (void)
+void wrapper_process_parent_unblock(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "call   system_call_process_parent_unblock\n"
 
-                "call	system_call_process_parent_unblock\n"
+                "addl   $4 * 0, %esp\n"
 
-                "addl	$4 * 0, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 0\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 0\n");
 }
 
-void wrapper_thread_create (void)
+void wrapper_thread_create(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "call   system_call_thread_create\n"
 
-                "call	system_call_thread_create\n"
+                "addl   $4 * 0, %esp\n"
 
-                "addl	$4 * 0, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 0\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 0\n");
 }
 
-void wrapper_thread_control (void)
+void wrapper_thread_control(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
-                "pushl  32 + 4 + 3 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "pushl 32 + 4 + 3 * 4(%esp)\n"
+                "call   system_call_thread_control\n"
 
-                "call	system_call_thread_control\n"
+                "addl   $4 * 3, %esp\n"
 
-                "addl	$4 * 3, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 3\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 3\n");
 }
 
-void wrapper_thread_name_set (void)
+void wrapper_thread_name_set(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_thread_name_set\n"
 
-                "call	system_call_thread_name_set\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_timer_read (void)
+void wrapper_timer_read(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
-                "pushl  32 + 4 + 1 * 4(%esp)\n"
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "pushl 32 + 4 + 1 * 4(%esp)\n"
+                "call   system_call_timer_read\n"
 
-                "call	system_call_timer_read\n"
+                "addl   $4 * 1, %esp\n"
 
-                "addl	$4 * 1, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 1\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 1\n");
 }
 
-void wrapper_dispatch_next (void)
+void wrapper_dispatch_next(void)
 {
   asm ("pushal\n"
-                /* Push all arguments. This is pretty smart... */
 
+                // Push all arguments. This approach pretty smart; it utilizes the fact that the stack grows downwards
+                // so the "next parameter to push" is always in the same memory location. :)
+      
+                "call   system_call_dispatch_next\n"
 
-                "call	system_call_dispatch_next\n"
+                "addl   $4 * 0, %esp\n"
 
-                "addl	$4 * 0, %esp\n"
+                // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
+                "popl   %edi\n"
+                "popl   %esi\n"
+                "popl   %ebp\n"
 
-		/* Simulate a popa, without overwriting EAX. */
+                // ESP can't be popped for obvious reasons.
+                "addl   $4, %esp\n"
+                "popl   %ebx\n"
+                "popl   %edx\n"
+                "popl   %ecx\n"
 
-		"popl	%edi\n"
-		"popl	%esi\n"
-		"popl	%ebp\n"
-
-		/* ESP can't be popped for obvious reasons. */
-
-		"addl	$4, %esp\n"
-		"popl	%ebx\n"
-		"popl	%edx\n"
-		"popl	%ecx\n"
-
-		/* EAX shall not be changed, since it is our return
-          	  value. */
-
-		"addl	$4, %esp\n"
-		"lret	$4 * 0\n");
+                // Adjust the stack for the fact that EAX isn't being popped.
+                "addl   $4, %esp\n"
+                "lret   $4 * 0\n");
 }

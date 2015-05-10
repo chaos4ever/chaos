@@ -1,4 +1,4 @@
-/* Generated automatically by system_calls.pl */
+// Generated automatically by system_calls.rb. Do not modify!
 
 #include <storm/ia32/system_calls.h>
 #include <storm/ia32/wrapper.h>
