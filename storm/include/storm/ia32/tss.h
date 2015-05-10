@@ -124,9 +124,6 @@ typedef struct
     // The current size of the I/O map.
     unsigned int iomap_size;
 
-    // Is this the new Era of Personal Computing? Or is it just Linux and Windows - the dynamic duo?
-    bool new_thread;
-
     // Process capabilities.
     capability_type capability;
 

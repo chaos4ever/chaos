@@ -323,7 +323,6 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
 
     new_tss->ss = new_tss->ss0;
     new_tss->cs = SELECTOR_KERNEL_CODE;
-    new_tss->new_thread = TRUE;
     new_tss->eflags = THREAD_NEW_EFLAGS;
     new_tss->timeslices = 0;
     string_copy(new_tss->thread_name, "unnamed");
@@ -337,29 +336,18 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     process_info->number_of_threads++;
     mutex_kernel_signal(&tss_tree_mutex);
 
-new_thread_entry:
+    new_tss->esp -= 4;
+    *(void**)new_tss->esp = argument;
+
+    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now, returning from a
+    // thread will trigger a page fault.
+    new_tss->esp -= 4;
+    *(void**)new_tss->esp = NULL;
 
     DEBUG_MESSAGE(DEBUG, "Enabling interrupts");
     cpu_interrupts_enable();
 
-    // Indicate to the caller whether this is the original thread or the new one.
-    if (current_tss->new_thread)
-    {
-        current_tss->new_thread = FALSE;
-
-        // FIXME: This shouldn't have to be.
-        dispatch_next();
-
-        DEBUG_MESSAGE(DEBUG, "Exiting, case 1.");
-
-        return STORM_RETURN_THREAD_NEW;
-    }
-    else
-    {
-        DEBUG_MESSAGE(DEBUG, "Exiting, case 2.");
-
-        return STORM_RETURN_THREAD_OLD;
-    }
+    return STORM_RETURN_SUCCESS;
 }
 
 // Delete a thread. If all threads under a cluster are deleted, the cluster is removed. If all clusters under a process

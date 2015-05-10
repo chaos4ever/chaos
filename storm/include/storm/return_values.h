@@ -30,12 +30,6 @@ enum
     // A limit has been overrun.
     STORM_RETURN_LIMIT_OVERRUN,
 
-    // The current thread is the new thread. (Returned by system_call_thread_create)
-    STORM_RETURN_THREAD_NEW,
-
-    // The current thread is the old thread. (Returned by system_call_thread_create)
-    STORM_RETURN_THREAD_OLD,
-
     // The DMA channel specified does not exist.
     STORM_RETURN_INVALID_DMA_CHANNEL,
 
