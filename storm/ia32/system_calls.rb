@@ -85,6 +85,20 @@ def create_include_storm_system_calls_h(system_calls)
   file.close
 end
 
+def create_include_storm_ia32_wrapper_h(system_calls)
+  file = File.open('../include/storm/ia32/wrapper.h', 'wb') or fail "Couldn't create wrapper.h"
+
+  file.puts "// Generated automatically by system_calls.rb. Do not modify!
+
+#pragma once
+
+"
+
+  system_calls.keys.each { |system_call| file.puts "void wrapper_#{system_call}(void);\n" }
+
+  file.close
+end
+
 $0.sub! 'system_calls.rb', ''
 Dir.chdir($0) or fail "Couldn't change directory: $!"
 
@@ -160,16 +174,4 @@ system_calls.each { |system_call, num_parameters|
 file.puts "};\n"
 file.close
 
-file = File.open('../include/storm/ia32/wrapper.h', 'wb') or fail "Couldn't create wrapper.h"
-
-file.puts "/* Generated automatically by system_calls.pl */
-
-#pragma once
-
-"
-
-system_calls.each { |system_call|
-  file.puts "void wrapper_system_call(void);\n"
-}
-
-file.close
+create_include_storm_ia32_wrapper_h system_calls
