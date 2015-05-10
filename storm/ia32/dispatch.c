@@ -42,11 +42,7 @@ tss_list_type *current_tss_node;
 
 void dispatch_init(void)
 {
-    if (idle_tss_node == NULL)
-    {
-        DEBUG_HALT("idle_tss_node == NULL");
-    }
-
+    assert(idle_tss_node != NULL, "idle_tss_node == NULL");
     current_tss_node = idle_tss_node;
 }
 
@@ -84,15 +80,8 @@ static int update_data(void)
     }
 #endif
 
-    if (tss_node == NULL)
-    {
-        DEBUG_HALT("tss_node == NULL");
-    }
-
-    if (tss_list == NULL)
-    {
-        DEBUG_HALT("tss_list == NULL");
-    }
+    assert(tss_node != NULL, "tss_node == NULL");
+    assert(tss_list != NULL, "tss_list == NULL");
 
     // Search for the next task waiting to be dispatched.
     do
@@ -152,6 +141,9 @@ static int update_data(void)
 
     current_tss_node = tss_node;
     current_tss = current_tss_node->tss;
+
+    assert(current_tss->eip >= BASE_KERNEL &&
+           current_tss->eip <= BASE_PROCESS_SPACE_END, "EIP outside allowed range for processes. Possible TSS corruption?");
 
     // Update information about the current process.
     current_process_id = current_tss->process_id;
