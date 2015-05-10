@@ -62,6 +62,58 @@ system_calls = Hash[
  'dispatch_next',                 0,
 ]
 
+def create_wrapper_c(system_calls)
+  File.open('wrapper.c', 'wb') do |file|
+    file.puts(
+"// Generated automatically by system_calls.rb. Do not modify!
+
+#include <storm/ia32/defines.h>
+#include <storm/ia32/wrapper.h>
+")
+
+    system_calls.each do |system_call, num_parameters|
+      file.puts %Q[
+void wrapper_#{system_call}(void)
+{
+  asm ("pushal\\n\"]
+
+      file.puts "
+                /* Push all arguments. This is pretty smart... */
+
+    "
+
+      for parameter in 0..num_parameters - 1 do
+        file.puts "                \"pushl  32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
+      end
+
+      file.puts %Q[\
+                "call  system_call_#{system_call}\\n"
+
+                "addl  \$4 * #{num_parameters}, %esp\\n"
+
+               /* Simulate a popa, without overwriting EAX. */
+
+               "popl   %edi\\n"
+               "popl   %esi\\n"
+               "popl   %ebp\\n"
+
+               /* ESP can't be popped for obvious reasons. */
+
+               "addl   \$4, %esp\\n"
+               "popl   %ebx\\n"
+               "popl   %edx\\n"
+               "popl   %ecx\\n"
+
+               /* EAX shall not be changed, since it is our return value. */
+
+               "addl   \$4, %esp\\n"
+               "lret   \$4 * #{num_parameters}\\n");
+}
+]
+    end
+  end
+end
+
 def create_include_storm_system_calls_h(system_calls)
   File.open('../include/storm/system_calls.h', 'wb') do |file|
     file.puts(
@@ -98,58 +150,7 @@ end
 $0.sub! 'system_calls.rb', ''
 Dir.chdir($0) or fail "Couldn't change directory: $!"
 
-file = File.open('wrapper.c', 'wb') or fail "Couldn't create wrapper.c"
-
-file.puts
-"/* Generated automatically by system_calls.rb. Don't change. */
-
-#include <storm/ia32/defines.h>
-#include <storm/ia32/wrapper.h>
-"
-
-system_calls.each do |system_call, num_parameters|
-  file.puts "\
-void wrapper_#{system_call}(void)
-{
-  asm (\"pushal\\n\""
-
-  file.puts "\
-                /* Push all arguments. This is pretty smart... */
-
-"
-
-  for parameter in 0..num_parameters do
-    file.puts "                \"pushl  32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
-  end
-
-  file.puts "\
-                ""call  system_call_#{system_call}\\n""
-
-                ""addl  \$4 * #{num_parameters}, %esp\\n""
-
-    /* Simulate a popa, without overwriting EAX. */
-
-    ""popl  %edi\\n""
-    ""popl  %esi\\n""
-    ""popl  %ebp\\n""
-
-    /* ESP can't be popped for obvious reasons. */
-
-    ""addl  \$4, %esp\\n""
-    ""popl  %ebx\\n""
-    ""popl  %edx\\n""
-    ""popl  %ecx\\n""
-
-    /* EAX shall not be changed, since it is our return value. */
-
-    ""addl  \$4, %esp\\n""
-    ""lret  \$4 * #{num_parameters}\\n"");
-}
-"
-end
-
-file.close
-
+create_wrapper_c system_calls
 create_include_storm_system_calls_h system_calls
 
 file = File.open('system_calls-auto.c', 'wb') or fail "Couldn't create system_call-auto.c"
