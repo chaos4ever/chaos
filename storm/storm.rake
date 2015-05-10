@@ -3,7 +3,7 @@ DEFINES = (ENV['DEFINES'] || '') + " -DPACKAGE_NAME=\\\"storm\\\" -DPACKAGE_VERS
 COMMON_CFLAGS =
 "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
 -Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
--Wmissing-noreturn -pipe -O3 -fno-builtin -funsigned-char \
+-Wmissing-noreturn -pipe -O3 -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
 -g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} "
 
 CFLAGS = COMMON_CFLAGS + 

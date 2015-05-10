@@ -312,10 +312,11 @@ void *memory_global_allocate(unsigned int length)
     int index = slab_heap_index(length);
     slab_block_type *block;
 
-    if (tss_tree_mutex != MUTEX_LOCKED &&
-        memory_mutex != MUTEX_LOCKED && initialised)
+    if (initialised)
     {
-        DEBUG_HALT("Code is not properly mutexed.");
+        assert(tss_tree_mutex == MUTEX_LOCKED || memory_mutex == MUTEX_LOCKED,
+               "Both tss_tree_mutex and memory_mutex were unlocked. memory_global_allocate() cannot be called when " \
+               "both of these mutexes are unlocked.");
     }
 
     //  mutex_kernel_wait (&memory_mutex);
