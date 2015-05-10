@@ -11,55 +11,53 @@ $gdt_start = 48
 # Always add things at the END of this list! Otherwise, you'll have to recompile all programs, libraries and
 # everything... so please, don't.
 system_calls = Hash[
- 'init',                          0,
- 'kernelfs_entry_read',           1,
- 
- 'mailbox_create',                5,
- 'mailbox_destroy',               1,
- 'mailbox_flush',                 1,
- 'mailbox_send',                  2,
- 'mailbox_receive',               2,
+  'init',                         0,
+  'kernelfs_entry_read',          1,
 
- 'service_create',                3,
- 'service_destroy',		  1,
- 'service_get',                   3,
- 'service_protocol_get',          2,
- 'service_protocol_get_amount',   1,
- 
- 'dma_transfer',                  5,
- 'dma_transfer_cancel',           1,
- 'dma_register',                  2,
- 'dma_unregister',                1,
+  'mailbox_create',               5,
+  'mailbox_destroy',              1,
+  'mailbox_flush',                1,
+  'mailbox_send',                 2,
+  'mailbox_receive',              2,
 
- 'irq_register',                  2,
- 'irq_unregister',                1,
- 'irq_wait',                      1,
- 'irq_acknowledge',               1,
+  'service_create',               3,
+  'service_destroy',		          1,
+  'service_get',                  3,
+  'service_protocol_get',         2,
+  'service_protocol_get_amount',  1,
 
- 'memory_allocate',		  3,
- 'memory_deallocate',             1,
- 'memory_reserve',                3,
- 'memory_get_physical_address',   2,
- 
- 'port_range_register',           3,
- 'port_range_unregister',         1,
+  'dma_transfer',                 5,
+  'dma_transfer_cancel',          1,
+  'dma_register',                 2,
+  'dma_unregister',               1,
 
- 'process_create',                1,
- 'process_name_set',              1,
- 'process_parent_unblock',        0,
+  'irq_register',                 2,
+  'irq_unregister',               1,
+  'irq_wait',                     1,
+  'irq_acknowledge',              1,
 
- # 'cluster_create',		  0
+  'memory_allocate',		          3,
+  'memory_deallocate',            1,
+  'memory_reserve',               3,
+  'memory_get_physical_address',  2,
 
- 'thread_create',                 0,
- 'thread_control',                3,
- 'thread_name_set',               1,
+  'port_range_register',          3,
+  'port_range_unregister',        1,
 
- 'timer_read',                    1,
+  'process_create',               1,
+  'process_name_set',             1,
+  'process_parent_unblock',       0,
 
- # This system call releases all the rest of this timeslice and
- # continues the task switching.
+  # 'cluster_create',		  0
 
- 'dispatch_next',                 0,
+  'thread_create',                0,
+  'thread_control',               3,
+  'thread_name_set',              1,
+
+  'timer_read',                   1,
+
+  # This system call releases all the rest of this timeslice and continues the task switching.
+  'dispatch_next',                0,
 ]
 
 def create_wrapper_c(system_calls)
