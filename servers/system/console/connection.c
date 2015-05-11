@@ -340,8 +340,10 @@ static void connection_provider_mouse(message_parameter_type *message_parameter)
 }
 
 // Handle an IPC connection request.
-void handle_connection(mailbox_id_type reply_mailbox_id)
+void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
+    system_thread_name_set("Handling connection");
+
     u32 *data;
     u32 **data_pointer = &data;
     message_parameter_type message_parameter;
@@ -356,7 +358,7 @@ void handle_connection(mailbox_id_type reply_mailbox_id)
     memory_allocate((void **) our_application_pointer, sizeof(console_application_type));
 
     // Accept the connection.
-    ipc_structure.output_mailbox_id = reply_mailbox_id;
+    ipc_structure.output_mailbox_id = *reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
     message_parameter.data = data;
