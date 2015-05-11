@@ -228,8 +228,8 @@ static inline return_type system_call_thread_create(thread_entry_point_type *thr
                  "pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value)
-                 : "ri" (thread_entry_point),
-                   "ri" (argument),
+                 : "ri" (argument),
+                   "ri" (thread_entry_point),
                    "n" (SYSTEM_CALL_THREAD_CREATE << 3));
 
     return return_value;
