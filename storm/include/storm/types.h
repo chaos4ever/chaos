@@ -47,3 +47,4 @@ typedef unsigned int mailbox_id_type;
 typedef unsigned int mutex_id_type;
 typedef volatile int spinlock_type;
 typedef u32 limit_type;
+typedef void (thread_entry_point_type)(void *);

@@ -71,9 +71,9 @@ return_type system_thread_name_set(const char *name)
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_thread_create(void *(*start_routine)(void *), void *argument)
+return_type system_thread_create(thread_entry_point_type *thread_entry_point, void *argument)
 {
-    switch(system_call_thread_create(start_routine, argument))
+    switch (system_call_thread_create(thread_entry_point, argument))
     {
         case STORM_RETURN_SUCCESS:
         {

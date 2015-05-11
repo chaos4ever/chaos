@@ -220,7 +220,7 @@ static inline return_type system_call_thread_control(thread_id_type thread_id, u
 }
 
 // fork() on steroids. ;-)
-static inline return_type system_call_thread_create(void *(*start_routine)(void *), void *argument)
+static inline return_type system_call_thread_create(thread_entry_point_type *thread_entry_point, void *argument)
 {
     return_type return_value;
 
@@ -228,7 +228,7 @@ static inline return_type system_call_thread_create(void *(*start_routine)(void 
                  "pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value)
-                 : "ri" (start_routine),
+                 : "ri" (thread_entry_point),
                    "ri" (argument),
                    "n" (SYSTEM_CALL_THREAD_CREATE << 3));
 
