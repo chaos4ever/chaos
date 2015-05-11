@@ -12,9 +12,9 @@ C_EXTERN_BEGIN
 
 extern return_type console_init(console_structure_type *console_structure, tag_type *tag, unsigned int connection_class);
 extern return_type console_open(console_structure_type *console_structure, unsigned int width, unsigned int height,
-  unsigned int depth, int mode_type);
+                                unsigned int depth, int mode_type);
 extern return_type console_mode_set(console_structure_type *console_structure, unsigned int width, unsigned int height,
-  unsigned int depth, int mode_type);
+                                    unsigned int depth, int mode_type);
 
 extern return_type console_resize(console_structure_type *console_structure, unsigned int width, unsigned int height);
 extern return_type console_print(console_structure_type *console_structure, const char *string);
