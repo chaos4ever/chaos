@@ -1,7 +1,10 @@
 // Abstract: Connection handling in the land of Oz.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #include <memory/memory.h>
 #include <video/video.h>
