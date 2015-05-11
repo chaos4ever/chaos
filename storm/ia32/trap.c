@@ -2,12 +2,12 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Johan Thim <nospam@inter.net>
 //          Per Lundberg <per@halleluja.nu>
-
+//
 // © Copyright 1998-2000
 // © Copyright 2013 chaos development.
+// © Copyright 2015 chaos development.
 
 // Define this when debugging this module.
-
 #define DEBUG FALSE
 
 // Define this if you want to halt the system whenever an unhandled trap occurs. (Sometimes, the system will triple fault otherwise)
