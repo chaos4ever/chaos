@@ -72,8 +72,8 @@
 // Function prototypes.
 extern void mouse_handle_event(u8 scancode);
 extern bool mouse_init(void);
-extern void mouse_irq_handler(void);
-extern void mouse_main(void);
+extern void mouse_irq_handler(void *argument);
+extern void mouse_main(void *argument);
 
 // Common variables.
 extern bool has_mouse;

@@ -68,32 +68,19 @@ int main(void)
     }
 
     // Handle the IRQs.
-    if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-    {
-        keyboard_irq_handler();
-    }
+    system_thread_create(keyboard_irq_handler, NULL);
 
-    if (has_mouse && system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
+    if (has_mouse)
     {
-        mouse_irq_handler();
+        system_thread_create(mouse_irq_handler, NULL);
     }
 
     // Handle the services.
-    if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-    {
-        if (keyboard_main())
-        {
-            return 0;
-        }
-        else
-        {
-            return -1;
-        }
-    }
+    system_thread_create(keyboard_main, NULL);
 
-    if (has_mouse && system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
+    if (has_mouse)
     {
-        mouse_main();
+        system_thread_create(mouse_main, NULL);
     }
 
     system_call_process_parent_unblock();
