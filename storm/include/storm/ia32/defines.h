@@ -3,7 +3,9 @@
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Öhrt <doa@chaosdev.org>
 //
-// © Copyright 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
