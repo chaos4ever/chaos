@@ -37,9 +37,9 @@ return_type system_call_thread_name_set(char *name)
     return STORM_RETURN_SUCCESS;
 }
 
-return_type system_call_thread_create(void)
+return_type system_call_thread_create(void *(*start_routine) (void *), void *argument)
 {
-    return thread_create();
+    return thread_create(start_routine, argument);
 }
 
 return_type system_call_thread_control(thread_id_type thread_id, unsigned int class, unsigned int parameter)
