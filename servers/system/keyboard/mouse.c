@@ -232,11 +232,9 @@ bool mouse_init(void)
 }
 
 // Handle a connection request.
-static void handle_connection(void *argument)
+static void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
     system_thread_name_set("Handling connection");
-
-    mailbox_id_type reply_mailbox_id = *(mailbox_id_type *) argument;
 
     bool done = FALSE;
     message_parameter_type message_parameter;
@@ -248,7 +246,7 @@ static void handle_connection(void *argument)
     memory_allocate((void **) data_pointer, data_size);
 
     // Accept the connection.
-    ipc_structure.output_mailbox_id = reply_mailbox_id;
+    ipc_structure.output_mailbox_id = *reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
     // Main loop. The connection is up, so we just handle the packets we get in the way we should.
@@ -305,6 +303,6 @@ void mouse_main(void *argument UNUSED)
         ipc_service_connection_wait(&ipc_structure);
         reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        system_thread_create(handle_connection, &reply_mailbox_id);
+        system_thread_create((thread_entry_point_type *) handle_connection, &reply_mailbox_id);
     }
 }
