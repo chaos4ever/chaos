@@ -1,6 +1,6 @@
 // Abstract: Keyboard initialisation code.
 // Author: Per Lundberg <per@halleluja.nu>
-
+//
 // © Copyright 2000 chaos development
 // © Copyright 2015 chaos development
 
