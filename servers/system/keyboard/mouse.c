@@ -29,7 +29,7 @@ static mouse_type mouse;
 static volatile mailbox_id_type mouse_target_mailbox_id = MAILBOX_ID_NONE;
 
 // Handler for the mouse IRQ.
-void mouse_irq_handler(void)
+void mouse_irq_handler(void *argument UNUSED)
 {
     system_thread_name_set("Mouse IRQ handler");
 
@@ -232,8 +232,12 @@ bool mouse_init(void)
 }
 
 // Handle a connection request.
-static void handle_connection(mailbox_id_type reply_mailbox_id)
+static void handle_connection(void *argument)
 {
+    system_thread_name_set("Handling connection");
+
+    mailbox_id_type reply_mailbox_id = *(mailbox_id_type *) argument;
+
     bool done = FALSE;
     message_parameter_type message_parameter;
     u8 *data;
@@ -281,7 +285,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 }
 
 // Main function for the mouse handling.
-void mouse_main(void)
+void mouse_main(void *argument UNUSED)
 {
     ipc_structure_type ipc_structure;
 
@@ -301,11 +305,6 @@ void mouse_main(void)
         ipc_service_connection_wait(&ipc_structure);
         reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-        {
-            system_thread_name_set("Handling connection");
-
-            handle_connection(reply_mailbox_id);
-        }
+        system_thread_create(handle_connection, &reply_mailbox_id);
     }
 }
