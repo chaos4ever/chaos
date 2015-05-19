@@ -308,6 +308,22 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
     memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1, PAGE_KERNEL);
 
+    new_tss->esp = cpu_get_esp();
+
+    // This stuff needs to run while the PL0 stack is being mapped, since ESP will (because of technical reasons ;)
+    // currently point into the PL0 stack. This happens because we are currently running kernel code, so it's not really that
+    // weird after all.
+    u32 new_stack_in_current_address_space = BASE_PROCESS_CREATE + (new_tss->esp - BASE_PROCESS_STACK);
+    new_tss->esp -= 4;
+    new_stack_in_current_address_space -= 4;
+    *(void **)new_stack_in_current_address_space = argument;
+
+    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now, returning from a
+    // thread will trigger a page fault.
+    new_tss->esp -= 4;
+    new_stack_in_current_address_space -= 4;
+    *(void **)new_stack_in_current_address_space = NULL;
+
     // Phew... Finished setting up a PL0 stack. Lets take a deep breath and do the same for the PL3 stack, which is
     // slightly more complicated.
 
@@ -332,17 +348,8 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     thread_link_list(&process_info->thread_list, new_tss);
     thread_link(new_tss);
     number_of_tasks++;
-    new_tss->esp = cpu_get_esp();
     process_info->number_of_threads++;
     mutex_kernel_signal(&tss_tree_mutex);
-
-    new_tss->esp -= 4;
-    *(void**)new_tss->esp = argument;
-
-    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now, returning from a
-    // thread will trigger a page fault.
-    new_tss->esp -= 4;
-    *(void**)new_tss->esp = NULL;
 
     DEBUG_MESSAGE(DEBUG, "Enabling interrupts");
     cpu_interrupts_enable();
