@@ -56,4 +56,4 @@ extern void keyboard_handle_event(u8 scancode);
 extern const char *keyboard_init(void);
 extern void keyboard_update_leds(void);
 extern void keyboard_irq_handler(void *argument);
-extern bool keyboard_main(void *argument);
+extern void keyboard_main(void *argument);

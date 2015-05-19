@@ -468,7 +468,7 @@ void keyboard_handle_event(u8 scancode)
 }
 
 // Handler for the keyboard IRQ.
-void keyboard_irq_handler(void)
+void keyboard_irq_handler(void *argument UNUSED)
 {
     system_thread_name_set("Keyboard IRQ handler");
 
@@ -627,7 +627,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
 }
 
 // Main function for the keyboard handling.
-bool keyboard_main(void)
+void keyboard_main(void *argument UNUSED)
 {
     console_structure_type console_structure;
 
