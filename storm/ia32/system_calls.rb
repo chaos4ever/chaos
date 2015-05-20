@@ -21,7 +21,7 @@ system_calls = Hash[
   'mailbox_receive',              2,
 
   'service_create',               3,
-  'service_destroy',		          1,
+  'service_destroy',              1,
   'service_get',                  3,
   'service_protocol_get',         2,
   'service_protocol_get_amount',  1,
@@ -36,7 +36,7 @@ system_calls = Hash[
   'irq_wait',                     1,
   'irq_acknowledge',              1,
 
-  'memory_allocate',		          3,
+  'memory_allocate',              3,
   'memory_deallocate',            1,
   'memory_reserve',               3,
   'memory_get_physical_address',  2,
@@ -48,9 +48,7 @@ system_calls = Hash[
   'process_name_set',             1,
   'process_parent_unblock',       0,
 
-  # 'cluster_create',		  0
-
-  'thread_create',                0,
+  'thread_create',                2,
   'thread_control',               3,
   'thread_name_set',              1,
 
@@ -84,11 +82,11 @@ void wrapper_#{system_call}(void)
       for parameter in 0..num_parameters - 1 do
         file.puts("\
       \"pushl 32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
-        )                      
+        )
       end
 
       file.puts %Q[\
-      
+
       "call   system_call_#{system_call}\\n"\
       ]
 
@@ -130,7 +128,7 @@ def create_include_storm_system_calls_h(system_calls)
 #define SYSTEM_CALLS #{system_calls.keys.count}
 
 ")
-    
+
     file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{$gdt_start},\n"
 
     system_calls.keys[1...system_calls.keys.count].each do |system_call|

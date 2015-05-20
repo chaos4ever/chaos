@@ -1,7 +1,7 @@
 // Abstract: Thread routines. Part of the process system. Responsible for adding and removing threads under a cluster.
 // Authors: Henrik Hallin <hal@chaosdev.org>,
 //          Per Lundberg <per@halleluja.nu>
-
+//
 // © Copyright 1999-2000 chaos development
 // © Copyright 2013 chaos development
 // © Copyright 2015 chaos development
@@ -217,7 +217,7 @@ thread_id_type thread_get_free_id(void)
 
 // FIXME: Some regions used by the kernel for temporary mappings need to be unique (or mutexed) to each thread under
 // a cluster. Discuss how this is best done! Right now, we lock everything, which is sub-optimal.
-return_type thread_create(void)
+return_type thread_create(void *(*start_routine) (void *), void *argument)
 {
     storm_tss_type *new_tss;
     page_directory_entry_page_table *new_page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
@@ -257,7 +257,7 @@ return_type thread_create(void)
     mutex_kernel_signal(&tss_tree_mutex);
 
     // What has changed in the TSS is the ESP/ESP0 and the EIP. We must update those fields.
-    new_tss->eip = (u32) &&new_thread_entry;
+    new_tss->eip = (u32) start_routine;
     new_tss->cr3 = page_directory_physical_page * SIZE_PAGE;
 
     //  debug_print ("thread: %u\n", new_tss->thread_id);
@@ -299,42 +299,46 @@ return_type thread_create(void)
 
     // FIXME: Map into all sister threads address spaces when creating a new page table for a thread.
 
-    // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
     mutex_kernel_wait(&memory_mutex);
 
+    // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, 1, "Thread PL0 stack.");
-
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE),
-                       stack_physical_page, 1, PAGE_KERNEL);
-
-    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK,
-                SIZE_PAGE * 1);
-
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, 1, PAGE_KERNEL);
+    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
     memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1, PAGE_KERNEL);
+
+    new_tss->esp = cpu_get_esp();
+
+    // This stuff needs to run while the PL0 stack is being mapped, since ESP will (because of technical reasons ;)
+    // currently point into the PL0 stack. This happens because we are currently running kernel code, so it's not really that
+    // weird after all.
+    u32 new_stack_in_current_address_space = BASE_PROCESS_CREATE + (new_tss->esp - BASE_PROCESS_STACK);
+    new_tss->esp -= 4;
+    new_stack_in_current_address_space -= 4;
+    *(void **)new_stack_in_current_address_space = argument;
+
+    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now, returning from a
+    // thread will trigger a page fault.
+    new_tss->esp -= 4;
+    new_stack_in_current_address_space -= 4;
+    *(void **)new_stack_in_current_address_space = NULL;
 
     // Phew... Finished setting up a PL0 stack. Lets take a deep breath and do the same for the PL3 stack, which is
     // slightly more complicated.
 
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, current_tss->stack_pages, "Thread PL3 stack.");
-
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE),
-                       stack_physical_page, current_tss->stack_pages,
-                       PAGE_KERNEL);
-
-    memory_copy((u8 *) BASE_PROCESS_CREATE,
-                (u8 *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, current_tss->stack_pages, PAGE_KERNEL);
+    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
                 current_tss->stack_pages * SIZE_PAGE);
-
-    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages,
-                             stack_physical_page, current_tss->stack_pages,
+    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page, current_tss->stack_pages,
                              PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
+
     mutex_kernel_signal(&memory_mutex);
 
     new_tss->ss = new_tss->ss0;
     new_tss->cs = SELECTOR_KERNEL_CODE;
-    new_tss->new_thread = TRUE;
     new_tss->eflags = THREAD_NEW_EFLAGS;
     new_tss->timeslices = 0;
     string_copy(new_tss->thread_name, "unnamed");
@@ -344,33 +348,13 @@ return_type thread_create(void)
     thread_link_list(&process_info->thread_list, new_tss);
     thread_link(new_tss);
     number_of_tasks++;
-    new_tss->esp = cpu_get_esp();
     process_info->number_of_threads++;
     mutex_kernel_signal(&tss_tree_mutex);
-
-new_thread_entry:
 
     DEBUG_MESSAGE(DEBUG, "Enabling interrupts");
     cpu_interrupts_enable();
 
-    // Indicate to the caller whether this is the original thread or the new one.
-    if (current_tss->new_thread)
-    {
-        current_tss->new_thread = FALSE;
-
-        // FIXME: This shouldn't have to be.
-        dispatch_next();
-
-        DEBUG_MESSAGE(DEBUG, "Exiting, case 1.");
-
-        return STORM_RETURN_THREAD_NEW;
-    }
-    else
-    {
-        DEBUG_MESSAGE(DEBUG, "Exiting, case 2.");
-
-        return STORM_RETURN_THREAD_OLD;
-    }
+    return STORM_RETURN_SUCCESS;
 }
 
 // Delete a thread. If all threads under a cluster are deleted, the cluster is removed. If all clusters under a process

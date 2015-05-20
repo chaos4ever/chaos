@@ -2,15 +2,15 @@
 
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
-// © Copyright 1999-2000, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 #include <storm/return_values.h>
 
 // Internal return values
 // FIXME: Look over this and see that all is good.
-// FIXME: Check if we can use a C++11 typed enum instead. Might be hard if we want C code to be able to use the header, which we
-// definitely want. :)
 enum
 {
     // Function returned successfully.

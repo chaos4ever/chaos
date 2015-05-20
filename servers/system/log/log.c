@@ -92,8 +92,11 @@ static void log_add(console_structure_type *console, char *title, ipc_log_print_
 }
 
 // Handle an IPC connection request.
-static void handle_connection(mailbox_id_type reply_mailbox_id)
+static void handle_connection(void *argument)
 {
+    system_thread_name_set("Handling connection");
+    mailbox_id_type reply_mailbox_id = *(mailbox_id_type *) argument;
+
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
@@ -174,15 +177,11 @@ static return_type handle_server_logging(void)
         ipc_service_connection_wait(&ipc_structure);
         reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-        {
-            system_thread_name_set("Handling connection");
-            handle_connection(reply_mailbox_id);
-        }
+        system_thread_create(handle_connection, &reply_mailbox_id);
     }
 }
 
-static return_type handle_kernel_logging(void)
+static void handle_kernel_logging(void *argument UNUSED)
 {
     kernelfs_log_type kernelfs_log;
     ipc_log_print_type *ipc_log_print;
@@ -204,13 +203,13 @@ static return_type handle_kernel_logging(void)
     if (console_init(&console_structure_kernel, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
             CONSOLE_RETURN_SUCCESS)
     {
-        return -1;
+        return;
     }
 
     if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
             CONSOLE_RETURN_SUCCESS)
     {
-        return -1;
+        return;
     }
 
     console_clear(&console_structure_kernel);
@@ -240,13 +239,6 @@ return_type main(void)
     // unecessary waiting.
     system_call_process_parent_unblock();
 
-    // Create another thread to handle the server logging.
-    if (system_thread_create() == SYSTEM_RETURN_THREAD_OLD)
-    {
-        return handle_server_logging();
-    }
-    else
-    {
-        return handle_kernel_logging();
-    }
+    system_thread_create(handle_kernel_logging, NULL);
+    return handle_server_logging();
 }

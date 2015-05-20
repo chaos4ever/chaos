@@ -2,7 +2,9 @@
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1998-2000, 2013 chaos development.
+// © Copyright 1998-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
@@ -45,3 +47,4 @@ typedef unsigned int mailbox_id_type;
 typedef unsigned int mutex_id_type;
 typedef volatile int spinlock_type;
 typedef u32 limit_type;
+typedef void (thread_entry_point_type)(void *);

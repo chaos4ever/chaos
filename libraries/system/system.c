@@ -1,7 +1,10 @@
 // Abstract: Library for system related stuff.
 // Author: Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #include <system/system.h>
 
@@ -68,18 +71,13 @@ return_type system_thread_name_set(const char *name)
     return SYSTEM_RETURN_SUCCESS;
 }
 
-return_type system_thread_create(void)
+return_type system_thread_create(thread_entry_point_type *thread_entry_point, void *argument)
 {
-    switch (system_call_thread_create())
+    switch (system_call_thread_create(thread_entry_point, argument))
     {
-        case STORM_RETURN_THREAD_NEW:
+        case STORM_RETURN_SUCCESS:
         {
-            return SYSTEM_RETURN_THREAD_NEW;
-        }
-
-        case STORM_RETURN_THREAD_OLD:
-        {
-            return SYSTEM_RETURN_THREAD_OLD;
+            return SYSTEM_RETURN_SUCCESS;
         }
 
         // Someone has added a return code in thread.c in the kernel without handling it in the system library. Please fix this in

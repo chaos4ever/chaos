@@ -3,7 +3,9 @@
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Ohrt <doa@chaosdev.org>
 //
-// © Copyright chaos development 1999-2000, 2013.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
@@ -27,12 +29,6 @@ enum
 
     // A limit has been overrun.
     STORM_RETURN_LIMIT_OVERRUN,
-
-    // The current thread is the new thread. (Returned by system_call_thread_create)
-    STORM_RETURN_THREAD_NEW,
-
-    // The current thread is the old thread. (Returned by system_call_thread_create)
-    STORM_RETURN_THREAD_OLD,
 
     // The DMA channel specified does not exist.
     STORM_RETURN_INVALID_DMA_CHANNEL,

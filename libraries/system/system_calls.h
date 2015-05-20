@@ -2,11 +2,17 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>,
 //          Per Lundberg <per@halleluja.nu>
 //
-// © Copyright 1999-2000, 2007, 2013 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #pragma once
 
 #include <storm/storm.h>
+
+// TODO: Should consider automatically creating this file in system_calls.rb. It feels stupid to have to maintain this manually.
+// The difficult part is the asm constraints though, can be a bit tricky...
 
 // Inlines through New York can be dangerous -- so please use a helmet!
 static inline return_type system_call_init(void)
@@ -214,13 +220,17 @@ static inline return_type system_call_thread_control(thread_id_type thread_id, u
 }
 
 // fork() on steroids. ;-)
-static inline return_type system_call_thread_create(void)
+static inline return_type system_call_thread_create(thread_entry_point_type *thread_entry_point, void *argument)
 {
     return_type return_value;
 
-    asm volatile("lcall %1, $0"
+    asm volatile("pushl %1\n"
+                 "pushl %2\n"
+                 "lcall %3, $0"
                  : "=a" (return_value)
-                 : "n" (SYSTEM_CALL_THREAD_CREATE << 3));
+                 : "ri" (argument),
+                   "ri" (thread_entry_point),
+                   "n" (SYSTEM_CALL_THREAD_CREATE << 3));
 
     return return_value;
 }

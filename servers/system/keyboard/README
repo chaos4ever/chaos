@@ -16,4 +16,12 @@ keyboard servers both have to register a service of protocol
 "keyboard", but the first one will be /services/keyboard/0 and the
 second one will be /services/keyboard/1.
 
+Because a lot of this code is based on the GPL:ed Linux kernel (which
+you can see very quickly by browsing through e.g. keyboard.c), the server
+can only be legally used under the terms of the GPL. Our own parts are of
+course more liberally usable than so, but because of the intermingling here
+it is probably safest to just assume the whole server is GPL:ed. If you want
+to rewrite it all in pure, BSD-based goodness, please be our guest - pull
+requests are certainly welcome here.
+
 -- Per Lundberg <per@halleluja.nu>  Sat,  8 Jul 2000 02:48:28 +0200

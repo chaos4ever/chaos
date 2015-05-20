@@ -1,11 +1,11 @@
-/* Abstract: storm external header file. */
-/* Authors: Per Lundberg <per@halleluja.nu>
-            Henrik Hallin <hal@chaosdev.org> */           
+// Abstract: storm external header file.
+// Authors: Per Lundberg <per@halleluja.nu>
+//          Henrik Hallin <hal@chaosdev.org>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013 chaos development
 
-/* Copyright 1999-2000, 2013 chaos development. */
-
-#ifndef __STORM_STORM_H__
-#define __STORM_STORM_H__
+#pragma once
 
 #include <storm/types.h>
 #include <storm/defines.h>
@@ -20,5 +20,3 @@
 #include <storm/service.h>
 #include <storm/state.h>
 #include <storm/system_calls.h>
-
-#endif /* !__STORM_STORM_H__ */

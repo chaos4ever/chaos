@@ -143,15 +143,9 @@ int main(void)
 
     while (TRUE)
     {
-        mailbox_id_type reply_mailbox_id;
-
         ipc_service_connection_wait(&ipc_structure);
-        reply_mailbox_id = ipc_structure.output_mailbox_id;
+        mailbox_id_type reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-        {
-            system_thread_name_set("Handling connection");
-            handle_connection(reply_mailbox_id);
-        }
+        system_thread_create((thread_entry_point_type *) handle_connection, &reply_mailbox_id);
     }
 }
