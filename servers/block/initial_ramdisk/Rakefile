@@ -1,0 +1,11 @@
+OBJECTS = %w(
+  initial_ramdisk.o
+)
+
+LIBRARIES = %w(
+  ipc
+)
+
+OUTPUT = 'initial_ramdisk'
+
+load '../../servers.rake'
