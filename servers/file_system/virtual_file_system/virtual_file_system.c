@@ -1,27 +1,10 @@
-/* $Id$ */
-/* Abstract: Virtual File System (VFS) server for chaos. This server
-   abstracts all file system servers into one generic interface. The
-   Virtual File System protocol is actually merely a superset of the
-   File System interface (as understood by the specific file system
-   servers). */
-/* Author: Per Lundberg <per@halleluja.nu> */
-
-/* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+// Abstract: Virtual File System (VFS) server for chaos. This server abstracts all file system servers into one generic
+// interface. The Virtual File System protocol is actually merely a superset of the File System interface (as understood
+// by the specific file system servers).
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2015 chaos development
 
 #include <console/console.h>
 #include <log/log.h>
@@ -32,10 +15,8 @@
 #include "config.h"
 #include "virtual_file_system.h"
 
-/* This array holds the list of mounted file systems and their
-   services. Some stuff is always present. */
-/* FIXME: Make this a linked list. */
-
+// This array holds the list of mounted file systems and their services. Some stuff is always present.
+// FIXME: Make this a linked list.
 mount_point_type mount_point[MAX_VOLUMES] =
 {
     { "", "VFS", TRUE, { MAILBOX_ID_NONE, MAILBOX_ID_NONE } },
@@ -50,8 +31,7 @@ static char *slash = (char *) "/";
 
 static log_structure_type log_structure;
 
-/* FIXME: Linked list for this. */
-
+// FIXME: Linked list for this.
 static unsigned int file_handle[MAX_FILE_HANDLES];
 static unsigned int number_of_file_handles = 0;
 
@@ -60,8 +40,7 @@ static tag_type empty_tag =
     0, 0, ""
 };
 
-/* Split a path name to its components. */
-
+// Split a path name to its components.
 static void path_split(char *path_name, char **output, unsigned int *elements)
 {
     unsigned int index = 0;
@@ -69,8 +48,7 @@ static void path_split(char *path_name, char **output, unsigned int *elements)
 
     if (path_name[0] == '/')
     {
-        /* Are we at the meta root? */
-
+        // Are we at the meta root?
         if (path_name[1] == '/')
         {
             output[0] = &path_name[2];
@@ -88,8 +66,7 @@ static void path_split(char *path_name, char **output, unsigned int *elements)
 
     while (path_name[index] != '\0' && output_index < *elements)
     {
-        if (path_name[index] == PATH_NAME_SEPARATOR &&
-                path_name[index + 1] != '\0')
+        if (path_name[index] == PATH_NAME_SEPARATOR && path_name[index + 1] != '\0')
         {
             path_name[index] = '\0';
             output[output_index] = &path_name[index + 1];
@@ -101,8 +78,7 @@ static void path_split(char *path_name, char **output, unsigned int *elements)
     *elements = output_index;
 }
 
-/* Initialise the VFS system. */
-
+// Initialise the VFS system.
 static bool vfs_init(ipc_structure_type *ipc_structure)
 {
     system_process_name_set(PACKAGE_NAME);
@@ -112,8 +88,7 @@ static bool vfs_init(ipc_structure_type *ipc_structure)
 
     memory_set_u8((u8 *) assign_point, 0, sizeof(assign_point));
 
-    if (ipc_service_create("virtual_file_system", ipc_structure,
-                           &empty_tag) != IPC_RETURN_SUCCESS)
+    if (ipc_service_create("virtual_file_system", ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
     {
         return FALSE;
     }
@@ -123,8 +98,7 @@ static bool vfs_init(ipc_structure_type *ipc_structure)
     }
 }
 
-/* Get the volume number for the given path. */
-
+// Get the volume number for the given path.
 static int get_volume(char **outpath, char *inpath, unsigned int *elements)
 {
     unsigned int index;
@@ -132,8 +106,7 @@ static int get_volume(char **outpath, char *inpath, unsigned int *elements)
 
     path_split(inpath, outpath, elements);
 
-    /* We got an empty string. Not very fun, indeed. */
-
+    // We got an empty string. Not very fun, indeed.
     if (*elements == 0)
     {
         return -1;
@@ -145,8 +118,7 @@ static int get_volume(char **outpath, char *inpath, unsigned int *elements)
         {
             if (string_compare(assign_point[index].location, "/") == 0)
             {
-                outpath[0] =
-                    (char *) &mount_point[assign_point[index].volume].location;
+                outpath[0] = (char *) &mount_point[assign_point[index].volume].location;
             }
         }
 
@@ -157,8 +129,7 @@ static int get_volume(char **outpath, char *inpath, unsigned int *elements)
         }
     }
 
-    /* Now, find out which service to contact about this file system. */
-
+    // Now, find out which service to contact about this file system.
     for (volume = 0; volume < mounted_volumes; volume++)
     {
         if (string_compare(outpath[0], mount_point[volume].location) == 0)
@@ -170,12 +141,9 @@ static int get_volume(char **outpath, char *inpath, unsigned int *elements)
     return volume;
 }
 
-/* Read directory entries from one of the file systems in this VFS. */
-/* FIXME: Much of this code should be put in a 'meta'-function to be
-   called by both this and vfs_file_get_info () */
-
-static bool vfs_directory_entry_read
-(file_directory_entry_read_type *directory_entry_read)
+// Read directory entries from one of the file systems in this VFS.
+// FIXME: Much of this code should be put in a 'meta'-function to be called by both this and vfs_file_get_info()
+static bool vfs_directory_entry_read(file_directory_entry_read_type *directory_entry_read)
 {
     unsigned int elements = MAX_PATH_ELEMENTS;
     char *path[MAX_PATH_ELEMENTS];
@@ -186,16 +154,13 @@ static bool vfs_directory_entry_read
 
     volume = get_volume(path, directory_entry_read->path_name, &elements);
 
-    if (volume == mounted_volumes ||
-            volume == (unsigned int) -1)
+    if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
-        log_print(&log_structure, LOG_URGENCY_DEBUG,
-                  "volume == mounted_volumes");
+        log_print(&log_structure, LOG_URGENCY_DEBUG, "volume == mounted_volumes");
         return FALSE;
     }
 
-    /* An external file system? */
-
+    // An external file system?
     if (mount_point[volume].ipc_structure.output_mailbox_id != MAILBOX_ID_NONE)
     {
         message_parameter_type message_parameter;
@@ -205,8 +170,7 @@ static bool vfs_directory_entry_read
 
         for (index = 1; index < elements; index++)
         {
-            string_print(path_name + string_length(path_name), "/%s",
-                         path[index]);
+            string_print(path_name + string_length(path_name), "/%s", path[index]);
         }
 
         string_copy(directory_entry_read->path_name, path_name);
@@ -216,8 +180,7 @@ static bool vfs_directory_entry_read
         message_parameter.length = sizeof(file_directory_entry_read_type);
         message_parameter.data = directory_entry_read;
         message_parameter.block = TRUE;
-        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id,
-                 &message_parameter);
+        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
 
         /* FIXME: This should be
            sizeof (file_system_directory_entry_read_type) +
@@ -225,13 +188,11 @@ static bool vfs_directory_entry_read
             directory_entry_read->entries) */
 
         message_parameter.length = 16384;
-        ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id,
-                    &message_parameter, NULL);
+        ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL);
     }
     else
     {
-        /* Meta-root filesystem */
-
+        // Meta-root filesystem
         unsigned int input_index;
         unsigned int output_index = 0;
         unsigned int max_entries = directory_entry_read->entries;
@@ -239,14 +200,11 @@ static bool vfs_directory_entry_read
         directory_entry_read->entries = 0;
 
         for (input_index = directory_entry_read->start_entry;
-                (input_index < (directory_entry_read->start_entry + max_entries) &&
-                 input_index < mounted_volumes - 1); input_index++)
+             (input_index < (directory_entry_read->start_entry + max_entries) &&
+             input_index < mounted_volumes - 1); input_index++)
         {
-            string_copy
-            (directory_entry_read->entry[output_index].name,
-             mount_point[input_index + 1].location);
-            directory_entry_read->entry[output_index].type =
-                FILE_ENTRY_TYPE_DIRECTORY;
+            string_copy(directory_entry_read->entry[output_index].name, mount_point[input_index + 1].location);
+            directory_entry_read->entry[output_index].type = FILE_ENTRY_TYPE_DIRECTORY;
             directory_entry_read->entries++;
             output_index++;
         }
@@ -264,10 +222,8 @@ static bool vfs_directory_entry_read
     return TRUE;
 }
 
-/* Get information about the given directory entry. */
-
-static void vfs_file_get_info(file_verbose_directory_entry_type
-                              *directory_entry)
+// Get information about the given directory entry.
+static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry)
 {
     unsigned int elements = MAX_PATH_ELEMENTS;
     char *path[MAX_PATH_ELEMENTS];
@@ -276,8 +232,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
 
     volume = get_volume(path, directory_entry->path_name, &elements);
 
-    if (volume == mounted_volumes ||
-            volume == (unsigned int) -1)
+    if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
         directory_entry->success = FALSE;
         return;
@@ -288,8 +243,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
         volume = 0;
     }
 
-    /* An external file system? */
-
+    // An external file system?
     if (mount_point[volume].ipc_structure.output_mailbox_id != MAILBOX_ID_NONE)
     {
         message_parameter_type message_parameter;
@@ -299,8 +253,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
 
         for (index = 1; index < elements; index++)
         {
-            string_print(path_name + string_length(path_name), "/%s",
-                         path[index]);
+            string_print(path_name + string_length(path_name), "/%s", path[index]);
         }
 
         string_copy(directory_entry->path_name, path_name);
@@ -310,8 +263,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
         message_parameter.length = sizeof(file_verbose_directory_entry_type);
         message_parameter.data = directory_entry;
         message_parameter.block = TRUE;
-        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id,
-                 &message_parameter);
+        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
 
         /* FIXME: Should be
            sizeof (file_directory_entry_read_type) +
@@ -320,13 +272,11 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
 
         message_parameter.length = 16384;
 
-        ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id,
-                    &message_parameter, NULL);
+        ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL);
 
         if (message_parameter.message_class == IPC_FILE_RETURN_VALUE)
         {
-            log_print(&log_structure, LOG_URGENCY_DEBUG,
-                      "IPC_FILE_GET_INFO failed.");
+            log_print(&log_structure, LOG_URGENCY_DEBUG, "IPC_FILE_GET_INFO failed.");
             directory_entry->success = FALSE;
         }
     }
@@ -334,30 +284,26 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
     {
         switch (volume)
         {
-                /* Meta-root filesystem */
-
+            // Meta-root filesystem
             case 0:
             {
                 unsigned int input_index;
 
                 for (input_index = 0; input_index < mounted_volumes; input_index++)
                 {
-                    /* Did we got a match? */
-
+                    // Did we got a match?
                     if (string_compare(path[0], mount_point[input_index].location) == 0)
                     {
                         directory_entry->type = FILE_ENTRY_TYPE_DIRECTORY;
                         directory_entry->size = 0;
 
-                        /* FIXME */
-
+                        // FIXME
                         directory_entry->time = 42;
                         break;
                     }
                 }
 
-                /* Did the file not exist? */
-
+                // Did the file not exist?
                 if (input_index == mounted_volumes)
                 {
                     directory_entry->success = FALSE;
@@ -367,12 +313,10 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
                 break;
             }
 
-            /* Services. */
-
+            // Services.
             case 2:
             {
-                log_print(&log_structure, LOG_URGENCY_DEBUG,
-                          "Reading from services.");
+                log_print(&log_structure, LOG_URGENCY_DEBUG, "Reading from services.");
                 break;
             }
         }
@@ -380,14 +324,11 @@ static void vfs_file_get_info(file_verbose_directory_entry_type
     }
 }
 
-/* Opens the given file and assigns a file handle. */
-/* FIXME: This function must be mutexed, so we get unique file handles. */
+// Opens the given file and assigns a file handle.
+// FIXME: This function must be mutexed, so we get unique file handles.
+static bool vfs_file_open(file_open_type *open, file_handle_type *handle) __attribute__((unused));
 
-static bool vfs_file_open(file_open_type *open,
-                          file_handle_type *handle) __attribute__((unused));
-
-static bool vfs_file_open(file_open_type *open,
-                          file_handle_type *handle)
+static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
 {
     unsigned int elements = MAX_PATH_ELEMENTS;
     char *path[MAX_PATH_ELEMENTS];
@@ -397,22 +338,18 @@ static bool vfs_file_open(file_open_type *open,
     *handle = number_of_file_handles;
     volume = get_volume(path, open->file_name, &elements);
 
-    if (volume == mounted_volumes ||
-            volume == (unsigned int) -1)
+    if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
         return FALSE;
     }
 
-    /* If this path only consists of one element, it is wrong, since we
-       have no files in the root. */
-
+    // If this path only consists of one element, it is wrong, since we have no files in the root.
     if (elements == 1)
     {
         return FALSE;
     }
 
-    /* An external file system? */
-
+    // An external file system?
     if (mount_point[volume].ipc_structure.output_mailbox_id != MAILBOX_ID_NONE)
     {
         message_parameter_type message_parameter;
@@ -421,13 +358,10 @@ static bool vfs_file_open(file_open_type *open,
 
         memory_set_u8(path_name, 0, MAX_PATH_NAME_LENGTH);
 
-        /* FIXME: Copy away the path name before splitting it to avoid
-           having to unsplit it... */
-
+        // FIXME: Copy away the path name before splitting it to avoid having to unsplit it...
         for (index = 1; index < elements; index++)
         {
-            string_print(path_name + string_length(path_name), "/%s",
-                         path[index]);
+            string_print(path_name + string_length(path_name), "/%s", path[index]);
         }
 
         string_copy(ipc_file_open.file_name, path_name);
@@ -439,15 +373,12 @@ static bool vfs_file_open(file_open_type *open,
         message_parameter.length = sizeof(ipc_file_open_type);
         message_parameter.data = &ipc_file_open;
         message_parameter.block = TRUE;
-        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id,
-                 &message_parameter);
+        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
 
-        /* FIXME: This should be something else. */
-
+        // FIXME: This should be something else.
         message_parameter.length = 16384;
 
-        if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id,
-                        &message_parameter, NULL) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
         {
             return FALSE;
         }
@@ -456,12 +387,10 @@ static bool vfs_file_open(file_open_type *open,
     {
         switch (volume)
         {
-                /* Meta-root filesystem */
-
+            // Meta-root filesystem
             case 0:
             {
-                /* No files here, sir. */
-
+                // No files here, sir.
                 return FALSE;
             }
         }
@@ -472,8 +401,7 @@ static bool vfs_file_open(file_open_type *open,
     return TRUE;
 }
 
-/* Read from the given file handle. */
-
+// Read from the given file handle.
 static bool vfs_file_read(file_read_type *read, void *buffer)
 {
     message_parameter_type message_parameter;
@@ -488,8 +416,7 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
 
     volume = file_handle[read->file_handle];
 
-    if (mount_point[volume].ipc_structure.output_mailbox_id ==
-            MAILBOX_ID_NONE)
+    if (mount_point[volume].ipc_structure.output_mailbox_id == MAILBOX_ID_NONE)
     {
         return FALSE;
     }
@@ -500,15 +427,12 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
     message_parameter.message_class = IPC_FILE_READ;
     message_parameter.block = TRUE;
 
-    ipc_send(mount_point[volume].ipc_structure.output_mailbox_id,
-             &message_parameter);
+    ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
 
-    /* Get the data. */
-
+    // Get the data.
     message_parameter.length = read->bytes;
     message_parameter.data = buffer;
-    if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id,
-                    &message_parameter, NULL) != IPC_RETURN_SUCCESS)
+    if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
     {
         return FALSE;
     }
@@ -518,34 +442,26 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
     }
 }
 
-/* Mount the given service at the given location. */
-
-static bool vfs_mount(file_mount_type *mount,
-                      ipc_structure_type *ipc_structure)
+// Mount the given service at the given location.
+static bool vfs_mount(file_mount_type *mount, ipc_structure_type *ipc_structure)
 {
-    memory_copy(&mount_point[mounted_volumes].ipc_structure,
-                ipc_structure, sizeof(ipc_structure_type));
+    memory_copy(&mount_point[mounted_volumes].ipc_structure, ipc_structure, sizeof(ipc_structure_type));
     mount_point[mounted_volumes].handled_by_vfs = FALSE;
-    string_copy_max(mount_point[mounted_volumes].location,
-                    mount->location, MAX_PATH_NAME_LENGTH);
+    string_copy_max(mount_point[mounted_volumes].location, mount->location, MAX_PATH_NAME_LENGTH);
     mounted_volumes++;
 
-    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
-                        "Mounting %u at //%s.",
-                        ipc_structure->output_mailbox_id,
-                        mount->location);
+    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounting %u at //%s.",
+                        ipc_structure->output_mailbox_id, mount->location);
     return TRUE;
 }
 
-/* Assign the meta-mounted volume a place in the UNIX-wannabe tree. */
-
+// Assign the meta-mounted volume a place in the UNIX-wannabe tree.
 static bool vfs_assign(file_assign_type *assign __attribute__((unused)))
 {
     return FALSE;
 }
 
-/* Handle an IPC connection request. */
-
+// Handle an IPC connection request.
 static void handle_connection(mailbox_id_type reply_mailbox_id)
 {
     message_parameter_type message_parameter;
@@ -556,8 +472,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
     memory_allocate((void **) &data, data_size);
 
-    /* Accept the connection. */
-
+    // Accept the connection.
     ipc_structure.output_mailbox_id = reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
@@ -570,11 +485,9 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
         message_parameter.length = data_size;
         message_parameter.data = data;
 
-        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter,
-                        &data_size) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter, &data_size) != IPC_RETURN_SUCCESS)
         {
-            log_print_formatted(&log_structure, LOG_URGENCY_ERROR,
-                                "Failed to read from mailbox %u",
+            log_print_formatted(&log_structure, LOG_URGENCY_ERROR, "Failed to read from mailbox %u",
                                 ipc_structure.input_mailbox_id);
             while (TRUE);
             continue;
@@ -582,31 +495,25 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
         switch (message_parameter.message_class)
         {
-                /* Read a directory entry. */
-
+            // Read a directory entry.
             case IPC_FILE_DIRECTORY_ENTRY_READ:
             {
-                file_directory_entry_read_type *directory_entry_read =
-                    (file_directory_entry_read_type *) data;
+                file_directory_entry_read_type *directory_entry_read = (file_directory_entry_read_type *) data;
 
                 if (!vfs_directory_entry_read(directory_entry_read))
                 {
-                    log_print_formatted(&log_structure, LOG_URGENCY_ERROR,
-                                        "Couldn't read a directory entry.");
+                    log_print_formatted(&log_structure, LOG_URGENCY_ERROR, "Couldn't read a directory entry.");
                     directory_entry_read->entries = 0;
                 }
-                message_parameter.length =
-                    (sizeof(file_directory_entry_read_type) +
-                     sizeof(file_directory_entry_type) *
-                     directory_entry_read->entries);
+                message_parameter.length = (sizeof(file_directory_entry_read_type) +
+                    sizeof(file_directory_entry_type) * directory_entry_read->entries);
                 ipc_send(ipc_structure.output_mailbox_id, &message_parameter);
                 break;
             }
 
             case IPC_FILE_GET_INFO:
             {
-                file_verbose_directory_entry_type *directory_entry =
-                    (file_verbose_directory_entry_type *) data;
+                file_verbose_directory_entry_type *directory_entry = (file_verbose_directory_entry_type *) data;
 
                 vfs_file_get_info(directory_entry);
                 ipc_send(ipc_structure.output_mailbox_id, &message_parameter);
@@ -615,8 +522,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
             case IPC_FILE_MOUNT_VOLUME:
             {
-                file_mount_type *mount =
-                    (file_mount_type *) data;
+                file_mount_type *mount = (file_mount_type *) data;
 
                 vfs_mount(mount, &ipc_structure);
                 break;
@@ -624,8 +530,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
             case IPC_FILE_ASSIGN_VOLUME:
             {
-                file_assign_type *assign =
-                    (file_assign_type *) data;
+                file_assign_type *assign = (file_assign_type *) data;
 
                 vfs_assign(assign);
                 break;
@@ -652,8 +557,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
                 if (!vfs_file_read(read, buffer))
                 {
-                    log_print(&log_structure, LOG_URGENCY_ERROR,
-                              "Failed to read file.");
+                    log_print(&log_structure, LOG_URGENCY_ERROR, "Failed to read file.");
                     message_parameter.length = 0;
                 }
                 else
@@ -676,10 +580,8 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
             case IPC_FILE_DETECT_VOLUME:
             default:
             {
-                /* Yet unsupported calls. */
-
-                log_print_formatted(&log_structure, LOG_URGENCY_ERROR,
-                                    "Unsupported message class (%u).",
+                // Yet unsupported calls.
+                log_print_formatted(&log_structure, LOG_URGENCY_ERROR, "Unsupported message class (%u).",
                                     message_parameter.message_class);
                 break;
             }
@@ -687,8 +589,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
     }
 }
 
-/* Main function. */
-
+// Main function.
 int main(void)
 {
     ipc_structure_type ipc_structure;
@@ -700,8 +601,7 @@ int main(void)
 
     system_call_process_parent_unblock();
 
-    /* Main loop. */
-
+    // Main loop.
     system_thread_name_set("Service handler");
     while (TRUE)
     {
