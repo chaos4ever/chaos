@@ -304,7 +304,7 @@ void keyboard_handle_event(u8 scancode)
 
         if ((scancode & 0x80) == 0)
         {
-            // A key was pressed. */
+            // A key was pressed.
             keyboard_pressed_keys[scancode / 8] |= (1 << (scancode % 8));
 
             // Check if the pressed key is a lock key.

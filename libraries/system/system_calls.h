@@ -158,7 +158,7 @@ static inline return_type system_call_memory_deallocate(void **address)
     asm volatile("pushl %2\n"
                  "lcall %3, $0"
                  : "=a" (return_value),
-                   "=ri" (*address)
+                   "=m" (*address)
                  : "ri" (address),
                    "n" (SYSTEM_CALL_MEMORY_DEALLOCATE << 3));
 
@@ -174,7 +174,7 @@ static inline return_type system_call_memory_get_physical_address(void *virtual_
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value),
-                   "=ri" (*physical_address)
+                   "=m" (*physical_address)
                  : "ri" (physical_address),
                    "ri" (virtual_address),
                    "n" (SYSTEM_CALL_MEMORY_GET_PHYSICAL_ADDRESS << 3));
@@ -192,7 +192,7 @@ static inline return_type system_call_memory_reserve(address_type start, unsigne
                  "pushl %4\n"
                  "lcall %5, $0"
                  : "=a" (return_value),
-                   "=ri" (*virtual_address)
+                   "=m" (*virtual_address)
                  : "ri" (virtual_address),
                    "ri" (size),
                    "ri" (start),
