@@ -3,6 +3,11 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
+  ipc
+  memory
+  log
+  string
+  system
 )
 
 OUTPUT = 'virtual_file_system'
