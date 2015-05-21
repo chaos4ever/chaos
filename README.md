@@ -17,6 +17,10 @@ Having that said, there are a number of issues with the codebase which made us s
 
 ### Setting up the dev environment
 
+* Fork the repo (using the Fork button in the upper right).
+* Clone your fork (using the clone button here at GitHub or 
+* Change working directory to your working copy (`cd ~/git/chaos` or similar) and run the following commands:
+
     vagrant up
     vagrant ssh
 
@@ -25,7 +29,7 @@ Having that said, there are a number of issues with the codebase which made us s
     rake
     rake install
 
-(Not all parts of the system has been converted to the rake-based compilation process yet, but we're working on it. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
+(Not all parts of the system has been converted to the `rake`-based compilation process yet, but we're working on it. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
 
 ### Running the compiled result.
 
