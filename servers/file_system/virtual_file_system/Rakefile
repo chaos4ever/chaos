@@ -1,0 +1,10 @@
+OBJECTS = %w(
+  virtual_file_system.o
+)
+
+LIBRARIES = %w(
+)
+
+OUTPUT = 'virtual_file_system'
+
+load '../../servers.rake'
