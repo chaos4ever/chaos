@@ -35,8 +35,10 @@ static tag_type empty_tag =
 };
 
 // Handle an IPC connection request.
-static void handle_connection(mailbox_id_type reply_mailbox_id)
+static void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
+    system_call_thread_name_set("Handling connection");
+
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
@@ -46,7 +48,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
     memory_allocate((void **) &data, data_size);
 
     // Accept the connection.
-    ipc_structure.output_mailbox_id = reply_mailbox_id;
+    ipc_structure.output_mailbox_id = *reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
     message_parameter.block = TRUE;
@@ -139,10 +141,6 @@ int main(void)
         ipc_service_connection_wait(&ipc_structure);
         reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-        {
-            system_call_thread_name_set("Handling connection");
-            handle_connection(reply_mailbox_id);
-        }
+        system_thread_create((thread_entry_point_type *) handle_connection, &reply_mailbox_id);
     }
 }
