@@ -5,6 +5,10 @@ OBJECTS = %w(
 
 LIBRARIES = %w(
   ipc
+  log
+  memory
+  string
+  system
 )
 
 OUTPUT = 'initial_ramdisk'
