@@ -47,26 +47,26 @@
 /* Local type definitions. */
 /* A mount point. */
 
-typedef struct 
+typedef struct
 {
-  char location[MAX_PATH_NAME_LENGTH];
-  char file_system_type[256];
+    char location[MAX_PATH_NAME_LENGTH];
+    char file_system_type[256];
 
-  /* Is this file system handled by the VFS server? */
+    /* Is this file system handled by the VFS server? */
 
-  bool handled_by_vfs;
-  ipc_structure_type ipc_structure;
+    bool handled_by_vfs;
+    ipc_structure_type ipc_structure;
 } mount_point_type;
 
 /* An "assign point", as mentioned before. */
 
 typedef struct
 {
-  char location[MAX_PATH_NAME_LENGTH];
+    char location[MAX_PATH_NAME_LENGTH];
 
-  /* The index into the vfs_mount_point structure. */
+    /* The index into the vfs_mount_point structure. */
 
-  unsigned int volume;
+    unsigned int volume;
 } assign_point_type;
 
 #endif /* !__VIRTUAL_FILE_SYSTEM_H__ */
