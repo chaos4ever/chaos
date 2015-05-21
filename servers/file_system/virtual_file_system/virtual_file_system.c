@@ -166,7 +166,7 @@ static bool vfs_directory_entry_read(file_directory_entry_read_type *directory_e
         message_parameter_type message_parameter;
         char path_name[MAX_PATH_NAME_LENGTH];
 
-        memory_set_u8(path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         for (index = 1; index < elements; index++)
         {
@@ -249,7 +249,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
         message_parameter_type message_parameter;
         char path_name[MAX_PATH_NAME_LENGTH];
 
-        memory_set_u8(path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         for (index = 1; index < elements; index++)
         {
@@ -356,7 +356,7 @@ static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
         char path_name[MAX_PATH_NAME_LENGTH];
         ipc_file_open_type ipc_file_open;
 
-        memory_set_u8(path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         // FIXME: Copy away the path name before splitting it to avoid having to unsplit it...
         for (index = 1; index < elements; index++)
