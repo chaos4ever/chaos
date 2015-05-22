@@ -1,7 +1,6 @@
 timeout 5
 
 title chaos
-rootnoverify (fd0)
 kernel /storm
 module /servers/console
 module /servers/keyboard
