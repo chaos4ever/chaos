@@ -25,7 +25,7 @@ desc 'Compiles and installs chaos'
 task :install do
   FileUtils.rm_rf INSTALL_ROOT
 
-  folders.each do |folder|
+  FOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end
 end
