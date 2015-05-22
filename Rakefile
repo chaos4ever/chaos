@@ -28,13 +28,12 @@ task :install do
   folders.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end
-
-  sh 'mcopy -o grub.cfg a:/grub'
 end
 
 desc 'Builds a bootable ISO image with the kernel, servers and programs.'
 task :iso_image => :install do
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
+  FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
 
   # I suspect this is actually an x86 binary, even though it resides in a folder that seems to indicate the opposite.
   FileUtils.cp '/usr/lib/grub/x86_64-pc/stage2_eltorito', "#{INSTALL_ROOT}/boot/grub"
