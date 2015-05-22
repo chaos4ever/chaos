@@ -7,7 +7,9 @@ Vagrant.configure(2) do |config|
       astyle \
       cmake \
       gcc-multilib \
+      genisoimage \
       git \
+      grub-legacy \
       mtools \
       nasm \
       qemu \
@@ -16,9 +18,7 @@ Vagrant.configure(2) do |config|
     cd /vagrant
     ./install_cmocka.sh
 
-    cd /vagrant && bzip2 -dc misc/grub.img.bz2 > floppy.img
-    echo 'drive a: file="/vagrant/floppy.img" 1.44m mformat_only' > /etc/mtools.conf
-    echo 'drive u: file="/vagrant/servers/block/initial_ramdisk/ramdisk.image" 720k mformat_only' > /etc/mtools.conf
+    echo 'drive u: file="/vagrant/servers/block/initial_ramdisk/ramdisk.image" 1.44m mformat_only' > /etc/mtools.conf
     echo 'cd /vagrant' >> /home/vagrant/.bashrc
     echo '-U' > /home/vagrant/.astylerc
     echo '-H' >> /home/vagrant/.astylerc

@@ -15,5 +15,5 @@ NASM = 'nasm'
 
 TARGET_ARCH = 'ia32'
 RAKE_COMMAND = "rake -s -N -R #{Rake.application.options.rakelib.first}"
-INSTALL_ROOT = 'a:'
-INSTALL_COMMAND = 'mcopy -D o'
+INSTALL_ROOT = '/tmp/chaos-iso-build'
+INSTALL_COMMAND = 'install -D'

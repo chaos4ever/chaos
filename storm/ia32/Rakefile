@@ -43,15 +43,15 @@ LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
 task :default => [:banner, :prepare, :storm] + OBJECTS
 
 task :banner do
-  print "Compiling ".bold
-  print "storm/ia32".cyan.bold
-  puts "..."
+  print 'Compiling '.bold
+  print 'storm/ia32'.cyan.bold
+  puts '...'
 
-  print "    "
+  print '    '
 end
 
 task :install do
-  sh "#{INSTALL_COMMAND} #{KERNEL_OUTPUT} #{INSTALL_ROOT}"
+  sh "#{INSTALL_COMMAND} #{KERNEL_OUTPUT} #{INSTALL_ROOT}/#{KERNEL_OUTPUT}"
   puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
 end
 
