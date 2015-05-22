@@ -1,6 +1,6 @@
 .vagrant
-floppy.img
 
+chaos.iso
 *.dep
 *.o
 *.a

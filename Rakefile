@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-folders = [:storm, :libraries, :servers] # :programs
+FOLDERS = [:storm, :libraries, :servers] # :programs
 
 verbose false
 
@@ -12,7 +12,7 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => folders
+task :default => FOLDERS + [:iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
@@ -23,11 +23,30 @@ end
 
 desc 'Compiles and installs chaos'
 task :install do
-  folders.each do |folder|
+  FileUtils.rm_rf INSTALL_ROOT
+
+  FOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end
+end
 
-  sh 'mcopy -o grub.cfg a:/grub'
+desc 'Builds a bootable ISO image with the kernel, servers and programs.'
+task :iso_image => :install do
+  FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
+  FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
+
+  # I suspect this is actually an x86 binary, even though it resides in a folder that seems to indicate the opposite.
+  FileUtils.cp '/usr/lib/grub/x86_64-pc/stage2_eltorito', "#{INSTALL_ROOT}/boot/grub"
+
+  sh "genisoimage \
+      -R \
+      -b boot/grub/stage2_eltorito \
+      -no-emul-boot \
+      -boot-load-size 4 \
+      -boot-info-table \
+      -input-charset ascii \
+      -quiet \
+      -o chaos.iso #{INSTALL_ROOT}"
 end
 
 desc "Compiles the 'storm' kernel."
