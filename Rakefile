@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-folders = [:storm, :libraries, :servers] # :programs
+FOLDERS = [:storm, :libraries, :servers] # :programs
 
 verbose false
 
@@ -12,7 +12,7 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => [:folders, :iso_image]
+task :default => [FOLDERS, :iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
