@@ -2,5 +2,5 @@ qemu \
     -s \
     -m 32 \
     -curses \
-    -fda floppy.img \
+    -cdrom chaos.iso \
     -d int
