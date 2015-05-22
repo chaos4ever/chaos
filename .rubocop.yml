@@ -1,0 +1,4 @@
+Metrics/LineLength:
+  Max: 132
+Style/HashSyntax:
+  Enabled: false
