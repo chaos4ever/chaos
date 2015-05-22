@@ -12,7 +12,7 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => [FOLDERS, :iso_image]
+task :default => FOLDERS + [:iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
