@@ -15,10 +15,10 @@ OUTPUT = 'initial_ramdisk'
 
 file 'initial_ramdisk.o' => ['initial_ramdisk.c', 'ramdisk-auto.h']
 
-file 'ramdisk-auto.h' => ['ramdisk.pl', 'ramdisk.image'] do |t|
+file 'ramdisk-auto.h' => ['ramdisk.rb', 'ramdisk.image'] do |t|
   print((t.name + ' ').cyan)
 
-  sh './ramdisk.pl ramdisk.image > ramdisk-auto.h'
+  sh './ramdisk.rb ramdisk.image > ramdisk-auto.h'
 end
 
 load '../../servers.rake'
