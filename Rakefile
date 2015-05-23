@@ -27,7 +27,9 @@ task :create_ramdisk_image do
 end
 
 desc 'Compiles and installs chaos'
-task :install => :create_ramdisk_image do
+task :install => [:create_ramdisk_image, :install_folders, :iso_image]
+
+task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT
 
   FOLDERS.each do |folder|
@@ -36,7 +38,7 @@ task :install => :create_ramdisk_image do
 end
 
 desc 'Builds a bootable ISO image with the kernel, servers and programs.'
-task :iso_image => :install do
+task :iso_image do
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
   FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
 
