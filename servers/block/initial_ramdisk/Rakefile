@@ -12,13 +12,20 @@ LIBRARIES = %w(
 )
 
 OUTPUT = 'initial_ramdisk'
+RAMDISK_IMAGE = 'ramdisk.image'
+
+desc 'Creates the initial ramdisk image'
+task :create_ramdisk_image do
+  sh "dd if=/dev/zero of=#{RAMDISK_IMAGE} bs=1M count=16 2> /dev/null"
+  sh "/sbin/mkdosfs #{RAMDISK_IMAGE} > /dev/null"
+end
 
 file 'initial_ramdisk.o' => ['initial_ramdisk.c', 'ramdisk-auto.h']
 
-file 'ramdisk-auto.h' => ['ramdisk.rb', 'ramdisk.image'] do |t|
+file 'ramdisk-auto.h' => ['ramdisk.rb', RAMDISK_IMAGE] do |t|
   print((t.name + ' ').cyan)
 
-  sh './ramdisk.rb ramdisk.image > ramdisk-auto.h'
+  sh "./ramdisk.rb #{RAMDISK_IMAGE} > ramdisk-auto.h"
 end
 
 load '../../servers.rake'

@@ -21,8 +21,13 @@ task :clean do
   end
 end
 
+desc 'Creates the initial ramdisk image where the programs and their data is stored'
+task :create_ramdisk_image do
+  sh "cd servers/block/initial_ramdisk && #{RAKE_COMMAND} create_ramdisk_image"
+end
+
 desc 'Compiles and installs chaos'
-task :install do
+task :install => :create_ramdisk_image do
   FileUtils.rm_rf INSTALL_ROOT
 
   FOLDERS.each do |folder|
