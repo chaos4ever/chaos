@@ -17,6 +17,8 @@ task :clean do
 end
 
 task :install => :default do
+  sh 'mcopy startup u:/config/servers/boot'
+
   SUBFOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end
