@@ -16,7 +16,7 @@ task :default => FOLDERS + [:iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
-  folders.each do |folder|
+  FOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} clean"
   end
 end
