@@ -1,31 +1,16 @@
-#!/usr/bin/perl -w
-
-# $Id$
-# Abstract: Get the block size of the given file and print in a C-like way.
+#!/usr/bin/env ruby
+#
+# Abstract: Get the block size of the given file and print it as a C header.
 # Author: Per Lundberg <per@halleluja.nu>
+#
+# © Copyright 1999-2000 chaos development
+# © Copyright 2015 chaos development
 
-# Copyright 1999-2000 chaos development.
+file = ARGV[0] or fail 'You need to provide the name of the file to inspect'
 
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License as
-# published by the Free Software Foundation; either version 2 of the
-# License, or (at your option) any later version.
+BLOCK_SIZE = 512
 
-# This program is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# General Public License for more details.
+number_of_blocks = File.size(file).fdiv(BLOCK_SIZE).ceil
 
-# You should have received a copy of the GNU General Public License
-# along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-# USA.
-
-use strict;
-use POSIX;
-
-my $file = $ARGV[0] or exit;
-
-(undef, undef, undef, undef, undef, undef, undef, my $size) = stat ($file);
-print "#define BLOCK_SIZE       512\n";
-print "#define NUMBER_OF_BLOCKS ", POSIX::ceil ($size / 512), "\n";
+puts "#define BLOCK_SIZE       #{BLOCK_SIZE}\n"
+puts "#define NUMBER_OF_BLOCKS #{number_of_blocks}\n"
