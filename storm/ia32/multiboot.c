@@ -1,7 +1,10 @@
-/* Abstract: Parse some of the Multiboot data. */
-/* Author: Per Lundberg <per@halleluja.nu> */
-
-/* Copyright 1999-2000, 2007, 2013 chaos development. */
+// Abstract: Parse some of the Multiboot data.
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015 chaos development
 
 #include <storm/generic/arguments.h>
 #include <storm/generic/defines.h>
@@ -16,26 +19,21 @@ multiboot_module_info_type multiboot_module_info[MAX_STARTUP_SERVERS] INIT_DATA;
 
 void INIT_CODE multiboot_init (void)
 {
-  char *target = (char *) BASE_MODULE_NAME;
-  unsigned module;
+    char *target = (char *) BASE_MODULE_NAME;
+    unsigned module;
 
-  memory_copy
-    (multiboot_module_info,
-     (multiboot_module_info_type *) multiboot_info.module_base,
-     multiboot_info.number_of_modules * sizeof (multiboot_module_info_type));
+    memory_copy(multiboot_module_info, (multiboot_module_info_type *) multiboot_info.module_base,
+                multiboot_info.number_of_modules * sizeof (multiboot_module_info_type));
 
-  /* First of all, make sure module names and parameters are stored in
-     a safe place. Otherwise, we may overwrite them later on in the
-     boot process. */
+    // First of all, make sure module names and parameters are stored in a safe place. Otherwise, we may overwrite them later on
+    // in the boot process.
+    for (module = 0; module < multiboot_info.number_of_modules; module++)
+    {
+        string_copy (target, (char *) multiboot_module_info[module].name);
+        multiboot_module_info[module].name = (u8 *) target;
+        target += string_length (target) + 1;
+    }
 
-  for (module = 0; module < multiboot_info.number_of_modules; module++)
-  {
-    string_copy (target, (char *) multiboot_module_info[module].name);
-    multiboot_module_info[module].name = (u8 *) target;
-    target += string_length (target) + 1;
-  }
-
-  /* Now, lets parse the kernel command line. */
-
-  arguments_parse ((char *) multiboot_info.command_line, arguments_kernel, 0);
+    // Now, lets parse the kernel command line. */
+    arguments_parse ((char *) multiboot_info.command_line, arguments_kernel, 0);
 }
