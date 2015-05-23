@@ -8,4 +8,5 @@ module /servers/keyboard.gz
 module /servers/vga.gz
 module /servers/log.gz
 module /servers/virtual_file_system.gz
+module /servers/initial_ramdisk.gz
 module /servers/boot.gz
