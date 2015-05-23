@@ -108,7 +108,7 @@ void memory_physical_init(void)
     for (counter = 0; counter < multiboot_info.number_of_modules; counter++)
     {
         memory_physical_reserve(GET_PAGE_NUMBER(multiboot_module_info[counter].start),
-            SIZE_IN_PAGES(multiboot_module_info[counter].end - multiboot_module_info[counter].start), "Server binaries");
+            SIZE_IN_PAGES(multiboot_module_info[counter].end - multiboot_module_info[counter].start), multiboot_module_info[counter].name);
     }
 }
 
@@ -163,7 +163,8 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length, con
         else
         {
             // I smell something rotten in the land of England...
-            DEBUG_HALT("You tried to reserve something that was already taken.");
+            DEBUG_HALT("You tried to reserve %u pages starting at 0x%x, but they are already taken by %s", length,
+                       start * SIZE_PAGE, node->description);
             return RETURN_PAGE_NOT_FOUND;
         }
     }
