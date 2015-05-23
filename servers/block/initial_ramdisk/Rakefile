@@ -21,11 +21,13 @@ task :create_ramdisk_image do
 end
 
 file 'initial_ramdisk.o' => ['initial_ramdisk.c', 'ramdisk-auto.h']
+file 'ramdisk.o' => ['ramdisk.asm', 'ramdisk.image']
 
 file 'ramdisk-auto.h' => ['ramdisk.rb', RAMDISK_IMAGE] do |t|
   print((t.name + ' ').cyan)
 
   sh "./ramdisk.rb #{RAMDISK_IMAGE} > ramdisk-auto.h"
 end
+
 
 load '../../servers.rake'
