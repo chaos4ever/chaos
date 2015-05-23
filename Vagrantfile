@@ -6,6 +6,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get install -y \
       astyle \
       cmake \
+      dosfstools \
       gcc-multilib \
       genisoimage \
       git \
