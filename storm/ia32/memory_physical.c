@@ -118,7 +118,8 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length, con
     avl_node_type *node = page_avl_header->root;
     avl_node_type *insert_node;
 
-    DEBUG_MESSAGE(DEBUG, "start = %u, length = %u", start, length);
+    DEBUG_MESSAGE(DEBUG, "Reserving from 0x%x to 0x%x for %s", start * SIZE_PAGE, ((start + length) * SIZE_PAGE) - 1,
+                  description);
 
 #ifdef CHECK
     avl_debug_tree_check(page_avl_header, page_avl_header->root);
