@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
     cd /vagrant
     ./install_cmocka.sh
 
-    echo 'drive u: file="/vagrant/servers/block/initial_ramdisk/ramdisk.image" 1.44m mformat_only' > /etc/mtools.conf
+    echo 'drive u: file="/vagrant/servers/block/initial_ramdisk/ramdisk.image"' > /etc/mtools.conf
     echo 'cd /vagrant' >> /home/vagrant/.bashrc
     echo '-U' > /home/vagrant/.astylerc
     echo '-H' >> /home/vagrant/.astylerc
