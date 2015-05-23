@@ -21,6 +21,8 @@ typedef struct avl_node_type
     // Pointer to parent.
     struct avl_node_type *parent;
 
+    const char *description;
+
     // Which of the child-trees is the highest?
     int balance;
 
@@ -32,7 +34,7 @@ typedef struct avl_node_type
     unsigned int busy_length;
     unsigned int free_length;
 
-    // These two make the search for a free block very fast.
+    // These two make the search for a free block very fast, but causes more work whenever the tree is updated.
     unsigned int largest_free_less;
     unsigned int largest_free_more;
 } __attribute__((packed)) avl_node_type;
@@ -71,7 +73,7 @@ typedef struct
 
 // Function prototypes.
 extern void avl_node_reset(avl_node_type *node, unsigned int start, unsigned int busy_length, unsigned int free_length,
-                           avl_node_type *parent);
+                           avl_node_type *parent, const char *description);
 extern avl_node_type *avl_node_allocate(avl_header_type *avl_header);
 extern void avl_tree_move(avl_header_type *avl_header, unsigned int delta);
 extern void avl_node_insert(avl_header_type *avl_header, avl_node_type *insert_node);

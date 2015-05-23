@@ -1,5 +1,5 @@
 // Abstract: Provides functions for managing the virtual memory (MMU) mechanisms of the IA32 architecture.
-// Authors: Per Lundberg <per@halleluja.nu> 
+// Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
 
 // Copyright 1999-2000 chaos development.
@@ -82,7 +82,7 @@ void memory_virtual_init (void)
   /* FIXME: Check return value. */
 
   memory_physical_allocate (&physical_page,
-                            (GET_PAGE_NUMBER (SIZE_GLOBAL) / 1024), 
+                            (GET_PAGE_NUMBER (SIZE_GLOBAL) / 1024),
                             "Shared page table");
 
   shared_page_tables = (page_table_entry *) (physical_page * SIZE_PAGE);
@@ -112,19 +112,19 @@ void memory_virtual_init (void)
 
   memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_PROCESS_PAGE_DIRECTORY),
-     GET_PAGE_NUMBER ((u32) kernel_page_directory), 
+     GET_PAGE_NUMBER ((u32) kernel_page_directory),
      1, PAGE_KERNEL);
 
   /* Kernel stack. */
-  
-  memory_virtual_map_kernel 
+
+  memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_KERNEL_STACK),
      GET_PAGE_NUMBER (BASE_KERNEL_STACK), SIZE_IN_PAGES (SIZE_KERNEL_STACK),
      PAGE_KERNEL);
 
   /* Trap handler stack. */
 
-  //  memory_virtual_map_kernel 
+  //  memory_virtual_map_kernel
   //    (kernel_page_directory, GET_PAGE_NUMBER (BASE_TRAP_STACK),
   //     GET_PAGE_NUMBER (BASE_TRAP_STACK), SIZE_IN_PAGES (SIZE_TRAP_STACK),
   //     PAGE_KERNEL, PROCESS_ID_KERNEL);
@@ -133,7 +133,7 @@ void memory_virtual_init (void)
   /* FIXME: this should be done by some kind of log-server? */
 
   memory_virtual_map_kernel
-    (kernel_page_directory, GET_PAGE_NUMBER (BASE_SCREEN), 
+    (kernel_page_directory, GET_PAGE_NUMBER (BASE_SCREEN),
      GET_PAGE_NUMBER (BASE_SCREEN), 16, PAGE_KERNEL);
 
   /* Multiboot module names. */
@@ -144,8 +144,8 @@ void memory_virtual_init (void)
      GET_PAGE_NUMBER (BASE_MODULE_NAME), 1, PAGE_KERNEL);
 
   /* Kernel code and data. */
-  
-  memory_virtual_map_kernel 
+
+  memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_KERNEL),
      GET_PAGE_NUMBER (BASE_KERNEL), SIZE_IN_PAGES ((u32) &_end - BASE_KERNEL),
      PAGE_KERNEL);
@@ -155,7 +155,7 @@ void memory_virtual_init (void)
   for (counter = 0; counter < SIZE_IN_PAGES (SIZE_GLOBAL) / 1024; counter++)
   {
     u32 index = (GET_PAGE_NUMBER (BASE_GLOBAL) / 1024) + counter;
-    
+
     kernel_page_directory[index].present = 1;
     kernel_page_directory[index].flags = PAGE_DIRECTORY_FLAGS;
     kernel_page_directory[index].accessed = 0;
@@ -173,7 +173,7 @@ void memory_virtual_init (void)
     {
       kernel_page_directory[index].global = 0;
     }
-    
+
     kernel_page_directory[index].available = 0;
     kernel_page_directory[index].page_table_base =
       (GET_PAGE_NUMBER (shared_page_tables) + counter);
@@ -194,7 +194,7 @@ void memory_virtual_enable (void)
 {
   //  debug_print
   //    ("Would save %u K of memory.\n",
-  //     ((page_avl_header->limit_nodes - 
+  //     ((page_avl_header->limit_nodes -
   //       avl_get_number_of_entries (page_avl_header->root)) *
   //      sizeof (avl_node_type)) / KB + 12 +
   //     ((u32) &_init_end - (u32) &_init_start) / KB);
@@ -202,14 +202,14 @@ void memory_virtual_enable (void)
   DEBUG_MESSAGE (DEBUG, "Called");
 
   /* Map the kernel TSS. */
-  
+
   memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_VIRTUAL_KERNEL_TSS),
      GET_PAGE_NUMBER (BASE_KERNEL_TSS), 1, PAGE_KERNEL);
 
   /* Map global data in the shared page tables. Since the page tables are the
      same for all processes, we can just map for the kernel. */
-  
+
   /* FIXME: need to find out how many pages are in use. */
 
   memory_virtual_map_kernel
@@ -222,20 +222,20 @@ void memory_virtual_enable (void)
 
   avl_tree_move (page_avl_header, BASE_PHYSICAL_MEMORY_TREE -
                  (u32) page_avl_header);
-  
+
   page_avl_header = (avl_header_type *) BASE_PHYSICAL_MEMORY_TREE;
 
   /* FIXME: Do this funky music, d0od. */
 
   /* Unreserve all the memory used by the page allocation system. */
-  
+
   //  page_range_unreserve (whatever);
 
   /* ...and reserve the parts needed. */
 
   /* Specify page directory to use for the kernel. */
 
-  cpu_set_cr3 ((u32) kernel_page_directory); 
+  cpu_set_cr3 ((u32) kernel_page_directory);
 
   /* Enable paging (virtual memory), protection and set the extension
      type flag. No external datastructures can be accessed after
@@ -273,11 +273,11 @@ return_type memory_virtual_map_kernel
   u32 counter, index;
 
   for (counter = 0; counter < pages; counter++)
-  {  
+  {
     /* Which page table? */
 
     index = (virtual_page + counter) / 1024;
-    
+
     if (page_directory[index].present == 0)
     {
       u32 page_table_page;
@@ -296,20 +296,20 @@ return_type memory_virtual_map_kernel
       page_directory[index].global = 0;
       page_directory[index].available = 0;
       page_directory[index].page_table_base = page_table_page;
-      
+
       /* Make sure we could allocate memory. */
 
       if (page_directory[index].page_table_base == 0)
       {
       	return RETURN_OUT_OF_MEMORY;
       }
-      
+
       /* Make sure no pages in the new page table are marked as
          present. */
 
       page_table = (page_table_entry *)
         (page_directory[index].page_table_base * SIZE_PAGE);
-      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE); 
+      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE);
 
       /* Map the newly created page table in the page_directory. */
 
@@ -324,9 +324,9 @@ return_type memory_virtual_map_kernel
     }
 
     /* Which entry in the page table to modify. */
-    
+
     index = (virtual_page + counter) % 1024;
-    
+
     /* Set up a new page table entry. */
 
     page_table[index].present = 1;
@@ -343,20 +343,20 @@ return_type memory_virtual_map_kernel
 
 /* This function is for mapping memory in syscalls (when paging is
    enabled). */
-  
+
 static return_type memory_virtual_map_real
   (u32 virtual_page, u32 physical_page, u32 pages, u32 flags)
 {
   page_table_entry *page_table;
   u32 counter, index;
 
-  DEBUG_MESSAGE (DEBUG, "Called (%x, %x, %x, %x)", virtual_page, 
+  DEBUG_MESSAGE (DEBUG, "Called (%x, %x, %x, %x)", virtual_page,
                  physical_page, pages, flags);
 
   for (counter = 0; counter < pages; counter++)
-  {  
+  {
     index = (virtual_page + counter) / 1024;
-    
+
     DEBUG_MESSAGE (DEBUG, "index = %u, counter = %u", index, counter);
 
     if (process_page_directory[index].present == 0)
@@ -382,9 +382,9 @@ static return_type memory_virtual_map_real
 
       //      memory_virtual_cache_invalidate
       //        ((void *) (process_page_directory[index].page table_base * SIZE_PAGE));
-      
+
       /* Make sure we could allocate memory. */
-      
+
       if (process_page_directory[index].page_table_base == 0)
       {
         return RETURN_OUT_OF_MEMORY;
@@ -397,12 +397,12 @@ static return_type memory_virtual_map_real
          (u32) process_page_directory[index].page_table_base, 1, PAGE_KERNEL);
 
       memory_set_u8 ((u8 *) (BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE)),
-                     0, SIZE_PAGE); 
+                     0, SIZE_PAGE);
     }
 
     /* The page table is in the page_directory. */
 
-    
+
     page_table = (page_table_entry *)
       (BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE));
 
@@ -452,7 +452,7 @@ static return_type memory_virtual_map_other_real
     (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
   u32 counter, index;
   bool global = (flags & PAGE_GLOBAL) != 0;
-  
+
   /* Remove PAGE_GLOBAL from the flags, if set. */
 
   flags &= ~PAGE_GLOBAL;
@@ -469,9 +469,9 @@ static return_type memory_virtual_map_other_real
   /* Start the mapping. */
 
   for (counter = 0; counter < pages; counter++)
-  {  
+  {
     index = (virtual_page + counter) / 1024;
-    
+
     DEBUG_MESSAGE (DEBUG, "Changing page directory entry %x", index);
 
     /* Page Table is not set up yet. */
@@ -496,9 +496,9 @@ static return_type memory_virtual_map_other_real
       page_directory[index].global = 0;
       page_directory[index].available = 0;
       page_directory[index].page_table_base = page_table_page;
-      
+
       /* Make sure we could allocate memory. */
-      
+
       //      if (process_page_directory[index].page table_base == 0)
       //      {
       //	return RETURN_OUT_OF_MEMORY;
@@ -513,7 +513,7 @@ static return_type memory_virtual_map_other_real
       memory_virtual_map_real
         (GET_PAGE_NUMBER (page_table),
          (u32) page_directory[index].page_table_base, 1, PAGE_KERNEL);
-      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE); 
+      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE);
     }
 
     memory_virtual_map_real
@@ -536,9 +536,9 @@ static return_type memory_virtual_map_other_real
     page_table[index].available = 0;
     page_table[index].page_base = physical_page + counter;
 
-    if (global) 
+    if (global)
     {
-      page_table[index].global = 1; 
+      page_table[index].global = 1;
     }
   }
 
@@ -555,7 +555,7 @@ return_type memory_virtual_map
 {
   return_type return_value;
 
-  DEBUG_MESSAGE (DEBUG, "Mapping %x at %x (%u pages)", physical_page, 
+  DEBUG_MESSAGE (DEBUG, "Mapping %x at %x (%u pages)", physical_page,
                  virtual_page, pages);
 
   //  mutex_kernel_wait (&memory_map_mutex);
@@ -598,9 +598,9 @@ void memory_virtual_unmap (u32 virtual_page, u32 pages)
   u32 counter, index;
 
   //  mutex_kernel_wait (&memory_map_mutex);
-  
+
   for (counter = 0; counter < pages; counter++)
-  {  
+  {
     index = (virtual_page + counter) / 1024;
 
     if (process_page_directory[index].present != 0)
@@ -644,7 +644,7 @@ return_type map (process_id_type process_id, u32 virtual_page,
 
   DEBUG_MESSAGE (DEBUG, "linear_page: 0x%lX, physical_page: 0x%lX, pages: %lu\n", linear_page,
                  physical_page, pages);
-  
+
   if (task > number_of_threads)
   {
     return RETURN_THREAD_INVALID;
@@ -666,13 +666,13 @@ return_type memory_virtual_allocate (u32 *page_number, u32 pages)
   avl_node_type *node = process_avl_header->root;
   avl_node_type *insert_node;
 
-  if (tss_tree_mutex != MUTEX_LOCKED && 
+  if (tss_tree_mutex != MUTEX_LOCKED &&
       memory_mutex != MUTEX_LOCKED && initialised)
   {
     DEBUG_HALT ("Code is not properly mutexed.");
   }
 
-  DEBUG_MESSAGE (DEBUG, "Called with page_number = %p, pages = %u", page_number, 
+  DEBUG_MESSAGE (DEBUG, "Called with page_number = %p, pages = %u", page_number,
                  pages);
 
   DEBUG_MESSAGE (DEBUG, "p: %p, r00t: %p, l: %u", process_avl_header,
@@ -726,13 +726,15 @@ return_type memory_virtual_allocate (u32 *page_number, u32 pages)
       else
       {
         insert_node = avl_node_allocate (process_avl_header);
-        avl_node_reset (insert_node, node->start + node->busy_length,
-                        pages, node->free_length - pages, NULL);
-        
+
+        // TODO: Make the description here configurable by the caller.
+        avl_node_reset (insert_node, node->start + node->busy_length, pages, node->free_length - pages, NULL,
+                        "Virtual memory (allocated)");
+
         node->free_length = 0;
-        
+
         avl_update_tree_largest_free (node->parent);
-        
+
         avl_node_insert (process_avl_header, insert_node);
 
         DEBUG_MESSAGE (DEBUG, "Exiting");
@@ -770,7 +772,7 @@ return_type memory_virtual_deallocate (u32 page_number)
   avl_node_type *node = process_avl_header->root;
   avl_node_type *adjacent_node;
   bool finished = FALSE;
-  
+
 #ifdef CHECK
   avl_debug_tree_check (process_avl_header, process_avl_header->root);
 #endif
@@ -832,7 +834,7 @@ return_type memory_virtual_deallocate (u32 page_number)
   {
     node->free_length += node->busy_length;
     node->busy_length = 0;
-    
+
     avl_update_tree_largest_free (node->parent);
   }
   else
@@ -880,7 +882,7 @@ return_type memory_virtual_reserve (unsigned int start_page,
     }
 
     /* Is it on the right side? */
-    
+
     else if (start_page >=
              (node->start + node->busy_length + node->free_length))
     {
@@ -894,9 +896,11 @@ return_type memory_virtual_reserve (unsigned int start_page,
               (node->start + node->busy_length + node->free_length)))
     {
       insert_node = avl_node_allocate (process_avl_header);
+
+      // TODO: Make it possible to override the description.
       avl_node_reset (insert_node, start_page, pages,
                       node->start + node->busy_length +
-                      node->free_length - start_page - pages, NULL);
+                      node->free_length - start_page - pages, NULL, "Virtual memory (reserved)");
 
       node->free_length = start_page - node->start - node->busy_length;
 
@@ -926,7 +930,7 @@ return_type memory_virtual_reserve (unsigned int start_page,
   }
 
   /* We didn't find a match. This will normally never happen. */
-  
+
   DEBUG_HALT ("Couldn't find a match");
   return RETURN_PAGE_NOT_FOUND;
 }
