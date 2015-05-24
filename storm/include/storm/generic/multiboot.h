@@ -94,7 +94,7 @@ typedef struct
 {
     u32 start;
     u32 end;
-    u8 *name;
+    char *name;
     u32 reserved;
 } PACKED multiboot_module_info_type;
 

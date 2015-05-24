@@ -34,7 +34,7 @@
 #include <storm/generic/thread.h>
 #include <storm/generic/types.h>
 
-u32 page_avl_base = BASE_PAGE_AVL;
+u32 page_avl_base;
 avl_header_type *page_avl_header;
 u32 pages_left, physical_pages;
 u32 page_avl_pages;
@@ -56,8 +56,11 @@ void memory_physical_init(void)
     page_avl_array_pages = SIZE_IN_PAGES(sizeof(avl_node_type) * physical_pages);
     page_avl_pages = page_avl_intro_pages + page_avl_array_pages;
 
+    // As demonstrated here, the AVL system is placed at the very end of the physical memory.
+    page_avl_base = (physical_pages - page_avl_pages) * SIZE_PAGE;
+
     // Put the AVL header where it should be.
-    page_avl_header = (avl_header_type *)(page_avl_base);
+    page_avl_header = (avl_header_type *) page_avl_base;
 
     // Fill in the values in the AVL header.
     page_avl_header->limit_nodes = physical_pages;
@@ -75,58 +78,51 @@ void memory_physical_init(void)
     memory_set_u8((u8 *) page_avl_header->bitmap, 0, physical_pages / 8);
 
     // Initialise the tree. All memory is free.
-    avl_node_reset(page_avl_header->root, 0, 0, physical_pages, NULL);
+    avl_node_reset(page_avl_header->root, 0, 0, physical_pages, NULL, "Unallocated physical memory");
 
     // And mark that entry as used in the bitmap.
     page_avl_header->bitmap[0] = 1;
 
     // Now, let's do it like they do on the discovery channel. Mark the reserved memory as reserved.
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_GDT), SIZE_IN_PAGES(SIZE_GDT_IDT));
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL_TSS), SIZE_IN_PAGES(SIZE_KERNEL_TSS));
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL_STACK), SIZE_IN_PAGES(SIZE_KERNEL_STACK));
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_MODULE_NAME), SIZE_IN_PAGES(SIZE_MODULE_NAME));
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_GDT), SIZE_IN_PAGES(SIZE_GDT_IDT), "IDT");
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL_TSS), SIZE_IN_PAGES(SIZE_KERNEL_TSS), "Kernel TSS");
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL_STACK), SIZE_IN_PAGES(SIZE_KERNEL_STACK), "Kernel stack");
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_MODULE_NAME), SIZE_IN_PAGES(SIZE_MODULE_NAME), "Module names");
 
     // Reserve the memory for the kernel.
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL), SIZE_IN_PAGES((u32) &_end - BASE_KERNEL));
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL), SIZE_IN_PAGES((u32) &_end - BASE_KERNEL), "Kernel code and data");
 
     // If we have more than 16 megs of RAM, we need to allocate DMA buffers to avoid lots of trouble later.
     // FIXME: Should be configurable via command line switch too.
-    DEBUG_MESSAGE(DEBUG, "Reserving memory for DMA...");
-
     // FIXME: For now, we have to do this unconditionally.
     // if (physical_pages * SIZE_PAGE > 16 * MB)
     {
-        memory_physical_reserve(GET_PAGE_NUMBER(BASE_DMA), SIZE_IN_PAGES(SIZE_DMA));
+        memory_physical_reserve(GET_PAGE_NUMBER(BASE_DMA), SIZE_IN_PAGES(SIZE_DMA), "DMA");
     }
 
     // The memory between 640k and 1024k are 'reserved' for various ISA plug in cards and other junk. Nevertheless, if
     // we mess with it, it may mess with us, so we'd better not.
-    DEBUG_MESSAGE(DEBUG, "Reserving high memory...");
-
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_UPPER), SIZE_IN_PAGES(SIZE_UPPER));
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_UPPER), SIZE_IN_PAGES(SIZE_UPPER), "High memory");
 
     // Reserve the memory used by the AVL system.
-    DEBUG_MESSAGE(DEBUG, "Reserving physical memory AVL-data...");
-
-    memory_physical_reserve(GET_PAGE_NUMBER((u32) page_avl_header), page_avl_pages);
+    memory_physical_reserve(GET_PAGE_NUMBER(page_avl_base), page_avl_pages, "Physical memory AVL data");
 
     // And of course the server images too.
-    DEBUG_MESSAGE(DEBUG, "Reserving memory for servers...");
-
     for (counter = 0; counter < multiboot_info.number_of_modules; counter++)
     {
         memory_physical_reserve(GET_PAGE_NUMBER(multiboot_module_info[counter].start),
-            SIZE_IN_PAGES(multiboot_module_info[counter].end - multiboot_module_info[counter].start));
+            SIZE_IN_PAGES(multiboot_module_info[counter].end - multiboot_module_info[counter].start), multiboot_module_info[counter].name);
     }
 }
 
 // Reserve a region, so it won't get allocated later.
-return_type memory_physical_reserve(unsigned int start, unsigned int length)
+return_type memory_physical_reserve(unsigned int start, unsigned int length, const char *description)
 {
     avl_node_type *node = page_avl_header->root;
     avl_node_type *insert_node;
 
-    DEBUG_MESSAGE(DEBUG, "start = %u, length = %u", start, length);
+    DEBUG_MESSAGE(DEBUG, "Reserving from 0x%x to 0x%x for %s", start * SIZE_PAGE, ((start + length) * SIZE_PAGE) - 1,
+                  description);
 
 #ifdef CHECK
     avl_debug_tree_check(page_avl_header, page_avl_header->root);
@@ -151,8 +147,8 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length)
                  ((start + length) <= (node->start + node->busy_length + node->free_length)))
         {
             insert_node = avl_node_allocate(page_avl_header);
-            avl_node_reset(insert_node, start, length,
-                           node->start + node->busy_length + node->free_length - start - length, NULL);
+            avl_node_reset(insert_node, start, length, node->start + node->busy_length + node->free_length - start - length,
+                           NULL, description);
 
             node->free_length = start - node->start - node->busy_length;
 
@@ -172,7 +168,8 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length)
         else
         {
             // I smell something rotten in the land of England...
-            DEBUG_HALT("You tried to reserve something that was already taken.");
+            DEBUG_HALT("You tried to reserve %u pages starting at 0x%x, but they are already taken by %s", length,
+                       start * SIZE_PAGE, node->description);
             return RETURN_PAGE_NOT_FOUND;
         }
     }
@@ -182,7 +179,7 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length)
 }
 
 // Allocate some pages.
-return_type memory_physical_allocate(u32 *page, unsigned int length, char *description UNUSED)
+return_type memory_physical_allocate(u32 *page, unsigned int length, const char *description)
 {
     avl_node_type *node = page_avl_header->root;
     avl_node_type *insert_node;
@@ -227,6 +224,7 @@ return_type memory_physical_allocate(u32 *page, unsigned int length, char *descr
             {
                 node->busy_length = length;
                 node->free_length -= length;
+                node->description = description;
 
                 DEBUG_MESSAGE(DEBUG, "Special case!\n");
 
@@ -246,7 +244,8 @@ return_type memory_physical_allocate(u32 *page, unsigned int length, char *descr
             else
             {
                 insert_node = avl_node_allocate(page_avl_header);
-                avl_node_reset(insert_node, node->start + node->busy_length, length, node->free_length - length, NULL);
+                avl_node_reset(insert_node, node->start + node->busy_length, length, node->free_length - length, NULL,
+                               description);
                 //        debug_print ("evald = %u\n", node->start + node->busy_length);
 
                 node->free_length = 0;

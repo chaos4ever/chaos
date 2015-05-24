@@ -29,8 +29,8 @@ void INIT_CODE multiboot_init (void)
     // in the boot process.
     for (module = 0; module < multiboot_info.number_of_modules; module++)
     {
-        string_copy (target, (char *) multiboot_module_info[module].name);
-        multiboot_module_info[module].name = (u8 *) target;
+        string_copy(target, multiboot_module_info[module].name);
+        multiboot_module_info[module].name = target;
         target += string_length (target) + 1;
     }
 

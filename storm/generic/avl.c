@@ -21,7 +21,7 @@
 
 // Given a new node, this function sets all properties for the node.
 void avl_node_reset(avl_node_type *node, unsigned int start, unsigned int busy_length, unsigned int free_length,
-                    avl_node_type *parent)
+                    avl_node_type *parent, const char *description)
 {
     node->start = start;
     node->busy_length = busy_length;
@@ -32,6 +32,7 @@ void avl_node_reset(avl_node_type *node, unsigned int start, unsigned int busy_l
     node->balance = 0;
     node->largest_free_less = 0;
     node->largest_free_more = 0;
+    node->description = description;
 }
 
 // Find a free node in the entry bitmap. This function is also responsible for growing the tree when needed.
