@@ -12,7 +12,7 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => FOLDERS + [:iso_image]
+task :default => [:create_ramdisk_image] + FOLDERS + [:iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
@@ -27,7 +27,7 @@ task :create_ramdisk_image do
 end
 
 desc 'Compiles and installs chaos'
-task :install => [:create_ramdisk_image, :install_folders, :iso_image]
+task :install => [:install_folders, :iso_image]
 
 task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT
