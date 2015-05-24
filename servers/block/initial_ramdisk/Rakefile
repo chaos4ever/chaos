@@ -16,8 +16,10 @@ RAMDISK_IMAGE = 'ramdisk.image'
 
 desc 'Creates the initial ramdisk image'
 task :create_ramdisk_image do
+  print 'Creating blank ramdisk image...'.cyan.bold
   sh "dd if=/dev/zero of=#{RAMDISK_IMAGE} bs=1M count=16 2> /dev/null"
   sh "/sbin/mkdosfs #{RAMDISK_IMAGE} > /dev/null"
+  puts ' done.'
 end
 
 file 'initial_ramdisk.o' => ['initial_ramdisk.c', 'ramdisk-auto.h']
