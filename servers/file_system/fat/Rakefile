@@ -1,8 +1,23 @@
 OBJECTS = %w(
+  clusters.o
+  detect_fat.o
   fat.o
+  fat_directory_read.o
+  fat_directory_entry_read.o
+  fat_file_get_info.o
+  fat_file_open.o
+  fat_file_read.o
+  get_entry_by_name.o
+  handle_connection.o
+  read_long_file_name.o
 )
 
 LIBRARIES = %w(
+  ipc
+  log
+  memory
+  string
+  system
 )
 
 OUTPUT = 'fat'
