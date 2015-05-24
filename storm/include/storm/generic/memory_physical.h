@@ -12,8 +12,8 @@
 
 extern void memory_physical_init(void) INIT_CODE;
 
-extern return_type memory_physical_reserve(unsigned int start, unsigned int length);
-extern return_type memory_physical_allocate(u32 *page, unsigned int length, char *description) WEAK;
+extern return_type memory_physical_reserve(unsigned int start, unsigned int length, const char *description);
+extern return_type memory_physical_allocate(u32 *page, unsigned int length, const char *description) WEAK;
 extern return_type memory_physical_deallocate(unsigned int start);
 extern u32 memory_physical_get_number_of_pages(void);
 extern u32 memory_physical_get_free(void);

@@ -32,9 +32,6 @@
 #define BASE_UPPER                      (640 * KB)
 #define BASE_SCREEN                     (0xB8000)
 
-// FIXME!!! The AVL tree should be at the end of physical memory.
-#define BASE_PAGE_AVL                   (3 * MB + 512 * KB)
-
 // Virtual addresses.
 #define BASE_VIRTUAL_KERNEL_TSS         (40 * KB)
 

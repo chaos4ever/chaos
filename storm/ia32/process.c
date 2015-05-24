@@ -415,7 +415,7 @@ return_type process_create(process_create_type *process_data)
       (avl_node_type *) (BASE_PROCESS_CREATE + 1 * SIZE_PAGE);
 
     // The lowest 4 megs are reserved for kernel and other stuff.
-    avl_node_reset(new_avl_header->root, 0, 1024, MAX_PAGES - 1024, NULL);
+    avl_node_reset(new_avl_header->root, 0, 1024, MAX_PAGES - 1024, NULL, "Reserved for kernel");
 
     new_avl_header->root = new_avl_header->node_array =
        (avl_node_type *) (BASE_PROCESS_AVL_TREE + process_avl_intro_pages * SIZE_PAGE);

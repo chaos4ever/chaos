@@ -2,3 +2,7 @@ Metrics/LineLength:
   Max: 132
 Style/HashSyntax:
   Enabled: false
+Style/AndOr:
+  Enabled: false
+Style/AsciiComments:
+  Enabled: false

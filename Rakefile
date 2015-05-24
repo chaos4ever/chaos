@@ -12,17 +12,24 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => FOLDERS + [:iso_image]
+task :default => [:create_ramdisk_image] + FOLDERS + [:iso_image]
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
-  folders.each do |folder|
+  FOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} clean"
   end
 end
 
+desc 'Creates the initial ramdisk image where the programs and their data is stored'
+task :create_ramdisk_image do
+  sh "cd servers/block/initial_ramdisk && #{RAKE_COMMAND} create_ramdisk_image"
+end
+
 desc 'Compiles and installs chaos'
-task :install do
+task :install => [:install_folders, :iso_image]
+
+task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT
 
   FOLDERS.each do |folder|
@@ -31,7 +38,7 @@ task :install do
 end
 
 desc 'Builds a bootable ISO image with the kernel, servers and programs.'
-task :iso_image => :install do
+task :iso_image do
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
   FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
 

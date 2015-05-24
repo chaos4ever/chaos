@@ -1,6 +1,6 @@
 qemu \
     -s \
-    -m 32 \
+    -m 128 \
     -curses \
     -cdrom chaos.iso \
     -d int

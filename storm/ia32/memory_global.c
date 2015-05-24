@@ -79,7 +79,7 @@ void memory_global_init(void)
 
     // Initialise the tree, starting with an empty entry.
     avl_node_reset(global_avl_header->root, GET_PAGE_NUMBER(BASE_GLOBAL_HEAP),
-                   0, SIZE_IN_PAGES(SIZE_GLOBAL_HEAP), NULL);
+                   0, SIZE_IN_PAGES(SIZE_GLOBAL_HEAP), NULL, "Unallocated global memory");
 
     // And mark that entry as used in the bitmap.
     global_avl_header->bitmap[0] = 1;
@@ -88,7 +88,7 @@ void memory_global_init(void)
     global_slab_heap = (slab_heap_type *) (memory_global_allocate_page(1) * SIZE_PAGE);
 
     // FIXME: Check return value.
-    memory_physical_allocate(&physical_page, 1, "Global SLAB heap.");
+    memory_physical_allocate(&physical_page, 1, "Global SLAB heap physical page.");
 
     memory_virtual_map(GET_PAGE_NUMBER(global_slab_heap), physical_page, 1, PAGE_KERNEL);
     slab_heap_init(global_slab_heap);
@@ -139,7 +139,7 @@ static u32 memory_global_allocate_page(u32 length)
                 insert_node = avl_node_allocate(global_avl_header);
 
                 avl_node_reset(insert_node, node->start + node->busy_length,
-                               length, node->free_length - length, NULL);
+                               length, node->free_length - length, NULL, "Global memory");
 
                 node->free_length = 0;
                 avl_update_tree_largest_free(node->parent);
