@@ -34,7 +34,7 @@
 #include <storm/generic/thread.h>
 #include <storm/generic/types.h>
 
-u32 page_avl_base = BASE_PAGE_AVL;
+u32 page_avl_base;
 avl_header_type *page_avl_header;
 u32 pages_left, physical_pages;
 u32 page_avl_pages;
@@ -56,8 +56,11 @@ void memory_physical_init(void)
     page_avl_array_pages = SIZE_IN_PAGES(sizeof(avl_node_type) * physical_pages);
     page_avl_pages = page_avl_intro_pages + page_avl_array_pages;
 
+    // As demonstrated here, the AVL system is placed at the very end of the physical memory.
+    page_avl_base = (physical_pages - page_avl_pages) * SIZE_PAGE;
+
     // Put the AVL header where it should be.
-    page_avl_header = (avl_header_type *)(page_avl_base);
+    page_avl_header = (avl_header_type *) page_avl_base;
 
     // Fill in the values in the AVL header.
     page_avl_header->limit_nodes = physical_pages;
@@ -102,7 +105,7 @@ void memory_physical_init(void)
     memory_physical_reserve(GET_PAGE_NUMBER(BASE_UPPER), SIZE_IN_PAGES(SIZE_UPPER), "High memory");
 
     // Reserve the memory used by the AVL system.
-    memory_physical_reserve(GET_PAGE_NUMBER((u32) page_avl_header), page_avl_pages, "Physical memory AVL data");
+    memory_physical_reserve(GET_PAGE_NUMBER(page_avl_base), page_avl_pages, "Physical memory AVL data");
 
     // And of course the server images too.
     for (counter = 0; counter < multiboot_info.number_of_modules; counter++)
