@@ -1,0 +1,35 @@
+OBJECTS = %w(
+  initial_ramdisk.o
+  ramdisk.o
+)
+
+LIBRARIES = %w(
+  ipc
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'initial_ramdisk'
+RAMDISK_IMAGE = 'ramdisk.image'
+
+desc 'Creates the initial ramdisk image'
+task :create_ramdisk_image do
+  print 'Creating blank ramdisk image...'.cyan.bold
+  sh "dd if=/dev/zero of=#{RAMDISK_IMAGE} bs=1M count=16 2> /dev/null"
+  sh "/sbin/mkdosfs #{RAMDISK_IMAGE} > /dev/null"
+  puts ' done.'
+end
+
+file 'initial_ramdisk.o' => ['initial_ramdisk.c', 'ramdisk-auto.h']
+file 'ramdisk.o' => ['ramdisk.asm', 'ramdisk.image']
+
+file 'ramdisk-auto.h' => ['ramdisk.rb', RAMDISK_IMAGE] do |t|
+  print((t.name + ' ').cyan)
+
+  sh "./ramdisk.rb #{RAMDISK_IMAGE} > ramdisk-auto.h"
+end
+
+
+load '../../servers.rake'

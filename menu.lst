@@ -1,3 +1,4 @@
+# This is the grub config file. It gets automatically copied into the .iso file during the build process.
 timeout 5
 
 title chaos
@@ -7,4 +8,5 @@ module /servers/keyboard.gz
 module /servers/vga.gz
 module /servers/log.gz
 module /servers/virtual_file_system.gz
+module /servers/initial_ramdisk.gz
 module /servers/boot.gz

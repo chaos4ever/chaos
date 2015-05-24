@@ -1,5 +1,5 @@
-global 		ramdisk, ramdisk_end
+global          ramdisk, ramdisk_end
 
 ramdisk:
-		incbin 		"ramdisk.image"
+                incbin "ramdisk.image"
 ramdisk_end:

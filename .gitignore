@@ -10,6 +10,11 @@ storm/ia32/storm
 storm/include/storm/current-arch
 storm_tests/ia32/ia32_tests
 
+# These are painful but what do we do...
+servers/block/initial_ramdisk/initial_ramdisk
+servers/block/initial_ramdisk/ramdisk-auto.h
+servers/block/initial_ramdisk/ramdisk.image
+servers/file_system/virtual_file_system/virtual_file_system
 servers/system/boot/boot
 servers/system/console/console
 servers/system/keyboard/keyboard

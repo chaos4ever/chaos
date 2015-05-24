@@ -1,4 +1,7 @@
 // Abstract: AVL function prototypes.
+// Authors: Henrik Hallin <hal@chaosdev.org
+//          Anders Öhrt <doa@chaosdev.org>
+//
 // © Copyright 2000, 2013 chaos development.
 
 #pragma once

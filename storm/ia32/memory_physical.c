@@ -137,8 +137,7 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length, con
             node = (avl_node_type *) node->less;
         }
         // Is it on the right side?
-        else if (start >=
-                 (node->start + node->busy_length + node->free_length))
+        else if (start >= (node->start + node->busy_length + node->free_length))
         {
             node = (avl_node_type *) node->more;
         }
