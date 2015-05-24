@@ -14,6 +14,7 @@ storm_tests/ia32/ia32_tests
 servers/block/initial_ramdisk/initial_ramdisk
 servers/block/initial_ramdisk/ramdisk-auto.h
 servers/block/initial_ramdisk/ramdisk.image
+servers/file_system/fat/fat
 servers/file_system/virtual_file_system/virtual_file_system
 servers/system/boot/boot
 servers/system/console/console
