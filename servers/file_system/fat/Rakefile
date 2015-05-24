@@ -1,0 +1,10 @@
+OBJECTS = %w(
+  fat.o
+)
+
+LIBRARIES = %w(
+)
+
+OUTPUT = 'fat'
+
+load '../../servers.rake'
