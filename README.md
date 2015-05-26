@@ -21,8 +21,8 @@ Having that said, there are a number of issues with the codebase which made us s
 * Clone your fork (using the clone button here at GitHub or 
 * Change working directory to your working copy (`cd ~/git/chaos` or similar) and run the following commands:
 
-    vagrant up
-    vagrant ssh
+      vagrant up
+      vagrant ssh
 
 ### Compiling:
 
