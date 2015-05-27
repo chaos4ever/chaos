@@ -234,6 +234,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
 
     if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "Failed to found matching volume for %s", directory_entry->path_name);
         directory_entry->success = FALSE;
         return;
     }
@@ -306,6 +307,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
                 // Did the file not exist?
                 if (input_index == mounted_volumes)
                 {
+                    log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "Failed to find %s in meta-root filesystem", directory_entry->path_name);
                     directory_entry->success = FALSE;
                     return;
                 }
