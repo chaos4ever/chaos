@@ -24,6 +24,10 @@ end
 desc 'Creates the initial ramdisk image where the programs and their data is stored'
 task :create_ramdisk_image do
   sh "cd servers/block/initial_ramdisk && #{RAKE_COMMAND} create_ramdisk_image"
+
+  sh 'mmd -o u:/config'
+  sh 'mmd u:/config/servers'
+  sh 'mmd u:/config/servers/boot'
 end
 
 desc 'Compiles and installs chaos'
