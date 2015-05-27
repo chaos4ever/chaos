@@ -452,7 +452,7 @@ static bool vfs_mount(file_mount_type *mount, ipc_structure_type *ipc_structure)
     string_copy_max(mount_point[mounted_volumes].location, mount->location, MAX_PATH_NAME_LENGTH);
     mounted_volumes++;
 
-    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounting %u at //%s.",
+    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounted %u at //%s.",
                         ipc_structure->output_mailbox_id, mount->location);
     return TRUE;
 }
