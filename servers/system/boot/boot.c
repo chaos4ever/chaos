@@ -86,7 +86,7 @@ int main(void)
     message_parameter.protocol = IPC_PROTOCOL_FILE;
     message_parameter.message_class = IPC_FILE_MOUNT_VOLUME;
     message_parameter.data = &mount;
-    message_parameter.length = sizeof (file_mount_type);
+    message_parameter.length = sizeof(file_mount_type);
     message_parameter.block = TRUE;
     ipc_send(vfs_structure.output_mailbox_id, &message_parameter);
     ipc_receive(vfs_structure.input_mailbox_id, &message_parameter, NULL);
