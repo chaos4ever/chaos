@@ -72,6 +72,7 @@ return_type log_print_formatted(log_structure_type *log_structure, unsigned int 
     va_end(arguments);
 
     ipc_log_print.urgency = urgency;
+    system_call_timer_read(&ipc_log_print.timestamp);
     string_copy_max(ipc_log_print.log_class, log_structure->log_class, IPC_LOG_MAX_CLASS_LENGTH);
     string_copy_max(ipc_log_print.message, output, IPC_LOG_MAX_MESSAGE_LENGTH);
     log(log_structure, &ipc_log_print);

@@ -79,7 +79,8 @@ static void log_add(console_structure_type *console, char *title, ipc_log_print_
                               urgency_colour[ipc_log_print->urgency][0],
                               urgency_colour[ipc_log_print->urgency][1],
                               urgency_colour[ipc_log_print->urgency][2]);
-        console_print_formatted(console, " [%s] %s ", ipc_log_print->log_class, ipc_log_print->message);
+        console_print_formatted(console, " [%u.%03u] [%s] %s ", (u32) ipc_log_print->timestamp / 1000,
+                                (u32) ipc_log_print->timestamp % 1000, ipc_log_print->log_class, ipc_log_print->message);
 
         // Go to next line (with correct colour). */
         console_attribute_set(console, CONSOLE_COLOUR_GRAY, CONSOLE_COLOUR_BLACK, CONSOLE_ATTRIBUTE_RESET);
