@@ -121,7 +121,6 @@ return_type file_read(ipc_structure_type *vfs_structure, file_handle_type file_h
     message_parameter.data = buffer;
     message_parameter.length = read.bytes;
 
-    system_call_mailbox_receive(vfs_structure->input_mailbox_id,
-                                &message_parameter);
+    system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter);
     return FILE_RETURN_SUCCESS;
 }
