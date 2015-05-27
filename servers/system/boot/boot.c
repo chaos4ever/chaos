@@ -81,13 +81,15 @@ int main(void)
     // mount.mailbox_id = mailbox_id[0];
     string_copy(mount.location, "ramdisk");
 
-    // That's it. Send the message.
+    // That's it. Send the message. The receive is here just to ensure that we don't keep on going before the volume is
+    // actually mounted.
     message_parameter.protocol = IPC_PROTOCOL_FILE;
     message_parameter.message_class = IPC_FILE_MOUNT_VOLUME;
     message_parameter.data = &mount;
     message_parameter.length = sizeof (file_mount_type);
     message_parameter.block = TRUE;
     ipc_send(vfs_structure.output_mailbox_id, &message_parameter);
+    ipc_receive(vfs_structure.input_mailbox_id, &message_parameter, NULL);
 
     log_print(&log_structure, LOG_URGENCY_DEBUG, "Mounted the first available block service as //ramdisk.");
 

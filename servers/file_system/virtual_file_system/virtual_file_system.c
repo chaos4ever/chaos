@@ -529,6 +529,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 file_mount_type *mount = (file_mount_type *) data;
 
                 vfs_mount(mount, &ipc_structure);
+                ipc_send(ipc_structure.output_mailbox_id, &message_parameter);
                 break;
             }
 
