@@ -14,15 +14,30 @@ Having that said, there are a number of issues with the codebase which made us s
 
 - Linux, Mac OSX or Windows.
 - [Vagrant](https://www.vagrantup.com/). If you don't know what this is, go check out their web page. It makes things like this much easier and smoother.
+- [VirtualBox](https://www.virtualbox.org/)
+- If Windows: an `ssh` client. (Install [mingw-get](http://www.mingw.org/wiki/getting_started) and then select at least the `msys-openssh`, `msys-base` and `msys-bash` packages.)
 
 ### Setting up the dev environment
 
 * Fork the repo (using the Fork button in the upper right).
-* Clone your fork (using the clone button here at GitHub or 
-* Change working directory to your working copy (`cd ~/git/chaos` or similar) and run the following commands:
+* Clone your fork (using the clone button here at GitHub or straight in the command line).
 
-    vagrant up
-    vagrant ssh
+#### On Linux or Mac
+
+* Open a terminal program.
+* Change working directory to your working copy (`cd ~/git/chaos` or similar)
+* Run the following commands:
+
+        vagrant up
+        vagrant ssh
+
+#### On Windows
+
+* Launch `msys.bat` from the MSYS packages, as Administrator. **Note**: You *must* run `msys.bat` as Administrator. This is because symbolic links with VirtualBox is only supported when the VM is launched as an Administrator, and the `chaos` build process relies on symbolic links. Typical errors you can get if you do not do this right is "Protocol error" and similar. If this happens, do a `vagrant halt` and then retry the commands below in an admin `msys.bat` instead.)
+* Change working directory to your working copy (`cd /c/git/chaos`, assuming that you have the code in `c:\git\chaos`) and run the following commands:
+
+        vagrant up
+        vagrant ssh
 
 ### Compiling:
 
@@ -31,10 +46,12 @@ Having that said, there are a number of issues with the codebase which made us s
 
 (Not all parts of the system has been converted to the `rake`-based compilation process yet, but we're working on it. Feel free to send a patch/pull request if you add support for building some of the broken parts of the system.)
 
+This should create a `chaos.iso`, if all worked correctly. Congratulations! You're just one step away from having a fully working version of chaos running now. :)
+
 ### Running the compiled result.
 
-* Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do)
-* Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `floppy.img` file from the project attached as the primary floppy drive.
+* Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do). If you're lazy, just run `./qemu.sh` within the Vagrant-VM; it will run `qemu` inside VirtualBox, which is enough for many test scenarios.
+* Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `chaos.iso` file you just built as the CD drive.
 * Launch it. If all went well, you shhould get an image like this:
 
 ![chaos running in Parallels](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-in-parallels.png)
