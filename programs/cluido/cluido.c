@@ -343,7 +343,7 @@ static void string_input(unsigned int max_length, bool do_syntax_check, bool com
                             if (input_string_position != input_string_length)
                             {
                                 unsigned int character_length = unicode_utf8_next_character_length(string, input_string_position);
-                                unsigned int new_position = input_string_position + character_length);
+                                unsigned int new_position = input_string_position + character_length;
 
                                 string_copy(&string[input_string_position], &string[new_position]);
 
