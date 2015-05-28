@@ -5,18 +5,19 @@ Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if R
 LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries"
 
 COMMON_CFLAGS = %w(
-  -Wall
-  -Wextra
-  -Wshadow
-  -Wpointer-arith
   -Waggregate-return
-  -Wredundant-decls
-  -Winline
-  -Werror
+  -Wall
   -Wcast-align
-  -Wsign-compare
+  -Werror
+  -Wextra
+  -Winline
   -Wmissing-declarations
   -Wmissing-noreturn
+  -Wno-pointer-sign
+  -Wpointer-arith
+  -Wredundant-decls
+  -Wshadow
+  -Wsign-compare
   -pipe
   -O3
   -fno-builtin
