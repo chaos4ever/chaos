@@ -726,9 +726,8 @@ void main_loop(void)
     // Before we begin, we have to know which user's config files to read.
     // FIXME: This functionality should _NOT_ lie in this program.
     console_print(&console_structure, "\
-I now need to know who you are, so I can read your personal configuration
-                  files from your home directory. Please enter your username, or just press
-                  enter if you don't care: ");
+I now need to know who you are, so I can read your personal configuration files from your home directory. Please enter your \
+username, or just press enter if you don't care: ");
 
     string_input(50, FALSE, FALSE, user_name_string);
 
