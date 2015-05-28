@@ -804,7 +804,6 @@ void command_ports(int number_of_arguments, char *argument[] UNUSED)
 void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
-    kernelfs_thread_info_type kernelfs_thread_info;
     u32 processes = KERNELFS_CLASS_PROCESS_AMOUNT;
 
     system_call_kernelfs_entry_read(&processes);
@@ -812,16 +811,14 @@ void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
 
     for (kernelfs_process_info.process_number = 0;
-            kernelfs_process_info.process_number < processes;
-            kernelfs_process_info.process_number++)
+         kernelfs_process_info.process_number < processes;
+         kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
         console_print_formatted(&console_structure, "%-10lu %-7u %s.\n",
                                 kernelfs_process_info.process_id,
                                 kernelfs_process_info.number_of_threads,
                                 kernelfs_process_info.name);
-
-        kernelfs_thread_info.process_id = kernelfs_process_info.process_id;
     }
 }
 
