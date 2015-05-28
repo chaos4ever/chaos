@@ -26,9 +26,9 @@
 
 typedef struct
 {
-  struct list_type *previous;
-  struct list_type *next;
-  void *data;
+    struct list_type *previous;
+    struct list_type *next;
+    void *data;
 } list_type;
 
 #endif /* !__LIST_H__ */

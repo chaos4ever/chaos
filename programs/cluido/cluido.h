@@ -26,26 +26,26 @@
 
 /* Function prototypes. */
 
-extern void main_loop (void) __attribute__ ((noreturn));
-extern void prompt_print (char *input);
-extern char *environment_get (char *key);
-extern void run (char *command_string);
+extern void main_loop(void) __attribute__((noreturn));
+extern void prompt_print(char *input);
+extern char *environment_get(char *key);
+extern void run(char *command_string);
 
 /* Type definitions. */
 
 typedef struct
 {
-  char name[64];
-  char arguments[256];
-  char description[70];
-  void *pointer;
+    char name[64];
+    char arguments[256];
+    char description[70];
+    void *pointer;
 } command_type;
 
 typedef struct
 {
-  int number_of_arguments;
-  char **argument_start;
-  char *arguments;
+    int number_of_arguments;
+    char **argument_start;
+    char *arguments;
 } arguments_type;
 
 /* FIXME: Temporary until we get the memory allocation of our
@@ -53,8 +53,8 @@ typedef struct
 
 typedef struct
 {
-  char key[16];
-  char value[256];
+    char key[16];
+    char value[256];
 } environment_type;
 
 extern command_type command[];

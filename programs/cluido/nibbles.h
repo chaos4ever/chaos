@@ -22,6 +22,6 @@
 #ifndef __NIBBLES_H__
 #define __NIBBLES_H__
 
-void command_nibbles (void);
+void command_nibbles(void);
 
 #endif

@@ -49,314 +49,314 @@
 
 enum
 {
-  EMPTY,
-  WALL,
-  PLAYER
+    EMPTY,
+    WALL,
+    PLAYER
 };
 
 typedef struct
 {
-  int x_pos, y_pos;
+    int x_pos, y_pos;
 } segment_type;
 
 typedef struct
 {
-  bool dead;
-  bool active;
-  int length;
-  int direction;
-  segment_type body[MAX_WORM_LENGTH];
+    bool dead;
+    bool active;
+    int length;
+    int direction;
+    segment_type body[MAX_WORM_LENGTH];
 } worm_type;
 
-static char read_key (void);
-static void restart_player (int player_number);
-static void move_players (void);
-static void redraw_playfield (void);
+static char read_key(void);
+static void restart_player(int player_number);
+static void move_players(void);
+static void redraw_playfield(void);
 
 worm_type player[MAX_PLAYERS];
 int playfield[PLAYFIELD_WIDTH][PLAYFIELD_HEIGHT];
 
-void command_nibbles (void)
+void command_nibbles(void)
 {
 #if FALSE
-  int x_pos, y_pos, player_number, segment_number;
-  time_type random_seed;
-  bool done;
-  char key;
+    int x_pos, y_pos, player_number, segment_number;
+    time_type random_seed;
+    bool done;
+    char key;
 
-  /* Initialise random sequence. */
+    /* Initialise random sequence. */
 
-  system_call_timer_read (&random_seed);
-  random_init ((int) random_seed);
+    system_call_timer_read(&random_seed);
+    random_init((int) random_seed);
 
-  /* Initialise playfield. */
+    /* Initialise playfield. */
 
-  for (x_pos = 0; x_pos < PLAYFIELD_WIDTH; x_pos++)
-  {
-    for (y_pos = 0; y_pos < PLAYFIELD_HEIGHT; y_pos++)
+    for (x_pos = 0; x_pos < PLAYFIELD_WIDTH; x_pos++)
     {
-      playfield[x_pos][y_pos] = WALL;
+        for (y_pos = 0; y_pos < PLAYFIELD_HEIGHT; y_pos++)
+        {
+            playfield[x_pos][y_pos] = WALL;
+        }
     }
-  }
 
-  for (x_pos = 2; x_pos < PLAYFIELD_WIDTH - 2; x_pos++)
-  {
-    for (y_pos = 2; y_pos < PLAYFIELD_HEIGHT - 2; y_pos++)
+    for (x_pos = 2; x_pos < PLAYFIELD_WIDTH - 2; x_pos++)
     {
-      playfield[x_pos][y_pos] = EMPTY;
+        for (y_pos = 2; y_pos < PLAYFIELD_HEIGHT - 2; y_pos++)
+        {
+            playfield[x_pos][y_pos] = EMPTY;
+        }
     }
-  }
 
-  /* Initialise worms. */
-
-  for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
-  {
-    player[player_number].dead = TRUE;
-    player[player_number].active = FALSE;
-
-    for (segment_number = 0;
-         segment_number < MAX_WORM_LENGTH;
-         segment_number++)
-    {
-      player[player_number].body[segment_number].x_pos = -1;
-      player[player_number].body[segment_number].y_pos = -1;
-    }
-  }
-  
-  console_clear ();
-  console_cursor_move (0, 30);
-
-  done = FALSE;
-
-  console_print ("Starting nibbles " NIBBLES_VERSION ".\n");
-
-  /* Let this be a single player game. */
-
-  player[0].active = TRUE;
-
-  while (!done)
-  {
-    console_clear ();
-
-    key = read_key ();
+    /* Initialise worms. */
 
     for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
     {
-      /* If an active player has died, restart him. */
+        player[player_number].dead = TRUE;
+        player[player_number].active = FALSE;
 
-      if (player[player_number].dead &&
-          player[player_number].active)
-      {
-        restart_player (player_number);
-      }
+        for (segment_number = 0;
+                segment_number < MAX_WORM_LENGTH;
+                segment_number++)
+        {
+            player[player_number].body[segment_number].x_pos = -1;
+            player[player_number].body[segment_number].y_pos = -1;
+        }
     }
 
-    console_print ("Moving players.\n");
-    move_players ();
+    console_clear();
+    console_cursor_move(0, 30);
 
-    console_print ("Drawing playfield.\n");
-    redraw_playfield ();
-  }
+    done = FALSE;
+
+    console_print("Starting nibbles " NIBBLES_VERSION ".\n");
+
+    /* Let this be a single player game. */
+
+    player[0].active = TRUE;
+
+    while (!done)
+    {
+        console_clear();
+
+        key = read_key();
+
+        for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
+        {
+            /* If an active player has died, restart him. */
+
+            if (player[player_number].dead &&
+                    player[player_number].active)
+            {
+                restart_player(player_number);
+            }
+        }
+
+        console_print("Moving players.\n");
+        move_players();
+
+        console_print("Drawing playfield.\n");
+        redraw_playfield();
+    }
 #endif
 }
 
-static void restart_player (int player_number)
+static void restart_player(int player_number)
 {
-  int counter, segment_number, x, y;
-  bool restarted = FALSE;
+    int counter, segment_number, x, y;
+    bool restarted = FALSE;
 
-  console_print_formatted ("Restarting player %d\n", player_number);
+    console_print_formatted("Restarting player %d\n", player_number);
 
-  /* Try to respawn at most 1000 times. */
+    /* Try to respawn at most 1000 times. */
 
-  for (counter = 0; counter < 1000 && restarted == FALSE; counter++)
-  {
-    x = 1 + random (PLAYFIELD_WIDTH - 2);
-    y = 1 + random (PLAYFIELD_HEIGHT - 2);
-
-    if (playfield[x][y] == EMPTY)
+    for (counter = 0; counter < 1000 && restarted == FALSE; counter++)
     {
-      player[player_number].dead = FALSE;
-      player[player_number].length = START_WORM_LENGTH;
-      restarted = TRUE;
+        x = 1 + random(PLAYFIELD_WIDTH - 2);
+        y = 1 + random(PLAYFIELD_HEIGHT - 2);
 
-      for (segment_number = 0;
-           segment_number < START_WORM_LENGTH;
-           segment_number++)
-      {
-        player[player_number].body[segment_number].x_pos = x;
-        player[player_number].body[segment_number].y_pos = y;
-      }
+        if (playfield[x][y] == EMPTY)
+        {
+            player[player_number].dead = FALSE;
+            player[player_number].length = START_WORM_LENGTH;
+            restarted = TRUE;
 
-      for (segment_number = START_WORM_LENGTH;
-           segment_number < MAX_WORM_LENGTH;
-           segment_number++)
-      {
-        player[player_number].body[segment_number].x_pos = -1;
-        player[player_number].body[segment_number].y_pos = -1;
-      }
+            for (segment_number = 0;
+                    segment_number < START_WORM_LENGTH;
+                    segment_number++)
+            {
+                player[player_number].body[segment_number].x_pos = x;
+                player[player_number].body[segment_number].y_pos = y;
+            }
+
+            for (segment_number = START_WORM_LENGTH;
+                    segment_number < MAX_WORM_LENGTH;
+                    segment_number++)
+            {
+                player[player_number].body[segment_number].x_pos = -1;
+                player[player_number].body[segment_number].y_pos = -1;
+            }
+        }
     }
-  }
 }
 
-static void move_players (void)
+static void move_players(void)
 {
-  int player_number, segment_number, x_pos, y_pos;
+    int player_number, segment_number, x_pos, y_pos;
 
-  for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
-  {
-
-    /* Move all segments one step back through the worm. */
-
-    for (segment_number = MAX_WORM_LENGTH - 1;
-         segment_number > 0;
-         segment_number--)
+    for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
     {
-      player[player_number].body[segment_number].x_pos =
-        player[player_number].body[segment_number - 1].x_pos;
-      player[player_number].body[segment_number].y_pos =
-        player[player_number].body[segment_number - 1].y_pos;
+
+        /* Move all segments one step back through the worm. */
+
+        for (segment_number = MAX_WORM_LENGTH - 1;
+                segment_number > 0;
+                segment_number--)
+        {
+            player[player_number].body[segment_number].x_pos =
+                player[player_number].body[segment_number - 1].x_pos;
+            player[player_number].body[segment_number].y_pos =
+                player[player_number].body[segment_number - 1].y_pos;
+        }
+
+        x_pos = player[player_number].body[0].x_pos;
+        y_pos = player[player_number].body[0].y_pos;
+
+        switch (player[player_number].direction)
+        {
+            case DIRECTION_UP:
+            {
+                y_pos--;
+            }
+            break;
+            case DIRECTION_LEFT:
+            {
+                x_pos--;
+            }
+            break;
+            case DIRECTION_DOWN:
+            {
+                y_pos++;
+            }
+            break;
+            case DIRECTION_RIGHT:
+            {
+                x_pos++;
+            }
+            break;
+        }
+
+        switch (playfield[x_pos][y_pos])
+        {
+            case EMPTY:
+            {
+                player[player_number].body[0].x_pos = x_pos;
+                player[player_number].body[0].y_pos = y_pos;
+            }
+            break;
+            case WALL:
+            {
+                player[player_number].dead = TRUE;
+            }
+            break;
+            default:
+            {
+
+                /* FIXME: Add frags. */
+
+                player[player_number].dead = TRUE;
+            }
+            break;
+        }
     }
-
-    x_pos = player[player_number].body[0].x_pos;
-    y_pos = player[player_number].body[0].y_pos;
-
-    switch (player[player_number].direction)
-    {
-      case DIRECTION_UP:
-      {
-        y_pos--;
-      }
-      break;
-      case DIRECTION_LEFT:
-      {
-        x_pos--;
-      }
-      break;
-      case DIRECTION_DOWN:
-      {
-        y_pos++;
-      }
-      break;
-      case DIRECTION_RIGHT:
-      {
-        x_pos++;
-      }
-      break;
-    }
-
-    switch (playfield[x_pos][y_pos])
-    {
-      case EMPTY:
-      {
-        player[player_number].body[0].x_pos = x_pos;
-        player[player_number].body[0].y_pos = y_pos;
-      }
-      break;
-      case WALL:
-      {
-        player[player_number].dead = TRUE;
-      }
-      break;
-      default:
-      {
-
-        /* FIXME: Add frags. */
-
-        player[player_number].dead = TRUE;        
-      }
-      break;
-    }
-  }
 }
 
-static void redraw_playfield (void)
+static void redraw_playfield(void)
 {
-  int x_pos, y_pos;
-  char row[PLAYFIELD_WIDTH + 2];
+    int x_pos, y_pos;
+    char row[PLAYFIELD_WIDTH + 2];
 
-  for (y_pos = 0; y_pos < PLAYFIELD_HEIGHT; y_pos++)
-  {
-    for (x_pos = 0; x_pos < PLAYFIELD_WIDTH; x_pos++)
+    for (y_pos = 0; y_pos < PLAYFIELD_HEIGHT; y_pos++)
     {
-      switch (playfield[x_pos][y_pos])
-      {
-        case EMPTY:
+        for (x_pos = 0; x_pos < PLAYFIELD_WIDTH; x_pos++)
         {
-          row[x_pos] = ' ';
-          break;
+            switch (playfield[x_pos][y_pos])
+            {
+                case EMPTY:
+                {
+                    row[x_pos] = ' ';
+                    break;
+                }
+                case WALL:
+                {
+                    row[x_pos] = '#';
+                    break;
+                }
+                case PLAYER:
+                {
+                    row[x_pos] = 'o';
+                    break;
+                }
+                default:
+                {
+                    row[x_pos] = '?';
+                    break;
+                }
+            }
         }
-        case WALL:
-        {
-          row[x_pos] = '#';
-          break;
-        }
-        case PLAYER:
-        {
-          row[x_pos] = 'o';
-          break;
-        }
-        default:
-        {
-          row[x_pos] = '?';
-          break;
-        }
-      }
-    }  
 
-    row[PLAYFIELD_WIDTH] = '\n';
-    row[PLAYFIELD_WIDTH + 1] = '\0';
-    console_print (row);
-  }
+        row[PLAYFIELD_WIDTH] = '\n';
+        row[PLAYFIELD_WIDTH + 1] = '\0';
+        console_print(row);
+    }
 }
 
 /* Read key delay exactly TIMEOUT milliseconds, and returns a key if
    pressed, and KEY_NOTHING if no key was pressed. */
 
-static char read_key (void)
+static char read_key(void)
 {
 #if FALSE
-  keyboard_packet_type keyboard_packet;
-  message_parameter_type message_parameter;
-  time_type timeout_time;
-  time_type current_time;
-  int key = KEY_NOTHING;
+    keyboard_packet_type keyboard_packet;
+    message_parameter_type message_parameter;
+    time_type timeout_time;
+    time_type current_time;
+    int key = KEY_NOTHING;
 
-  /* Initialise times. */
+    /* Initialise times. */
 
-  system_call_timer_read (&current_time);
-  timeout_time = current_time + TIMEOUT;
+    system_call_timer_read(&current_time);
+    timeout_time = current_time + TIMEOUT;
 
-  do
-  {
-
-    /* If we haven't gotten a key yet, check for one. */
-
-    if (key == KEY_NOTHING)
+    do
     {
-      message_parameter.block = FALSE;
-      message_parameter.length = sizeof (keyboard_packet_type);
-      message_parameter.data = &keyboard_packet;
-      message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
-      message_parameter.class = IPC_CLASS_NONE;
 
-      system_call_mailbox_receive (console_structure.input_mailbox_id,
-                                 &message_parameter);
+        /* If we haven't gotten a key yet, check for one. */
+
+        if (key == KEY_NOTHING)
+        {
+            message_parameter.block = FALSE;
+            message_parameter.length = sizeof(keyboard_packet_type);
+            message_parameter.data = &keyboard_packet;
+            message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
+            message_parameter.class = IPC_CLASS_NONE;
+
+            system_call_mailbox_receive(console_structure.input_mailbox_id,
+                                        &message_parameter);
+        }
+
+        system_call_timer_read(&current_time);
+
+    } while (current_time < timeout_time);
+
+    if (message_parameter.class == IPC_CONSOLE_KEYBOARD_EVENT &&
+            keyboard_packet.key_released == 0 &&
+            keyboard_packet.has_character_code == 1)
+    {
+        return keyboard_packet.character_code[0];
     }
-
-    system_call_timer_read (&current_time);
-
-  } while (current_time < timeout_time);
-
-  if (message_parameter.class == IPC_CONSOLE_KEYBOARD_EVENT &&
-      keyboard_packet.key_released == 0 &&
-      keyboard_packet.has_character_code == 1)
-  {
-    return keyboard_packet.character_code[0];
-  }
-  else
-  {
-  }
+    else
+    {
+    }
 #endif
-  return KEY_NOTHING;
+    return KEY_NOTHING;
 }
