@@ -1,24 +1,9 @@
-/* $Id$ */
-/* Abstract: Cludio internal commands. */
-/* Authors: Per Lundberg <per@halleluja.nu>
-            Henrik Hallin <hal@chaosdev.org> */
-
-/* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+// Abstract: Cludio internal commands.
+// Authors: Per Lundberg <per@halleluja.nu>
+//          Henrik Hallin <hal@chaosdev.org>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2015 chaos development
 
 #include "config.h"
 #include "cluido.h"
@@ -27,20 +12,16 @@
 
 const char *file_type[] =
 {
-    /* Directory. */
-
+    // Directory.
     "[DIR]",
 
-    /* Ordinary file. */
-
+    // Ordinary file.
     "[FILE]",
 
-    /* Soft link. */
-
+    // Soft link.
     "[SLNK]",
 
-    /* Hard link. */
-
+    // Hard link.
     "[HLNK]"
 };
 
@@ -49,8 +30,7 @@ void command_benchmark(int number_of_arguments, char **argument);
 void command_clear(int number_of_arguments, char **argument);
 void command_cpu(int number_of_arguments, char **argument);
 void command_crash(int number_of_arguments, char **argument);
-void command_directory_change_working(int number_of_arguments,
-                                      char **argument);
+void command_directory_change_working(int number_of_arguments, char **argument);
 void command_directory_list(int number_of_arguments, char **argument);
 void command_execute(int number_of_arguments, char **argument);
 void command_font_set(int number_of_arguments, char **argument);
@@ -77,9 +57,7 @@ void command_unset(int number_of_arguments, char **argument);
 void command_uptime(int number_of_arguments, char **argument);
 void command_version(int number_of_arguments, char **argument);
 
-/* Structure for holding a list of all the commands, and which
-   functions they correspond to. */
-
+// Structure for holding a list of all the commands, and which functions they correspond to.
 command_type command[] =
 {
     { "?", "", "Display help about available commands.", command_help },
@@ -88,55 +66,29 @@ command_type command[] =
     { "clear", "", "Clear the console.", command_clear },
     { "cpu", "", "Display information about installed CPUs.", command_cpu },
     { "crash", "", "Cause this process to crash.", command_crash },
-    {   "cd", "DIRECTORY",
-        "Change the current working directory.",
-        command_directory_change_working
-    },
-    {   "list", "", "List the contents of the current directory.",
-        command_directory_list
-    },
+    { "cd", "DIRECTORY", "Change the current working directory.", command_directory_change_working },
+    { "list", "", "List the contents of the current directory.", command_directory_list },
     { "execute", "FILE", "Executes the given file.", command_execute },
     { "font_set", "FILE", "Set the font to the one in FILE", command_font_set },
-    {   "help", "[COMMAND]", "Display help about available commands.",
-        command_help
-    },
+    { "help", "[COMMAND]", "Display help about available commands.", command_help },
     { "ip", "(--dhcp interface | --set interface address netmask [gateway] | --forward { on | off })", "Configure IPv4 networking.", command_ip },
-    {   "irq", "", "Display information about the IRQ levels in use.",
-        command_irq
-    },
+    { "irq", "", "Display information about the IRQ levels in use.", command_irq },
     { "kill", "THREAD", "Kills the given thread.", command_kill },
     { "memory", "", "Display memory amount and usage.", command_memory },
-    {   "pci", "", "Display information about any PCI devices in the system.",
-        command_pci
-    },
-    {   "ports", "", "Display information about the I/O ports in use.",
-        command_ports
-    },
-    {   "processes", "", "Display information about the running processes.",
-        command_processes
-    },
+    { "pci", "", "Display information about any PCI devices in the system.", command_pci },
+    { "ports", "", "Display information about the I/O ports in use.", command_ports },
+    { "processes", "", "Display information about the running processes.", command_processes },
     { "reboot", "", "Reboot the system.", command_reboot },
     { "run", "SCRIPT", "Run a cluido script (just a list of commands).", command_run },
-    {   "shutdown", "", "Shutdown system by telling the boot server to shutdown the system.",
-        command_shutdown
-    },
-    {   "set", "VARIABLE VALUE", "Set VARIABLE to VALUE in the environment",
-        command_set
-    },
+    { "shutdown", "", "Shutdown system by telling the boot server to shutdown the system.", command_shutdown },
+    { "set", "VARIABLE VALUE", "Set VARIABLE to VALUE in the environment", command_set },
     { "show", "", "Show the contents of the environment.", command_show },
-    {   "show_file", "FILE", "Show the contents of the given file.",
-        command_show_file
-    },
+    { "show_file", "FILE", "Show the contents of the given file.", command_show_file },
     { "sleep", "TIME", "Sleep for TIME seconds.", command_sleep },
     { "test", "", "Basic test command.", command_test },
-    {   "threads", "", "Display information about the all threads in the system.",
-        command_threads
-    },
+    { "threads", "", "Display information about the all threads in the system.", command_threads },
     { "time", "", "Show the time.", command_time },
-    {   "top", "",
-        "Display information about the running threads sorted on CPU usage.",
-        command_top
-    },
+    { "top", "", "Display information about the running threads sorted on CPU usage.", command_top },
     { "unset", "VARIABLE", "Unset VARIABLE in the environment.", command_unset },
     { "uptime", "", "Display current machine uptime.", command_uptime },
     { "version", "", "Show the program version", command_version }
@@ -144,10 +96,8 @@ command_type command[] =
 
 int number_of_commands = (sizeof(command) / sizeof(command_type));
 
-/* Show the entries in the ARP table. */
-
-void command_arp(int number_of_arguments __attribute__((unused)),
-                 char **argument __attribute__((unused)))
+// Show the entries in the ARP table.
+void command_arp(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     message_parameter_type message_parameter;
     int amount;
@@ -190,11 +140,9 @@ void command_arp(int number_of_arguments __attribute__((unused)),
     }
 }
 
-/* Benchmark the system. This includes IPC and console. */
-/* FIXME: Add file benchmarking as soon as file creation/deletion is done. */
-
-void command_benchmark(int number_of_arguments __attribute__((unused)),
-                       char **argument __attribute__((unused)))
+// Benchmark the system. This includes IPC and console.
+// FIXME: Add file benchmarking as soon as file creation/deletion is done.
+void command_benchmark(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     int counter;
     time_type start_time, end_time, phony;
@@ -203,14 +151,11 @@ void command_benchmark(int number_of_arguments __attribute__((unused)),
 
     for (counter = 0; counter < 10000; counter++)
     {
-        console_print(&console_structure,
-                      "\rBenchmarking IPC and console server...");
+        console_print(&console_structure, "\rBenchmarking IPC and console server...");
     }
 
     system_call_timer_read(&end_time);
-    console_print_formatted(&console_structure,
-                            "\n%llu milliseconds (10 000 prints).\n",
-                            end_time - start_time);
+    console_print_formatted(&console_structure, "\n%llu milliseconds (10 000 prints).\n", end_time - start_time);
 
     console_print(&console_structure, "Benchmarking system calls...\n");
     system_call_timer_read(&start_time);
@@ -219,23 +164,17 @@ void command_benchmark(int number_of_arguments __attribute__((unused)),
         system_call_timer_read(&phony);
     }
     system_call_timer_read(&end_time);
-    console_print_formatted(&console_structure,
-                            "%llu milliseconds (1 000 000 system calls).\n",
-                            end_time - start_time);
+    console_print_formatted(&console_structure, "%llu milliseconds (1 000 000 system calls).\n", end_time - start_time);
 }
 
-/* Clear the screen. */
-
-void command_clear(int number_of_arguments __attribute__((unused)),
-                   char **argument __attribute__((unused)))
+// Clear the screen.
+void command_clear(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     console_clear(&console_structure);
 }
 
-/* Get information about installed CPU:s. */
-
-void command_cpu(int number_of_arguments __attribute__((unused)),
-                 char **argument __attribute__((unused)))
+// Get information about installed CPU:s.
+void command_cpu(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_cpu_info_type cpu_info;
 
@@ -246,23 +185,18 @@ void command_cpu(int number_of_arguments __attribute__((unused)),
                             cpu_info.vendor, cpu_info.name, cpu_info.hz);
 }
 
-/* Cause an illegal pagefault. */
-
-void command_crash(int number_of_arguments __attribute__((unused)),
-                   char **argument __attribute__((unused)))
+// Cause an illegal pagefault.
+void command_crash(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     *(u32 *) NULL = 0x42424242;
 }
 
-/* Change current working directory. */
-
-void command_directory_change_working(int number_of_arguments,
-                                      char *argument[])
+// Change current working directory.
+void command_directory_change_working(int number_of_arguments, char *argument[])
 {
     file_verbose_directory_entry_type directory_entry;
 
-    /* FIXME: Ugly. */
-
+    // FIXME: Ugly.
     char new_working_directory[256];
 
     string_copy(new_working_directory, working_directory);
@@ -279,18 +213,15 @@ void command_directory_change_working(int number_of_arguments,
 
     if (string_compare(argument[1], "..") == 0)
     {
-        /* Go up a level. */
-
+        // Go up a level.
         int index = string_length(new_working_directory) - 1;
 
-        while (new_working_directory[index] != '\0' &&
-                new_working_directory[index] != '/')
+        while (new_working_directory[index] != '\0' && new_working_directory[index] != '/')
         {
             index--;
         }
 
-        if (index > 0 && new_working_directory[index] == '/' &&
-                new_working_directory[index - 1] == '/')
+        if (index > 0 && new_working_directory[index] == '/' && new_working_directory[index - 1] == '/')
         {
             new_working_directory[index + 1] = '\0';
         }
@@ -301,14 +232,12 @@ void command_directory_change_working(int number_of_arguments,
     }
     else if (argument[1][0] == '/')
     {
-        /* Absolute path. */
-
+        // Absolute path.
         string_copy(new_working_directory, argument[1]);
     }
     else
     {
-        /* Relative path. */
-
+        // Relative path.
         if (string_compare(working_directory, "//") != 0)
         {
             string_append(new_working_directory, "/");
@@ -316,15 +245,12 @@ void command_directory_change_working(int number_of_arguments,
         string_append(new_working_directory, argument[1]);
     }
 
-    string_copy_max(directory_entry.path_name, new_working_directory,
-                    MAX_PATH_NAME_LENGTH);
+    string_copy_max(directory_entry.path_name, new_working_directory,  MAX_PATH_NAME_LENGTH);
     file_get_info(&vfs_structure, &directory_entry);
 
-    if (!directory_entry.success ||
-            directory_entry.type != FILE_ENTRY_TYPE_DIRECTORY)
+    if (!directory_entry.success || directory_entry.type != FILE_ENTRY_TYPE_DIRECTORY)
     {
-        console_print_formatted(&console_structure, "%s is not a directory.\n",
-                                new_working_directory);
+        console_print_formatted(&console_structure, "%s is not a directory.\n", new_working_directory);
     }
     else
     {
@@ -332,10 +258,8 @@ void command_directory_change_working(int number_of_arguments,
     }
 }
 
-/* List files. */
-
-void command_directory_list(int number_of_arguments __attribute__((unused)),
-                            char *argument[] __attribute__((unused)))
+// List files.
+void command_directory_list(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     u8 *buffer;
     file_directory_entry_read_type *directory_entry;
@@ -354,8 +278,7 @@ void command_directory_list(int number_of_arguments __attribute__((unused)),
     {
         string_copy(directory_entry->path_name, working_directory);
 
-        if (file_directory_entry_read(&vfs_structure, directory_entry) !=
-                FILE_RETURN_SUCCESS)
+        if (file_directory_entry_read(&vfs_structure, directory_entry) != FILE_RETURN_SUCCESS)
         {
             break;
         }
@@ -369,8 +292,7 @@ void command_directory_list(int number_of_arguments __attribute__((unused)),
             {
                 string_append(verbose_directory_entry.path_name, "/");
             }
-            string_append(verbose_directory_entry.path_name,
-                          directory_entry->entry[index].name);
+            string_append(verbose_directory_entry.path_name, directory_entry->entry[index].name);
 
             file_get_info(&vfs_structure, &verbose_directory_entry);
 
@@ -393,8 +315,7 @@ void command_directory_list(int number_of_arguments __attribute__((unused)),
     memory_deallocate((void **) &buffer);
 }
 
-/* Executes the given file. */
-
+// Executes the given file.
 void command_execute(int number_of_arguments, char **argument)
 {
     u8 *buffer;
@@ -420,14 +341,12 @@ void command_execute(int number_of_arguments, char **argument)
         return;
     }
 
-    /* Allocate a buffer, so we can read the entire file. */
-
+    // Allocate a buffer, so we can read the entire file.
     memory_allocate((void **) &buffer, directory_entry.size);
 
     file_open(&vfs_structure, argument[1], FILE_MODE_READ, &handle);
 
-    /* Read the file. */
-
+    // Read the file.
     while (bytes_read < directory_entry.size)
     {
         unsigned int bytes;
@@ -445,8 +364,7 @@ void command_execute(int number_of_arguments, char **argument)
     {
         case EXECUTE_ELF_RETURN_SUCCESS:
         {
-            console_print_formatted(&console_structure,
-                                    "New process ID %lu.\n", process_id);
+            console_print_formatted(&console_structure, "New process ID %lu.\n", process_id);
             break;
         }
 
@@ -473,8 +391,7 @@ void command_execute(int number_of_arguments, char **argument)
     memory_deallocate((void **) &buffer);
 }
 
-/* Change the VGA font accordingly. */
-
+// Change the VGA font accordingly.
 void command_font_set(int number_of_arguments, char **argument)
 {
     u8 *buffer;
@@ -485,8 +402,7 @@ void command_font_set(int number_of_arguments, char **argument)
     file_handle_type handle;
     unsigned int services = 10;
 
-    /* FIXME: Support fonts of different sizes. */
-
+    // FIXME: Support fonts of different sizes.
     unsigned int font_size = 2048;
 
     if (number_of_arguments != 2)
@@ -511,14 +427,11 @@ void command_font_set(int number_of_arguments, char **argument)
 
     file_open(&vfs_structure, argument[1], FILE_MODE_READ, &handle);
 
-    /* Read the file.  */
-
+    // Read the file.
     file_read(&vfs_structure, handle, font_size, buffer);
 
-    /* Set the font. */
-    /* FIXME: Have a library function for this, and make it go through
-       the console server. */
-
+    // Set the font. */
+    // FIXME: Have a library function for this, and make it go through the console server.
     ipc_service_resolve("video", mailbox_id, &services, 5, &empty_tag);
 
     ipc_structure.output_mailbox_id = mailbox_id[0];
@@ -534,8 +447,7 @@ void command_font_set(int number_of_arguments, char **argument)
     memory_deallocate((void **) &buffer);
 }
 
-/* Show a list of the available commands, with a short description */
-
+// Show a list of the available commands, with a short description
 void command_help(int number_of_arguments, char **argument)
 {
     int counter;
@@ -562,8 +474,7 @@ void command_help(int number_of_arguments, char **argument)
     }
     else
     {
-        console_print(&console_structure,
-                      "Available commands. (try 'help command' for help about a specific command)\n\n");
+        console_print(&console_structure, "Available commands. (try 'help command' for help about a specific command)\n\n");
 
         for (counter = 0; counter < number_of_commands; counter++)
         {
@@ -574,13 +485,10 @@ void command_help(int number_of_arguments, char **argument)
     }
 }
 
-/* Configure IP networking. */
-
+// Configure IP networking.
 void command_ip(int number_of_arguments, char **argument)
 {
-    /* If no arguments are given, print information about the current
-       interfaces. */
-
+    // If no arguments are given, print information about the current interfaces.
     if (number_of_arguments == 1)
     {
         ipv4_interface_type ipv4_interface;
@@ -608,8 +516,7 @@ void command_ip(int number_of_arguments, char **argument)
 
             message_parameter.data = &ipv4_interface;
             message_parameter.length = sizeof(ipv4_interface_type);
-            ipc_receive(ipv4_structure.input_mailbox_id,
-                        &message_parameter, NULL);
+            ipc_receive(ipv4_structure.input_mailbox_id, &message_parameter, NULL);
 
             console_print_formatted(&console_structure,
                                     "Interface: %s\n",
@@ -649,15 +556,13 @@ void command_ip(int number_of_arguments, char **argument)
                                 "IP forwarding disabled");
     }
 
-    /* Otherwise, we are probably trying to set the interface up. */
-
+    // Otherwise, we are probably trying to set the interface up.
     else if (number_of_arguments > 1)
     {
         ipv4_interface_type interface;
         message_parameter_type message_parameter;
 
-        if (string_compare(argument[1], "--dhcp") == 0 &&
-                number_of_arguments == 3)
+        if (string_compare(argument[1], "--dhcp") == 0 && number_of_arguments == 3)
         {
             interface.dhcp = TRUE;
             interface.up = TRUE;
@@ -668,14 +573,11 @@ void command_ip(int number_of_arguments, char **argument)
             message_parameter.data = &interface;
             message_parameter.length = sizeof(ipv4_interface_type);
             message_parameter.block = TRUE;
-            ipc_send(ipv4_structure.output_mailbox_id,
-                     &message_parameter);
+            ipc_send(ipv4_structure.output_mailbox_id, &message_parameter);
         }
 
-        /* Disable/enable IP forwarding. */
-
-        else if (string_compare(argument[1], "--forward") == 0 &&
-                 number_of_arguments == 3)
+        // Disable/enable IP forwarding.
+        else if (string_compare(argument[1], "--forward") == 0 && number_of_arguments == 3)
         {
             bool forward;
             unsigned int flags;
@@ -705,22 +607,19 @@ void command_ip(int number_of_arguments, char **argument)
 
             ipv4_set_flags(&ipv4_structure, flags);
         }
-        else if (string_compare(argument[1], "--set") == 0 &&
-                 number_of_arguments >= 5)
+        else if (string_compare(argument[1], "--set") == 0 && number_of_arguments >= 5)
         {
             interface.dhcp = FALSE;
             interface.up = TRUE;
             string_copy(interface.identification, argument[2]);
 
-            if (ipv4_string_to_binary_ip_address
-                    (argument[3], &interface.ip_address) != IPV4_RETURN_SUCCESS)
+            if (ipv4_string_to_binary_ip_address(argument[3], &interface.ip_address) != IPV4_RETURN_SUCCESS)
             {
                 console_print(&console_structure, "Invalid IP address specified!\n");
                 return;
             }
 
-            if (ipv4_string_to_binary_ip_address
-                    (argument[4], &interface.netmask) != IPV4_RETURN_SUCCESS)
+            if (ipv4_string_to_binary_ip_address(argument[4], &interface.netmask) != IPV4_RETURN_SUCCESS)
             {
                 console_print(&console_structure, "Invalid netmask specified!\n");
                 return;
@@ -728,8 +627,7 @@ void command_ip(int number_of_arguments, char **argument)
 
             if (number_of_arguments == 6)
             {
-                if (ipv4_string_to_binary_ip_address
-                        (argument[5], &interface.gateway) != IPV4_RETURN_SUCCESS)
+                if (ipv4_string_to_binary_ip_address(argument[5], &interface.gateway) != IPV4_RETURN_SUCCESS)
                 {
                     console_print(&console_structure, "Invalid gateway address specified!\n");
                     return;
@@ -745,8 +643,7 @@ void command_ip(int number_of_arguments, char **argument)
             message_parameter.data = &interface;
             message_parameter.length = sizeof(ipv4_interface_type);
             message_parameter.block = TRUE;
-            ipc_send(ipv4_structure.output_mailbox_id,
-                     &message_parameter);
+            ipc_send(ipv4_structure.output_mailbox_id, &message_parameter);
         }
         else
         {
@@ -757,10 +654,8 @@ void command_ip(int number_of_arguments, char **argument)
     }
 }
 
-/* Get information about IRQ levels. */
-
-void command_irq(int number_of_arguments,
-                 char **argument __attribute__((unused)))
+// Get information about IRQ levels.
+void command_irq(int number_of_arguments, char **argument UNUSED)
 {
     unsigned int irqs = KERNELFS_CLASS_IRQ_AMOUNT;
     kernelfs_irq_info_type kernelfs_irq_info;
@@ -791,8 +686,7 @@ void command_irq(int number_of_arguments,
     for (index = 0; index < irqs; index++)
     {
         kernelfs_irq_info.which = index;
-        if (system_call_kernelfs_entry_read(&kernelfs_irq_info) !=
-                STORM_RETURN_SUCCESS)
+        if (system_call_kernelfs_entry_read(&kernelfs_irq_info) != STORM_RETURN_SUCCESS)
         {
             console_print(&console_structure, "Failed to get IRQ information");
         }
@@ -810,8 +704,7 @@ void command_irq(int number_of_arguments,
     }
 }
 
-/* Kill a thread. */
-
+// Kill a thread.
 void command_kill(int number_of_arguments, char **argument)
 {
     process_id_type thread_id;
@@ -835,31 +728,25 @@ void command_kill(int number_of_arguments, char **argument)
     system_call_thread_control(thread_id, THREAD_TERMINATE, 0);
 }
 
-/* Print information about used and available memory. */
-
-void command_memory(int number_of_arguments __attribute__((unused)),
-                    char **argument __attribute__((unused)))
+// Print information about used and available memory.
+void command_memory(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_memory_info_type memory_info;
 
     memory_info.kernelfs_class = KERNELFS_CLASS_MEMORY_INFO;
     system_call_kernelfs_entry_read(&memory_info);
-    console_print_formatted
-    (&console_structure,
-     "Physical memory: %luK total, %luK free, %luK used\n",
-     memory_info.total_memory / 1024,  memory_info.free_memory / 1024,
-     (memory_info.total_memory - memory_info.free_memory) / 1024);
-    console_print_formatted
-    (&console_structure,
-     "Global memory: %lu total, %lu free, %lu used\n",
-     memory_info.total_global_memory, memory_info.free_global_memory,
-     memory_info.total_global_memory - memory_info.free_global_memory);
+    console_print_formatted(&console_structure,
+                            "Physical memory: %luK total, %luK free, %luK used\n",
+                            memory_info.total_memory / 1024,  memory_info.free_memory / 1024,
+                            (memory_info.total_memory - memory_info.free_memory) / 1024);
+    console_print_formatted(&console_structure,
+                            "Global memory: %lu total, %lu free, %lu used\n",
+                            memory_info.total_global_memory, memory_info.free_global_memory,
+                            memory_info.total_global_memory - memory_info.free_global_memory);
 }
 
-/* Get information about installed PCI devices. */
-
-void command_pci(int number_of_arguments __attribute__((unused)),
-                 char *argument[] __attribute__((unused)))
+// Get information about installed PCI devices.
+void command_pci(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     unsigned int number_of_devices;
 
@@ -868,10 +755,8 @@ void command_pci(int number_of_arguments __attribute__((unused)),
                             number_of_devices);
 }
 
-/* Get information about the status of the I/O ports in the system. */
-
-void command_ports(int number_of_arguments,
-                   char *argument[] __attribute__((unused)))
+// Get information about the status of the I/O ports in the system.
+void command_ports(int number_of_arguments, char *argument[] UNUSED)
 {
     unsigned int ranges = KERNELFS_CLASS_PORT_AMOUNT;
     kernelfs_port_info_type kernelfs_port_info;
@@ -887,8 +772,7 @@ void command_ports(int number_of_arguments,
 
     if (system_call_kernelfs_entry_read(&ranges) != STORM_RETURN_SUCCESS)
     {
-        console_print(&console_structure,
-                      "Couldn't read information about the number of available port ranges from kernel.");
+        console_print(&console_structure, "Couldn't read information about the number of available port ranges from kernel.");
         return;
     }
 
@@ -916,10 +800,8 @@ void command_ports(int number_of_arguments,
     }
 }
 
-/* List the processes. */
-
-void command_processes(int number_of_arguments __attribute__((unused)),
-                       char **argument __attribute__((unused)))
+// List the processes.
+void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
     kernelfs_thread_info_type kernelfs_thread_info;
@@ -943,16 +825,13 @@ void command_processes(int number_of_arguments __attribute__((unused)),
     }
 }
 
-/* Reboot. */
-
-void command_reboot(int number_of_arguments __attribute__((unused)),
-                    char **argument __attribute__((unused)))
+// Reboot.
+void command_reboot(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     system_call_thread_control(THREAD_ID_KERNEL, THREAD_TERMINATE, 0);
 }
 
-/* Run a script. */
-
+// Run a script.
 void command_run(int number_of_arguments, char *argument[])
 {
     file_handle_type handle;
@@ -982,9 +861,7 @@ void command_run(int number_of_arguments, char *argument[])
 
     file_open(&vfs_structure, argument[1], FILE_MODE_READ, &handle);
 
-    /* Read the file (hopefully, it's not more than
-       VFS_BUFFER_SIZE...) */
-
+    // Read the file (hopefully, it's not larger than VFS_BUFFER_SIZE...)
     file_read(&vfs_structure, handle, directory_entry.size, buffer);
 
     for (where = 0; where < directory_entry.size; where++)
@@ -1007,8 +884,7 @@ void command_run(int number_of_arguments, char *argument[])
     memory_deallocate((void **) &buffer);
 }
 
-/* Set an environment variable. */
-
+// Set an environment variable.
 void command_set(int number_of_arguments, char *argument[])
 {
     int index;
@@ -1030,13 +906,10 @@ void command_set(int number_of_arguments, char *argument[])
         }
     }
 
-    /* FIXME: Rewrite this to a bintree or whatever suitable... */
-
+    // FIXME: Rewrite this to a bintree or whatever suitable...
     if (index == 16)
     {
-        /* Okay, this is a new entry in the environment. Find an empty
-           spot. */
-
+        // Okay, this is a new entry in the environment. Find an empty spot.
         for (index = 0; index < 16 && environment[index].key[0] != '\0'; index++);
 
         if (index == 16)
@@ -1056,10 +929,8 @@ void command_set(int number_of_arguments, char *argument[])
     }
 }
 
-/* Show the environmental variables. */
-
-void command_show(int number_of_arguments,
-                  char *argument[] __attribute__((unused)))
+// Show the environment variables.
+void command_show(int number_of_arguments, char *argument[] UNUSED)
 {
     int index;
 
@@ -1080,10 +951,8 @@ void command_show(int number_of_arguments,
     }
 }
 
-/* Show the contents of the given file. */
-
-void command_show_file(int number_of_arguments,
-                       char *argument[])
+// Show the contents of the given file.
+void command_show_file(int number_of_arguments, char *argument[])
 {
     file_handle_type handle;
     u8 *buffer;
@@ -1112,8 +981,7 @@ void command_show_file(int number_of_arguments,
 
     file_open(&vfs_structure, argument[1], FILE_MODE_READ, &handle);
 
-    /* Read the file, in blocks of 4 Kbytes. */
-
+    // Read the file, in blocks of 4 Kbytes.
     while (read_bytes < directory_entry.size)
     {
         unsigned int bytes = directory_entry.size - read_bytes;
@@ -1131,13 +999,10 @@ void command_show_file(int number_of_arguments,
     memory_deallocate((void **) &buffer);
 }
 
-/* Shut down all running processes. */
-
-void command_shutdown(int number_of_arguments __attribute__((unused)),
-                      char **argument __attribute__((unused)))
+// Shut down all running processes.
+void command_shutdown(int number_of_arguments UNUSED, char **argument UNUSED)
 {
-    /* FIXME: Let the console server handle longer messages. */
-
+    // FIXME: Let the console server handle longer messages.
     console_clear(&console_structure);
     console_print(&console_structure, "\
 \e[2J\e[37;44m
@@ -1160,13 +1025,12 @@ void command_shutdown(int number_of_arguments __attribute__((unused)),
                   \e[1;37m*  Press CTRL+ALT+DEL again to restart the computer. You will
                   \e[1;37m   lose any unsaved information in all applications");
     console_print(&console_structure, "\
-                                                                                
+
                   \e[1;37mPress any key to continue");
     while (TRUE);
 }
 
-/* Sleep for a given number of seconds. */
-
+// Sleep for a given number of seconds.
 void command_sleep(int number_of_arguments, char *argument[])
 {
     int seconds;
@@ -1183,12 +1047,9 @@ void command_sleep(int number_of_arguments, char *argument[])
     system_sleep(seconds * 1000);
 }
 
-/* Test command. When some functionality of storm, the libraries, the
-   Universe, or whatever is a little untested, test it in this
-   function. Nothing stays here forever. */
-
-void command_test(int number_of_arguments __attribute__((unused)),
-                  char *argument[] __attribute__((unused)))
+// Test command. When some functionality of storm, the libraries, the Universe, or whatever is a little untested, test it in
+// this function. Nothing stays here forever.
+void command_test(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     ipv4_receive_type receive;
     ipv4_socket_id_type socket_id;
@@ -1269,10 +1130,8 @@ void command_test(int number_of_arguments __attribute__((unused)),
     // memory_deallocate ((void **) &send);
 }
 
-/* Show information about running threads. */
-
-void command_threads(int number_of_arguments __attribute__((unused)),
-                     char **argument __attribute__((unused)))
+// Show information about running threads.
+void command_threads(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
     kernelfs_thread_info_type kernelfs_thread_info;
@@ -1284,8 +1143,8 @@ void command_threads(int number_of_arguments __attribute__((unused)),
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO;
 
     for (kernelfs_process_info.process_number = 0;
-            kernelfs_process_info.process_number < processes;
-            kernelfs_process_info.process_number++)
+         kernelfs_process_info.process_number < processes;
+         kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
         console_print_formatted(&console_structure, "%-10lu %-7u %s.\n",
@@ -1295,9 +1154,9 @@ void command_threads(int number_of_arguments __attribute__((unused)),
 
         kernelfs_thread_info.process_id = kernelfs_process_info.process_id;
         for (kernelfs_thread_info.thread_number = 0;
-                kernelfs_thread_info.thread_number <
-                kernelfs_process_info.number_of_threads;
-                kernelfs_thread_info.thread_number++)
+             kernelfs_thread_info.thread_number <
+             kernelfs_process_info.number_of_threads;
+             kernelfs_thread_info.thread_number++)
         {
             system_call_kernelfs_entry_read(&kernelfs_thread_info);
             console_print_formatted(&console_structure,
@@ -1309,10 +1168,8 @@ void command_threads(int number_of_arguments __attribute__((unused)),
     }
 }
 
-/* Show the current time. */
-
-void command_time(int number_of_arguments __attribute__((unused)),
-                  char *argument[] __attribute__((unused)))
+// Show the current time.
+void command_time(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     kernelfs_time_type kernelfs_time;
     unsigned int hours, minutes, seconds;
@@ -1324,14 +1181,11 @@ void command_time(int number_of_arguments __attribute__((unused)),
     minutes = time_to_minutes(kernelfs_time.time);
     seconds = time_to_seconds(kernelfs_time.time);
 
-    console_print_formatted(&console_structure, "Current time: %02u:%02u:%02u\n", hours, minutes,
-                            seconds);
+    console_print_formatted(&console_structure, "Current time: %02u:%02u:%02u\n", hours, minutes, seconds);
 }
 
-/* Top of Earth. */
-
-void command_top(int number_of_arguments __attribute__((unused)),
-                 char *argument[] __attribute__((unused)))
+// Top of Earth.
+void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
     kernelfs_thread_info_verbose_type kernelfs_thread_info;
@@ -1346,16 +1200,16 @@ void command_top(int number_of_arguments __attribute__((unused)),
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO_VERBOSE;
 
     for (kernelfs_process_info.process_number = 0;
-            kernelfs_process_info.process_number < processes;
-            kernelfs_process_info.process_number++)
+         kernelfs_process_info.process_number < processes;
+         kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
         kernelfs_thread_info.process_id = kernelfs_process_info.process_id;
 
         for (kernelfs_thread_info.thread_number = 0;
-                kernelfs_thread_info.thread_number <
-                kernelfs_process_info.number_of_threads;
-                kernelfs_thread_info.thread_number++)
+             kernelfs_thread_info.thread_number <
+             kernelfs_process_info.number_of_threads;
+             kernelfs_thread_info.thread_number++)
         {
             system_call_kernelfs_entry_read(&kernelfs_thread_info);
             kernelfs_thread_info.process_name[15] = '\0';
@@ -1374,10 +1228,8 @@ void command_top(int number_of_arguments __attribute__((unused)),
     }
 }
 
-/* Unset an environment variable. */
-
-void command_unset(int number_of_arguments,
-                   char *argument[])
+// Unset an environment variable.
+void command_unset(int number_of_arguments, char *argument[])
 {
     int index;
     int highest;
@@ -1407,26 +1259,21 @@ void command_unset(int number_of_arguments,
         return;
     }
 
-    /* We have two cases to handle here. If this entry is the last, we
-       just delete it. Otherwise, we move the last entry to this
-       position and set the last as free. */
-
+    // We have two cases to handle here. If this entry is the last, we just delete it. Otherwise, we move the last entry to
+    // this position and set the last as free.
     if (highest == match)
     {
         environment[match].key[0] = '\0';
     }
     else
     {
-        memory_copy(&environment[match], &environment[highest],
-                    sizeof(environment_type));
+        memory_copy(&environment[match], &environment[highest], sizeof(environment_type));
         environment[highest].key[0] = '\0';
     }
 }
 
-/* Show the current uptime. */
-
-void command_uptime(int number_of_arguments __attribute__((unused)),
-                    char **argument __attribute__((unused)))
+// Show the current uptime.
+void command_uptime(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     u32 uptime = KERNELFS_CLASS_UPTIME_INFO;
     u32 days, hours, minutes, seconds;
@@ -1460,18 +1307,14 @@ void command_uptime(int number_of_arguments __attribute__((unused)),
     }
 }
 
-/* Shows the version of storm and cluido. */
-
-void command_version(int number_of_arguments __attribute__((unused)),
-                     char **argument __attribute__((unused)))
+// Shows the version of storm and cluido.
+void command_version(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_storm_info_type storm_info;
 
     storm_info.kernelfs_class = KERNELFS_CLASS_STORM_INFO;
     system_call_kernelfs_entry_read(&storm_info);
 
-    console_print_formatted(&console_structure, "storm version %s\n",
-                            storm_info.version);
-    console_print_formatted(&console_structure, "%s version %s\n",
-                            PACKAGE_NAME, PACKAGE_VERSION);
+    console_print_formatted(&console_structure, "storm version %s\n", storm_info.version);
+    console_print_formatted(&console_structure, "%s version %s\n", PACKAGE_NAME, PACKAGE_VERSION);
 }
