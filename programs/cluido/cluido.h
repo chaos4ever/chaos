@@ -1,38 +1,20 @@
-/* $Id$ */
-/* Abstract: Function prototypes and external variables. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+// Abstract: Function prototypes and external variables.
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2015 chaos development
 
-/* Copyright 2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
-
-#ifndef __CLUIDO_H__
-#define __CLUDIO_H__
+#pragma once
 
 #include "config.h"
 
-/* Function prototypes. */
-
+// Function prototypes.
 extern void main_loop(void) __attribute__((noreturn));
 extern void prompt_print(char *input);
 extern char *environment_get(char *key);
 extern void run(char *command_string);
 
-/* Type definitions. */
-
+// Type definitions.
 typedef struct
 {
     char name[64];
@@ -48,9 +30,7 @@ typedef struct
     char *arguments;
 } arguments_type;
 
-/* FIXME: Temporary until we get the memory allocation of our
-   lives. */
-
+// FIXME: Temporary until we get the memory allocation of our lives.
 typedef struct
 {
     char key[16];
@@ -68,5 +48,3 @@ extern ipc_structure_type pci_structure;
 extern char host_name[IPV4_HOST_NAME_LENGTH];
 extern tag_type empty_tag;
 extern bool has_net;
-
-#endif /* !__CLUDIO_H__ */

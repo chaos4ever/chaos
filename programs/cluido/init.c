@@ -1,24 +1,9 @@
-/* $Id$ */
-/* Abstract: Initialisation code. */
-/* Authors: Per Lundberg <per@halleluja.nu>
-            Henrik Hallin <hal@chaosdev.org> */
-
-/* Copyright 1999-2000 chaos development. */
-
-/* This program is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public License as
-   published by the Free Software Foundation; either version 2 of the
-   License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful, but
-   WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software
-   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-   USA. */
+// Abstract: Initialisation code.
+// Authors: Per Lundberg <per@halleluja.nu>
+//          Henrik Hallin <hal@chaosdev.org>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2015 chaos development
 
 #include "cluido.h"
 
@@ -32,26 +17,20 @@ tag_type empty_tag =
 
 bool has_net = FALSE;
 
-/* Main function. */
-
+// Main function.
 int main(void)
 {
-    /* Set our names. */
-
+    // Set our names.
     system_process_name_set("cluido");
     system_thread_name_set("Initialising");
 
-    /* First of all, initiate a connection to the console service. */
-
-    if (console_init(&console_structure, &empty_tag,
-                     IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
-            CONSOLE_RETURN_SUCCESS)
+    // First of all, initiate a connection to the console service.
+    if (console_init(&console_structure, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
 
-    if (console_open(&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-            CONSOLE_RETURN_SUCCESS)
+    if (console_open(&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
@@ -69,12 +48,10 @@ int main(void)
 
     console_use_keyboard(&console_structure, TRUE, CONSOLE_KEYBOARD_NORMAL);
 
-    console_attribute_set(&console_structure, CONSOLE_COLOUR_GRAY,
-                          CONSOLE_COLOUR_BLUE, CONSOLE_ATTRIBUTE_RESET);
+    console_attribute_set(&console_structure, CONSOLE_COLOUR_GRAY, CONSOLE_COLOUR_BLUE, CONSOLE_ATTRIBUTE_RESET);
     console_clear(&console_structure);
 
-    /* FIXME: This should not be put in cluido, really... */
-
+    // FIXME: This should not be put in cluido, really...
     console_print(&console_structure, "\
 
                   NOTE! This is an unstable prerelease of chaos. Do expect system crashes and
