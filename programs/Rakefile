@@ -1,9 +1,8 @@
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 SUBFOLDERS = %w(
+  cluido
 )
-
-#  cluido
 
 task :default => SUBFOLDERS do |t|
   t.prerequisites.each do |folder|
