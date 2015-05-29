@@ -1002,27 +1002,27 @@ void command_shutdown(int number_of_arguments UNUSED, char **argument UNUSED)
     // FIXME: Let the console server handle longer messages.
     console_clear(&console_structure);
     console_print(&console_structure, "\
-\e[2J\e[37;44m
-
-
-
-
-
-
-
-                  \e[34;47m chaos 2000 \e[37;44m");
-    console_print(&console_structure, "\n
-                  \e[1;37mA fatal exception 0E has occured at 0028:080054f3 in VXD VMM(01) +
-                  \e[1;37mC0CAC01A. The current application will be terminated.
-
-                  ");
+                  \e[2J\e[37;44m\n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \e[34;47m chaos 2000 \e[37;44m\n");
+    console_print(&console_structure, "\
+                  \n\
+                  \e[1;37mA fatal exception 0E has occured at 0028:080054f3 in VXD VMM(01) +\n\
+                  \e[1;37mC0CAC01A. The current application will be terminated.\n\
+                  \n");
 
     console_print(&console_structure, "\
-    \e[1;37m*  Press any key to terminate the current application.
-                  \e[1;37m*  Press CTRL+ALT+DEL again to restart the computer. You will
+                  \e[1;37m*  Press any key to terminate the current application.\n\
+                  \e[1;37m*  Press CTRL+ALT+DEL again to restart the computer. You will\n\
                   \e[1;37m   lose any unsaved information in all applications");
     console_print(&console_structure, "\
-
+                  \n\
                   \e[1;37mPress any key to continue");
     while (TRUE);
 }
