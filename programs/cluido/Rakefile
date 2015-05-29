@@ -2,7 +2,6 @@ OBJECTS = %w(
   cluido.o
   command.o
   init.o
-  list.o
   nibbles.o
 )
 
