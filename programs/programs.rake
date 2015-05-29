@@ -9,6 +9,7 @@ COMMON_CFLAGS = %w(
   -Wall
   -Wcast-align
   -Werror
+  -Wno-error=suggest-attribute=noreturn
   -Wextra
   -Winline
   -Wmissing-declarations
