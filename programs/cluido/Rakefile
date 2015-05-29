@@ -6,7 +6,13 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
+  console
+  file
+  ipc
+  memory
+  string
   system
+  unicode
 )
 
 OUTPUT = 'cluido'
