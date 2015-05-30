@@ -1,0 +1,12 @@
+INCLUDES = %w(
+  -I../../storm/include
+  -I..
+)
+
+OBJECTS = %w(
+  time.o
+)
+
+OUTPUT = 'libtime.a'
+
+load '../libraries.rake'

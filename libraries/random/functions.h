@@ -26,7 +26,7 @@
 
 /* Function prototypes. */
 
-return_type random_init (int seed);
-int random (int max);
+return_type random_init(int seed);
+int random(int max);
 
 #endif /* !__LIBRARY_RANDOM_FUNCTIONS_H__ */
