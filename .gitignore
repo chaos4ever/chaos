@@ -11,6 +11,7 @@ storm/include/storm/current-arch
 storm_tests/ia32/ia32_tests
 
 # These are painful but what do we do...
+programs/cluido/cluido
 servers/block/initial_ramdisk/initial_ramdisk
 servers/block/initial_ramdisk/ramdisk-auto.h
 servers/block/initial_ramdisk/ramdisk.image
