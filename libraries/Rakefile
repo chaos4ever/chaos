@@ -5,23 +5,23 @@ libraries = %w(
   execute_elf
   file
   ipc
+  ipv4
   log
   memory
+  pci
+  random
   string
   system
+  time
   unicode
   video
 )
 
 # These haven't been upgraded to work w/ Rake yet.
-#  ipv4
 #  serial
-#  random
 #  math
 #  checksum
 #  mutex
-#  pci
-#  time
 #  list
 #  sound
 

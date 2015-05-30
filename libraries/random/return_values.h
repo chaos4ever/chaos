@@ -24,9 +24,9 @@
 
 enum
 {
-  /* The call completed successfully. */
+    /* The call completed successfully. */
 
-  RANDOM_RETURN_SUCCESS
+    RANDOM_RETURN_SUCCESS
 };
 
 #endif /* !__LIBRARY_RANDOM_RETURN_VALUES_H__ */
