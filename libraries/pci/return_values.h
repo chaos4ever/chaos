@@ -24,17 +24,17 @@
 
 enum
 {
-  /* The function completed successfully. */
+    /* The function completed successfully. */
 
-  PCI_RETURN_SUCCESS,
+    PCI_RETURN_SUCCESS,
 
-  /* The service we tried to resolve was unavailable. */
+    /* The service we tried to resolve was unavailable. */
 
-  PCI_RETURN_SERVICE_UNAVAILABLE,
+    PCI_RETURN_SERVICE_UNAVAILABLE,
 
-  /* We failed to allocate memory. */
+    /* We failed to allocate memory. */
 
-  PCI_RETURN_OUT_OF_MEMORY,
+    PCI_RETURN_OUT_OF_MEMORY,
 };
 
 #endif /* !__LIBRARY_PCI_RETURN_VALUES_H__ */

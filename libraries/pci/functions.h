@@ -38,16 +38,16 @@
 
 
 extern return_type pci_init
-  (ipc_structure_type *pci_structure, tag_type *tag);
+(ipc_structure_type *pci_structure, tag_type *tag);
 
 extern return_type pci_get_number_of_devices
-  (ipc_structure_type *pci_structure, unsigned int *number_of_devices);
+(ipc_structure_type *pci_structure, unsigned int *number_of_devices);
 
 extern return_type pci_device_exists
-   (ipc_structure_type *pci_structure, pci_device_probe_type *probe, 
-    pci_device_info_type **device_info, unsigned int *number_of_devices);
+(ipc_structure_type *pci_structure, pci_device_probe_type *probe,
+ pci_device_info_type **device_info, unsigned int *number_of_devices);
 
-extern return_type pci_allocate_buffer 
-  (void **physical_address, void **virtual_address, unsigned int size);
+extern return_type pci_allocate_buffer
+(void **physical_address, void **virtual_address, unsigned int size);
 
 #endif /* !__LIBRARY_PCI_FUNCTIONS_H__ */

@@ -33,10 +33,10 @@
 
 /* Min. octets in frame minus FCS. */
 
-#define IPV4_ETHERNET_MINIMUM_LENGTH         60  
+#define IPV4_ETHERNET_MINIMUM_LENGTH         60
 
 /* Max. octets in payload. */
-            
+
 #define IPV4_ETHERNET_DATA_LENGTH            1500
 
 /* Max. octets in frame minus FCS. */
@@ -50,13 +50,13 @@
 #define IPV4_ETHERNET_PROTOCOL_IPV6          0x86DD
 
 /* This is an ethernet frame header. */
- 
+
 typedef struct
 {
-  u8 destination_address[IPV4_ETHERNET_ADDRESS_LENGTH];
-  u8 source_address[IPV4_ETHERNET_ADDRESS_LENGTH];
-  u16 protocol_type;
-  u8 data[0];
-} __attribute__ ((packed)) ipv4_ethernet_header_type;
+    u8 destination_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    u8 source_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    u16 protocol_type;
+    u8 data[0];
+} __attribute__((packed)) ipv4_ethernet_header_type;
 
 #endif /* !__LIBRARY_IPV4_ETHERNET_H__ */

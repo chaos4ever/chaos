@@ -30,21 +30,21 @@ static volatile int random_seed = 0;
 
 /* Initialise the random seed. */
 
-return_type random_init (int seed)
+return_type random_init(int seed)
 {
-  random_seed = seed;
+    random_seed = seed;
 
-  return RANDOM_RETURN_SUCCESS;
+    return RANDOM_RETURN_SUCCESS;
 }
 
 /* Get a random number with max size max in *output. */
 
-int random (int max)
+int random(int max)
 {
-  random_seed = (random_seed * 12345 + 67892);
-  //  random_seed &= 0xFFFF;
+    random_seed = (random_seed * 12345 + 67892);
+    //  random_seed &= 0xFFFF;
 
-  max++;
+    max++;
 
-  return random_seed;
+    return random_seed;
 }
