@@ -40,6 +40,7 @@ CFLAGS = (COMMON_CFLAGS + %w(
 
 LDFLAGS = %W(
   #{LIBRARIES_DIR}/startup.o
+  -lgcc
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32
