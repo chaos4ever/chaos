@@ -53,35 +53,35 @@ int main(void)
 
     // FIXME: This should not be put in cluido, really...
     console_print(&console_structure, "\
-                  \n\
-                  NOTE! This is an unstable prerelease of chaos. Do expect system crashes and\n\
-                  strange behaviour. There is no need for you, as a user, to fix minor bugs and\n\
-                  send us patches, since the bug probably already have been fixed when the patch\n\
-                  arrives to us. If you find a serious bug though, please report to\n\
-                  chaos-devel@lists.chaosdev.org and hopefully we can work something out. Thank\n\
-                  you for your time and interest in the project.\n");
+\n\
+NOTE! This is an unstable prerelease of chaos. Do expect system crashes and\n\
+strange behaviour. There is no need for you, as a user, to fix minor bugs and\n\
+send us patches, since the bug probably already have been fixed when the patch\n\
+arrives to us. If you find a serious bug though, please report to\n\
+chaos-devel@lists.chaosdev.org and hopefully we can work something out. Thank\n\
+you for your time and interest in the project.\n");
 
     console_print(&console_structure, "\
-                  \n\
-                  \e[1mcluido version 0.0.1, Copyright (C) 1998-2000 chaos development.\n\
-                  cluido and the rest of chaos comes with ABSOLUTELY NO WARRANTY.\n\
-                  This is free software, and you are welcome to redistribute it under\n\
-                  certain conditions; see the GNU GPL for details.\e[0;44m\n");
+\n\
+\e[1mcluido version 0.0.1, Copyright (C) 1998-2000 chaos development.\n\
+cluido and the rest of chaos comes with ABSOLUTELY NO WARRANTY.\n\
+This is free software, and you are welcome to redistribute it under\n\
+certain conditions; see the GNU GPL for details.\e[0;44m\n");
 
     console_print(&console_structure, "\
-                  \n\
-                  This is cluido, the Command Line User Interface. Type 'help' or '?' for\n\
-                  information about available commands. You can also cycle through the virtual\n\
-                  consoles using ALT+TAB. To 'bind' a console to a function key, use\n\
-                  CTRL+ALT+Fn. This console can later be switched to by pressing ALT+Fn.\n\
-                  Consoles having a blue background are shells, just like this one, and consoles\n\
-                  with a black background is the log consoles (one for servers and one for the\n\
-                  kernel). If tornado has been started, it will have its own graphical console\n\
-                  with a movable mouse cursor.\n\
-                  \n\
-                  Some Emacs compatible bindings (C-a, C-e, etc) are available, and also some\n\
-                  DOS:ish ones (Home, End, arrows). You can go back and forth in the command\n\
-                  history with the up and down arrows.\n\n");
+\n\
+This is cluido, the Command Line User Interface. Type 'help' or '?' for\n\
+information about available commands. You can also cycle through the virtual\n\
+consoles using ALT+TAB. To 'bind' a console to a function key, use\n\
+CTRL+ALT+Fn. This console can later be switched to by pressing ALT+Fn.\n\
+Consoles having a blue background are shells, just like this one, and consoles\n\
+with a black background is the log consoles (one for servers and one for the\n\
+kernel). If tornado has been started, it will have its own graphical console\n\
+with a movable mouse cursor.\n\
+\n\
+Some Emacs compatible bindings (C-a, C-e, etc) are available, and also some\n\
+DOS:ish ones (Home, End, arrows). You can go back and forth in the command\n\
+history with the up and down arrows.\n\n");
 
     main_loop();
     return 0;
