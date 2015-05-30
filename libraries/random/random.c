@@ -23,9 +23,5 @@ return_type random_init(int seed)
 int random(int max)
 {
     random_seed = (random_seed * 12345 + 67892);
-    //  random_seed &= 0xFFFF;
-
-    max++;
-
-    return random_seed;
+    return random_seed & max;
 }
