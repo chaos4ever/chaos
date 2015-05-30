@@ -87,7 +87,7 @@ task :clean do
 end
 
 task :install => OUTPUT do
-  target_path = INSTALL_ROOT + '/servers'
+  target_path = INSTALL_ROOT + '/programs'
 
   sh "#{INSTALL_COMMAND} #{OUTPUT} #{target_path}/#{OUTPUT}"
   sh "gzip -9 #{target_path}/#{OUTPUT}"
