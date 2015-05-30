@@ -7,11 +7,16 @@ OBJECTS = %w(
 
 LIBRARIES = %w(
   console
+  execute_elf
   file
   ipc
+  ipv4
   memory
+  pci
+  random
   string
   system
+  time
   unicode
 )
 
