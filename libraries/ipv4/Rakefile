@@ -7,6 +7,6 @@ OBJECTS = %w(
   ipv4.o
 )
 
-OUTPUT = 'libpci.a'
+OUTPUT = 'libipv4.a'
 
 load '../libraries.rake'
