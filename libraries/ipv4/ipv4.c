@@ -1,33 +1,29 @@
-/* $Id$ */
-/* Abstract: IPv4 library. */
-/* Author: Per Lundberg <per@halleluja.nu> */
-
-/* Copyright 2000 chaos development. */
-/* Copyright 2007 chaos development. */
+// Abstract: IPv4 library.
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2015 chaos development
 
 #include <ipc/ipc.h>
 #include <ipv4/ipv4.h>
 #include <string/string.h>
 
-/* Initialise the IPv4 support (by contacting the IPv4 server). */
-
+// Initialise the IPv4 support (by contacting the IPv4 server).
 return_type ipv4_init(ipc_structure_type *ipv4_structure, tag_type *tag)
 {
     mailbox_id_type mailbox_id[10];
     unsigned int services = 10;
 
-    /* Try to resolve the IPv4 service. */
-
-    if (ipc_service_resolve("ipv4", mailbox_id, &services, 0, tag) !=
-            IPC_RETURN_SUCCESS)
+    // Try to resolve the IPv4 service.
+    if (ipc_service_resolve("ipv4", mailbox_id, &services, 0, tag) != IPC_RETURN_SUCCESS)
     {
         return IPV4_RETURN_SERVICE_UNAVAILABLE;
     }
 
     ipv4_structure->output_mailbox_id = mailbox_id[0];
 
-    /* Connect to this service. */
-
+    // Connect to this service.
     if (ipc_service_connection_request(ipv4_structure) != IPC_RETURN_SUCCESS)
     {
         return IPV4_RETURN_SERVICE_UNAVAILABLE;
@@ -36,10 +32,8 @@ return_type ipv4_init(ipc_structure_type *ipv4_structure, tag_type *tag)
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Get the host name of the system. */
-
-return_type ipv4_host_name_get
-(ipc_structure_type *ipv4_structure, char *host_name)
+// Get the host name of the system.
+return_type ipv4_host_name_get(ipc_structure_type *ipv4_structure, char *host_name)
 {
     message_parameter_type message_parameter;
 
@@ -50,14 +44,12 @@ return_type ipv4_host_name_get
     ipc_send(ipv4_structure->output_mailbox_id, &message_parameter);
 
     message_parameter.length = IPV4_HOST_NAME_LENGTH;
-    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter,
-                NULL);
+    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter, NULL);
 
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Convert a string-based IP address to the binary notation. */
-
+// Convert a string-based IP address to the binary notation.
 return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
 {
     unsigned int characters;
@@ -65,8 +57,7 @@ return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
     unsigned int position = 0;
     unsigned int length = string_length(string);
 
-    if (string_to_number(string + position, &a, &characters) !=
-            STRING_RETURN_SUCCESS)
+    if (string_to_number(string + position, &a, &characters) != STRING_RETURN_SUCCESS)
     {
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
@@ -83,8 +74,7 @@ return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
 
-    if (string_to_number(string + position, &b, &characters) !=
-            STRING_RETURN_SUCCESS)
+    if (string_to_number(string + position, &b, &characters) != STRING_RETURN_SUCCESS)
     {
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
@@ -101,8 +91,7 @@ return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
 
-    if (string_to_number(string + position, &c, &characters) !=
-            STRING_RETURN_SUCCESS)
+    if (string_to_number(string + position, &c, &characters) != STRING_RETURN_SUCCESS)
     {
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
@@ -119,8 +108,7 @@ return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
 
-    if (string_to_number(string + position, &d, &characters) !=
-            STRING_RETURN_SUCCESS)
+    if (string_to_number(string + position, &d, &characters) != STRING_RETURN_SUCCESS)
     {
         return IPV4_RETURN_INVALID_ARGUMENT;
     }
@@ -134,12 +122,8 @@ return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Connect to a remote host (in the case of TCP), or just bind the
-   port (in the case of UDP). */
-
-return_type ipv4_connect
-(ipc_structure_type *ipv4_structure, ipv4_connect_type *connect,
- ipv4_socket_id_type *socket_id)
+// Connect to a remote host (in the case of TCP), or just bind the port (in the case of UDP).
+return_type ipv4_connect(ipc_structure_type *ipv4_structure, ipv4_connect_type *connect, ipv4_socket_id_type *socket_id)
 {
     message_parameter_type message_parameter;
 
@@ -158,10 +142,8 @@ return_type ipv4_connect
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Reconnect the given socket. Only works for UDP datagram streams. */
-
-return_type ipv4_reconnect
-(ipc_structure_type *ipv4_structure, ipv4_reconnect_type *connect)
+// Reconnect the given socket. Only works for UDP datagram streams.
+return_type ipv4_reconnect(ipc_structure_type *ipv4_structure, ipv4_reconnect_type *connect)
 {
     message_parameter_type message_parameter;
 
@@ -175,10 +157,8 @@ return_type ipv4_reconnect
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Send data on the given socket. */
-
-return_type ipv4_send
-(ipc_structure_type *ipv4_structure, ipv4_send_type *send)
+// Send data on the given socket.
+return_type ipv4_send(ipc_structure_type *ipv4_structure, ipv4_send_type *send)
 {
     message_parameter_type message_parameter;
 
@@ -192,11 +172,9 @@ return_type ipv4_send
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Receive data on the given socket. */
-
-return_type ipv4_receive
-(ipc_structure_type *ipv4_structure, ipv4_receive_type *receive,
- ipv4_socket_id_type socket_id, void **data, unsigned int *length)
+// Receive data on the given socket.
+return_type ipv4_receive(ipc_structure_type *ipv4_structure, ipv4_receive_type *receive, ipv4_socket_id_type socket_id,
+                         void **data, unsigned int *length)
 {
     message_parameter_type message_parameter;
 
@@ -216,16 +194,13 @@ return_type ipv4_receive
 
     message_parameter.data = receive;
     message_parameter.length = sizeof(ipv4_receive_type);
-    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter,
-                NULL);
+    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter, NULL);
 
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Set flags. */
-
-return_type ipv4_set_flags
-(ipc_structure_type *ipv4_structure, unsigned int flags)
+// Set flags.
+return_type ipv4_set_flags(ipc_structure_type *ipv4_structure, unsigned int flags)
 {
     message_parameter_type message_parameter;
 
@@ -239,10 +214,8 @@ return_type ipv4_set_flags
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Get flags. */
-
-return_type ipv4_get_flags
-(ipc_structure_type *ipv4_structure, unsigned int *flags)
+// Get flags.
+return_type ipv4_get_flags(ipc_structure_type *ipv4_structure, unsigned int *flags)
 {
     message_parameter_type message_parameter;
 
@@ -254,14 +227,12 @@ return_type ipv4_get_flags
     ipc_send(ipv4_structure->output_mailbox_id, &message_parameter);
 
     message_parameter.length = sizeof(unsigned int);
-    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter,
-                NULL);
+    ipc_receive(ipv4_structure->input_mailbox_id, &message_parameter, NULL);
 
     return IPV4_RETURN_SUCCESS;
 }
 
-/* Convert an IPv4 address to string form. */
-
+// Convert an IPv4 address to string form.
 return_type ipv4_address_to_string(char *string, u32 ipv4_address)
 {
     string_print(string, "%lu.%lu.%lu.%lu",
@@ -272,4 +243,3 @@ return_type ipv4_address_to_string(char *string, u32 ipv4_address)
 
     return IPV4_RETURN_SUCCESS;
 }
-
