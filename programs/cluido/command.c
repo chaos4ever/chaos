@@ -804,7 +804,6 @@ void command_ports(int number_of_arguments, char *argument[] UNUSED)
 void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
-    kernelfs_thread_info_type kernelfs_thread_info;
     u32 processes = KERNELFS_CLASS_PROCESS_AMOUNT;
 
     system_call_kernelfs_entry_read(&processes);
@@ -812,16 +811,14 @@ void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
 
     for (kernelfs_process_info.process_number = 0;
-            kernelfs_process_info.process_number < processes;
-            kernelfs_process_info.process_number++)
+         kernelfs_process_info.process_number < processes;
+         kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
         console_print_formatted(&console_structure, "%-10lu %-7u %s.\n",
                                 kernelfs_process_info.process_id,
                                 kernelfs_process_info.number_of_threads,
                                 kernelfs_process_info.name);
-
-        kernelfs_thread_info.process_id = kernelfs_process_info.process_id;
     }
 }
 
@@ -1005,27 +1002,27 @@ void command_shutdown(int number_of_arguments UNUSED, char **argument UNUSED)
     // FIXME: Let the console server handle longer messages.
     console_clear(&console_structure);
     console_print(&console_structure, "\
-\e[2J\e[37;44m
-
-
-
-
-
-
-
-                  \e[34;47m chaos 2000 \e[37;44m");
-    console_print(&console_structure, "\n
-                  \e[1;37mA fatal exception 0E has occured at 0028:080054f3 in VXD VMM(01) +
-                  \e[1;37mC0CAC01A. The current application will be terminated.
-
-                  ");
+                  \e[2J\e[37;44m\n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \n\
+                  \e[34;47m chaos 2000 \e[37;44m\n");
+    console_print(&console_structure, "\
+                  \n\
+                  \e[1;37mA fatal exception 0E has occured at 0028:080054f3 in VXD VMM(01) +\n\
+                  \e[1;37mC0CAC01A. The current application will be terminated.\n\
+                  \n");
 
     console_print(&console_structure, "\
-    \e[1;37m*  Press any key to terminate the current application.
-                  \e[1;37m*  Press CTRL+ALT+DEL again to restart the computer. You will
+                  \e[1;37m*  Press any key to terminate the current application.\n\
+                  \e[1;37m*  Press CTRL+ALT+DEL again to restart the computer. You will\n\
                   \e[1;37m   lose any unsaved information in all applications");
     console_print(&console_structure, "\
-
+                  \n\
                   \e[1;37mPress any key to continue");
     while (TRUE);
 }

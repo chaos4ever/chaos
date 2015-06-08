@@ -1,9 +1,9 @@
 // Abstract: Linked list function prototypes and structure definitions.
 // Author: Per Lundberg <per@halleluja.nu>
-//         Anders Öhrt <hal@chaosdev.org>
+//         Anders Ã–hrt <hal@chaosdev.org>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2015 chaos development
+// Â© Copyright 1999-2000 chaos development
+// Â© Copyright 2015 chaos development
 
 #pragma once
 

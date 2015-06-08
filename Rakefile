@@ -1,7 +1,7 @@
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-FOLDERS = [:storm, :libraries, :servers] # :programs
+FOLDERS = [:storm, :libraries, :programs, :servers]
 
 verbose false
 
@@ -39,12 +39,14 @@ end
 
 desc 'Builds a bootable ISO image with the kernel, servers and programs.'
 task :iso_image do
+
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
   FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
 
   # I suspect this is actually an x86 binary, even though it resides in a folder that seems to indicate the opposite.
   FileUtils.cp '/usr/lib/grub/x86_64-pc/stage2_eltorito', "#{INSTALL_ROOT}/boot/grub"
 
+  print 'Creating ISO image...'.cyan.bold
   sh "genisoimage \
       -R \
       -b boot/grub/stage2_eltorito \
@@ -54,6 +56,7 @@ task :iso_image do
       -input-charset ascii \
       -quiet \
       -o chaos.iso #{INSTALL_ROOT}"
+  puts ' done.'
 end
 
 desc "Compiles the 'storm' kernel."
@@ -75,10 +78,11 @@ task :libraries => [:storm] do |folder|
   sh "cd #{folder} && #{RAKE_COMMAND}"
 end
 
+task :programs do |folder|
+  system "cd #{folder} && rake"
+end
+
 task :servers do |folder|
   sh "cd #{folder} && rake"
 end
 
-# task :programs do |folder|
-#   system "cd #{folder} && rake"
-# end

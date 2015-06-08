@@ -11,3 +11,4 @@ module /servers/virtual_file_system.gz
 module /servers/fat.gz
 module /servers/initial_ramdisk.gz
 module /servers/boot.gz
+module /programs/cluido.gz

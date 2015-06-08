@@ -5,18 +5,20 @@ Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if R
 LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries"
 
 COMMON_CFLAGS = %w(
-  -Wall
-  -Wextra
-  -Wshadow
-  -Wpointer-arith
   -Waggregate-return
-  -Wredundant-decls
-  -Winline
-  -Werror
+  -Wall
   -Wcast-align
-  -Wsign-compare
+  -Werror
+  -Wno-error=suggest-attribute=noreturn
+  -Wextra
+  -Winline
   -Wmissing-declarations
   -Wmissing-noreturn
+  -Wno-pointer-sign
+  -Wpointer-arith
+  -Wredundant-decls
+  -Wshadow
+  -Wsign-compare
   -pipe
   -O3
   -fno-builtin
@@ -38,6 +40,7 @@ CFLAGS = (COMMON_CFLAGS + %w(
 
 LDFLAGS = %W(
   #{LIBRARIES_DIR}/startup.o
+  -lgcc
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32
@@ -84,7 +87,7 @@ task :clean do
 end
 
 task :install => OUTPUT do
-  target_path = INSTALL_ROOT + '/servers'
+  target_path = INSTALL_ROOT + '/programs'
 
   sh "#{INSTALL_COMMAND} #{OUTPUT} #{target_path}/#{OUTPUT}"
   sh "gzip -9f #{target_path}/#{OUTPUT}"

@@ -1,0 +1,25 @@
+OBJECTS = %w(
+  cluido.o
+  command.o
+  init.o
+  nibbles.o
+)
+
+LIBRARIES = %w(
+  console
+  execute_elf
+  file
+  ipc
+  ipv4
+  memory
+  pci
+  random
+  string
+  system
+  time
+  unicode
+)
+
+OUTPUT = 'cluido'
+
+load '../programs.rake'

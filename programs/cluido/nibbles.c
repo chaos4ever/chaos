@@ -61,11 +61,9 @@ int playfield[PLAYFIELD_WIDTH][PLAYFIELD_HEIGHT];
 
 void command_nibbles(void)
 {
-#if FALSE
     int x_pos, y_pos, player_number, segment_number;
     time_type random_seed;
     bool done;
-    char key;
 
     // Initialise random sequence.
     system_call_timer_read(&random_seed);
@@ -101,21 +99,21 @@ void command_nibbles(void)
         }
     }
 
-    console_clear();
-    console_cursor_move(0, 30);
+    console_clear(&console_structure);
+    console_cursor_move(&console_structure, 0, 30);
 
     done = FALSE;
 
-    console_print("Starting nibbles " NIBBLES_VERSION ".\n");
+    console_print(&console_structure, "Starting nibbles " NIBBLES_VERSION ".\n");
 
     // Let this be a single player game.
     player[0].active = TRUE;
 
     while (!done)
     {
-        console_clear();
+        console_clear(&console_structure);
 
-        key = read_key();
+        read_key();
 
         for (player_number = 0; player_number < MAX_PLAYERS; player_number++)
         {
@@ -126,13 +124,12 @@ void command_nibbles(void)
             }
         }
 
-        console_print("Moving players.\n");
+        console_print(&console_structure, "Moving players.\n");
         move_players();
 
-        console_print("Drawing playfield.\n");
+        console_print(&console_structure, "Drawing playfield.\n");
         redraw_playfield();
     }
-#endif
 }
 
 static void restart_player(int player_number)
@@ -140,7 +137,7 @@ static void restart_player(int player_number)
     int counter, segment_number, x, y;
     bool restarted = FALSE;
 
-    console_print_formatted("Restarting player %d\n", player_number);
+    console_print_formatted(&console_structure, "Restarting player %d\n", player_number);
 
     // Try to respawn at most 1000 times.
     for (counter = 0; counter < 1000 && restarted == FALSE; counter++)
@@ -275,7 +272,7 @@ static void redraw_playfield(void)
 
         row[PLAYFIELD_WIDTH] = '\n';
         row[PLAYFIELD_WIDTH + 1] = '\0';
-        console_print(row);
+        console_print(&console_structure, row);
     }
 }
 

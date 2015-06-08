@@ -299,6 +299,8 @@ static void string_input(unsigned int max_length, bool do_syntax_check, bool com
     // Allocate memory for scratchpad.
     memory_allocate((void **) &string, max_length);
 
+    memory_set_u8((u8 *) &keyboard_packet, 0, sizeof(keyboard_packet_type));
+
     while (!(keyboard_packet.key_pressed &&
              keyboard_packet.has_special_key &&
              keyboard_packet.special_key == IPC_KEYBOARD_SPECIAL_KEY_ENTER))
@@ -726,9 +728,8 @@ void main_loop(void)
     // Before we begin, we have to know which user's config files to read.
     // FIXME: This functionality should _NOT_ lie in this program.
     console_print(&console_structure, "\
-I now need to know who you are, so I can read your personal configuration
-                  files from your home directory. Please enter your username, or just press
-                  enter if you don't care: ");
+I now need to know who you are, so I can read your personal configuration files from your home directory. Please enter your \
+username, or just press enter if you don't care: ");
 
     string_input(50, FALSE, FALSE, user_name_string);
 
