@@ -26,4 +26,6 @@ typedef struct
 
   // How urgent is this log message? 0 is most urgent, and higher numbers are of less importance.
   unsigned int urgency;
+
+  time_type timestamp;
 } ipc_log_print_type;

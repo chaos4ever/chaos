@@ -173,4 +173,3 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
         }
     }
 }
-

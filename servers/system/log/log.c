@@ -2,7 +2,7 @@
 // from the kernel.
 // Authors: Per Lundberg <per@halleluja.nu>
 //          Henrik Hallin <hal@chaosdev.org>
-
+//
 // © Copyright 2000 chaos development
 // © Copyright 2007 chaos development
 // © Copyright 2015 chaos development
@@ -79,7 +79,8 @@ static void log_add(console_structure_type *console, char *title, ipc_log_print_
                               urgency_colour[ipc_log_print->urgency][0],
                               urgency_colour[ipc_log_print->urgency][1],
                               urgency_colour[ipc_log_print->urgency][2]);
-        console_print_formatted(console, " [%s] %s ", ipc_log_print->log_class, ipc_log_print->message);
+        console_print_formatted(console, " [%u.%03u] [%s] %s ", (u32) ipc_log_print->timestamp / 1000,
+                                (u32) ipc_log_print->timestamp % 1000, ipc_log_print->log_class, ipc_log_print->message);
 
         // Go to next line (with correct colour). */
         console_attribute_set(console, CONSOLE_COLOUR_GRAY, CONSOLE_COLOUR_BLACK, CONSOLE_ATTRIBUTE_RESET);
@@ -119,8 +120,7 @@ static void handle_connection(void *argument)
         message_parameter.message_class = IPC_CLASS_NONE;
         message_parameter.length = data_size;
 
-        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter,
-                        &data_size) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter, &data_size) != IPC_RETURN_SUCCESS)
         {
             continue;
         }
@@ -131,8 +131,7 @@ static void handle_connection(void *argument)
             {
                 ipc_log_print_type *ipc_log_print = (ipc_log_print_type *) data;
 
-                log_add(&console_structure_server,  " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.",
-                        ipc_log_print);
+                log_add(&console_structure_server,  " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.", ipc_log_print);
 
                 break;
             }
@@ -143,8 +142,7 @@ static void handle_connection(void *argument)
 static return_type handle_server_logging(void)
 {
     // Open a new console for the log.
-    if (console_init(&console_structure_server, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
-            CONSOLE_RETURN_SUCCESS)
+    if (console_init(&console_structure_server, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
@@ -155,8 +153,7 @@ static return_type handle_server_logging(void)
         return -1;
     }
 
-    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-            CONSOLE_RETURN_SUCCESS)
+    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
@@ -200,14 +197,12 @@ static void handle_kernel_logging(void *argument UNUSED)
     system_thread_name_set("Kernel log handler");
 
     // Open a new console for the log.
-    if (console_init(&console_structure_kernel, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
-            CONSOLE_RETURN_SUCCESS)
+    if (console_init(&console_structure_kernel, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) != CONSOLE_RETURN_SUCCESS)
     {
         return;
     }
 
-    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-            CONSOLE_RETURN_SUCCESS)
+    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) != CONSOLE_RETURN_SUCCESS)
     {
         return;
     }
@@ -222,8 +217,7 @@ static void handle_kernel_logging(void *argument UNUSED)
     {
         system_call_kernelfs_entry_read(&kernelfs_log);
 
-        log_add(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.",
-                ipc_log_print);
+        log_add(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.", ipc_log_print);
     }
 }
 

@@ -234,6 +234,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
 
     if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "Failed to found matching volume for %s", directory_entry->path_name);
         directory_entry->success = FALSE;
         return;
     }
@@ -306,6 +307,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
                 // Did the file not exist?
                 if (input_index == mounted_volumes)
                 {
+                    log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "Failed to find %s in meta-root filesystem", directory_entry->path_name);
                     directory_entry->success = FALSE;
                     return;
                 }
@@ -450,7 +452,7 @@ static bool vfs_mount(file_mount_type *mount, ipc_structure_type *ipc_structure)
     string_copy_max(mount_point[mounted_volumes].location, mount->location, MAX_PATH_NAME_LENGTH);
     mounted_volumes++;
 
-    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounting %u at //%s.",
+    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounted %u at //%s.",
                         ipc_structure->output_mailbox_id, mount->location);
     return TRUE;
 }
@@ -527,6 +529,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 file_mount_type *mount = (file_mount_type *) data;
 
                 vfs_mount(mount, &ipc_structure);
+                ipc_send(ipc_structure.output_mailbox_id, &message_parameter);
                 break;
             }
 
