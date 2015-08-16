@@ -1,5 +1,12 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = 'chef/debian-7.8'
+  config.vm.provider :parallels do |vb, override|
+    override.vm.box = 'puphpet/debian75-x64'
+  end
+
+  config.vm.provider :virtualbox do |vb, override|
+    config.vm.box = 'chef/debian-7.8'
+  end
+
   config.vm.provision 'shell', inline: <<-SHELL
     set -e
     sudo apt-get update
