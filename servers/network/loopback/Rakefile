@@ -1,0 +1,10 @@
+OBJECTS = %w(
+  loopback.o
+)
+
+LIBRARIES = %w(
+)
+
+OUTPUT = 'ipv4'
+
+load '../../servers.rake'
