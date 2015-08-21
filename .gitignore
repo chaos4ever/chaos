@@ -4,6 +4,7 @@ chaos.iso
 *.dep
 *.o
 *.a
+*.orig
 
 storm/current-arch
 storm/ia32/storm
