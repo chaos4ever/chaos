@@ -17,6 +17,7 @@ servers/block/initial_ramdisk/ramdisk-auto.h
 servers/block/initial_ramdisk/ramdisk.image
 servers/file_system/fat/fat
 servers/file_system/virtual_file_system/virtual_file_system
+servers/network/loopback/loopback
 servers/system/boot/boot
 servers/system/console/console
 servers/system/keyboard/keyboard

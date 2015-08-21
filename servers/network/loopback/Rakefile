@@ -3,8 +3,13 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
+  ipc
+  log
+  memory
+  string
+  system
 )
 
-OUTPUT = 'ipv4'
+OUTPUT = 'loopback'
 
 load '../../servers.rake'
