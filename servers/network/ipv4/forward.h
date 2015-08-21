@@ -26,8 +26,8 @@
 
 /* Function prototypes. */
 
-extern void forward_packet (ipv4_ethernet_header_type *ethernet_header, 
-                            unsigned int length);
+extern void forward_packet(ipv4_ethernet_header_type *ethernet_header,
+                           unsigned int length);
 
 /* Globals. */
 
