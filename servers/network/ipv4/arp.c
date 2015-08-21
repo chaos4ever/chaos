@@ -34,14 +34,14 @@ bool arp_ip_to_ethernet_address(u32 ip_address, u8 ethernet_address[])
         {
             memory_copy(ethernet_address, entry->ethernet_address,
                         IPV4_ETHERNET_ADDRESS_LENGTH);
-            mutex_signal(arp_mutex);
+            mutex_signal(&arp_mutex);
             return TRUE;
         }
 
         entry = (arp_cache_entry_type *) entry->next;
     }
 
-    mutex_signal(arp_mutex);
+    mutex_signal(&arp_mutex);
     return FALSE;
 }
 
@@ -61,7 +61,7 @@ void arp_insert_entry(u32 ip_address, u8 ethernet_address[])
     mutex_wait(arp_mutex);
     entry->next = (struct arp_cache_entry_type *) arp_cache;
     arp_cache = entry;
-    mutex_signal(arp_mutex);
+    mutex_signal(&arp_mutex);
 }
 
 /* Get the number of entries in the list. */
