@@ -22,7 +22,10 @@
 #ifndef __IPV4_H__
 #define __IPV4_H__
 
-#include "config.h"
+#include <ipv4/ipv4.h>
+#include <log/log.h>
+#include <mutex/mutex.h>
+#include <system/system.h>
 
 /* Structures. */
 /* IP protocol types. */
