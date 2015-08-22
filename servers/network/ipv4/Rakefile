@@ -10,15 +10,17 @@ OBJECTS = %w(
   udp.o
 )
 
+EXTRA_LDFLAGS = '-lgcc'
 LIBRARIES = %w(
   ipc
   ipv4
+  list
   log
   memory
   random
-  time
   string
   system
+  time
 )
 
 OUTPUT = 'ipv4'
