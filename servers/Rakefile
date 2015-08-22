@@ -3,12 +3,12 @@ Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.opt
 subfolders = %w(
   block
   file_system
+  network
   system
   video
 )
 
 # These haven't been upgraded to work w/ Rake yet.
-# network
 # system
 # sound
 # other
