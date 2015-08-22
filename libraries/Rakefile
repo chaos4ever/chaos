@@ -6,6 +6,7 @@ libraries = %w(
   file
   ipc
   ipv4
+  list
   log
   memory
   pci
@@ -22,7 +23,6 @@ libraries = %w(
 #  math
 #  checksum
 #  mutex
-#  list
 #  sound
 
 load 'constants.rake'
