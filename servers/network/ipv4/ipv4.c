@@ -67,7 +67,7 @@ static void interface_add(ipv4_interface_type *interface,
     mutex_wait(interface_list_mutex);
     entry->next = (struct ipv4_interface_list_type *) interface_list;
     interface_list = entry;
-    mutex_signal(interface_list_mutex);
+    mutex_signal(&interface_list_mutex);
 }
 
 /* Get the interface matching the given identification. */
@@ -83,14 +83,14 @@ static ipv4_interface_type *interface_get(char *identification)
     {
         if (string_compare(entry->interface->identification, identification) == 0)
         {
-            mutex_signal(interface_list_mutex);
+            mutex_signal(&interface_list_mutex);
             return entry->interface;
         }
 
         entry = (ipv4_interface_list_type *) entry->next;
     }
 
-    mutex_signal(interface_list_mutex);
+    mutex_signal(&interface_list_mutex);
 
     return NULL;
 }
@@ -111,7 +111,7 @@ static unsigned int interface_get_amount(void)
         entry = (ipv4_interface_list_type *) entry->next;
     }
 
-    mutex_signal(interface_list_mutex);
+    mutex_signal(&interface_list_mutex);
 
     return counter;
 }
@@ -132,7 +132,7 @@ static ipv4_interface_type *interface_get_number(unsigned int number)
         entry = (ipv4_interface_list_type *) entry->next;
     }
 
-    mutex_signal(interface_list_mutex);
+    mutex_signal(&interface_list_mutex);
     if (entry == NULL)
     {
         return NULL;
@@ -211,8 +211,10 @@ void ipv4_header_create(u32 destination_address, u32 source_address,
 
 /* Handle an IPC connection request. */
 
-static void handle_connection(mailbox_id_type reply_mailbox_id)
+static void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
+    system_thread_name_set("Handling connection");
+
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
@@ -224,7 +226,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
     /* Accept the connection. */
 
-    ipc_structure.output_mailbox_id = reply_mailbox_id;
+    ipc_structure.output_mailbox_id = *reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
     while (!done)
@@ -482,7 +484,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
 /* Handle the connection to the ethernet service. */
 
-static bool handle_ethernet(mailbox_id_type mailbox_id)
+static bool handle_ethernet(mailbox_id_type *mailbox_id)
 {
     ipc_structure_type *ethernet_structure;
     ipc_structure_type **ethernet_structure_pointer = &ethernet_structure;
@@ -506,7 +508,7 @@ static bool handle_ethernet(mailbox_id_type mailbox_id)
 
     /* Connect to the ethernet service. */
 
-    ethernet_structure->output_mailbox_id = mailbox_id;
+    ethernet_structure->output_mailbox_id = *mailbox_id;
     if (ipc_service_connection_request(ethernet_structure) !=
             IPC_RETURN_SUCCESS)
     {
@@ -682,17 +684,7 @@ int main(void)
         {
             //      system_sleep (2000);
 
-            if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-            {
-                if (handle_ethernet(mailbox_id[index]))
-                {
-                    return 0;
-                }
-                else
-                {
-                    return -1;
-                }
-            }
+            system_thread_create((thread_entry_point_type *) handle_ethernet, &mailbox_id[index]);
         }
     }
 
@@ -719,11 +711,7 @@ int main(void)
         ipc_service_connection_wait(&ipc_structure);
         reply_mailbox_id = ipc_structure.output_mailbox_id;
 
-        if (system_thread_create() == SYSTEM_RETURN_THREAD_NEW)
-        {
-            system_thread_name_set("Handling connection");
-            handle_connection(reply_mailbox_id);
-        }
+        system_thread_create((thread_entry_point_type *) handle_connection, &reply_mailbox_id);
     }
 
     return 0;
