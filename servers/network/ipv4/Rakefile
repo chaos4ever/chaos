@@ -11,6 +11,14 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
+  ipc
+  ipv4
+  log
+  memory
+  random
+  time
+  string
+  system
 )
 
 OUTPUT = 'ipv4'

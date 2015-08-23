@@ -48,13 +48,13 @@ bool route_find(u32 address, ipv4_interface_type **interface,
 
     if (entry == NULL)
     {
-        mutex_signal(interface_list_mutex);
+        mutex_signal(&interface_list_mutex);
         return FALSE;
     }
 
     *interface = entry->interface;
     *ethernet_structure = entry->ethernet_structure;
-    mutex_signal(interface_list_mutex);
+    mutex_signal(&interface_list_mutex);
 
     *direct = FALSE;
     return TRUE;
