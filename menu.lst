@@ -8,6 +8,8 @@ module /servers/keyboard.gz
 module /servers/vga.gz
 module /programs/cluido.gz
 module /servers/log.gz
+module /servers/loopback.gz
+module /servers/ipv4.gz
 module /servers/virtual_file_system.gz
 module /servers/fat.gz
 module /servers/initial_ramdisk.gz
