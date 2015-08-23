@@ -18,6 +18,7 @@ servers/block/initial_ramdisk/ramdisk-auto.h
 servers/block/initial_ramdisk/ramdisk.image
 servers/file_system/fat/fat
 servers/file_system/virtual_file_system/virtual_file_system
+servers/network/ipv4/ipv4
 servers/network/loopback/loopback
 servers/system/boot/boot
 servers/system/console/console
