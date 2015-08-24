@@ -5,7 +5,9 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015 chaos development
 
-#include "config.h"
+#include <list/list.h>
+#include <memory/memory.h>
+
 #include "ipv4.h"
 #include "socket.h"
 #include "udp.h"
