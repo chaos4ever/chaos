@@ -4,7 +4,8 @@
 // © Copyright 1999-2000 chaos development
 // © Copyright 2015 chaos development
 
-#include "config.h"
+#include <memory/memory.h>
+
 #include "ipv4.h"
 #include "icmp.h"
 
