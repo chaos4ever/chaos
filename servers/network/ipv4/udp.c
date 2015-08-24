@@ -5,7 +5,9 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015 chaos development
 
+#include <list/list.h>
 #include <log/log.h>
+#include <memory/memory.h>
 #include <system/system.h>
 
 #include "arp.h"
