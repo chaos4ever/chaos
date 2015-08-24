@@ -1,9 +1,9 @@
-/* $Id$ */
-/* Abstract: A server for handling the Internet Protocol. (v4) */
-/* Author: Per Lundberg <per@halleluja.nu> */
-
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+// Abstract: A server for handling the Internet Protocol. (v4)
+// Author: Per Lundberg <per@halleluja.nu>
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2015 chaos development
 
 #include "config.h"
 #include "arp.h"
@@ -15,45 +15,37 @@
 #include "tcp.h"
 #include "udp.h"
 
-/* Globals. */
-
+// Globals.
 log_structure_type log_structure;
 ipv4_interface_list_type *interface_list = NULL;
 mutex_type interface_list_mutex = MUTEX_UNLOCKED;
 u8 ethernet_broadcast[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
-/* Locals. */
-
+// Locals.
 static ipv4_protocol_type ipv4_protocol[] =
 {
     { &icmp_packet_receive, IP_PROTOCOL_ICMP },
     { &tcp_packet_receive, IP_PROTOCOL_TCP },
     { &udp_packet_receive, IP_PROTOCOL_UDP },
 
-    /* This must be here to tell where the saga ends. */
-
+    // This must be here to tell where the saga ends.
     { NULL, 0 }
 };
 
 static char host_name[IPV4_HOST_NAME_LENGTH] = "localhost";
 
-/* An empty tag list. */
-
+// An empty tag list.
 static tag_type empty_tag =
 {
     0, 0, ""
 };
 
-/* FIXME: This is awkward... */
-
+// FIXME: This is awkward...
 static volatile unsigned int interface_counter = 0;
 
-/* Add an interface to the list of interfaces. This function does NOT
-   make a copy of the interface; it generates a reference to the
-   already existing one. */
-
-static void interface_add(ipv4_interface_type *interface,
-                          ipc_structure_type *ethernet_structure)
+// Add an interface to the list of interfaces. This function does NOT make a copy of the interface; it generates a reference to
+// the already existing one.
+static void interface_add(ipv4_interface_type *interface, ipc_structure_type *ethernet_structure)
 {
     ipv4_interface_list_type *entry;
     ipv4_interface_list_type **entry_pointer = &entry;
@@ -62,16 +54,14 @@ static void interface_add(ipv4_interface_type *interface,
     entry->interface = interface;
     entry->ethernet_structure = ethernet_structure;
 
-    /* Add this entry into the list. */
-
+    // Add this entry into the list.
     mutex_wait(interface_list_mutex);
     entry->next = (struct ipv4_interface_list_type *) interface_list;
     interface_list = entry;
     mutex_signal(&interface_list_mutex);
 }
 
-/* Get the interface matching the given identification. */
-
+// Get the interface matching the given identification.
 static ipv4_interface_type *interface_get(char *identification)
 {
     ipv4_interface_list_type *entry;
@@ -95,8 +85,7 @@ static ipv4_interface_type *interface_get(char *identification)
     return NULL;
 }
 
-/* Get the amount of interfaces used. */
-
+// Get the amount of interfaces used.
 static unsigned int interface_get_amount(void)
 {
     ipv4_interface_list_type *entry;
@@ -116,8 +105,7 @@ static unsigned int interface_get_amount(void)
     return counter;
 }
 
-/* Get the data for the given interface number. */
-
+// Get the data for the given interface number.
 static ipv4_interface_type *interface_get_number(unsigned int number)
 {
     ipv4_interface_list_type *entry;
@@ -143,15 +131,13 @@ static ipv4_interface_type *interface_get_number(unsigned int number)
     }
 }
 
-/* Calculate the IP checksum for an IP header. */
-
+// Calculate the IP checksum for an IP header.
 u16 ipv4_checksum(u16 *data, unsigned int length)
 {
     u32 sum = 0;
     unsigned int index;
 
-    /* If we have an odd length, fill the last byte with a zero. */
-
+    // If we have an odd length, fill the last byte with a zero.
     if (length % 2 != 0)
     {
         ((u8 *) data)[length] = 0;
@@ -172,22 +158,17 @@ u16 ipv4_checksum(u16 *data, unsigned int length)
     return ((~sum) & 0x0000FFFF);
 }
 
-/* Create an ethernet header. */
-
-void ipv4_ethernet_header_create(void *destination_address,
-                                 void *source_address,
-                                 u16 protocol_type,
-                                 ipv4_ethernet_header_type *ethernet_header)
+// Create an ethernet header.
+void ipv4_ethernet_header_create(void *destination_address, void *source_address,
+                                 u16 protocol_type, ipv4_ethernet_header_type *ethernet_header)
 {
     memory_copy(ethernet_header->destination_address, destination_address, 6);
     memory_copy(ethernet_header->source_address, source_address, 6);
     ethernet_header->protocol_type = system_byte_swap_u16(protocol_type);
 }
 
-/* Create an IPv4 header. */
-
-void ipv4_header_create(u32 destination_address, u32 source_address,
-                        u8 protocol_type, unsigned int length,
+// Create an IPv4 header.
+void ipv4_header_create(u32 destination_address, u32 source_address, u8 protocol_type, unsigned int length,
                         ipv4_header_type *ipv4_header)
 {
     ipv4_header->destination_address = destination_address;
@@ -203,14 +184,11 @@ void ipv4_header_create(u32 destination_address, u32 source_address,
     ipv4_header->fragment_offset = 0;
     ipv4_header->checksum = 0;
 
-    /* Calculate the header checksum. */
-
-    ipv4_header->checksum = ipv4_checksum((u16 *) ipv4_header,
-                                          sizeof(ipv4_header_type));
+    // Calculate the header checksum. */
+    ipv4_header->checksum = ipv4_checksum((u16 *) ipv4_header, sizeof(ipv4_header_type));
 }
 
-/* Handle an IPC connection request. */
-
+// Handle an IPC connection request.
 static void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
     system_thread_name_set("Handling connection");
@@ -224,8 +202,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 
     memory_allocate((void **) data_pointer, data_size);
 
-    /* Accept the connection. */
-
+    // Accept the connection.
     ipc_structure.output_mailbox_id = *reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
@@ -237,26 +214,22 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
         message_parameter.length = data_size;
         message_parameter.block = TRUE;
 
-        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter,
-                        &data_size) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter, &data_size) != IPC_RETURN_SUCCESS)
         {
             continue;
         }
 
         switch (message_parameter.message_class)
         {
-                /* Configure this IPv4 interface according to the parameters
-                   given. */
-
+            // Configure this IPv4 interface according to the parameters given.
             case IPC_IPV4_INTERFACE_CONFIGURE:
             {
                 ipv4_interface_type *new_interface = (ipv4_interface_type *) data;
-                ipv4_interface_type *interface =
-                    interface_get(new_interface->identification);
+                ipv4_interface_type *interface = interface_get(new_interface->identification);
 
                 if (interface == NULL)
                 {
-                    /* FIXME: Notify the other end about this. */
+                    // FIXME: Notify the other end about this.
                 }
                 else
                 {
@@ -267,7 +240,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                     {
                         if (interface->up)
                         {
-                            /* TODO. */
+                            // TODO.
 
                             //            dhcp_assign (interface, &ethernet_structure);
 
@@ -286,8 +259,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Get information about this interface. */
-
+            // Get information about this interface.
             case IPC_IPV4_INTERFACE_QUERY:
             {
                 char *identification = (char *) data;
@@ -309,9 +281,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Get information about the number of interfaces currently in
-               use. */
-
+            // Get information about the number of interfaces currently in use.
             case IPC_IPV4_INTERFACE_GET_AMOUNT:
             {
                 unsigned int amount = interface_get_amount();
@@ -324,8 +294,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Get information about the interface with the given number. */
-
+            // Get information about the interface with the given number.
             case IPC_IPV4_INTERFACE_GET_NUMBER:
             {
                 unsigned int *number = (unsigned int *) data;
@@ -339,12 +308,10 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Set/get host name. */
-
+            // Set/get host name.
             case IPC_IPV4_SET_HOST_NAME:
             {
-                string_copy_max(host_name, message_parameter.data,
-                                IPV4_HOST_NAME_LENGTH);
+                string_copy_max(host_name, message_parameter.data, IPV4_HOST_NAME_LENGTH);
                 break;
             }
 
@@ -356,8 +323,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Connect to a remote host. */
-
+            // Connect to a remote host.
             case IPC_IPV4_CONNECT:
             {
                 ipv4_connect_type *connect = (ipv4_connect_type *) data;
@@ -371,9 +337,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Change the target address and/or port of a given
-               socket. (Only works with UDP) */
-
+            // Change the target address and/or port of a given socket. (Only works with UDP)
             case IPC_IPV4_RECONNECT:
             {
                 ipv4_reconnect_type *reconnect = (ipv4_reconnect_type *) data;
@@ -388,29 +352,24 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Listen for incoming connections on the given port (in the
-               case of TCP), or incoming data (in the case of UDP). */
-
+            // Listen for incoming connections on the given port (in the case of TCP), or incoming data (in the case of UDP).
             case IPC_IPV4_LISTEN:
             {
                 break;
             }
 
-            /* Send data to the given socket. */
-
+            // Send data to the given socket.
             case IPC_IPV4_SEND:
             {
                 ipv4_send_type *send = (ipv4_send_type *) data;
 
                 socket_send(send->socket_id, send->length, &send->data);
 
-                /* FIXME: ACK or NACK. */
-
+                // FIXME: ACK or NACK.
                 break;
             }
 
-            /* Read data from the given socket. */
-
+            // Read data from the given socket.
             case IPC_IPV4_RECEIVE:
             {
                 ipv4_socket_id_type *socket_id = (ipv4_socket_id_type *) data;
@@ -419,8 +378,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Set flags in the IPv4 server. */
-
+            // Set flags in the IPv4 server.
             case IPC_IPV4_SET_FLAGS:
             {
                 unsigned int *flags = (unsigned int *) data;
@@ -437,8 +395,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Get flags. */
-
+            // Get flags.
             case IPC_IPV4_GET_FLAGS:
             {
                 unsigned int flags = 0;
@@ -454,8 +411,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                 break;
             }
 
-            /* Read information about/from the ARP table. */
-
+            // Read information about/from the ARP table.
             case IPC_IPV4_ARP_GET_AMOUNT:
             {
                 unsigned int amount = arp_get_number_of_entries();
@@ -482,8 +438,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     }
 }
 
-/* Handle the connection to the ethernet service. */
-
+// Handle the connection to the ethernet service.
 static bool handle_ethernet(mailbox_id_type *mailbox_id)
 {
     ipc_structure_type *ethernet_structure;
@@ -502,23 +457,18 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
 
     memory_set_u8((u8 *) interface, 0, sizeof(ipv4_interface_type));
 
-    /* Set name. */
-
+    // Set name.
     system_thread_name_set("Ethernet packet handler");
 
-    /* Connect to the ethernet service. */
-
+    // Connect to the ethernet service.
     ethernet_structure->output_mailbox_id = *mailbox_id;
-    if (ipc_service_connection_request(ethernet_structure) !=
-            IPC_RETURN_SUCCESS)
+    if (ipc_service_connection_request(ethernet_structure) != IPC_RETURN_SUCCESS)
     {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY,
-                  "Couldn't connect to ethernet service.");
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "Couldn't connect to ethernet service.");
         return FALSE;
     }
 
-    /* Read the ethernet hardware address. */
-
+    // Read the ethernet hardware address.
     message_parameter.length = 0;
     message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
     message_parameter.message_class = IPC_ETHERNET_ADDRESS_GET;
@@ -527,11 +477,9 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     ipc_send(ethernet_structure->output_mailbox_id, &message_parameter);
     message_parameter.data = &interface->hardware_address;
     message_parameter.length = IPV4_ETHERNET_ADDRESS_LENGTH;
-    ipc_receive(ethernet_structure->input_mailbox_id, &message_parameter,
-                NULL);
+    ipc_receive(ethernet_structure->input_mailbox_id, &message_parameter, NULL);
 
-    /* Request ourselves as receiver of IPv4 packets. */
-
+    // Request ourselves as receiver of IPv4 packets.
     message_parameter.message_class = IPC_ETHERNET_REGISTER_TARGET;
     message_parameter.length = 4;
     message_parameter.data = data;
@@ -539,29 +487,25 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     data[0] = IPV4_ETHERNET_PROTOCOL_IPV4;
     ipc_send(ethernet_structure->output_mailbox_id, &message_parameter);
 
-    /* ...and ARP. */
-
+    // ...and ARP.
     data[0] = IPV4_ETHERNET_PROTOCOL_ARP;
     ipc_send(ethernet_structure->output_mailbox_id, &message_parameter);
 
-    /* FIXME: Handle this in a better way. */
-
+    // FIXME: Handle this in a better way.
     string_print(interface->identification, "ethernet%u", interface_counter);
     interface_counter++;
     interface_add(interface, ethernet_structure);
 
     message_parameter.block = TRUE;
 
-    /* Read and process ethernet packets. */
-
+    // Read and process ethernet packets.
     while (!done)
     {
         message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
         message_parameter.message_class = IPC_CLASS_NONE;
         message_parameter.length = data_size;
 
-        if (ipc_receive(ethernet_structure->input_mailbox_id, &message_parameter,
-                        &data_size) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(ethernet_structure->input_mailbox_id, &message_parameter, &data_size) != IPC_RETURN_SUCCESS)
         {
             continue;
         }
@@ -570,61 +514,47 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
         {
             case IPC_ETHERNET_PACKET_RECEIVED:
             {
-                ipv4_ethernet_header_type *ethernet_header =
-                    (ipv4_ethernet_header_type *) data;
+                ipv4_ethernet_header_type *ethernet_header = (ipv4_ethernet_header_type *) data;
 
                 switch (system_byte_swap_u16(ethernet_header->protocol_type))
                 {
-                        /* ARP packet. */
-
+                    // ARP packet.
                     case IPV4_ETHERNET_PROTOCOL_ARP:
                     {
-                        arp_packet_receive(interface, ethernet_header,
-                                           message_parameter.length,
-                                           ethernet_structure->output_mailbox_id);
+                        arp_packet_receive(interface, ethernet_header, message_parameter.length, ethernet_structure->output_mailbox_id);
                         break;
                     }
 
-                    /* IPv4 packet. */
-
+                    // IPv4 packet.
                     case IPV4_ETHERNET_PROTOCOL_IPV4:
                     {
                         int index;
-                        ipv4_header_type *ipv4_header =
-                            (ipv4_header_type *) &ethernet_header->data;
+                        ipv4_header_type *ipv4_header = (ipv4_header_type *) &ethernet_header->data;
 
                         if (!interface->up)
                         {
                             break;
                         }
 
-                        /* It could be to our broadcast or IP address. */
-
+                        // It could be to our broadcast or IP address.
                         if ((ipv4_header->destination_address & ~interface->netmask) == 0 ||
                                 (ipv4_header->destination_address & ~interface->netmask) == ~interface->netmask ||
                                 interface->ip_address == ipv4_header->destination_address)
                         {
-                            /* Check if there's a function specified to take care of
-                               this protocol. */
-
-                            for (index = 0; ipv4_protocol[index].function != NULL;
-                                    index++)
+                            // Check if there's a function specified to take care of this protocol.
+                            for (index = 0; ipv4_protocol[index].function != NULL; index++)
                             {
                                 if (ipv4_protocol[index].type == ipv4_header->protocol)
                                 {
-                                    ipv4_protocol[index].function
-                                    (interface, ethernet_header,
-                                     message_parameter.length,
-                                     ethernet_structure->output_mailbox_id);
+                                    ipv4_protocol[index].function(interface, ethernet_header, message_parameter.length,
+                                                                  ethernet_structure->output_mailbox_id);
                                     break;
                                 }
                             }
                         }
 
-                        /* Check if this packet is destined for the IP address of
-                           this interface. If it's not, we may forward or drop
-                           it. */
-
+                        // Check if this packet is destined for the IP address of this interface. If it's not, we may forward or
+                        // drop it.
                         else
                         {
                             forward_packet(ethernet_header, message_parameter.length);
@@ -640,8 +570,7 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     return TRUE;
 }
 
-/* Main function */
-
+// Main function
 int main(void)
 {
     ipc_structure_type ipc_structure;
@@ -654,31 +583,25 @@ int main(void)
     system_call_timer_read((time_type *) &seed);
     random_init(seed);
 
-    /* Initialise the different subsystems of the server. */
-
+    // Initialise the different subsystems of the server.
     socket_init();
     udp_init();
 
-    /* Set our name and create the service. */
-
+    // Set our name and create the service.
     system_process_name_set("ipv4");
     system_thread_name_set("Initialising");
 
-    /* Wait for cards to probe. FIXME: Remove this. */
+    // Wait for cards to probe. FIXME: Remove this.
 
     //  system_sleep (2000);
 
     log_init(&log_structure, PACKAGE_NAME, &empty_tag);
 
-    /* Check if we have some available ethernet services. */
-
-    if (ipc_service_resolve("ethernet", mailbox_id, &services, 0,
-                            &empty_tag) == IPC_RETURN_SUCCESS)
+    // Check if we have some available ethernet services.
+    if (ipc_service_resolve("ethernet", mailbox_id, &services, 0, &empty_tag) == IPC_RETURN_SUCCESS)
     {
-        /* Create one thread per service. */
-
-        log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
-                            "Found %u ethernet interfaces.", services);
+        // Create one thread per service.
+        log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Found %u ethernet interfaces.", services);
 
         for (index = 0; index < services; index++)
         {
@@ -688,17 +611,13 @@ int main(void)
         }
     }
 
-    /* Now, handle the service. */
-
+    // Now, handle the service.
     system_thread_name_set("Service handler");
 
-    /* Create a service. */
-
-    if (ipc_service_create("ipv4", &ipc_structure, &empty_tag) !=
-            IPC_RETURN_SUCCESS)
+    // Create a service.
+    if (ipc_service_create("ipv4", &ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
     {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY,
-                  "Couldn't create ipv4 service.");
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "Couldn't create ipv4 service.");
         return -1;
     }
 
