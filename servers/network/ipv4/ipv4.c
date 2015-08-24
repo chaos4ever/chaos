@@ -5,7 +5,10 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015 chaos development
 
-#include "config.h"
+#include <memory/memory.h>
+#include <random/random.h>
+#include <string/string.h>
+
 #include "arp.h"
 #include "dhcp.h"
 #include "forward.h"
@@ -595,7 +598,7 @@ int main(void)
 
     //  system_sleep (2000);
 
-    log_init(&log_structure, PACKAGE_NAME, &empty_tag);
+    log_init(&log_structure, "ipv4", &empty_tag);
 
     // Check if we have some available ethernet services.
     if (ipc_service_resolve("ethernet", mailbox_id, &services, 0, &empty_tag) == IPC_RETURN_SUCCESS)
