@@ -4,6 +4,8 @@
 // © Copyright 2000 chaos development
 // © Copyright 2015 chaos development
 
+#include <memory/memory.h>
+
 #include "arp.h"
 #include "forward.h"
 #include "ipv4.h"

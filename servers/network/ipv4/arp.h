@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <ipv4/ipv4.h>
 #include <system/system.h>
 
 typedef struct

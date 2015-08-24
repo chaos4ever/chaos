@@ -5,6 +5,9 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015 chaos development
 
+#include <memory/memory.h>
+#include <random/random.h>
+
 #include "ipv4.h"
 #include "udp.h"
 #include "dhcp.h"
