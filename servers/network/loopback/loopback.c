@@ -114,6 +114,9 @@ int main(void)
     // Main loop.
     system_call_thread_name_set("Service handler");
 
+    // All set; we can now let the next available server run its initialisation sequence.
+    system_call_process_parent_unblock();
+
     while (TRUE)
     {
         mailbox_id_type reply_mailbox_id;
