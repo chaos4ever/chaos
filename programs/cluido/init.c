@@ -83,6 +83,9 @@ Some Emacs compatible bindings (C-a, C-e, etc) are available, and also some\n\
 DOS:ish ones (Home, End, arrows). You can go back and forth in the command\n\
 history with the up and down arrows.\n\n");
 
+    // We may be running as a "service" until the boot server has been fixed, so for now, let's unblock the next server.
+    system_call_process_parent_unblock();
+
     main_loop();
     return 0;
 }
