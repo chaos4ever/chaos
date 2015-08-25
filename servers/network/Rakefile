@@ -1,17 +1,9 @@
-Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
+Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w(
-  block
-  file_system
-  network
-  system
-  video
+  ipv4 
+  loopback
 )
-
-# These haven't been upgraded to work w/ Rake yet.
-# system
-# sound
-# other
 
 task :default => subfolders do |t|
   t.prerequisites.each do |folder|

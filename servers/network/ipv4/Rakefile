@@ -1,0 +1,28 @@
+OBJECTS = %w(
+  arp.o
+  dhcp.o
+  forward.o
+  icmp.o
+  ipv4.o
+  route.o
+  socket.o
+  tcp.o
+  udp.o
+)
+
+EXTRA_LDFLAGS = '-lgcc'
+LIBRARIES = %w(
+  ipc
+  ipv4
+  list
+  log
+  memory
+  random
+  string
+  system
+  time
+)
+
+OUTPUT = 'ipv4'
+
+load '../../servers.rake'

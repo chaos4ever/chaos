@@ -1,0 +1,15 @@
+OBJECTS = %w(
+  loopback.o
+)
+
+LIBRARIES = %w(
+  ipc
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'loopback'
+
+load '../../servers.rake'

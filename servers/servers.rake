@@ -36,12 +36,14 @@ CFLAGS = (COMMON_CFLAGS + %w(
   -Wstrict-prototypes
 )).join(' ')
 
+EXTRA_LDFLAGS ||= ''
 LDFLAGS = %W(
   #{LIBRARIES_DIR}/startup.o
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32
   -L#{LIBRARIES_DIR}
+  #{EXTRA_LDFLAGS}
 )
 
 LIBRARY_FILES = LIBRARIES.map { |l| "#{LIBRARIES_DIR}/lib#{l}.a" }
