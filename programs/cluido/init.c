@@ -63,10 +63,10 @@ you for your time and interest in the project.\n");
 
     console_print(&console_structure, "\
 \n\
-\e[1mcluido version 0.0.1, Copyright (C) 1998-2000 chaos development.\n\
+\e[1mcluido version 0.0.2, Copyright (c) 1998-2000, 2015 chaos development.\n\
 cluido and the rest of chaos comes with ABSOLUTELY NO WARRANTY.\n\
-This is free software, and you are welcome to redistribute it under\n\
-certain conditions; see the GNU GPL for details.\e[0;44m\n");
+chaos is free software, and you are welcome to redistribute it under\n\
+certain conditions; see the README.md file for details.\e[0;44m\n");
 
     console_print(&console_structure, "\
 \n\
