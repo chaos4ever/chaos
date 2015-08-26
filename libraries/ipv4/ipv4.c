@@ -16,7 +16,7 @@ return_type ipv4_init(ipc_structure_type *ipv4_structure, tag_type *tag)
     unsigned int services = 10;
 
     // Try to resolve the IPv4 service.
-    if (ipc_service_resolve("ipv4", mailbox_id, &services, 0, tag) != IPC_RETURN_SUCCESS)
+    if (ipc_service_resolve("ipv4", mailbox_id, &services, 5, tag) != IPC_RETURN_SUCCESS)
     {
         return IPV4_RETURN_SERVICE_UNAVAILABLE;
     }
