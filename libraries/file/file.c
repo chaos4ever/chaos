@@ -15,7 +15,7 @@ return_type file_init(ipc_structure_type *vfs_structure, tag_type *tag)
     mailbox_id_type mailbox_id[10];
     unsigned int services = 10;
 
-    if (ipc_service_resolve("virtual_file_system", mailbox_id, &services, 0, tag) != IPC_RETURN_SUCCESS)
+    if (ipc_service_resolve("virtual_file_system", mailbox_id, &services, 5, tag) != IPC_RETURN_SUCCESS)
     {
         return FILE_RETURN_SERVICE_UNAVAILABLE;
     }

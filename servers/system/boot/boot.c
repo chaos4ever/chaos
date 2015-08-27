@@ -40,8 +40,7 @@ int main(void)
     system_process_name_set(PACKAGE_NAME);
     system_thread_name_set("Initialising");
 
-    if (log_init(&log_structure, PACKAGE_NAME, &empty_tag) !=
-        LOG_RETURN_SUCCESS)
+    if (log_init(&log_structure, PACKAGE_NAME, &empty_tag) != LOG_RETURN_SUCCESS)
     {
         return -1;
     }
