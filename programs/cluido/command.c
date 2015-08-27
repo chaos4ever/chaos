@@ -57,6 +57,8 @@ void command_unset(int number_of_arguments, char **argument);
 void command_uptime(int number_of_arguments, char **argument);
 void command_version(int number_of_arguments, char **argument);
 
+static u32 get_total_number_of_timeslices(void);
+
 // Structure for holding a list of all the commands, and which functions they correspond to.
 command_type command[] =
 {
@@ -1203,10 +1205,12 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
     system_call_kernelfs_entry_read(&processes);
     console_print_formatted(&console_structure,
                             "%-8s %-8s %-8s %-8s %-8s %-15s %-15s\n",
-                            "Process", "Thread", "Time", "Memory", "IP",
+                            "Process", "Thread", "Time (%)", "Memory", "IP",
                             "Process name", "Thread name");
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO_VERBOSE;
+
+    u32 total_number_of_timeslices = get_total_number_of_timeslices();
 
     for (kernelfs_process_info.process_number = 0;
          kernelfs_process_info.process_number < processes;
@@ -1227,7 +1231,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
                                     "%-8lu %-8lu %-8lu %-8lu %08lX %-15s %-15s\n",
                                     kernelfs_thread_info.process_id,
                                     kernelfs_thread_info.thread_id,
-                                    (u32) kernelfs_thread_info.timeslices,
+                                    (u32) (kernelfs_thread_info.timeslices * 100) / total_number_of_timeslices,
                                     kernelfs_thread_info.main_memory / 1024,
                                     /* kernelfs_thread_info.stack_memory / 1024, */
                                     kernelfs_thread_info.instruction_pointer,
@@ -1235,6 +1239,13 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
                                     kernelfs_thread_info.thread_name);
         }
     }
+}
+
+static u32 get_total_number_of_timeslices(void)
+{
+    u32 number_of_timeslices = KERNELFS_CLASS_NUMBER_OF_TIMESLICES;
+    system_call_kernelfs_entry_read(&number_of_timeslices);
+    return number_of_timeslices;
 }
 
 // Unset an environment variable.
