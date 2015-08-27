@@ -179,8 +179,6 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
                 {
                     if (thread == thread_info->thread_number)
                     {
-                        //            string_copy (thread_info->process_name,
-                        //                         tss_node->tss->process_name);
                         string_copy(thread_info->thread_name, tss_node->tss->thread_name);
 
                         thread_info->thread_id = tss_node->tss->thread_id;
