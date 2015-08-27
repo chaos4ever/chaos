@@ -100,7 +100,6 @@ typedef struct
     u32 main_memory;
     u32 stack_memory;
 
-    char process_name[MAX_PROCESS_NAME_LENGTH];
     char thread_name[MAX_THREAD_NAME_LENGTH];
 
     // The current instruction pointer of the thread.
