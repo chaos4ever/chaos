@@ -278,6 +278,25 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
             break;
         }
 
+        case KERNELFS_CLASS_NUMBER_OF_TIMESLICES:
+        {
+          u32 *number_of_timeslices = (u32 *) kernelfs_generic;
+          *number_of_timeslices = 0;
+
+          mutex_kernel_wait(&tss_tree_mutex);
+
+          tss_list_type *tss_node = tss_list;
+
+          while (tss_node != NULL)
+          {
+              *number_of_timeslices += tss_node->tss->timeslices;
+              tss_node = (tss_list_type *) tss_node->next;
+          }
+
+          mutex_kernel_signal(&tss_tree_mutex);
+          break;
+        }
+
         // Get the number of CPUs installed in the system.
         case KERNELFS_CLASS_CPU_AMOUNT:
         {
