@@ -99,6 +99,12 @@ int number_of_commands = (sizeof(command) / sizeof(command_type));
 // Show the entries in the ARP table.
 void command_arp(int number_of_arguments UNUSED, char **argument UNUSED)
 {
+    if (!has_net)
+    {
+      console_print_formatted(&console_structure, "\nNetworking is not available. Is the 'ipv4' server running?\n\n");
+      return;
+    }
+
     message_parameter_type message_parameter;
     int amount;
     int counter;
@@ -488,6 +494,12 @@ void command_help(int number_of_arguments, char **argument)
 // Configure IP networking.
 void command_ip(int number_of_arguments, char **argument)
 {
+    if (!has_net)
+    {
+      console_print_formatted(&console_structure, "\nNetworking is not available. Is the 'ipv4' server running?\n\n");
+      return;
+    }
+
     // If no arguments are given, print information about the current interfaces.
     if (number_of_arguments == 1)
     {
