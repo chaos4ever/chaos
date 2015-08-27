@@ -1221,7 +1221,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
              kernelfs_thread_info.thread_number++)
         {
             system_call_kernelfs_entry_read(&kernelfs_thread_info);
-            kernelfs_thread_info.process_name[15] = '\0';
+            kernelfs_process_info.name[15] = '\0';
             kernelfs_thread_info.thread_name[15] = '\0';
             console_print_formatted(&console_structure,
                                     "%-8lu %-8lu %-8lu %-8lu %08lX %-15s %-15s\n",
@@ -1231,7 +1231,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
                                     kernelfs_thread_info.main_memory / 1024,
                                     /* kernelfs_thread_info.stack_memory / 1024, */
                                     kernelfs_thread_info.instruction_pointer,
-                                    kernelfs_thread_info.process_name,
+                                    kernelfs_process_info.name,
                                     kernelfs_thread_info.thread_name);
         }
     }
