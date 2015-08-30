@@ -57,6 +57,9 @@ void command_unset(int number_of_arguments, char **argument);
 void command_uptime(int number_of_arguments, char **argument);
 void command_version(int number_of_arguments, char **argument);
 
+static u32 get_total_number_of_timeslices(void);
+static void get_time_display_value(char *str, u32 timeslices, u32 total_timeslices);
+
 // Structure for holding a list of all the commands, and which functions they correspond to.
 command_type command[] =
 {
@@ -1203,10 +1206,12 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
     system_call_kernelfs_entry_read(&processes);
     console_print_formatted(&console_structure,
                             "%-8s %-8s %-8s %-8s %-8s %-15s %-15s\n",
-                            "Process", "Thread", "Time", "Memory", "IP",
+                            "Process", "Thread", "Time (%)", "Memory", "IP",
                             "Process name", "Thread name");
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO_VERBOSE;
+
+    u32 total_number_of_timeslices = get_total_number_of_timeslices();
 
     for (kernelfs_process_info.process_number = 0;
          kernelfs_process_info.process_number < processes;
@@ -1223,11 +1228,13 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
             system_call_kernelfs_entry_read(&kernelfs_thread_info);
             kernelfs_process_info.name[15] = '\0';
             kernelfs_thread_info.thread_name[15] = '\0';
+            char time_display_value[16];
+            get_time_display_value(time_display_value, kernelfs_thread_info.timeslices, total_number_of_timeslices);
             console_print_formatted(&console_structure,
-                                    "%-8lu %-8lu %-8lu %-8lu %08lX %-15s %-15s\n",
+                                    "%-8lu %-8lu %-8s %-8lu %08lX %-15s %-15s\n",
                                     kernelfs_thread_info.process_id,
                                     kernelfs_thread_info.thread_id,
-                                    (u32) kernelfs_thread_info.timeslices,
+                                    time_display_value,
                                     kernelfs_thread_info.main_memory / 1024,
                                     /* kernelfs_thread_info.stack_memory / 1024, */
                                     kernelfs_thread_info.instruction_pointer,
@@ -1235,6 +1242,21 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
                                     kernelfs_thread_info.thread_name);
         }
     }
+}
+
+static u32 get_total_number_of_timeslices(void)
+{
+    u32 number_of_timeslices = KERNELFS_CLASS_NUMBER_OF_TIMESLICES;
+    system_call_kernelfs_entry_read(&number_of_timeslices);
+    return number_of_timeslices;
+}
+
+static void get_time_display_value(char *str, u32 timeslices, u32 total_timeslices)
+{
+    // Easy way to get around the fact that we do not have FPU support at the moment... do it using integer calculation instead. :)
+    u32 time_integer_part = (u32) (((u64) timeslices * 100) / total_timeslices);
+    u32 time_fraction_part = (u32) (((u64) timeslices * 100 * 100) / total_timeslices) - time_integer_part * 100;
+    string_print(str, "%lu.%lu", time_integer_part, time_fraction_part);
 }
 
 // Unset an environment variable.
