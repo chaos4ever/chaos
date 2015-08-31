@@ -1,6 +1,6 @@
 Vagrant.configure(2) do |config|
   config.vm.provider :parallels do |vb, override|
-    override.vm.box = 'puphpet/debian75-x64'
+    override.vm.box = 'puphpet/debian75-x32'
   end
 
   config.vm.provider :virtualbox do |vb, override|
