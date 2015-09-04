@@ -9,6 +9,7 @@ Vagrant.configure(2) do |config|
       cmake \
       dosfstools \
       gcc-multilib \
+      gdb \
       genisoimage \
       git \
       grub-legacy \
