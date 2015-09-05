@@ -9,6 +9,17 @@ rule '.o' => [ '.c' ] do |t|
   end
 end
 
+rule '.o' => [ '.rs' ] do |t|
+  begin
+    print((t.source + ' ').cyan)
+    command = "#{RUSTC} #{RUSTCFLAGS} --crate-type lib -o #{t.name} --emit obj #{t.source}"
+    sh command
+  rescue
+    puts "Error compiling #{t.source}. Full command line was: #{command}"
+    raise
+  end
+end
+
 rule '.o' => [ '.S' ] do |t|
   begin
     print((t.source + ' ').cyan)

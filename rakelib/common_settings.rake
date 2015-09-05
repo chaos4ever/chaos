@@ -8,6 +8,8 @@ when 'Darwin' then
 else
   CC = ENV['CC'] || 'gcc-4.7'
   AR = ENV['AR'] || 'ar'
+  RUSTC = 'rustc'
+  RUSTCFLAGS = '-O -C code-model=kernel -C relocation-model=static'
 end
 
 # Can always use plain nasm, since even the OSX version can produce ELF images.
