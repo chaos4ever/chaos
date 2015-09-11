@@ -85,8 +85,6 @@ The code in the following directories/files are to be treated as licensed under 
 
 * [libraries/string/inlines.h](libraries/string/inlines.h) (should be fixed).
 * servers/system/pci
-* servers/network/3c509
-* servers/network/ne2000
 * [storm/ia32/cpuid.c](storm/ia32/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
 
 We encourage code that is written for chaos (servers, programs, libraries) to use the license below. This license allows us, and anyone else for that matter, to use your code freely, incorporate it in future versions of chaos and similar. However, unlike with the GNU GPL, we don't force this choice upon you. The freedom is yours. Use it wisely.
