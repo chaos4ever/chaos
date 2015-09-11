@@ -106,7 +106,7 @@
 /* DEVSEL timing. */
 
 #define  PCI_STATUS_DEVSEL_MASK         0x600
-#define  PCI_STATUS_DEVSEL_FAST         0x000	
+#define  PCI_STATUS_DEVSEL_FAST         0x000
 #define  PCI_STATUS_DEVSEL_MEDIUM       0x200
 #define  PCI_STATUS_DEVSEL_SLOW         0x400
 
@@ -796,7 +796,7 @@
 /* The PCI interface treats multi-function devices as independent
    devices.  The slot/function address of each device is encoded in a
    single byte as follows:
- 
+
      Bit 7-3: slot
      Bit 2-0: function */
 
@@ -808,7 +808,7 @@
   ((device_function) & 0x07)
 
 /* For PCI devices, the region numbers are assigned this way:
- 
+
  	0-5	standard PCI regions.
  	6	expansion ROM.
  	7-10    bridges: address space assigned to buses behind the
@@ -816,148 +816,148 @@
 
 #define PCI_ROM_RESOURCE        6
 #define PCI_BRIDGE_RESOURCES    7
-  
+
 /* These bits of resource flags tell us the PCI region flags. */
 
 #define PCI_REGION_FLAG_MASK    0x0F
 
 typedef struct
 {
-  /* Node in list of buses. */
+    /* Node in list of buses. */
 
-  struct pci_bus_type *previous;
-  struct pci_bus_type *next;
+    struct pci_bus_type *previous;
+    struct pci_bus_type *next;
 
-  /* List of devices on this bus. */
+    /* List of devices on this bus. */
 
-  struct pci_device_type *devices;
+    struct pci_device_type *devices;
 
-  /* Bridge device as seen by parent. */
+    /* Bridge device as seen by parent. */
 
-  struct pci_device_type *self;
+    struct pci_device_type *self;
 
-  /* Bus number. */
-  
-  unsigned char	number;
+    /* Bus number. */
 
-  /* Number of primary bridge. */
+    unsigned char	number;
 
-  unsigned char	primary;
+    /* Number of primary bridge. */
 
-  /* Number of secondary bridge. */
+    unsigned char	primary;
 
-  unsigned char	secondary;
+    /* Number of secondary bridge. */
 
-  /* Max number of subordinate buses. */
+    unsigned char	secondary;
 
-  unsigned char	subordinate;
+    /* Max number of subordinate buses. */
 
-  /* Pointer to the PCI functions we should use when accessing this
-     bus. */
-  
-  struct pci_operation_type *operation;
+    unsigned char	subordinate;
 
-  char name[48];
-  u16 vendor_id;
-  u16 device_id;
+    /* Pointer to the PCI functions we should use when accessing this
+       bus. */
 
-  /* Serial number. */
+    struct pci_operation_type *operation;
 
-  unsigned int serial;
+    char name[48];
+    u16 vendor_id;
+    u16 device_id;
 
-  /* Plug & Play version. */
+    /* Serial number. */
 
-  unsigned char	pnpver;
+    unsigned int serial;
 
-  /* Product version. */
+    /* Plug & Play version. */
 
-  unsigned char	productver;
+    unsigned char	pnpver;
 
-  /* If zero - checksum passed. */
+    /* Product version. */
 
-  unsigned char	checksum;
-  unsigned char	pad1;
+    unsigned char	productver;
+
+    /* If zero - checksum passed. */
+
+    unsigned char	checksum;
+    unsigned char	pad1;
 } pci_bus_type;
 
 typedef struct
 {
-  /* Node in list of all PCI devices. */
+    /* Node in list of all PCI devices. */
 
-  struct pci_device_type *next;
-  struct pci_device_type *previous;
+    struct pci_device_type *next;
+    struct pci_device_type *previous;
 
-  /* Bus this device is on. */
+    /* Bus this device is on. */
 
-  pci_bus_type *bus;
+    pci_bus_type *bus;
 
-  /* Bus this device bridges to. */
+    /* Bus this device bridges to. */
 
-  pci_bus_type *subordinate;
-  
-  /* Encoded device & function index (7 bits device, 3 bits function). */
+    pci_bus_type *subordinate;
 
-  unsigned int device_function;
+    /* Encoded device & function index (7 bits device, 3 bits function). */
 
-  u16 vendor_id;
-  u16 device_id;
-  u16 subsystem_vendor_id;
-  u16 subsystem_device_id;
+    unsigned int device_function;
 
-  /* 3 bytes: (base, sub, prog-if) */
+    u16 vendor_id;
+    u16 device_id;
+    u16 subsystem_vendor_id;
+    u16 subsystem_device_id;
 
-  u32 class;
+    /* 3 bytes: (base, sub, prog-if) */
 
-  /* PCI header type (`multi' flag masked out). */
+    u32 class;
 
-  u8 header_type;
+    /* PCI header type (`multi' flag masked out). */
 
-  /* Which config register controls the ROM? */
+    u8 header_type;
 
-  u8 rom_base_reg;
-  
-  /* Device is compatible with these IDs. */
+    /* Which config register controls the ROM? */
 
-  u16 vendor_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
-  u16 device_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
-  
-  /* The IRQ line this device is using, if any. */
-  
-  unsigned int irq;
-  
-  /* I/O and memory regions + expansion ROMs. */
+    u8 rom_base_reg;
 
-  pci_resource_type resource[PCI_NUMBER_OF_RESOURCES];
+    /* Device is compatible with these IDs. */
 
-  /* Device name. */
+    u16 vendor_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
+    u16 device_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
 
-  char name[80];
+    /* The IRQ line this device is using, if any. */
 
-  /* Slot name. */
+    unsigned int irq;
 
-  char slot_name[8];
+    /* I/O and memory regions + expansion ROMs. */
+
+    pci_resource_type resource[PCI_NUMBER_OF_RESOURCES];
+
+    /* Device name. */
+
+    char name[80];
+
+    /* Slot name. */
+
+    char slot_name[8];
 } pci_device_type;
 
 typedef struct
 {
-  u8 (*read_u8)(pci_device_type *, int where);
-  u16 (*read_u16)(pci_device_type *, int where);
-  u32 (*read_u32)(pci_device_type *, int where);
-  void (*write_u8)(pci_device_type *, int where, u8 value);
-  void (*write_u16)(pci_device_type *, int where, u16 value);
-  void (*write_u32)(pci_device_type *, int where, u32 value);
+    u8(*read_u8)(pci_device_type *, int where);
+    u16(*read_u16)(pci_device_type *, int where);
+    u32(*read_u32)(pci_device_type *, int where);
+    void (*write_u8)(pci_device_type *, int where, u8 value);
+    void (*write_u16)(pci_device_type *, int where, u16 value);
+    void (*write_u32)(pci_device_type *, int where, u32 value);
 } pci_operation_type;
 
 typedef struct
 {
-  u16 device_id;
-  u16 vendor_id;
-  char *name;
+    u16 device_id;
+    u16 vendor_id;
+    char *name;
 } pci_device_id_type;
 
 typedef struct
 {
-  u16 vendor_id;
-  char *name;
+    u16 vendor_id;
+    char *name;
 } pci_vendor_id_type;
 
 #endif /* !__PCI_H__ */
