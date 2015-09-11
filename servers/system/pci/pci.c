@@ -1,11 +1,9 @@
-/* $Id$ */
-/* Abstract: PCI server. (It should also support AGP sometime, but
-   currently, it hardly does PCI right...) */
-/* Author: Per Lundberg <per@halleluja.nu>. Heaviliy inspired by
- * the Linux source, but not by far as obnoxious... */
-
-/* Copyright 1999-2000 chaos development. */
-/* Copyright 2007 chaos development. */
+// Abstract: PCI server. (It should also support AGP sometime, but currently, it hardly does PCI right...)
+// Author: Per Lundberg <per@halleluja.nu>. Heaviliy inspired by the Linux source, but not by far as obnoxious...
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2015 chaos development
 
 #include <ipc/ipc.h>
 #include <log/log.h>
@@ -17,13 +15,11 @@
 
 static log_structure_type log_structure;
 
-/* Linked list of all PCI devices. */
-
+// Linked list of all PCI devices.
 static pci_device_type *pci_device_list = NULL;
 static pci_device_type **pci_device_list_pointer = &pci_device_list;
 
-/* Linked list of all buses. */
-
+// Linked list of all buses.
 static pci_bus_type *root_bus = NULL;
 
 tag_type empty_tag =
@@ -31,9 +27,7 @@ tag_type empty_tag =
     0, 0, ""
 };
 
-/* Functions for accessing PCI configuration space with type 1
-   accesses. */
-
+// Functions for accessing PCI configuration space with type 1 accesses.
 #define CONFIG_COMMAND(device, where) \
    (0x80000000 | (device->bus->number << 16) | \
     (device->device_function << 8) | \
@@ -88,13 +82,10 @@ static pci_operation_type pci_type1_operation =
     pci_type1_write_config_u32
 };
 
-/* Functions for accessing PCI configuration space with type 2 accesses. */
+// Functions for accessing PCI configuration space with type 2 accesses.
+#define IOADDR(device_function, where) ((0xC000 | ((device_function & 0x78) << 5)) + where)
 
-#define IOADDR(device_function, where) \
-   ((0xC000 | ((device_function & 0x78) << 5)) + where)
-
-#define FUNC(device_function) \
-   (((device_function & 7) << 1) | 0xF0)
+#define FUNC(device_function) (((device_function & 7) << 1) | 0xF0)
 
 #define SET(device) \
     system_port_out_u8 (PCI_BASE, FUNC (device->device_function)); \
@@ -130,24 +121,21 @@ static u32 pci_type2_read_config_u32(pci_device_type *device, int where)
     return return_value;
 }
 
-static void pci_type2_write_config_u8(pci_device_type *device, int where,
-                                      u8 value)
+static void pci_type2_write_config_u8(pci_device_type *device, int where, u8 value)
 {
     SET(device);
     system_port_out_u16(IOADDR(device->device_function, where), value);
     system_port_out_u8(PCI_BASE, 0);
 }
 
-static void pci_type2_write_config_u16(pci_device_type *device, int where,
-                                       u16 value)
+static void pci_type2_write_config_u16(pci_device_type *device, int where, u16 value)
 {
     SET(device);
     system_port_out_u16(IOADDR(device->device_function, where), value);
     system_port_out_u8(PCI_BASE, 0);
 }
 
-static void pci_type2_write_config_u32(pci_device_type *device, int where,
-                                       u32 value)
+static void pci_type2_write_config_u32(pci_device_type *device, int where, u32 value)
 {
     SET(device);
     system_port_out_u32(IOADDR(device->device_function, where), value);
@@ -167,95 +155,31 @@ static pci_operation_type pci_type2_operation =
 extern pci_device_id_type pci_device_id[];
 extern pci_vendor_id_type pci_vendor_id[];
 
-/* The operations we should use to access the PCI host. */
-
+// The operations we should use to access the PCI host.
 static pci_operation_type *pci_operation = NULL;
 
-/* Meta-functions for reading and writing PCI data. */
-
+// Meta-functions for reading and writing PCI data.
 static u32 pci_read_config_u32(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u32(device,
-            where);
+    return ((pci_operation_type *) device->bus->operation)->read_u32(device, where);
 }
 
 static u16 pci_read_config_u16(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u16(device,
-            where);
+    return ((pci_operation_type *) device->bus->operation)->read_u16(device, where);
 }
 
 static u8 pci_read_config_u8(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u8(device,
-            where);
+    return ((pci_operation_type *) device->bus->operation)->read_u8(device, where);
 }
 
 static void pci_write_config_u32(pci_device_type *device, int where, u32 data)
 {
-    ((pci_operation_type *) device->bus->operation)->write_u32(device, where,
-            data);
+    ((pci_operation_type *) device->bus->operation)->write_u32(device, where, data);
 }
 
-/* The following functions are not yet used; they remain since the PCI
-   server is esentially a rip-off of the Linux code. I keep them for
-   now since they might be useful later. */
-
-#if FALSE
-
-static void pci_write_config_u16(pci_device_type *device, int where, u32 data)
-{
-    ((pci_operation_type *) device->bus->operation)->write_u16(device, where,
-            data);
-}
-
-static void pci_write_config_u8(pci_device_type *device, int where, u32 data)
-{
-    ((pci_operation_type *) device->bus->operation)->write_u8(device, where,
-            data);
-}
-
-/* The following methods are mostly of interest when debugging. */
-
-/* Get the vendor name for the given ID. */
-
-static const char *vendor_get_name(u16 vendor_id)
-{
-    int counter;
-
-    for (counter = 0; pci_device_id[counter].name != NULL; counter++)
-    {
-        if (pci_vendor_id[counter].vendor_id == vendor_id)
-        {
-            break;
-        }
-    }
-
-    return pci_vendor_id[counter].name;
-}
-
-/* Get the device name for the given ID. */
-
-static const char *device_get_name(u16 vendor_id, u16 device_id)
-{
-    int counter;
-
-    for (counter = 0; pci_device_id[counter].name != NULL; counter++)
-    {
-        if (pci_device_id[counter].vendor_id == vendor_id &&
-                pci_device_id[counter].device_id == device_id)
-        {
-            break;
-        }
-    }
-
-    return pci_device_id[counter].name;
-}
-
-#endif
-
-/* Handle an IPC connection request. */
-
+// Handle an IPC connection request.
 static void handle_connection(mailbox_id_type reply_mailbox_id)
 {
     message_parameter_type message_parameter;
@@ -267,8 +191,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
     memory_allocate((void **) data_pointer, data_size);
 
-    /* Accept the connection. */
-
+    // Accept the connection.
     ipc_structure.output_mailbox_id = reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
@@ -281,17 +204,14 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
         message_parameter.message_class = IPC_CLASS_NONE;
         message_parameter.length = data_size;
 
-        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter,
-                        &data_size) != IPC_RETURN_SUCCESS)
+        if (ipc_receive(ipc_structure.input_mailbox_id, &message_parameter, &data_size) != IPC_RETURN_SUCCESS)
         {
             continue;
         }
 
         switch (message_parameter.message_class)
         {
-                /* Get the resource information for the device matching the
-                   input vendor and device ID. */
-
+            // Get the resource information for the device matching the input vendor and device ID.
             case IPC_PCI_DEVICE_EXISTS:
             {
                 pci_device_probe_type *probe = (pci_device_probe_type *) data;
@@ -303,8 +223,7 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
 
                 while (device != NULL)
                 {
-                    if (probe->vendor_id == device->vendor_id &&
-                            probe->device_id == device->device_id)
+                    if (probe->vendor_id == device->vendor_id && probe->device_id == device->device_id)
                     {
                         devices++;
                     }
@@ -312,17 +231,14 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
                     device = (pci_device_type *) device->next;
                 }
 
-                /* Allocate memory to hold this many devices. */
-
-                memory_allocate((void **) device_info_pointer,
-                                devices * sizeof(pci_device_info_type));
+                // Allocate memory to hold this many devices.
+                memory_allocate((void **) device_info_pointer, devices * sizeof(pci_device_info_type));
 
                 device = pci_device_list;
 
                 while (device != NULL && counter < devices)
                 {
-                    if (probe->vendor_id == device->vendor_id &&
-                            probe->device_id == device->device_id)
+                    if (probe->vendor_id == device->vendor_id && probe->device_id == device->device_id)
                     {
                         memory_copy(&device_info[counter].resource, device->resource,
                                     sizeof(pci_resource_type) * PCI_NUMBER_OF_RESOURCES);
@@ -345,10 +261,8 @@ static void handle_connection(mailbox_id_type reply_mailbox_id)
     }
 }
 
-/* Detect the presence of a PCI host, and if found, return a pointer
-   to the functions that should be used when accessing it. Otherwise,
-   return NULL. */
-
+// Detect the presence of a PCI host, and if found, return a pointer to the functions that should be used when accessing it.
+// Otherwise, return NULL.
 static pci_operation_type *pci_detect(void)
 {
     pci_operation_type *operation = NULL;
@@ -356,8 +270,7 @@ static pci_operation_type *pci_detect(void)
     system_port_out_u8(PCI_BASE, 0);
     system_port_out_u8(PCI_BASE + 2, 0);
 
-    if ((system_port_in_u8(PCI_BASE) == 0) &&
-            (system_port_in_u8(PCI_BASE + 2) == 0))
+    if ((system_port_in_u8(PCI_BASE) == 0) && (system_port_in_u8(PCI_BASE + 2) == 0))
     {
         operation = &pci_type2_operation;
     }
@@ -377,8 +290,7 @@ static pci_operation_type *pci_detect(void)
     return operation;
 }
 
-/* Read interrupt line. */
-
+// Read interrupt line.
 static void pci_read_irq(pci_device_type *device)
 {
     unsigned int irq;
@@ -393,8 +305,7 @@ static void pci_read_irq(pci_device_type *device)
     device->irq = irq;
 }
 
-/* Translate the low bits of the PCI base to the resource type. */
-
+// Translate the low bits of the PCI base to the resource type.
 static unsigned int pci_get_resource_type(unsigned int flags)
 {
     if ((flags & PCI_BASE_ADDRESS_SPACE_IO) != 0)
@@ -410,15 +321,12 @@ static unsigned int pci_get_resource_type(unsigned int flags)
     return PCI_RESOURCE_MEMORY;
 }
 
-/* Read PCI base addresses. */
-
-static void pci_read_bases(pci_device_type *device, unsigned int amount,
-                           int rom)
+// Read PCI base addresses.
+static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom)
 {
     unsigned int position, register_number, next;
 
-    /* FIXME: Find a better name for the 'l' variable. */
-
+    // FIXME: Find a better name for the 'l' variable.
     u32 l, size;
     pci_resource_type *resource;
 
@@ -504,98 +412,77 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount,
     }
 }
 
-/* Fill in class and map information of a device. */
-
+// Fill in class and map information of a device.
 static bool pci_setup_device(pci_device_type *device)
 {
     u32 class;
 
-    /* Set the name. */
-
+    // Set the name.
     string_print(device->slot_name, "%02x:%02x.%d", device->bus->number,
                  PCI_SLOT(device->device_function),
                  PCI_FUNC(device->device_function));
     string_print(device->name, "PCI device %04x:%04x",
                  device->vendor_id, device->device_id);
 
-    /* Read the 3-byte class. (?) */
-
+    // Read the 3-byte class. (?)
     class = pci_read_config_u32(device, PCI_CLASS_REVISION);
     class >>= 8;
     device->class = class;
     class >>= 8;
 
-    /* Handle erroneous cases first. (In Linux, they use evil gotos for
-       this...) */
-
-    if ((device->header_type == PCI_HEADER_TYPE_BRIDGE &&
-            class != PCI_CLASS_BRIDGE_PCI) ||
-            (device->header_type == PCI_HEADER_TYPE_CARDBUS &&
-             class != PCI_CLASS_BRIDGE_CARDBUS))
+    // Handle erroneous cases first. (In Linux, they use evil gotos for this...)
+    if ((device->header_type == PCI_HEADER_TYPE_BRIDGE && class != PCI_CLASS_BRIDGE_PCI) ||
+            (device->header_type == PCI_HEADER_TYPE_CARDBUS && class != PCI_CLASS_BRIDGE_CARDBUS))
     {
-        log_print_formatted
-        (&log_structure, LOG_URGENCY_WARNING,
-         "%s: class %lx doesn't match header type %02x. Ignoring class.",
-         device->slot_name, class, device->header_type);
+        log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "%s: class %lx doesn't match header type %02x. Ignoring class.",
+            device->slot_name, class, device->header_type);
         device->class = PCI_CLASS_NOT_DEFINED;
         return TRUE;
     }
 
     switch (device->header_type)
     {
-            /* Standard header. */
-
+        // Standard header.
         case PCI_HEADER_TYPE_NORMAL:
         {
             pci_read_irq(device);
             pci_read_bases(device, 6, PCI_ROM_ADDRESS);
-            device->subsystem_vendor_id = pci_read_config_u16
-                                          (device, PCI_SUBSYSTEM_VENDOR_ID);
-            device->subsystem_device_id = pci_read_config_u16
-                                          (device, PCI_SUBSYSTEM_ID);
+            device->subsystem_vendor_id = pci_read_config_u16(device, PCI_SUBSYSTEM_VENDOR_ID);
+            device->subsystem_device_id = pci_read_config_u16(device, PCI_SUBSYSTEM_ID);
             break;
         }
 
-        /* Bridge header. */
-
+        // Bridge header.
         case PCI_HEADER_TYPE_BRIDGE:
         {
             pci_read_bases(device, 2, PCI_ROM_ADDRESS1);
             break;
         }
 
-        /* CardBus bridge header. */
-
+        // CardBus bridge header.
         case PCI_HEADER_TYPE_CARDBUS:
         {
             pci_read_irq(device);
             pci_read_bases(device, 1, 0);
-            device->subsystem_vendor_id = pci_read_config_u16
-                                          (device, PCI_CARDBUS_SUBSYSTEM_VENDOR_ID);
-            device->subsystem_device_id = pci_read_config_u16
-                                          (device, PCI_CARDBUS_SUBSYSTEM_ID);
+            device->subsystem_vendor_id = pci_read_config_u16(device, PCI_CARDBUS_SUBSYSTEM_VENDOR_ID);
+            device->subsystem_device_id = pci_read_config_u16(device, PCI_CARDBUS_SUBSYSTEM_ID);
             break;
         }
 
-        /* Unknown header. */
-
+        // Unknown header.
         default:
         {
-            log_print_formatted(&log_structure, LOG_URGENCY_WARNING,
-                                "Device %s has unknown header type %02x, ignoring.",
+            log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "Device %s has unknown header type %02x, ignoring.",
                                 device->slot_name, device->header_type);
             return FALSE;
         }
     }
 
-    /* We found a fine healthy device, go go go... */
-
+    // We found a fine healthy device, go go go...
     return TRUE;
 }
 
-/* Read the config data for a PCI device, sanity-check it and fill in
-   the device structure... */
-
+// Read the config data for a PCI device, sanity-check it and fill in the device structure...
 static pci_device_type *pci_scan_device(pci_device_type *input_device)
 {
     pci_device_type *device;
@@ -604,10 +491,8 @@ static pci_device_type *pci_scan_device(pci_device_type *input_device)
 
     vendor_id = pci_read_config_u32(input_device, PCI_VENDOR_ID);
 
-    /* Some broken boards return 0 or ~0 if a slot is empty. */
-
-    if (vendor_id == 0xFFFFFFFF || vendor_id == 0x00000000 ||
-            vendor_id == 0x0000FFFF || vendor_id == 0xFFFF0000)
+    // Some broken boards return 0 or ~0 if a slot is empty.
+    if (vendor_id == 0xFFFFFFFF || vendor_id == 0x00000000 || vendor_id == 0x0000FFFF || vendor_id == 0xFFFF0000)
     {
         return NULL;
     }
@@ -624,9 +509,7 @@ static pci_device_type *pci_scan_device(pci_device_type *input_device)
     device->vendor_id = vendor_id & 0xFFFF;
     device->device_id = (vendor_id >> 16) & 0xFFFF;
 
-    /* Assume 32-bit PCI; let 64-bit PCI cards (which are far rarer)
-       set this higher, assuming the system even supports it.  */
-
+    // Assume 32-bit PCI; let 64-bit PCI cards (which are far rarer) set this higher, assuming the system even supports it.
     if (!pci_setup_device(device))
     {
         memory_deallocate((void **) device_pointer);
@@ -635,8 +518,7 @@ static pci_device_type *pci_scan_device(pci_device_type *input_device)
     return device;
 }
 
-/* Scan the given PCI slot. */
-
+// Scan the given PCI slot.
 static pci_device_type *pci_scan_slot(pci_device_type *input_device)
 {
     pci_device_type *device;
@@ -661,26 +543,22 @@ static pci_device_type *pci_scan_slot(pci_device_type *input_device)
             continue;
         }
 
-        /* FIXME: Maybe set the device name here? */
-
+        // FIXME: Maybe set the device name here?
         if (function == 0)
         {
             is_multi = (header_type & 0x80) == 0x80;
             first_device = device;
         }
 
-        /* Add this device to the linked list. */
-
+        // Add this device to the linked list.
         list_node_insert((list_type **) pci_device_list_pointer, (list_type *) device);
     }
 
     return first_device;
 }
 
-/* Scan the given bus. */
-
-static pci_bus_type *pci_scan_bus(int bus_number,
-                                  pci_operation_type *operation)
+// Scan the given bus.
+static pci_bus_type *pci_scan_bus(int bus_number, pci_operation_type *operation)
 {
     pci_bus_type *bus;
     pci_bus_type **bus_pointer = &bus;
@@ -693,8 +571,7 @@ static pci_bus_type *pci_scan_bus(int bus_number,
 
     device.bus = bus;
 
-    /* Find all the devices on this bus. */
-
+    // Find all the devices on this bus.
     for (device_function = 0; device_function < 0x100; device_function += 8)
     {
         device.device_function = device_function;
@@ -704,19 +581,16 @@ static pci_bus_type *pci_scan_bus(int bus_number,
     return bus;
 }
 
-/* Initialisation code. */
-
+// Initialisation code.
 static bool init(void)
 {
-    /* Set our names. */
-
+    // Set our names.
     system_process_name_set(PACKAGE_NAME);
     system_thread_name_set("Initialising");
 
     log_init(&log_structure, PACKAGE_NAME, &empty_tag);
 
-    /* Register the ports we need. */
-
+    // Register the ports we need.
     system_call_port_range_register(PCI_BASE, PCI_PORTS, "PCI controller");
 
     pci_operation = pci_detect();
@@ -726,26 +600,22 @@ static bool init(void)
         return FALSE;
     }
 
-    /* Scan this bus. */
-
+    // Scan this bus.
     root_bus = pci_scan_bus(0, pci_operation);
 
     return TRUE;
 }
 
-/* Main function. */
-
+// Main function.
 int main(void)
 {
     ipc_structure_type ipc_structure;
     pci_device_type *device;
 
-    /* Initialise the PCI support. */
-
+    // Initialise the PCI support.
     if (!init())
     {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY,
-                  "No compatible PCI host found.");
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "No compatible PCI host found.");
         return -1;
     }
 
@@ -753,19 +623,14 @@ int main(void)
 
     while (device != NULL)
     {
-        log_print_formatted
-        (&log_structure, LOG_URGENCY_DEBUG, "%s IRQ %u",
-         device->name, device->irq);
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "%s IRQ %u", device->name, device->irq);
         device = (pci_device_type *) device->next;
     }
 
-    /* Create the service. */
-
-    if (ipc_service_create("pci", &ipc_structure,
-                           &empty_tag) != IPC_RETURN_SUCCESS)
+    // Create the service.
+    if (ipc_service_create("pci", &ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
     {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY,
-                  "Couldn't create pci service.");
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "Couldn't create pci service.");
         return -1;
     }
 
@@ -773,9 +638,7 @@ int main(void)
 
     system_call_process_parent_unblock();
 
-    /* Main loop. Wait for messages and answer if someone asks us an
-       appropriate question. */
-
+    // Main loop. Wait for messages and answer if someone asks us an appropriate question.
     while (TRUE)
     {
         mailbox_id_type reply_mailbox_id;
