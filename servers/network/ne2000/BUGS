@@ -1,3 +1,0 @@
-An overflow in the rx buffer ring causes
-a pagefault in ne and a double abort in 
-the kernel.
