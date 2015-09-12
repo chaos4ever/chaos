@@ -54,7 +54,7 @@ This should create a `chaos.iso`, if all worked correctly. Congratulations! You'
 * Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `chaos.iso` file you just built as the CD drive.
 * Launch it. If all went well, you shhould get an image like this:
 
-![chaos running in Parallels](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-in-parallels.png)
+![chaos running in Parallels](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-0.0.3-virtualbox.png)
 
 That's all there is to it, *for now*. There's lot of stuff more that "used to work" at some point, but for whatever reason (new gcc versions being introduced, code being unmaintained for many years and then suddenly refactored/cleaned up in some areas) most of what "used to be", like our nice shell, IP stack etc is not (yet!) working again. Want to help us out? Fork the project and start hacking away! :smile:
 
