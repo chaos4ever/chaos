@@ -4,6 +4,11 @@ OBJECTS = %w(
 )
 
 LIBRARIES = %w(
+  ipc
+  list
+  log
+  memory
+  string
   system
 )
 
