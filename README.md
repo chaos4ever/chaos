@@ -56,7 +56,9 @@ This should create a `chaos.iso`, if all worked correctly. Congratulations! You'
 
 ![chaos 0.0.3 in action](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-0.0.3.png)
 
-That's all there is to it, *for now*. There's lot of stuff more that "used to work" at some point, but for whatever reason (new gcc versions being introduced, code being unmaintained for many years and then suddenly refactored/cleaned up in some areas) most of what "used to be", like our nice shell, IP stack etc is not (yet!) working again. Want to help us out? Fork the project and start hacking away! :smile:
+From there, just follow the instructions on the screen.
+
+Want to help us out? Feel like contributing? Fork the project and start hacking away! :smile: The easiest way to get in touch with is this GitHub page, for the moment. We may in the future put back our mailing lists and stuff, for public communication, but for now, make a fork and submit pull requests, create issues if you find issues that you think should be fixed, etc. **Don't be afraid**, we usually don't bite. :wink:
 
 ## Authors
 
