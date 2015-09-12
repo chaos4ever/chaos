@@ -10,6 +10,8 @@ Having that said, there are a number of issues with the codebase which made us s
 
 ## Compiling chaos
 
+**Note**: If you just want to try things out, go straight to the [Releases](https://github.com/chaos4ever/chaos/releases) page and download an `.iso` file. Then, skip down to "Running chaos" below.
+
 ### Prerequisites:
 
 - Linux, Mac OSX or Windows.
@@ -48,11 +50,11 @@ Having that said, there are a number of issues with the codebase which made us s
 
 This should create a `chaos.iso`, if all worked correctly. Congratulations! You're just one step away from having a fully working version of chaos running now. :)
 
-### Running the compiled result.
+### Running chaos
 
-* Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do). If you're lazy, just run `./qemu.sh` within the Vagrant-VM; it will run `qemu` inside VirtualBox, which is enough for many test scenarios.
-* Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `chaos.iso` file you just built as the CD drive.
-* Launch it. If all went well, you shhould get an image like this:
+* Fire up your favorite VM software (VirtualBox, Parallels, VMware Player/Fusion, etc. Even Virtual PC will probably do).
+* Create a tiny VM (256 megs of RAM will do, no hard drive etc) with the `chaos.iso` (or `chaos-0.0.x.iso` if you downloaded it from here) file as the CD drive.
+* Launch it. If all went well, you should get an image like this:
 
 ![chaos 0.0.3 in action](https://raw.githubusercontent.com/chaos4ever/chaos/master/misc/chaos-0.0.3.png)
 
