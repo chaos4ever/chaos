@@ -13,6 +13,7 @@
 #include <storm/generic/debug.h>
 #include <storm/generic/memory.h>
 #include <storm/ia32/idt.h>
+#include <storm/ia32/port.h>
 
 // External variables.
 extern void cpu_structaddr;
@@ -149,14 +150,21 @@ static inline void cpu_set_tr(u16 new_tr)
 static inline void cpu_reset(void) __attribute__ ((noreturn));
 static inline void cpu_reset(void)
 {
-    // Force a triple fault..
-    asm ("cli");
-    memory_set_u8((u8 *) idt, 0, SIZE_IDT);
+    // Based on an approach seen at http://wiki.osdev.org/Reboot
+    const u16 keyboard_interface_port = 0x64;
+    const u8 keyboard_reset = 0xFE;
+    const u8 user_data_in_buffer = 0x02;
 
-    asm ("int $0x3");
+    // Clear the user data first.
+    while (port_in_u8(keyboard_interface_port) & user_data_in_buffer);
 
-    // This code will not be reached.
-    while (TRUE);
+    port_out_u8(keyboard_interface_port, keyboard_reset);
+
+    // If all else fails, just halt the CPU.
+    while (TRUE)
+    {
+        asm volatile ("hlt");
+    }
 }
 
 // CR0 bits.
