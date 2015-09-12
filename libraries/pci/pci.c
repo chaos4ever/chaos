@@ -16,7 +16,7 @@ return_type pci_init(ipc_structure_type *pci_structure, tag_type *tag)
     unsigned int services = 10;
 
     // Try to resolve the pci service.
-    if (ipc_service_resolve("pci", mailbox_id, &services, 0, tag) != IPC_RETURN_SUCCESS)
+    if (ipc_service_resolve("pci", mailbox_id, &services, 5, tag) != IPC_RETURN_SUCCESS)
     {
         return PCI_RETURN_SERVICE_UNAVAILABLE;
     }

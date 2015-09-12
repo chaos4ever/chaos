@@ -1,0 +1,17 @@
+OBJECTS = %w(
+  pci.o
+  pci-id.o
+)
+
+LIBRARIES = %w(
+  ipc
+  list
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'pci'
+
+load '../../servers.rake'

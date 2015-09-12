@@ -5,11 +5,8 @@ subfolders = %w(
   console
   keyboard
   log
+  pci
 )
-
-# Not yet converted to Rake:
-#
-# pci
 
 task :default => subfolders do |t|
   t.prerequisites.each do |folder|

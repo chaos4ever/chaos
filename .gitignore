@@ -24,4 +24,5 @@ servers/system/boot/boot
 servers/system/console/console
 servers/system/keyboard/keyboard
 servers/system/log/log
+servers/system/pci/pci
 servers/video/vga/vga
