@@ -9,6 +9,7 @@ Vagrant.configure(2) do |config|
       cmake \
       dosfstools \
       gcc-multilib \
+      gdb \
       genisoimage \
       git \
       grub-legacy \
@@ -25,5 +26,7 @@ Vagrant.configure(2) do |config|
     echo '-U' > /home/vagrant/.astylerc
     echo '-H' >> /home/vagrant/.astylerc
     echo '-S' >> /home/vagrant/.astylerc
+
+    echo target remote localhost:1234 > /home/vagrant/.gdbinit
   SHELL
 end
