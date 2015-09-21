@@ -18,6 +18,10 @@ Vagrant.configure(2) do |config|
       qemu \
       rake
 
+    # We need the beta channel for the #![feature] functionality.
+    curl -sSf https://static.rust-lang.org/rustup.sh > /tmp/rustup.sh && \
+      sh /tmp/rustup.sh --yes --channel=beta
+
     cd /vagrant
     ./install_cmocka.sh
 
