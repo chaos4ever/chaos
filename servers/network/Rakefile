@@ -1,8 +1,9 @@
 Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w(
-  ipv4 
+  ipv4
   loopback
+  virtio-net-pci
 )
 
 task :default => subfolders do |t|

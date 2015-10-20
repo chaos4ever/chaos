@@ -15,6 +15,7 @@ module /servers/fat.gz
 module /servers/initial_ramdisk.gz
 module /servers/log.gz
 module /servers/loopback.gz
+module /servers/virtio-net-pci.gz
 module /servers/ipv4.gz
 module /servers/pci.gz
 module /servers/virtual_file_system.gz
