@@ -42,10 +42,7 @@ task :iso_image do
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
   FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
 
-  eltorito_file = '/usr/lib/grub/i386-pc/stage2_eltorito'
-  eltorito_file = '/usr/lib/grub/x86_64-pc/stage2_eltorito' unless File.exist? eltorito_file
-
-  FileUtils.cp eltorito_file, "#{INSTALL_ROOT}/boot/grub"
+  FileUtils.cp '/usr/lib/grub/i386-pc/stage2_eltorito', "#{INSTALL_ROOT}/boot/grub"
 
   print 'Creating ISO image...'.cyan.bold
   sh "genisoimage \
