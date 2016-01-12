@@ -1,13 +1,14 @@
 Vagrant.configure(2) do |config|
-  config.vm.box = 'puphpet/debian75-x32'
+  config.vm.box = 'remram/debian-9-i386'
 
   config.vm.provision 'shell', inline: <<-SHELL
     set -e
     sudo apt-get update
-    sudo apt-get install -y \
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
       astyle \
       cmake \
       dosfstools \
+      gcc-5 \
       gcc-multilib \
       gdb \
       genisoimage \
