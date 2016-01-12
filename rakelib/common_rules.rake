@@ -20,7 +20,7 @@ rule '.o' => [ '.rs' ] do |t|
   end
 end
 
-rule '.o' => [ '.S' ] do |t|
+rule '.o' => ['.S'] do |t|
   begin
     print((t.source + ' ').cyan)
     command = "#{CC} -o #{t.name} #{CFLAGS} #{INCLUDES.join(' ')} -c #{t.source}"
@@ -31,7 +31,7 @@ rule '.o' => [ '.S' ] do |t|
   end
 end
 
-rule '.o' => [ '.asm' ] do |t|
+rule '.o' => ['.asm'] do |t|
   begin
     print((t.source + ' ').cyan)
     command = "#{NASM} -o #{t.name} -f elf #{t.source}"
@@ -44,5 +44,5 @@ end
 
 def cflags
   flags = CFLAGS.join(' ') if CFLAGS.respond_to?(:join)
-  flags ||= CFLAGS
+  flags || CFLAGS
 end
