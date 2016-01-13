@@ -21,7 +21,7 @@ Vagrant.configure(2) do |config|
 
     # We need the beta channel for the #![feature] functionality.
     curl -sSf https://static.rust-lang.org/rustup.sh > /tmp/rustup.sh && \
-      sh /tmp/rustup.sh --yes --channel=beta
+      sh /tmp/rustup.sh --yes --channel=nightly --date=2016-01-13
 
     cd /vagrant
     ./install_cmocka.sh
