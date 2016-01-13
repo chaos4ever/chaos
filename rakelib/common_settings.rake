@@ -6,7 +6,7 @@ case UNAME
 when 'Darwin' then
   abort 'Error: OS X is not supported as a build host.'
 else
-  CC = ENV['CC'] || 'gcc-4.7'
+  CC = ENV['CC'] || 'gcc-5'
   AR = ENV['AR'] || 'ar'
   RUSTC = 'rustc'
   RUSTCFLAGS = '-O -C code-model=kernel -C relocation-model=static'

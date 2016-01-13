@@ -37,7 +37,7 @@ volatile cluster_id_type current_cluster_id = CLUSTER_ID_KERNEL;
 volatile thread_id_type current_thread_id = THREAD_ID_KERNEL;
 volatile time_type timeslice = 0;
 storm_tss_type *current_tss = (storm_tss_type *) BASE_VIRTUAL_KERNEL_TSS;
-static u32 jump_data[2] = { 0, 0 };
+u32 jump_data[2] = { 0, 0 };
 tss_list_type *current_tss_node;
 
 void dispatch_init(void)
@@ -104,7 +104,7 @@ static int update_data(void)
         counter++;
         tss_node = (tss_list_type *) tss_node->next;
         if (tss_node == NULL)
-        {            
+        {
             tss_node = tss_list;
         }
     } while (tss_node->tss->state != STATE_DISPATCH);
