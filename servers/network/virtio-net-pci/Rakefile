@@ -1,0 +1,17 @@
+OBJECTS = %w(
+  virtio-net-pci.o
+)
+
+EXTRA_LDFLAGS = '../../../rust/libcore.rlib ../../../rust/librlibc.rlib'
+
+LIBRARIES = %w(
+  ipc
+  log
+  memory
+  string
+  system
+)
+
+OUTPUT = 'virtio-net-pci'
+
+load '../../servers.rake'

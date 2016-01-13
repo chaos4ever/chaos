@@ -9,7 +9,12 @@ else
   CC = ENV['CC'] || 'gcc-5'
   AR = ENV['AR'] || 'ar'
   RUSTC = 'rustc'
-  RUSTCFLAGS = '-O -C code-model=kernel -C relocation-model=static'
+  RUSTCFLAGS = %w(
+    -O
+    -C code-model=kernel
+    -C relocation-model=static
+    -Z no-landing-pads
+    -g).join(' ')
 end
 
 # Can always use plain nasm, since even the OSX version can produce ELF images.
