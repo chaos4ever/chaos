@@ -4,5 +4,6 @@ before_script:
  - sudo apt-get install dosfstools gcc-multilib genisoimage grub mtools nasm
  - ./install_cmocka.sh
 script:
+ - bundle exec rubocop
  - rake
  - rake tests
