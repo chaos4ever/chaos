@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   ia32_tests_main.o
   memory_global_test.o
   string_tests.o
-)
+).freeze
 
 OUTPUT = :ia32_tests
 
@@ -11,18 +12,18 @@ LDFLAGS = %w(
   -L/usr/local/lib
   -L../../storm/generic
   -L../../storm/ia32
-)
+).freeze
 
-  # Need to provide the same name twice for linking to succeed. (circular dependency?)
+# Need to provide the same name twice for linking to succeed. (circular dependency?)
 LIBRARIES = %w(
   cmocka
 
   storm_ia32
   storm_generic
   storm_ia32
-)
+).freeze
 
-task :default => [ :banner, OUTPUT ]
+task default: [:banner, OUTPUT]
 
 task :banner do
   print 'Compiling '.bold

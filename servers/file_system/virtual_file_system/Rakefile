@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   virtual_file_system.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -8,8 +9,8 @@ LIBRARIES = %w(
   log
   string
   system
-)
+).freeze
 
-OUTPUT = 'virtual_file_system'
+OUTPUT = 'virtual_file_system'.freeze
 
 load '../../servers.rake'

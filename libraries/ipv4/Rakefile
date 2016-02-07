@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   ipv4.o
-)
+).freeze
 
-OUTPUT = 'libipv4.a'
+OUTPUT = 'libipv4.a'.freeze
 
 load '../libraries.rake'

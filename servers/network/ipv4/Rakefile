@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   arp.o
   dhcp.o
@@ -8,9 +9,9 @@ OBJECTS = %w(
   socket.o
   tcp.o
   udp.o
-)
+).freeze
 
-EXTRA_LDFLAGS = '-lgcc'
+EXTRA_LDFLAGS = '-lgcc'.freeze
 LIBRARIES = %w(
   ipc
   ipv4
@@ -21,8 +22,8 @@ LIBRARIES = %w(
   string
   system
   time
-)
+).freeze
 
-OUTPUT = 'ipv4'
+OUTPUT = 'ipv4'.freeze
 
 load '../../servers.rake'

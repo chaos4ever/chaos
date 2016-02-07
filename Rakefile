@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 # TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-FOLDERS = [:storm, :libraries, :programs, :servers]
+FOLDERS = [:storm, :libraries, :programs, :servers].freeze
 
 verbose false
 
@@ -12,7 +13,7 @@ root = pwd
 Rake.application.options.rakelib = ["#{root}/rakelib"]
 
 desc 'Compiles chaos'
-task :default => [:create_ramdisk_image] + FOLDERS
+task default: [:create_ramdisk_image] + FOLDERS
 
 desc 'Performs cleanup (removes old .o files and similar)'
 task :clean do
@@ -27,7 +28,7 @@ task :create_ramdisk_image do
 end
 
 desc 'Compiles and installs chaos'
-task :install => [:install_folders, :iso_image]
+task install: [:install_folders, :iso_image]
 
 task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT
@@ -63,16 +64,16 @@ task :storm do |folder|
 end
 
 desc "Compiles the unit tests for the 'storm' kernel."
-task :build_storm_tests => :storm do
+task build_storm_tests: :storm do
   sh "cd storm_tests && #{RAKE_COMMAND}"
 end
 
 desc 'Runs the unit tests'
-task :tests => [:build_storm_tests] do
+task tests: [:build_storm_tests] do
   sh "cd storm_tests && #{RAKE_COMMAND} tests"
 end
 
-task :libraries => [:storm] do |folder|
+task libraries: [:storm] do |folder|
   sh "cd #{folder} && #{RAKE_COMMAND}"
 end
 

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 
 # FIXME: Don't repeat all of these in many places.
@@ -19,7 +20,7 @@ COMMON_CFLAGS = %w(
   -funsigned-char
   -m32
   -fomit-frame-pointer
-)
+).freeze
 
 CFLAGS = COMMON_CFLAGS + %w(
   --std=gnu99
@@ -30,10 +31,10 @@ CFLAGS = COMMON_CFLAGS + %w(
   -Wstrict-prototypes
 )
 
-INCLUDES = %W(
+INCLUDES = %w(
   -I..
   -I../../storm/include
-)
+).freeze
 
 def run_test(test)
   sh "./#{test} 2>&1 | #{Rake.application.options.rakelib.first}/../tools/colorize.rb"

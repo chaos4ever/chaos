@@ -1,10 +1,11 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   common.o
   controller.o
   init.o
   keyboard.o
   mouse.o
-)
+).freeze
 
 LIBRARIES = %w(
   console
@@ -13,8 +14,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'keyboard'
+OUTPUT = 'keyboard'.freeze
 
 load '../../servers.rake'

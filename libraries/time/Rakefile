@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   time.o
-)
+).freeze
 
-OUTPUT = 'libtime.a'
+OUTPUT = 'libtime.a'.freeze
 
 load '../libraries.rake'

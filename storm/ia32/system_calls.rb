@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 # Abstract: Generate files with system call stuff. Since they are a bunch, updating them all manually was a little
 # uncomfortable. Ideally, the architecture independant parts of this file should be in a generic directory.
@@ -6,7 +7,7 @@
 # Author: Per Lundberg <per@halleluja.nu>
 
 # The lowest entry in the GDT we may use.
-$gdt_start = 48
+@gdt_start = 48
 
 # Always add things at the END of this list! Otherwise, you'll have to recompile all programs, libraries and
 # everything... so please, don't.
@@ -58,17 +59,16 @@ system_calls = Hash[
   'dispatch_next',                0,
 ]
 
-def create_wrapper_c(system_calls)
+def create_wrapper_c(system_calls) # rubocop:disable MethodLength
   File.open('wrapper.c', 'wb') do |file|
-    file.puts(
-"// Generated automatically by system_calls.rb. Do not modify!
+    file.puts("// Generated automatically by system_calls.rb. Do not modify!
 
 #include <storm/ia32/defines.h>
 #include <storm/ia32/wrapper.h>
 ")
 
     system_calls.each do |system_call, num_parameters|
-      file.puts %Q[
+      file.puts %[
 void wrapper_#{system_call}(void)
 {
   asm("pushal\\n\"]
@@ -79,25 +79,25 @@ void wrapper_#{system_call}(void)
       // so the "next parameter to push" is always in the same memory location. :)'
       end
 
-      for parameter in 0..num_parameters - 1 do
+      (0..num_parameters - 1).each do
         file.puts("\
       \"pushl 32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
-        )
+                 )
       end
 
-      file.puts %Q[\
+      file.puts %(\
 
       "call   system_call_#{system_call}\\n"\
-      ]
+      )
 
       if num_parameters > 0
-        file.puts %Q[
+        file.puts %(
       // Restore the stack after the function call
       "addl   \$4 * #{num_parameters}, %esp\\n"\
-      ]
+      )
       end
 
-      file.puts %Q[
+      file.puts %[
       // Simulate a popa, without overwriting EAX (since it contains the return value from the system call).
       "popl   %edi\\n"
       "popl   %esi\\n"
@@ -118,10 +118,9 @@ void wrapper_#{system_call}(void)
   end
 end
 
-def create_include_storm_system_calls_h(system_calls)
+def create_include_storm_system_calls_h(system_calls) # rubocop:disable AbcSize
   File.open('../include/storm/system_calls.h', 'wb') do |file|
-    file.puts(
-"// Generated automatically by system_calls.rb. Do not modify!
+    file.puts("// Generated automatically by system_calls.rb. Do not modify!
 
 #pragma once
 
@@ -129,7 +128,7 @@ def create_include_storm_system_calls_h(system_calls)
 
 ")
 
-    file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{$gdt_start},\n"
+    file.puts "enum\n{\n  SYSTEM_CALL_#{system_calls.keys.first.upcase} = #{@gdt_start},\n"
 
     system_calls.keys[1...system_calls.keys.count].each do |system_call|
       file.puts "  SYSTEM_CALL_#{system_call.upcase},\n"
@@ -170,8 +169,8 @@ def create_include_storm_ia32_wrapper_h(system_calls)
   end
 end
 
-script_directory = $0.sub 'system_calls.rb', ''
-Dir.chdir(script_directory) or fail "Couldn't change directory: $!"
+script_directory = $PROGRAM_NAME.sub 'system_calls.rb', ''
+Dir.chdir(script_directory) or raise "Couldn't change directory: $!"
 
 create_wrapper_c system_calls
 create_include_storm_system_calls_h system_calls

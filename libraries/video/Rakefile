@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   video.o
-)
+).freeze
 
-OUTPUT = 'libvideo.a'
+OUTPUT = 'libvideo.a'.freeze
 
 load '../libraries.rake'

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   connection.o
   console.o
   console_output.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -11,8 +12,8 @@ LIBRARIES = %w(
   system
   unicode
   video
-)
+).freeze
 
-OUTPUT = 'console'
+OUTPUT = 'console'.freeze
 
 load '../../servers.rake'

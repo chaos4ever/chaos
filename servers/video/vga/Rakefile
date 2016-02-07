@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   vga.o
   vgalib.o
-)
+).freeze
 
 LIBRARIES = %w(
   console
@@ -9,8 +10,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'vga'
+OUTPUT = 'vga'.freeze
 
 load '../../servers.rake'

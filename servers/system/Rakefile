@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w(
@@ -8,7 +9,7 @@ subfolders = %w(
   pci
 )
 
-task :default => subfolders do |t|
+task default: subfolders do |t|
   t.prerequisites.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND}"
   end
@@ -20,7 +21,7 @@ task :clean do
   end
 end
 
-task :install => :default do
+task install: :default do
   subfolders.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end

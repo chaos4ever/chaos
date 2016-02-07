@@ -1,4 +1,5 @@
-rule '.o' => [ '.c' ] do |t|
+# frozen_string_literal: true
+rule '.o' => ['.c'] do |t|
   begin
     print((t.source + ' ').cyan)
     command = "#{CC} -o #{t.name} #{cflags} #{INCLUDES.join(' ')} -c #{t.source}"
@@ -9,7 +10,7 @@ rule '.o' => [ '.c' ] do |t|
   end
 end
 
-rule '.o' => [ '.rs' ] do |t|
+rule '.o' => ['.rs'] do |t|
   begin
     print((t.source + ' ').cyan)
     command = "#{RUSTC} #{RUSTCFLAGS} --crate-type lib -o #{t.name} --emit obj #{t.source}"

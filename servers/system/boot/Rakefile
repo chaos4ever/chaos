@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   boot.o
-)
+).freeze
 
 LIBRARIES = %w(
   execute_elf
@@ -10,8 +11,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'boot'
+OUTPUT = 'boot'.freeze
 
 load '../../servers.rake'

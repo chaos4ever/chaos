@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   execute_elf.o
-)
+).freeze
 
-OUTPUT = 'libexecute_elf.a'
+OUTPUT = 'libexecute_elf.a'.freeze
 
 load '../libraries.rake'

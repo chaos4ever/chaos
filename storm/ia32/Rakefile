@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   cluster.o
   cpuid.o
@@ -30,17 +31,17 @@ OBJECTS = %w(
   wrapper.o
   compiler_rt/udivdi3.o
   compiler_rt/umoddi3.o
-)
+).freeze
 
-OUTPUT = 'libstorm_ia32.a'
+OUTPUT = 'libstorm_ia32.a'.freeze
 
 # TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
-GENERIC_OUTPUT = '../generic/libstorm_generic.a'
+GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 
-KERNEL_OUTPUT = 'storm'
-LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'
+KERNEL_OUTPUT = 'storm'.freeze
+LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'.freeze
 
-task :default => [:banner, :prepare, :storm] + OBJECTS
+task default: [:banner, :prepare, :storm] + OBJECTS
 
 task :banner do
   print 'Compiling '.bold
@@ -55,7 +56,7 @@ task :install do
   puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
 end
 
-task :prepare => ['wrapper.c', 'system_calls-auto.c']
+task prepare: ['wrapper.c', 'system_calls-auto.c']
 
 # TODO: I guess the header files should be listed here also.
 file 'wrapper.c' => 'system_calls.rb' do |t|

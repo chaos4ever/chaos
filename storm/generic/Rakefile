@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   arguments.o
   avl.o
@@ -17,21 +18,21 @@ OBJECTS = %w(
   system_call.o
   tag.o
   time.o
-)
+).freeze
 
 # TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
-OUTPUT = 'libstorm_generic.a'
+OUTPUT = 'libstorm_generic.a'.freeze
 
-task :default => [:banner, OUTPUT] do
+task default: [:banner, OUTPUT] do
   puts
 end
 
 task :banner do
-  print "Compiling ".bold
-  print "storm/generic".cyan.bold
-  puts "..."
+  print 'Compiling '.bold
+  print 'storm/generic'.cyan.bold
+  puts '...'
 
-  print "    "
+  print '    '
 end
 
 load '../storm.rake'

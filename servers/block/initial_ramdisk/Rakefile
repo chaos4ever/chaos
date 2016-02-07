@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   initial_ramdisk.o
   ramdisk.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -9,10 +10,10 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'initial_ramdisk'
-RAMDISK_IMAGE = 'ramdisk.image'
+OUTPUT = 'initial_ramdisk'.freeze
+RAMDISK_IMAGE = 'ramdisk.image'.freeze
 
 desc 'Creates the initial ramdisk image'
 task :create_ramdisk_image do
@@ -30,6 +31,5 @@ file 'ramdisk-auto.h' => ['ramdisk.rb', RAMDISK_IMAGE] do |t|
 
   sh "./ramdisk.rb #{RAMDISK_IMAGE} > ramdisk-auto.h"
 end
-
 
 load '../../servers.rake'

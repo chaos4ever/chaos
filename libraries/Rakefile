@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 libraries = %w(
@@ -30,15 +31,15 @@ load 'constants.rake'
 INCLUDES = %w(
   -I.
   -I../storm/include
-)
+).freeze
 
-task :default => libraries + [ :startup ] do |t|
+task default: libraries + [:startup] do
   libraries.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND}"
   end
 end
 
-task :startup => [ :banner, 'startup.o' ] do
+task startup: [:banner, 'startup.o'] do
   puts
   puts # TODO: Should only get run sometimes...
 end
@@ -60,7 +61,7 @@ task :clean do
   rm_f Dir['*.a']
 end
 
-task :install => :default do
+task install: :default do
   libraries.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
   end

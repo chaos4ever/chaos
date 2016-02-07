@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   log.o
-)
+).freeze
 
 LIBRARIES = %w(
   console
@@ -9,8 +10,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'log'
+OUTPUT = 'log'.freeze
 
 load '../../servers.rake'

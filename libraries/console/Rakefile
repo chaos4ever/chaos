@@ -1,12 +1,14 @@
+# frozen_string_literal: true
+
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   console.o
-)
+).freeze
 
-OUTPUT = 'libconsole.a'
+OUTPUT = 'libconsole.a'.freeze
 
 load '../libraries.rake'

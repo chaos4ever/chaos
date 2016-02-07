@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 Vagrant.configure(2) do |config|
   config.vm.box = 'remram/debian-9-i386'
 

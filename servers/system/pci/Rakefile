@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   pci.o
   pci-id.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -10,8 +11,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'pci'
+OUTPUT = 'pci'.freeze
 
 load '../../servers.rake'

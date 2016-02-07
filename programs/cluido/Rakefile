@@ -1,9 +1,10 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   cluido.o
   command.o
   init.o
   nibbles.o
-)
+).freeze
 
 LIBRARIES = %w(
   console
@@ -18,8 +19,8 @@ LIBRARIES = %w(
   system
   time
   unicode
-)
+).freeze
 
-OUTPUT = 'cluido'
+OUTPUT = 'cluido'.freeze
 
 load '../programs.rake'

@@ -1,8 +1,9 @@
+# frozen_string_literal: true
 # Common settings and Rake rules for all servers.
 
 Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 
-LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries"
+LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries".freeze
 
 COMMON_CFLAGS = %w(
   -Wall
@@ -25,9 +26,10 @@ COMMON_CFLAGS = %w(
   -m32
   -fomit-frame-pointer
   -ffreestanding
- )
+).freeze
 
-# TODO: Consider changing the rules in common_rules to presume that these are actually arrays. That requires us to modify all Rakefiles though.
+# TODO: Consider changing the rules in common_rules to presume that these are actually arrays. That requires us to modify all
+# Rakefiles though.
 CFLAGS = (COMMON_CFLAGS + %w(
   --std=gnu99
   -Wbad-function-cast
@@ -36,7 +38,7 @@ CFLAGS = (COMMON_CFLAGS + %w(
   -Wstrict-prototypes
 )).join(' ')
 
-EXTRA_LDFLAGS ||= ''
+EXTRA_LDFLAGS ||= ''.freeze
 LDFLAGS = %W(
   #{LIBRARIES_DIR}/startup.o
   -nostdlib
@@ -44,7 +46,7 @@ LDFLAGS = %W(
   -m32
   -L#{LIBRARIES_DIR}
   #{EXTRA_LDFLAGS}
-)
+).freeze
 
 LIBRARY_FILES = LIBRARIES.map { |l| "#{LIBRARIES_DIR}/lib#{l}.a" }
 
@@ -53,18 +55,18 @@ servers_dir = File.dirname(__FILE__)
 INCLUDES = %W(
   -I#{servers_dir}/../storm/include
   -I#{servers_dir}/../libraries
-)
+).freeze
 
-task :default => [ :banner, OUTPUT ] do
+task default: [:banner, OUTPUT] do
   puts
 end
 
 task :banner do
-  print "Compiling ".bold
+  print 'Compiling '.bold
   print OUTPUT.sub('.a', '').cyan.bold
-  puts "..."
+  puts '...'
 
-  print "    "
+  print '    '
 end
 
 file OUTPUT => OBJECTS + LIBRARY_FILES do |t|
@@ -85,7 +87,7 @@ task :clean do
   rm_f OUTPUT
 end
 
-task :install => OUTPUT do
+task install: OUTPUT do
   target_path = INSTALL_ROOT + '/servers'
 
   sh "#{INSTALL_COMMAND} #{OUTPUT} #{target_path}/#{OUTPUT}"

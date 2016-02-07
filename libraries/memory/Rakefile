@@ -1,13 +1,14 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   memory.o
   slab.o
-)
+).freeze
 
-OUTPUT = 'libmemory.a'
+OUTPUT = 'libmemory.a'.freeze
 
 load '../libraries.rake'

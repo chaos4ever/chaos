@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   clusters.o
   detect_fat.o
@@ -10,7 +11,7 @@ OBJECTS = %w(
   get_entry_by_name.o
   handle_connection.o
   read_long_file_name.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -18,8 +19,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'fat'
+OUTPUT = 'fat'.freeze
 
 load '../../servers.rake'

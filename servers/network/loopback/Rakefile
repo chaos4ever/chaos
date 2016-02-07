@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 OBJECTS = %w(
   loopback.o
-)
+).freeze
 
 LIBRARIES = %w(
   ipc
@@ -8,8 +9,8 @@ LIBRARIES = %w(
   memory
   string
   system
-)
+).freeze
 
-OUTPUT = 'loopback'
+OUTPUT = 'loopback'.freeze
 
 load '../../servers.rake'

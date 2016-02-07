@@ -1,12 +1,13 @@
+# frozen_string_literal: true
 INCLUDES = %w(
   -I../../storm/include
   -I..
-)
+).freeze
 
 OBJECTS = %w(
   ipc.o
-)
+).freeze
 
-OUTPUT = 'libipc.a'
+OUTPUT = 'libipc.a'.freeze
 
 load '../libraries.rake'
