@@ -126,7 +126,7 @@ static void tornado_fill_screen (u32 *buffer, u32 argb)
   else if (DEPTH == 8)
   {
     u8 index = argb_to_332 (argb);
-    
+
     memory_set_u8 ((u8 *) buffer, index, WIDTH * HEIGHT);
   }
 }
@@ -153,7 +153,7 @@ static void tornado_draw_vline (u32 *buffer, unsigned int x,
                                 u32 colour)
 {
   unsigned int y_loop;
-  
+
   if (DEPTH == 32)
   {
     for (y_loop = y; y_loop < y + height; y_loop++)
@@ -314,11 +314,11 @@ static void tornado_draw_mouse_cursor (int x_position,
                    &screen[(y_position + y) * WIDTH + x_position],
                    MOUSE_CURSOR_WIDTH * (DEPTH / 8));
     }
-  }  
+  }
   else
   {
     /* Restore the screen. */
-    
+
     for (y = 0; y < MOUSE_CURSOR_HEIGHT; y++)
     {
       if (old_y + y < HEIGHT)
@@ -380,7 +380,7 @@ static void tornado_draw_mouse_cursor (int x_position,
             break;
           }
         }
-       
+
         if (DEPTH == 32)
         {
           tornado_putpixel32 ((u32 *) screen, x_position + x, y_position + y,
@@ -397,7 +397,7 @@ static void tornado_draw_mouse_cursor (int x_position,
 
 int main (void)
 {
-  char tmpstr[] = "chaos 0.0.3-beta installation";
+  char tmpstr[] = "chaos 0.0.4-beta installation";
   int mouse_x = WIDTH / 2, mouse_y = HEIGHT / 2;
 
   /* Set our name. */
@@ -417,7 +417,7 @@ int main (void)
   if (console_open (&console_structure, WIDTH, HEIGHT, DEPTH,
                     VIDEO_MODE_TYPE_GRAPHIC) != VIDEO_RETURN_SUCCESS)
   {
-    log_print (&log_structure, LOG_URGENCY_EMERGENCY, 
+    log_print (&log_structure, LOG_URGENCY_EMERGENCY,
                "Could not open a graphical console.");
     return -1;
   }
@@ -429,10 +429,10 @@ int main (void)
   tornado_fill_screen ((u32 *) screen, COLOUR_BACKGROUND);
   tornado_draw_text ((u32 *) screen, WIDTH - string_length (tmpstr) * 8 - 2,
                      HEIGHT - 10, tmpstr, COLOUR_TEXT);
-  
+
   tornado_draw_window ((u32 *) screen, 5, 5, 300, 180,
                        tmpstr);
-  
+
   tornado_draw_mouse_cursor (mouse_x, mouse_y, -1, -1);
 
   while (TRUE)
@@ -440,7 +440,7 @@ int main (void)
     ipc_mouse_event_type ipc_mouse_event;
     int event_type;
 
-    console_event_wait (&console_structure, &ipc_mouse_event, 
+    console_event_wait (&console_structure, &ipc_mouse_event,
                         &event_type, TRUE);
 
     switch (event_type)
