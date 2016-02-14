@@ -1,6 +1,6 @@
 // Abstract: Function prototypes and structure definitions of the Multiboot stuff.
 // Authors: Henrik Hallin <hal@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 
 // © Copyright 1999, 2013 chaos development.
 

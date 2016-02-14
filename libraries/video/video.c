@@ -1,5 +1,5 @@
 // Abstract: Video library.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000, 2013 chaos development.
 

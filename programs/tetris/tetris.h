@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Function prototypes, defines and structures. */
 /* Author: Anders Ohrt <doa@chaosdev.org>
-           Per Lundberg <per@halleluja.nu> */
+           Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 2000 chaos development */
 

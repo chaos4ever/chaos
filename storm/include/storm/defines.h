@@ -1,9 +1,11 @@
 // Abstract: General definitions.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
-//          Anders �hrt <doa@chaosdev.org>
+//          Anders Öhrt <doa@chaosdev.org>
 //
-// � Copyright 1998-2000, 2013 chaos development.
+// © Copyright 1998-2000 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2016 chaos development
 
 #pragma once
 

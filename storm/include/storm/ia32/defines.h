@@ -1,11 +1,11 @@
 // Abstract: IA32 specific defines.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
-//          Anders Öhrt <doa@chaosdev.org>
+//          Anders Ã–hrt <doa@chaosdev.org>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// Â© Copyright 1999-2000 chaos development
+// Â© Copyright 2013 chaos development
+// Â© Copyright 2015-2016 chaos development
 
 #pragma once
 

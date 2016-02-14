@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Inlined functions. */
-/* Author: Per Lundberg <per@halleluja.nu> 
+/* Author: Per Lundberg <per@chaosdev.io> 
 
    I think much of this is ripped from "somewhere" though... so this
    is probably more GPL than BSD. */

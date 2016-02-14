@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Virtual file system protocol. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999-2000 chaos development. */
 

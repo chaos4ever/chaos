@@ -1,5 +1,5 @@
 // Abstract: Parse some of the Multiboot data.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2007 chaos development

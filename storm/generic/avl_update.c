@@ -1,8 +1,8 @@
-// Abstract: Hifi-Eslöf specific functions.
+// Abstract: Hifi-EslÃ¶f specific functions.
 // Author: Henrik Hallin <hal@chaosdev.org>
-//         Per Lundberg <per@halleluja.nu>
+//         Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000, 2013 chaos development.
+// Â© Copyright 2000, 2013, 2016 chaos development.
 
 // Define as TRUE to get lots of debug information.
 #define DEBUG FALSE
@@ -16,7 +16,7 @@
 #include <storm/generic/memory_virtual.h>
 #include <storm/generic/memory_physical.h>
 
-// Update the hifi-eslöf specific largest_free*-fields. This function returns TRUE if the node needed to be update, or FALSE
+// Update the hifi-eslÃ¶f specific largest_free*-fields. This function returns TRUE if the node needed to be update, or FALSE
 // otherwise.
 bool avl_update_node_largest_free(avl_node_type *node)
 {
@@ -86,7 +86,7 @@ void avl_update_tree_largest_free(avl_node_type *tree)
     {
         tree = (avl_node_type *) tree->parent;
     }
-    
+
     DEBUG_MESSAGE(DEBUG, "Leaving.");
 }
 

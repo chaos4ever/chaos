@@ -1,5 +1,5 @@
 // Abstract: Functions for setting up the system calls.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development

@@ -1,5 +1,5 @@
 // Abstract: Function prototypes and structure definitions of ISA port I/O.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1998-2000, 2013 chaos development.
 

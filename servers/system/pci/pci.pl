@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 
 # Abstract: Convert a PCI ID file to a C header file.
-# Author: Per Lundberg <per@halleluja.nu>
+# Author: Per Lundberg <per@chaosdev.io>
 
 use strict;
 

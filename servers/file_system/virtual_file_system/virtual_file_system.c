@@ -1,7 +1,7 @@
 // Abstract: Virtual File System (VFS) server for chaos. This server abstracts all file system servers into one generic
 // interface. The Virtual File System protocol is actually merely a superset of the File System interface (as understood
 // by the specific file system servers).
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2015 chaos development

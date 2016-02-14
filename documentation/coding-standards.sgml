@@ -534,7 +534,7 @@ error_type semaphore_signal (kernel_semaphore_type *semaphore)
 # $Id$
 
 # Abstract: Program for building chaos packages.
-# Author: Per Lundberg &lt;per@halleluja.nu&gt;
+# Author: Per Lundberg &lt;per@chaosdev.io&gt;
 
 use chaos::cAPS;
 use strict;

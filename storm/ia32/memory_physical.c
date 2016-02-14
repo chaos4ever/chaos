@@ -1,14 +1,14 @@
 // Abstract: Memory allocation functions on page level.
 // Authors: Henrik Hallin <hal@chaosdev.org>,
-//          Anders Öhrt <doa@chaosdev.org>,
-//          Per Lundberg <per@halleluja.nu>
+//          Anders Ã–hrt <doa@chaosdev.org>,
+//          Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// Â© Copyright 1999-2000 chaos development
+// Â© Copyright 2013 chaos development
+// Â© Copyright 2015-2016 chaos development
 
-// This is the low level page allocation system. It is based on the hifi-eslöf algorithms. On level zero, we have a
-// bitmap which tells us which entries in the level one array is used. On level one, we have the hifi-eslöf which
+// This is the low level page allocation system. It is based on the hifi-eslÃ¶f algorithms. On level zero, we have a
+// bitmap which tells us which entries in the level one array is used. On level one, we have the hifi-eslÃ¶f which
 // contains all the memory blocks. A memory block describes one or more occupied pages and a set of free pages.
 
 // Define if you are debugging this module.

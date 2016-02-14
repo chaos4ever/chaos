@@ -1,7 +1,7 @@
 // Abstract: cluido is the Command Line User Interface (CLUI) of the chaos operating system. It serves a somewhat similar
 // function as the AmigaOS CLI, COMMAND.COM in DOS, CMD.EXE in OS/2 and Windows
 // NT, or the Bourne Again SHell in GNU systems.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development

@@ -1,6 +1,6 @@
 // Abstract: Routines for allocating memory in the global heap.
 // Authors: Henrik Hallin <hal@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 
 // © Copyright 2000, 2013 chaos development.
 

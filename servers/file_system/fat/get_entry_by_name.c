@@ -1,5 +1,5 @@
 // Abstract: Reads FAT entries matching a provided name.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Anders Öhrt <doa@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development

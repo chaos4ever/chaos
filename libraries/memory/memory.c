@@ -1,6 +1,6 @@
 // Abstract: Memory library.
 // Authors: Anders Ohrt <doa@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 
 // © Copyright 1999-2000 chaos development.
 // © Copyright 2015 chaos development.

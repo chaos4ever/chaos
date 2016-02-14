@@ -4,7 +4,7 @@
 # Abstract: Generate files with system call stuff. Since they are a bunch, updating them all manually was a little
 # uncomfortable. Ideally, the architecture independant parts of this file should be in a generic directory.
 #
-# Author: Per Lundberg <per@halleluja.nu>
+# Author: Per Lundberg <per@chaosdev.io>
 
 # The lowest entry in the GDT we may use.
 @gdt_start = 48

@@ -21,4 +21,4 @@ design, so please don't try to fix things. Of course, there may be
 bugs in our design (but they should be few; much of this is borrowed
 from other, well-tested systems).
 
--- Per Lundberg <per@halleluja.nu>  Thu, 31 Aug 2000 22:22:36 +0200
+-- Per Lundberg <per@chaosdev.io>  Thu, 31 Aug 2000 22:22:36 +0200

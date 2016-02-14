@@ -1,5 +1,5 @@
 // Abstract: Execution of ELF images.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000, 2007, 2013, 2015 chaos development.
 

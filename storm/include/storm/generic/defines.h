@@ -1,5 +1,5 @@
 // Abstract: Platform-independent defines local to storm.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 
 // © Copyright 2000, 2013 chaos development.
 

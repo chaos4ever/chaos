@@ -1,5 +1,5 @@
 // Abstract: Process control.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000, 2013 chaos development.
 

@@ -1,5 +1,5 @@
 // Abstract: Routines for parsing command line arguments.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //         Henrik Hallin <hal@chaosdev.org>
 
 // © Copyright 1999-2000, 2013 chaos development.

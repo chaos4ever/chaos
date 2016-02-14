@@ -1,5 +1,5 @@
 // Abstract: String routines (unit tests)
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 2015 chaos development
 

@@ -1,5 +1,5 @@
 // Abstract: Function prototypes and structure definitions of port in-and output.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // Probably a bit based on Linux or similar (to know the gcc syntax for inline assembly).
 //

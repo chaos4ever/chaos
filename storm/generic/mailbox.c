@@ -1,7 +1,7 @@
 // Abstract: Mailbox functions for the LPC (local process communication).
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Anders Öhrt <doa@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 
 // © Copyright 1999-2000 chaos development
 // © Copyright 2013 chaos development

@@ -1,6 +1,6 @@
 // Abstract: Process management. Responsible for starting and stopping processes and threads.
 // Authors: Henrik Hallin <hal@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2007 chaos development

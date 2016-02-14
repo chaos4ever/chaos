@@ -1,5 +1,5 @@
 // Abstract: IA32-specific thread stuff.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 2000 chaos development
 // © Copyright 2013 chaos development

@@ -1,5 +1,5 @@
 // Abstract: Standard types used in the chaos operating system.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1998-2000 chaos development

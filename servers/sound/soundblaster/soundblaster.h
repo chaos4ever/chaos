@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Authors:
 
-   Per Lundberg <per@halleluja.nu>
+   Per Lundberg <per@chaosdev.io>
    Erik Moren   <nemo@chaosdev.org> */
 
 /* Copyright 1999-2000 chaos development. */

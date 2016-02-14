@@ -1,7 +1,7 @@
 /* $Id$ */
 /* Abstract: Protocol used for communicating with mouse hardware
    servers. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999-2000 chaos development. */
 

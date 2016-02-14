@@ -1,7 +1,7 @@
 // Abstract: CPU identification. Parts borrowed from the Linux kernel.
-// Author: Per Lundberg <per@halleluja.nu> with some parts borrowed from Linux kernel.
+// Author: Per Lundberg <per@chaosdev.io> with some parts borrowed from Linux kernel.
 
-// Copyright 1999-2000, 2007, 2013 chaos development.
+// Â© Copyright 1999-2000, 2007, 2013, 2016 chaos development.
 
 // TODO: Get rid of the Linux kernel legacy here so we can relicense the file under the BSD license instead.
 
@@ -9,16 +9,16 @@
 // modify it under the terms of the GNU General Public License as
 // published by the Free Software Foundation; either version 2 of the
 // License, or (at your option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License
 // along with this program; if not, write to the Free Software
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA. 
+// USA.
 
 #include <storm/ia32/timer.h>
 #include <storm/ia32/types.h>
@@ -42,8 +42,8 @@ enum
 
 static inline void rdtsc (u32 *low, u32 *high)
 {
-  asm volatile 
-  ("rdtsc" 
+  asm volatile
+  ("rdtsc"
    : "=a" (*low), "=d" (*high));
 }
 
@@ -69,7 +69,7 @@ static cpu_model_type cpu_model[] =
     VENDOR_INTEL, 4,
     {
       "486 DX-25/33", "486 DX-50", "486 SX", "486 DX/2", "486 SL", "486 SX/2",
-      unknown, "486 DX/2-WB", "486 DX/4", "486 DX/4-WB", unknown, unknown, 
+      unknown, "486 DX/2-WB", "486 DX/4", "486 DX/4-WB", unknown, unknown,
       unknown, unknown, unknown, unknown
     }
   },
@@ -78,16 +78,16 @@ static cpu_model_type cpu_model[] =
     {
       "Pentium A-step", "Pentium", "Pentium", "OverDrive PODP5V83",
       "Pentium MMX", unknown, unknown, "Mobile Pentium", "Mobile Pentium MMX",
-      unknown, unknown, unknown, unknown, unknown, unknown, unknown 
+      unknown, unknown, unknown, unknown, unknown, unknown, unknown
     }
   },
-  { 
+  {
     VENDOR_INTEL, 6,
     {
-      "Pentium Pro A-step", "Pentium Pro", unknown, "Pentium II (Klamath)", 
+      "Pentium Pro A-step", "Pentium Pro", unknown, "Pentium II (Klamath)",
       unknown, "Pentium II (Deschutes)", "Celeron (Mendocino)",
       "Pentium III (McKinley)", "Pentium III (Coppermine)", unknown,
-      unknown, unknown, unknown, unknown, unknown, unknown 
+      unknown, unknown, unknown, unknown, unknown, unknown
     }
   },
   {
@@ -105,17 +105,17 @@ static cpu_model_type cpu_model[] =
     {
       unknown, unknown, unknown, "486 DX/2", unknown, unknown, unknown,
       "486 DX/2-WB", "486 DX/4", "486 DX/4-WB", unknown, unknown, unknown,
-      unknown, "Am5x86-WT", "Am5x86-WB" 
+      unknown, "Am5x86-WT", "Am5x86-WB"
     }
   },
-  { 
+  {
     VENDOR_AMD, 5,
     {
       "K5/SSA5", "K5", "K5", "K5", unknown, unknown, "K6", "K6", "K6-2",
       "K6-3", unknown, unknown, unknown, unknown, unknown, unknown
     }
   },
-  { 
+  {
     VENDOR_AMD, 6,
     {
       "Athlon", "Athlon", unknown, unknown, unknown, unknown, unknown,
@@ -164,7 +164,7 @@ static int INIT_CODE has_cpuid (void)
                 "popfl\n"
 
                 /* Read eflags register and mask all bits but id bit. */
-                
+
                 "pushfl\n"
                 "movl        (%%esp), %%eax\n"
                 "andl        %1, %%eax\n"
@@ -184,10 +184,10 @@ static int INIT_CODE has_cpuid (void)
                 "popfl\n"
 
                 /* Is id bit the same? */
-                
+
                 "cmpl        %%ebx, %%eax\n"
                 "jne         1f\n"
-  
+
                 /* CPUID not supported. */
 
                 "movl        $0, %%eax\n"
@@ -196,7 +196,7 @@ static int INIT_CODE has_cpuid (void)
                 "2: popl        %%ebx"
                 : "=&a" (return_value)
                 : "g" (FLAG_ID));
-  
+
   return return_value;
 }
 
@@ -209,29 +209,29 @@ static int INIT_CODE is_486 (void)
 
   asm
   ("pushl   %%ecx\n"
-    
+
    "pushfl\n"
    "popl    %%eax\n"
    "movl    %%eax, %%ecx\n"
    "xorl    $0x40000, %%eax\n"
    "pushl   %%eax\n"
    "popf\n"
-                  
+
    "pushf\n"
    "popl    %%eax\n"
    "xorl    %%ecx, %%eax\n"
    "and     $0x40000, %%eax\n"
    "je      1f\n"
-  
+
    /* 486 was detected. */
 
    "movl   $1, %%eax\n"
    "jmp    2f\n"
-                
+
    "1:  movl   $0, %%eax\n"
    "2:  popl   %%ecx"
    : "=&a" (return_value));
-  
+
   return return_value;
 }
 
@@ -257,7 +257,7 @@ static void INIT_CODE cpu_examine (void)
     cpu_info.name = cpuid_string;
 
     /* Get model type and flags. */
-   
+
     cpuid (GET_CPU_INFO, (u32 *) &cpu_info.signature, &dummy, &dummy,
            (u32 *) &cpu_info.flags.real_flags);
   }
@@ -265,7 +265,7 @@ static void INIT_CODE cpu_examine (void)
   {
     cpu_info.name = cpu_name_nocpuid;
     cpu_info.cpuid = 0;
-  
+
     /* Now detect if the CPU is a 386 or 486. */
 
     if (is_486 ())
@@ -278,7 +278,7 @@ static void INIT_CODE cpu_examine (void)
       cpu_info.family = 3;
     }
   }
-}                
+}
 
 /* FIXME: This code should be much cleaner... */
 
@@ -305,10 +305,10 @@ static u32 INIT_CODE calibrate_tsc (void)
   /* Set the gate high, disable speaker. */
 
   port_out_u8 (0x61, (port_in_u8 (0x61) & ~0x02) | 0x01);
-  
+
   /* Now let's take care of CTC channel 2. */
-  
-  /* Set the gate high, program CTC channel 2 for mode 0, (interrupt
+
+  /* Set the gate high, program CTC channel 2 for mode 0, (interrupt
      on terminal count mode), binary count, load 5 * LATCH count, (LSB
      and MSB) to begin countdown. */
 
@@ -323,51 +323,51 @@ static u32 INIT_CODE calibrate_tsc (void)
   /* MSB of count */
 
   port_out_u8 (0x42, CALIBRATE_LATCH >> 8);
-  
+
   rdtsc (&startlow, &starthigh);
   count = 0;
-  
+
   do
   {
     count++;
   } while ((port_in_u8 (0x61) & 0x20) == 0);
 
   rdtsc (&endlow, &endhigh);
-  
+
   /* Error */
-  
+
   if (count <= 1)
   {
     return 0;
   }
-  
+
   /* 64-bit subtract - gcc just messes up with long longs. FIXME: test
      if this is really so. The code was borrowed from Linux which was
      designed for gcc 2.7, and we're targeting gcc 2.95... */
-  
+
   asm ("subl %2, %0\n"
        "sbbl %3, %1"
        : "=a" (endlow), "=d" (endhigh)
        : "g" (startlow), "g" (starthigh), "0" (endlow), "1" (endhigh));
-  
+
   /* CPU is too fast. */
-  
+
   if (endhigh != 0)
   {
     return 0;
   }
-  
+
   /* CPU is too slow. */
-  
+
   if (endlow <= CALIBRATE_TIME)
   {
     return 0;
   }
-  
+
   asm ("divl %2"
        : "=a" (endlow), "=d" (endhigh)
        : "r" (endlow), "0" (0), "1" (CALIBRATE_TIME));
-  
+
   return endlow;
 }
 
@@ -377,14 +377,14 @@ static u32 INIT_CODE cpuid_get_cpu_speed (void)
 {
   u32 tsc_quotient = calibrate_tsc ();
   u32 cpu_hz;
-  
+
   if (tsc_quotient != 0)
   {
     /* Report CPU clock rate in Hz. The formula is (10^6 * 2^32) /
        (2^32 * 1 / (clocks/us)) = clock/second. Our precision is about
        100 ppm. */
 
-    {   
+    {
       u32 eax = 0, edx = 1000000;
       asm ("divl %2"
            : "=a" (cpu_hz), "=d" (edx)
@@ -406,7 +406,7 @@ void cpuid_init (void)
   u8 c;
 
   /* Make sure we clear this structure. */
-  
+
   memory_set_u8 ((u8 *) &cpu_info, 0, sizeof (cpu_info_type));
 
   DEBUG_MESSAGE (DEBUG, "Passed");
@@ -436,11 +436,11 @@ void cpuid_init (void)
   switch (cpu_info.cpuid)
   {
     /* Non-CPUID capable machine (386, early 486). */
-    
+
     case 0:
     {
       DEBUG_MESSAGE (DEBUG, "Passed");
-    
+
       switch (cpu_info.family)
       {
         /* 386 */
@@ -450,20 +450,20 @@ void cpuid_init (void)
           parsed_cpu.name = "Unidentified 386";
           parsed_cpu.vendor = "Unknown";
           break;
-        }        
+        }
 
-        /* 486 */ 
+        /* 486 */
 
         case 4:
         {
           parsed_cpu.name = "Unidentified 486";
           parsed_cpu.vendor = "Unknown";
           break;
-        }        
- 
+        }
+
         /* Error */
 
-        default: 
+        default:
         {
           corrupted_struct ();
           break;
@@ -473,10 +473,10 @@ void cpuid_init (void)
 
       break;
     }
- 
+
     /* CPUID capable machine. (late 486, Pentium, K6, Athlon and so
        on...) */
-    
+
     case 1:
     {
       DEBUG_MESSAGE (DEBUG, "Passed");
@@ -496,13 +496,13 @@ void cpuid_init (void)
         vendor = VENDOR_CYRIX;
         parsed_cpu.vendor = "Cyrix";
       }
-      else 
+      else
       {
         vendor = VENDOR_UNKNOWN;
         parsed_cpu.name = "Unknown clone manufacturer";
         parsed_cpu.vendor = "Unknown";
-      }      
-      
+      }
+
       DEBUG_MESSAGE (DEBUG, "Passed");
 
       if (vendor != VENDOR_UNKNOWN) {
@@ -524,11 +524,11 @@ void cpuid_init (void)
 
       break;
     }
-    
+
     default:
     {
       corrupted_struct ();
       break;
-    } 
+    }
   }
 }

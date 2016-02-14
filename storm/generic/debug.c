@@ -1,5 +1,5 @@
 // Abstract: Functions used primarily when debugging the kernel.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 2000, 2007, 2013 chaos development.

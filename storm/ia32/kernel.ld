@@ -1,5 +1,5 @@
 /* Abstract: storm linker script. Heavily based on the elf_i386.xbn from GNU binutils. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* © Copyright 2000, 2013 chaos development. */
 

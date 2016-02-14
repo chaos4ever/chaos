@@ -1,5 +1,5 @@
 // Abstract: Startup code file for chaos binaries. This code is what executes the main () function.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000, 2013 chaos development.
 

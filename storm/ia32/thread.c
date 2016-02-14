@@ -1,6 +1,6 @@
 // Abstract: Thread routines. Part of the process system. Responsible for adding and removing threads under a cluster.
 // Authors: Henrik Hallin <hal@chaosdev.org>,
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2013 chaos development

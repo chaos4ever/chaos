@@ -1,5 +1,5 @@
 // Abstract: Translation map from UCS-2 to code page 437.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 2000, 2013 chaos development.
 

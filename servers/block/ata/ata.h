@@ -2,7 +2,7 @@
 /* Abstract: ATA driver */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
             Anders Ohrt <doa@chaosdev.org>
-            Per Lundberg <per@halleluja.nu> */
+            Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999-2000 chaos development */
 

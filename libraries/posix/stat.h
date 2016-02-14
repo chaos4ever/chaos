@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: sys/stat.h */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 2000 chaos development. */
 

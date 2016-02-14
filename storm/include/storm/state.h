@@ -1,6 +1,6 @@
 // Abstract: Definitions of task states.
 // Authors: Henrik Hallin <hal@chaosdev.org>
-//          Per Lundberg <per@halleluja.nu>
+//          Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999-2000, 2013 chaos development.
 

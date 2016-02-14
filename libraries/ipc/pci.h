@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Protocol for commuicating with the PCI server. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999 chaos development. */
 

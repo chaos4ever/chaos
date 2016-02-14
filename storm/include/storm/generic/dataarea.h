@@ -1,5 +1,5 @@
 // Abstract: Definition of the data area which is used for communication between the startup code and the kernel.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 
 // © Copyright 1998-1999, 2013 chaos development.
 

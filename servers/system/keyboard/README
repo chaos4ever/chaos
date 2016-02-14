@@ -24,4 +24,4 @@ it is probably safest to just assume the whole server is GPL:ed. If you want
 to rewrite it all in pure, BSD-based goodness, please be our guest - pull
 requests are certainly welcome here.
 
--- Per Lundberg <per@halleluja.nu>  Sat,  8 Jul 2000 02:48:28 +0200
+-- Per Lundberg <per@chaosdev.io>  Sat,  8 Jul 2000 02:48:28 +0200

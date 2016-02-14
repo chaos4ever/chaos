@@ -2,8 +2,8 @@
 /* Abstract: ATA server for chaos. Follows the standard chaos block
    service format. */
 /* Author: Henrik Hallin <hal@chaosdev.org>
-           Anders Öhrt <doa@chaosdev.org> 
-           Per Lundberg <per@halleluja.nu> */
+           Anders Ã–hrt <doa@chaosdev.org> 
+           Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999-2000 chaos development. */
 
@@ -62,15 +62,15 @@ static bool select_device (interface_type *interface, unsigned int device)
   unsigned int timeout = 0;
 
   /* Wait for BSY to clear for up to one second. */
-  
-  while ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & 
+
+  while ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
           BIT_BSY) != 0 && timeout < 10)
   {
     timeout++;
     system_sleep (100);
   }
 
-  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & 
+  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
        BIT_BSY) != 0)
   {
     return FALSE;
@@ -79,7 +79,7 @@ static bool select_device (interface_type *interface, unsigned int device)
   /* Select device. */
   /* FIXME: Optimize this by having an interface->selected_device flag
      to avoid reselecting the same device over and over. */
-  
+
   system_port_out_u8 (interface->io_base + REGISTER_DEVICE_HEAD,
                       (device == 0) ? DEVICE_MASTER : DEVICE_SLAVE);
 
@@ -94,7 +94,7 @@ static bool select_device (interface_type *interface, unsigned int device)
     timeout++;
     system_sleep (100);
   }
-  
+
   if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
        (BIT_BSY | BIT_DRDY)) != BIT_DRDY)
   {
@@ -197,7 +197,7 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 
   system_port_out_u8 (interface->io_base + REGISTER_SECTOR_COUNT,
                       number_of_sectors);
-  
+
   if (interface->device[device]->lba)
   {
     /* This device supports LBA addressing mode. */
@@ -304,7 +304,7 @@ static bool check_extended (interface_type *interface, unsigned int device,
       log_print_formatted (&log_structure, LOG_URGENCY_INFORMATIVE,
                            "  Partition: Type 0x%02X, starts at sector %lu, size: %lu MB. %s",
                            partition[index].type,
-                           partition[index].lba_starting_sector_number + 
+                           partition[index].lba_starting_sector_number +
                            extended_start_sector + offset,
                            partition[index].lba_number_of_sectors * 512 / 1024 / 1024,
                            (partition[index].active == 1) ? "(Active)" : "");
@@ -318,7 +318,7 @@ static bool check_extended (interface_type *interface, unsigned int device,
       service->number_of_sectors = partition[index].lba_number_of_sectors;
 
       /* Create a block service for this partition. */
-      
+
       if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
       {
         handle_service (service);
@@ -399,7 +399,7 @@ static bool check_primary (interface_type *interface, unsigned int device,
       service->number_of_sectors = partition[index].lba_number_of_sectors;
 
       /* Create a block service for this partition. */
-      
+
       if (system_thread_create () == SYSTEM_RETURN_THREAD_NEW)
       {
         handle_service (service);
@@ -578,7 +578,7 @@ bool ata_init_interface (interface_type *interface)
 
   /* Ok. We have things set up for this interface. Now, let's probe
      for devices on it. */
-  
+
   for (device = 0; device < 2; device++)
   {
     unsigned int type = ATA_DEVICE_NONE;
@@ -615,18 +615,18 @@ bool ata_init_interface (interface_type *interface)
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                            "Found a %s device on interface.",
                            (device == 0) ? "master" : "slave");
-      
+
       memory_allocate ((void **) &interface->device[device],
                        sizeof (device_type));
       memory_set_u8 ((u8 *) interface->device[device], 0,
                      sizeof (device_type));
-      
+
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                            "Sending identify command to device.");
       send_command (interface, COMMAND_IDENTIFY_DEVICE);
-      
+
       /* Read the status register and ACK the controller at the same time. */
-      
+
       status = system_port_in_u8 (interface->io_base + REGISTER_STATUS);
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                            "Command status was 0x%X. Reading data...", status);
@@ -673,7 +673,7 @@ bool ata_init_interface (interface_type *interface)
         interface->device[device]->number_of_cylinders = interface->device[device]->id[1];
         interface->device[device]->number_of_heads = interface->device[device]->id[3];
         interface->device[device]->sectors_per_track = interface->device[device]->id[6];
-        interface->device[device]->number_of_sectors = 
+        interface->device[device]->number_of_sectors =
           interface->device[device]->number_of_cylinders *
           interface->device[device]->number_of_heads *
           interface->device[device]->sectors_per_track;
@@ -709,7 +709,7 @@ bool ata_init_interface (interface_type *interface)
       /* Initialise this device. This includes reading the partition
          table and create a thread and a service for each found
          partition. */
-      
+
       init_device (interface, device);
     }
     else

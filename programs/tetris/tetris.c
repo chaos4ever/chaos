@@ -1,8 +1,8 @@
 /* $Id$ */
 /* Abstract: A simple tetris game. */
 /* Authors: Henrik Hallin <hal@chaosdev.org>
-            Anders Öhrt <doa@chaosdev.org>
-            Per Lundberg <per@halleluja.nu> */
+            Anders Ã–hrt <doa@chaosdev.org>
+            Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 2000 chaos development */
 
@@ -68,8 +68,8 @@ const piece_type piece[] =
   },
 
   /*  ##
-     ##  */ 
-    
+     ##  */
+
   {
     {
       {
@@ -99,8 +99,8 @@ const piece_type piece[] =
     }
   },
 
-  /* #### */ 
-    
+  /* #### */
+
   {
     {
       {
@@ -131,8 +131,8 @@ const piece_type piece[] =
   },
 
   /* ##
-     ## */ 
-    
+     ## */
+
   {
     {
       {
@@ -164,7 +164,7 @@ const piece_type piece[] =
 
   /* ###
       #  */
-    
+
   {
     {
       {
@@ -196,7 +196,7 @@ const piece_type piece[] =
 
   /* ###
        # */
-    
+
   {
     {
       {
@@ -228,7 +228,7 @@ const piece_type piece[] =
 
   /* ###
      #   */
-    
+
   {
     {
       {
@@ -315,7 +315,7 @@ void tetris (void)
   timeout_time = current_time + TIMEOUT;
 
   /* Redraw the playfield. */
-  
+
   draw_playfield ();
 
   /* Main loop. */
@@ -335,7 +335,7 @@ void tetris (void)
                     piece_x - 1, piece_y))
       {
         fixate_piece_on_playfield (current_piece, current_rotation,
-                                   piece_x, piece_y);        
+                                   piece_x, piece_y);
         done = TRUE;
         continue;
       }
@@ -380,7 +380,7 @@ void tetris (void)
       }
 
       case DOWN:
-      {        
+      {
         if (!(collides (current_piece, current_rotation,
                         piece_x, piece_y + 1)))
         {
@@ -414,7 +414,7 @@ void tetris (void)
         if (!(collides (current_piece, current_rotation,
                         piece_x, piece_y + 1)))
         {
-          piece_y++;          
+          piece_y++;
         }
         else
         {
@@ -473,7 +473,7 @@ void tetris (void)
     draw_playfield ();
   }
 
-  console_print_formatted (&console_structure, 
+  console_print_formatted (&console_structure,
                            "Thank you for playing %s %s.\n",
                            PACKAGE_NAME, PACKAGE_VERSION);
 }
@@ -536,7 +536,7 @@ static u16 read_key (void)
 
   console_event_wait (&console_structure, &keyboard_packet,
                       &event_type, FALSE);
-  
+
   if (event_type == CONSOLE_EVENT_KEYBOARD &&
       !keyboard_packet.key_pressed)
   {
@@ -607,7 +607,7 @@ static void fixate_piece_on_playfield (int current_piece, int current_rotation,
         }
       }
     }
-  }        
+  }
 }
 
 
@@ -645,5 +645,5 @@ static void paste_piece_to_playfield (int current_piece, int current_rotation,
         }
       }
     }
-  }        
+  }
 }

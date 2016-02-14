@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Little endian functions. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 2000 chaos development. */
 

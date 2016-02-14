@@ -1,5 +1,5 @@
 // Abstract: Return values
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Ohrt <doa@chaosdev.org>
 //

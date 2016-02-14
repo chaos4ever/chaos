@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: Functions for setting memory blocks. */
-/* Author: Per Lundberg <per@halleluja.nu> 
+/* Author: Per Lundberg <per@chaosdev.io> 
    
    Probably a bit ripped off of Linux or similar. OTOH, it is hard to
    write these functions differently to how they are currently

@@ -1,5 +1,5 @@
 // Abstract: Library for getting pseudo-random numbers.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 2000 chaos development

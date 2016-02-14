@@ -1,5 +1,5 @@
 // Abstract: Provides functions for managing the virtual memory (MMU) mechanisms of the IA32 architecture.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 
 // Copyright 1999-2000 chaos development.

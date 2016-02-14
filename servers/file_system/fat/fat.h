@@ -1,5 +1,5 @@
 // Abstract: Data structures used by the FAT server.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //         Anders Öhrt <doa@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development

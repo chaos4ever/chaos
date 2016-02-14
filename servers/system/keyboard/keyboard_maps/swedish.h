@@ -1,6 +1,6 @@
 /* $Id$ */
 /* Abstract: A swedish keyboard translation map for chaos. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1998-2000 chaos development. */
 

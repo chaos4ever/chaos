@@ -2,7 +2,7 @@
 /* Abstract: Definition of the protocol types used in the chaos
    system. Also define all the message types those protocols
    support. */
-/* Author: Per Lundberg <per@halleluja.nu> */
+/* Author: Per Lundberg <per@chaosdev.io> */
 
 /* Copyright 1999-2000 chaos development. */
 

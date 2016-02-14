@@ -1,5 +1,5 @@
 // Abstract: Limitation variables. All of those should in the future be overridable via kernel parameters or similar.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 
 // Copyright 2000, 2013 chaos development.

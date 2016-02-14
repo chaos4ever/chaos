@@ -2,7 +2,7 @@
 # frozen_string_literal: true
 #
 # Abstract: Get the block size of the given file and print it as a C header.
-# Author: Per Lundberg <per@halleluja.nu>
+# Author: Per Lundberg <per@chaosdev.io>
 #
 # © Copyright 1999-2000 chaos development
 # © Copyright 2015 chaos development

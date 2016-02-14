@@ -1,5 +1,5 @@
 // Abstract: CPU detection and some lowlevel routines.
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development

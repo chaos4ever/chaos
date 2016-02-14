@@ -1,5 +1,5 @@
 // Abstract: Log library. The functions in this library are used for communicating to the log server.
-// Author: Per Lundberg <per@halleluja.nu>
+// Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 2000 chaos development
 // © Copyright 2015 chaos development

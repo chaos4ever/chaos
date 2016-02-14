@@ -3,7 +3,7 @@
 // facilities of the host CPU and multitasking. It is also responsible for starting the servers loaded by the Multiboot compliant
 // boot loader.
 //
-// Authors: Per Lundberg <per@halleluja.nu>
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1998-2000, 2007, 2013, 2015 chaos development.
