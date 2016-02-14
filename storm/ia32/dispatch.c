@@ -5,7 +5,7 @@
 // © Copyright 1999-2000 chaos development
 // © Copyright 2007 chaos development
 // © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 // Define this as TRUE if you want *lots* of debug information.
 #define DEBUG FALSE
@@ -204,13 +204,16 @@ void dispatch_next(void)
         // There is at least one more task that should be executed, so let's do it.
         mutex_kernel_signal(&tss_tree_mutex);
         dispatch();
+        cpu_interrupts_enable();
     }
     else
     {
+        // No other thread to run. We need to make _sure_ to yield the CPU in this case; otherwise we will always consume 100%
+        // CPU, even when we are completely idle.
         mutex_kernel_signal(&tss_tree_mutex);
+        cpu_interrupts_enable();
+        asm("hlt");
     }
-
-    cpu_interrupts_enable();
 }
 
 // Update dispatcher information. Called from the IRQ 0 handler.
