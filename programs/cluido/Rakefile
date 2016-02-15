@@ -3,7 +3,6 @@ OBJECTS = %w(
   cluido.o
   command.o
   init.o
-  nibbles.o
 ).freeze
 
 LIBRARIES = %w(
