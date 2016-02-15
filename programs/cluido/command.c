@@ -3,7 +3,8 @@
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015-2016 chaos development
 
 #include "config.h"
 #include "cluido.h"
@@ -203,6 +204,12 @@ void command_crash(int number_of_arguments UNUSED, char **argument UNUSED)
 // Change current working directory.
 void command_directory_change_working(int number_of_arguments, char *argument[])
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     file_verbose_directory_entry_type directory_entry;
 
     // FIXME: Ugly.
@@ -270,6 +277,12 @@ void command_directory_change_working(int number_of_arguments, char *argument[])
 // List files.
 void command_directory_list(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     u8 *buffer;
     file_directory_entry_read_type *directory_entry;
     unsigned int index;
@@ -327,6 +340,12 @@ void command_directory_list(int number_of_arguments UNUSED, char *argument[] UNU
 // Executes the given file.
 void command_execute(int number_of_arguments, char **argument)
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     u8 *buffer;
     file_handle_type handle;
     file_verbose_directory_entry_type directory_entry;
@@ -403,6 +422,12 @@ void command_execute(int number_of_arguments, char **argument)
 // Change the VGA font accordingly.
 void command_font_set(int number_of_arguments, char **argument)
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     u8 *buffer;
     message_parameter_type message_parameter;
     mailbox_id_type mailbox_id[10];
@@ -846,6 +871,12 @@ void command_reboot(int number_of_arguments UNUSED, char **argument UNUSED)
 // Run a script.
 void command_run(int number_of_arguments, char *argument[])
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     file_handle_type handle;
     u8 *buffer;
     file_verbose_directory_entry_type directory_entry;
@@ -966,6 +997,12 @@ void command_show(int number_of_arguments, char *argument[] UNUSED)
 // Show the contents of the given file.
 void command_show_file(int number_of_arguments, char *argument[])
 {
+    if (vfs_structure.output_mailbox_id == 0)
+    {
+        console_print_formatted(&console_structure, "No connection to VFS service available. Is the vfs server started?\n");
+        return;
+    }
+
     file_handle_type handle;
     u8 *buffer;
     file_verbose_directory_entry_type directory_entry;
