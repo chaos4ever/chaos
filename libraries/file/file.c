@@ -7,8 +7,6 @@
 #include <file/file.h>
 #include <string/string.h>
 
-#include "config.h"
-
 // Initialise the file library.
 return_type file_init(ipc_structure_type *vfs_structure, tag_type *tag)
 {
