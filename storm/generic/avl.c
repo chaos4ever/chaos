@@ -1,10 +1,10 @@
 // Abstract: Functions used by the AVL tree functions.
 // Authors: Henrik Hallin <hal@chaosdev.org
-//          Anders Öhrt <doa@chaosdev.org>
+//          Anders ï¿½hrt <doa@chaosdev.org>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// ï¿½ Copyright 1999-2000 chaos development
+// ï¿½ Copyright 2013 chaos development
+// ï¿½ Copyright 2015-2016 chaos development
 
 #define DEBUG FALSE
 

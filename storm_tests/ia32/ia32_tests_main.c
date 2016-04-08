@@ -1,7 +1,7 @@
 // Abstract: Entry point for the unit test program.
 // Authors: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 #include "test_helper.h"
 

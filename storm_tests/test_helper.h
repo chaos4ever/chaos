@@ -1,7 +1,7 @@
 // Abstract: Helper for the unit tests
 // Authors: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 #pragma once
 

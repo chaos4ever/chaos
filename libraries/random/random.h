@@ -3,7 +3,7 @@
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 2000 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 #pragma once
 
