@@ -1,15 +1,18 @@
-// Abstract: PS/2 mouse code for the keyboard server. */
+// Abstract: PS/2 mouse code for the keyboard server.
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 2000 chaos development
 // © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development
+
+#include <ipc/ipc.h>
+#include <memory/memory.h>
 
 #include "common.h"
 #include "controller.h"
 #include "mouse.h"
-#include "config.h"
 
 // Have we got a PS/2 mouse port? As of yet, we don't probe for the actual existance of a *mouse*, just the port. This
 // makes hotswapping PS/2 mice easy.

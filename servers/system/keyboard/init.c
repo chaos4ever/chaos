@@ -2,9 +2,13 @@
 // Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development
 
-#include "config.h"
+#include <memory/memory.h>
+#include <system/system.h>
+
 #include "common.h"
 #include "controller.h"
 #include "init.h"
@@ -17,15 +21,14 @@ bool init(void)
     const char *message;
 
     memory_init();
-    system_process_name_set(PACKAGE_NAME);
+    system_process_name_set("keyboard");
 
-    /* Initialise a connection to the log service. */
-    //  log_init (&log_structure, PACKAGE_NAME);
+    // Initialise a connection to the log service.
+    // log_init (&log_structure, "keyboard");
 
     if (system_call_port_range_register(CONTROLLER_PORT_BASE, CONTROLLER_PORTS, "Keyboard controller") != STORM_RETURN_SUCCESS)
     {
-        //    log_print (&log_structure, LOG_URGENCY_EMERGENCY,
-        //               "Could not allocate portrange 0x60 - 0x6F.");
+        // log_print (&log_structure, LOG_URGENCY_EMERGENCY, "Could not allocate portrange 0x60 - 0x6F.");
         return FALSE;
     }
 
@@ -35,7 +38,7 @@ bool init(void)
     message = keyboard_init();
     if (message != NULL)
     {
-        //log_print (&log_structure, LOG_URGENCY_ERROR, message);
+        // log_print (&log_structure, LOG_URGENCY_ERROR, message);
     }
 
     // Initialise a PS/2 mouse port, if found.
