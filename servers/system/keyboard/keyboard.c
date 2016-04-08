@@ -1,16 +1,20 @@
 // Abstract: Keyboard server for chaos.
-// Authors: Per Lundberg <per@chaosdev.io>,
+// Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development
 
 // Parts of this file was inspired by the Linux keyboard support. Should be rewritten, both to get rid of the GPL viral
 // effect but also since the code quality of some parts here are incredibly bad. Probably the parts we wrote
 // ourselves... ;)
 
-#include "config.h"
+#include <console/console.h>
+#include <ipc/ipc.h>
+#include <memory/memory.h>
+#include <string/string.h>
 
 // FIXME: Set this to a dummy map, and let the boot-server set the right key map. Or something.
 #include "keyboard_maps/british.h"
