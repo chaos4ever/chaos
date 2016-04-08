@@ -29,9 +29,9 @@
 #include "scan_code.h"
 
 // The keyboard maps convert keys to standard UTF-8 sequences.
-static const char **keyboard_map = swedish_keyboard_map;
-static const char **keyboard_map_shift = swedish_keyboard_map_shift;
-static const char **keyboard_map_altgr = swedish_keyboard_map_altgr;
+static const char **keyboard_map = us_keyboard_map;
+static const char **keyboard_map_shift = us_keyboard_map_shift;
+static const char **keyboard_map_altgr = us_keyboard_map_altgr;
 
 // We need to create an array of 16 bytes, for storing the currently pressed keys in. (128 scan codes / 8).
 static volatile u8 keyboard_pressed_keys[16];
