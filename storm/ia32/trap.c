@@ -5,7 +5,7 @@
 //
 // © Copyright 1998-2000
 // © Copyright 2013 chaos development.
-// © Copyright 2015 chaos development.
+// © Copyright 2015-2016 chaos development.
 
 // Define this when debugging this module.
 #define DEBUG FALSE

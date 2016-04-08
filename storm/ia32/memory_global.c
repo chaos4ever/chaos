@@ -4,7 +4,7 @@
 //
 // © Copyright 2000 chaos development
 // © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 // If DEBUG is TRUE, lots of debug information will be printed.
 #define DEBUG FALSE

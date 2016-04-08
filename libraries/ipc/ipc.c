@@ -3,7 +3,7 @@
 
 // © Copyright 2000 chaos development
 // © Copyright 2007 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 #include <console/console.h>
 #include <ipc/ipc.h>

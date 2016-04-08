@@ -4,7 +4,7 @@
 
 // © Copyright 1999-2000 chaos development
 // © Copyright 2007 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 // FIXME: Rename this file to task.h, and make it more generic (also split it in two of course).
 

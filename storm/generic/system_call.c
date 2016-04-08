@@ -4,7 +4,7 @@
 // © Copyright 2000 chaos development
 // © Copyright 2007 chaos development
 // © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 // This file contains a wrapper for each system call function, which is responsible for locking the right mutex. Also, it
 // serves as an abstraction layer for the architecture dependent parts of the kernel.

@@ -3,7 +3,7 @@
 
 // © Copyright 1999 chaos development
 // © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 #include <storm/generic/debug.h>
 #include <storm/generic/defines.h>

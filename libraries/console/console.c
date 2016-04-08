@@ -3,7 +3,7 @@
 //
 // © Copyright 1999-2000 chaos development
 // © Copyright 2013 chaos development
-// © Copyright 2015 chaos development
+// © Copyright 2015-2016 chaos development
 
 // See The chaos Programming Reference Manual for more information about the functions in this library.
 
