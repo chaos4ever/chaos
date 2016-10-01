@@ -6,6 +6,6 @@
 #pragma once
 
 #include <storm/kernelfs.h>
-#include <storm/ia32/types.h>
+#include <storm/x86/types.h>
 
 extern return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic);

@@ -2,7 +2,7 @@
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w(
-  ia32
+  x86
 )
 
 task default: subfolders do |t|
