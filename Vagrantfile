@@ -4,12 +4,18 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision 'shell', inline: <<-SHELL
     set -e
+
+    # Override sources.list for faster downloads (for people outside of the US).
+    echo deb http://httpredir.debian.org/debian/ stretch main > /etc/apt/sources.list
+    echo deb-src http://httpredir.debian.org/debian/ stretch main >> /etc/apt/sources.list
+    echo deb http://security.debian.org/debian-security stretch/updates main >> /etc/apt/sources.list
+    echo deb-src http://security.debian.org/debian-security stretch/updates main >> /etc/apt/sources.list
+
     sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
       astyle \
       cmake \
       dosfstools \
-      gcc-5 \
       gcc-multilib \
       gdb \
       genisoimage \
@@ -20,7 +26,13 @@ Vagrant.configure(2) do |config|
       qemu \
       rake
 
-    # Disabled for now since we don't have any Rust dependencies, and 
+    # The gcc-arm-none-eabi package is not yet available in stretch:
+    # https://packages.debian.org/jessie/devel/gcc-arm-none-eabi
+    echo deb http://httpredir.debian.org/debian/ unstable main >> /etc/apt/sources.list
+    sudo apt-get update
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-arm-none-eabi
+
+    # Disabled for now since we don't have any Rust dependencies, and
     ## We need the beta channel for the #![feature] functionality.
     #curl -sSf https://static.rust-lang.org/rustup.sh > /tmp/rustup.sh && \
     #  sh /tmp/rustup.sh --yes --channel=nightly --date=2016-01-13
