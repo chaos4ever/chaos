@@ -1,12 +1,12 @@
 // Abstract: AVL function prototypes.
 // Authors: Henrik Hallin <hal@chaosdev.org
-//          Anders Öhrt <doa@chaosdev.org>
+//          Anders ï¿½hrt <doa@chaosdev.org>
 //
-// © Copyright 2000, 2013 chaos development.
+// ï¿½ Copyright 2000, 2013 chaos development.
 
 #pragma once
 
-#include <storm/ia32/types.h>
+#include <storm/x86/types.h>
 
 // Type definitions.
 // Information about a memory block.
@@ -26,7 +26,7 @@ typedef struct avl_node_type
     // Which of the child-trees is the highest?
     int balance;
 
-    // The following is what makes the hifi-eslöf system special.
+    // The following is what makes the hifi-eslï¿½f system special.
     // Which is the start page of the block?
     unsigned int start;
 

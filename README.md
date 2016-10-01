@@ -27,7 +27,7 @@ The code in the following directories/files are to be treated as licensed under 
 
 * [libraries/string/inlines.h](libraries/string/inlines.h) (should be fixed).
 * servers/system/pci
-* [storm/ia32/cpuid.c](storm/ia32/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
+* [storm/x86/cpuid.c](storm/x86/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
 
 We encourage code that is written for chaos (servers, programs, libraries) to use the license below. This license allows us, and anyone else for that matter, to use your code freely, incorporate it in future versions of chaos and similar. However, unlike with the GNU GPL, we don't force this choice upon you. The freedom is yours. Use it wisely.
 
@@ -46,9 +46,9 @@ Redistribution and use in source and binary forms, with or without modification,
 
 **THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.**
 
-### License for storm/ia32/compiler_rt
+### License for storm/x86/compiler_rt
 
-Copyright © 2009-2013 by the contributors listed in [CREDITS.TXT](storm/ia32/compiler_rt/CREDITS.TXT)
+Copyright © 2009-2013 by the contributors listed in [CREDITS.TXT](storm/x86/compiler_rt/CREDITS.TXT)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

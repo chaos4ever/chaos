@@ -7,9 +7,9 @@
 
 #include <storm/generic/avl.h>
 #include <storm/generic/avl_debug.h>
-#include <storm/ia32/defines.h>
-#include <storm/ia32/debug.h>
-#include <storm/ia32/memory.h>
+#include <storm/x86/defines.h>
+#include <storm/x86/debug.h>
+#include <storm/x86/memory.h>
 
 // Dumps information about the page allocation system.
 static void tree_dump(avl_node_type *tree)

@@ -7,9 +7,9 @@ chaos.iso
 *.orig
 
 storm/current-arch
-storm/ia32/storm
+storm/x86/storm
 storm/include/storm/current-arch
-storm_tests/ia32/ia32_tests
+storm_tests/x86/x86_tests
 
 # These are painful but what do we do...
 programs/cluido/cluido

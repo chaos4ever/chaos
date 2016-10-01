@@ -78,7 +78,7 @@
 	(command_help): Likewise.
 	(command_sanity): Likewise.	
 
-	* Moved a lot of header files from include/storm/ia32 to
+	* Moved a lot of header files from include/storm/x86 to
 	include/storm/generic. Now, most everything has two header
 	files. One in generic and one in ia32; the one in generic includes
 	the architecture specific stuff. This was done to ease future
@@ -128,7 +128,7 @@
 
 2000-08-19  Per Lundberg  <plundis@chaosdev.org>
 
-	* include/storm/ia32/timer.[ch]: Changed the event stuff to have
+	* include/storm/x86/timer.[ch]: Changed the event stuff to have
 	a timeslice' variable instead of decreasing the
 	'jiffies_left' each timeslice.
 
@@ -139,12 +139,12 @@
 
 	* ia32/process.c (process_find): New function.
 
-	* include/storm/ia32/tss.h (storm_tss_type): New field:
+	* include/storm/x86/tss.h (storm_tss_type): New field:
 	process_info.
 
 	* ia32/thread.c (thread_link_list): New function.
 
-	* include/storm/ia32/process.h (process_info_type): New data type.
+	* include/storm/x86/process.h (process_info_type): New data type.
 
 	* ia32/process.c (process_info_root): New variable.
 
@@ -172,7 +172,7 @@
 	unique. (as of earlier, if one of them would create a new page
 	table, all would have it)
 
-	* include/storm/ia32/defines.h (BASE_PROCESS_PAGEDIRECTORY):
+	* include/storm/x86/defines.h (BASE_PROCESS_PAGEDIRECTORY):
 	Renamed to BASE_PROCESS_PAGE_DIRECTORY.
 	(BASE_PROCESS_PAGETABLES): Renamed to BASE_PROCESS_PAGE_TABLES.
 
@@ -193,13 +193,13 @@
 
 	* generic/mailbox.c (mailbox_receive): Added some sanity checks.
 
-	* include/storm/ia32/memory_virtual.h: Changed the prototype for
+	* include/storm/x86/memory_virtual.h: Changed the prototype for
 	memory_virtual_map_other.
 
 	* ia32/memory_virtual.c (memory_virtual_map_other): Changed the
 	input parameter to be a pointer to a TSS instead of a task ID.
 
-	* include/storm/ia32/timer.h (event_timer_type): Changed the
+	* include/storm/x86/timer.h (event_timer_type): Changed the
 	variable 'task' to thread_id.
 
 	* include/storm/defines.h (TASK_ID_MAX): New define.
@@ -218,11 +218,11 @@
 
 	* ia32/timer.c (timer_add_event): Likewise.
 
-	* include/storm/ia32/irq.h (irq_free_all): Likewise.
+	* include/storm/x86/irq.h (irq_free_all): Likewise.
 
 	* ia32/port.c (port_range_free_all): Likewise.
 
-	* include/storm/ia32/irq.h (irq_type): Removed the task_id
+	* include/storm/x86/irq.h (irq_type): Removed the task_id
 	variable from this data type, since it is no longer needed.
 
 	* ia32/dispatch.c (dispatch_init): New function.
@@ -231,7 +231,7 @@
 	(tss_list): Likewise.
 	(thread_get_tss): New function.
 
-	* include/storm/ia32/tss.h (tss_tree_type): New data type.
+	* include/storm/x86/tss.h (tss_tree_type): New data type.
 	(tss_list_type): New data type.
 
 	* ia32/process.c (tss): Removed this variable, since it is to be
@@ -260,7 +260,7 @@
 	* ia32/dispatch.c (dispatch_task_switcher): Added code for setting
 	current_tss->instruction_pointer on each task switch.
 
-	* include/storm/ia32/tss.h (STORM_ALIGNED_TSS_SIZE): Removed this
+	* include/storm/x86/tss.h (STORM_ALIGNED_TSS_SIZE): Removed this
 	define, since it was no longer in use.
 	(storm_tss_type): Added a new field: instruction_pointer.
 
@@ -334,19 +334,19 @@
 	instead, to avoid using them from within storm (and thus bloating
 	the kernel binary a lot).
 
-	* include/storm/ia32/port.h: Added a prototypes for the
+	* include/storm/x86/port.h: Added a prototypes for the
 	port_free_all function.
 
-	* include/storm/ia32/irq.h: Added a prototype for the irq_free_all
+	* include/storm/x86/irq.h: Added a prototype for the irq_free_all
 	function.
 
-	* include/storm/ia32/port.h: Fixed a typo. Also, did some minor
+	* include/storm/x86/port.h: Fixed a typo. Also, did some minor
 	cleanups of the file.
 	
 	* ia32/port.c (port_range_free_all): New function for freeing all
 	ports that belong to a given thread.
 
-	* include/storm/ia32/port.h (port_range_type): Made the port range
+	* include/storm/x86/port.h (port_range_type): Made the port range
 	type a double linked list instead of a regular linked list.
 
 	* ia32/irq.c: Added mutexing for the IRQ code.
@@ -372,7 +372,7 @@
 	* ia32/irq.c (irq_register): Added a check for controlling the
 	input data.
 
-	* include/storm/ia32/irq.h (IRQ_LEVELS): New define.
+	* include/storm/x86/irq.h (IRQ_LEVELS): New define.
 
 	* generic/kernelfs.c (kernelfs_entry_read): New kernelfs class:
 	KERNELFS_CLASS_PORT_AMOUNT.
@@ -381,7 +381,7 @@
 	* ia32/port.c (port_range_register): Added code for filling the
 	new fields in port_range_type described below.
 
-	* include/storm/ia32/port.h (process_id): Added to the
+	* include/storm/x86/port.h (process_id): Added to the
 	port_range_type struct.
 	(cluster_id): Likewise.
 	(thread_id): Likewise.
@@ -399,7 +399,7 @@
 2000-07-18  Per Lundberg  <plundis@chaosdev.org>
 
 	* include/storm/defines.h (SIZE_PAGE): Moved this define here from
-	include/storm/ia32, since it is needed by regular programs.
+	include/storm/x86, since it is needed by regular programs.
 	(SIZE_IN_PAGES): Likewise.
 	(PAGE_ALIGN): Likewise.
 
@@ -445,7 +445,7 @@
 
 2000-07-04  Per Lundberg  <plundis@chaosdev.org>
 
-	* include/storm/ia32/tss.h (storm_tss_type.capability): New field.
+	* include/storm/x86/tss.h (storm_tss_type.capability): New field.
 
 2000-07-03  Per Lundberg  <plundis@chaosdev.org>
 
@@ -474,7 +474,7 @@
 
 2000-06-04  Per Lundberg  <plundis@chaosdev.org>
 
-	* include/storm/ia32/tss.h (storm_tss_type): Removed
+	* include/storm/x86/tss.h (storm_tss_type): Removed
 	kernel_stack_pages since it is no longer necessary.
 
 2000-05-28  Per Lundberg  <plundis@chaosdev.org>
