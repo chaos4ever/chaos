@@ -1,7 +1,10 @@
 // Abstract: Execution of ELF images.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000, 2007, 2013, 2015 chaos development.
+// © Copyright 1999-2000 chaos development
+// © Copyright 2007 chaos development
+// © Copyright 2013 chaos development
+// © Copyright 2015-2016 chaos development
 
 #define DEBUG FALSE
 
@@ -136,7 +139,7 @@ return_type elf_execute(u8 *image, char *parameter_string, process_id_type *proc
                     // .text, i.e. the code section.
                     case ELF_SECTION_FLAG_ALLOCATE | ELF_SECTION_FLAG_EXECUTE:
                     {
-                        if (code_section_base != 0 || code_section_size != 0)                          
+                        if (code_section_base != 0 || code_section_size != 0)
                         {
                           return RETURN_ELF_SECTION_MULTIPLE_INSTANCES;
                         }
