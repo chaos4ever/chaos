@@ -44,15 +44,15 @@ bool initialised = FALSE;
 dataarea_type dataarea;
 
 // Local variables.
-static u32 server_process_id INIT_DATA;
-static u32 help INIT_DATA = 0;
+static uint32_t server_process_id INIT_DATA;
+static uint32_t help INIT_DATA = 0;
 
 // Struct to define kernel arguments.
 typedef struct
 {
     const char *name;
     bool has_value;
-    u32 *variable;
+    uint32_t *variable;
 } kernel_argument_type;
 
 // This is the structure of valid kernel arguments.
@@ -279,7 +279,7 @@ return_type kernel_main(int arguments, char *argument[])
     }
 
     // Initial servers are started; let's deallocate the images.
-    for (u32 index = 0; index < multiboot_info.number_of_modules; index++)
+    for (uint32_t index = 0; index < multiboot_info.number_of_modules; index++)
     {
         // FIXME: This breaks the AVL tree sometimes...
         // memory_physical_deallocate(GET_PAGE_NUMBER(multiboot_module_info[index].start));

@@ -26,8 +26,8 @@ extern descriptor_type *gdt;
 
 C_EXTERN_BEGIN
 
-extern void gdt_add_entry(u16 number, descriptor_type *descriptor) INIT_CODE;
-extern void gdt_setup_call_gate(u8 number, u16 selector, function_type handler, u8 dpl, u8 params) INIT_CODE;
-extern void gdt_setup_tss_descriptor(u16 selector, void *address, int dpl, int limit);
+extern void gdt_add_entry(uint16_t number, descriptor_type *descriptor) INIT_CODE;
+extern void gdt_setup_call_gate(uint8_t number, uint16_t selector, function_type handler, uint8_t dpl, uint8_t params) INIT_CODE;
+extern void gdt_setup_tss_descriptor(uint16_t selector, void *address, int dpl, int limit);
 
 C_EXTERN_END

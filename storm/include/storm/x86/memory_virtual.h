@@ -22,45 +22,45 @@
 
 typedef struct
 {
-    u32 present           : 1;
-    u32 flags             : 4;
-    u32 accessed          : 1;
-    u32 dirty             : 1;
+    uint32_t present           : 1;
+    uint32_t flags             : 4;
+    uint32_t accessed          : 1;
+    uint32_t dirty             : 1;
 
     // Should always be one.
-    u32 page_size         : 1;
-    u32 global            : 1;
-    u32 available         : 3;
+    uint32_t page_size         : 1;
+    uint32_t global            : 1;
+    uint32_t available         : 3;
 
     // Obvious?
-    u32 zero              : 10;
-    u32 page_base         : 10;
+    uint32_t zero              : 10;
+    uint32_t page_base         : 10;
 } page_directory_entry_4mbpage;
 
 typedef struct
 {
-    u32 present           : 1;
-    u32 flags             : 4;
-    u32 accessed          : 1;
-    u32 zero              : 1;
+    uint32_t present           : 1;
+    uint32_t flags             : 4;
+    uint32_t accessed          : 1;
+    uint32_t zero              : 1;
 
     // Should always be zero.
-    u32 page_size         : 1;
-    u32 global            : 1;
-    u32 available         : 3;
-    u32 page_table_base    : 20;
+    uint32_t page_size         : 1;
+    uint32_t global            : 1;
+    uint32_t available         : 3;
+    uint32_t page_table_base    : 20;
 } page_directory_entry_page_table;
 
 typedef struct
 {
-    u32 present           : 1;
-    u32 flags             : 4;
-    u32 accessed          : 1;
-    u32 dirty             : 1;
-    u32 zero              : 1;
-    u32 global            : 1;
-    u32 available         : 3;
-    u32 page_base         : 20;
+    uint32_t present           : 1;
+    uint32_t flags             : 4;
+    uint32_t accessed          : 1;
+    uint32_t dirty             : 1;
+    uint32_t zero              : 1;
+    uint32_t global            : 1;
+    uint32_t available         : 3;
+    uint32_t page_base         : 20;
 } page_table_entry;
 
 static inline void memory_virtual_cache_invalidate(void *address)
@@ -70,7 +70,7 @@ static inline void memory_virtual_cache_invalidate(void *address)
     {
         asm ("invlpg %0"
              :
-             : "m" (*(u8 *) address)
+             : "m" (*(uint8_t *) address)
              : "memory");
     }
 }

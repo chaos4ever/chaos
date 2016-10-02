@@ -23,7 +23,7 @@
 return_type init(void)
 {
     // Clear the bitmap, marking all slots as free.
-    memory_set_u8((u8 *) process_avl_header->bitmap, 0, SIZE_PAGE - sizeof (avl_header_type));
+    memory_set_uint8_t((uint8_t *) process_avl_header->bitmap, 0, SIZE_PAGE - sizeof (avl_header_type));
 
     // Mark the first entry in the bitmap as used.
     process_avl_header->bitmap[0] = 1;

@@ -100,8 +100,8 @@ static void handle_connection(void *argument)
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     unsigned int data_size = 1024;
 
     memory_allocate((void **) data_pointer, data_size);

@@ -30,14 +30,14 @@
 #include <storm/x86/tss.h>
 #include <storm/x86/gdt.h>
 
-volatile u8 dispatch_task_flag = 0;
+volatile uint8_t dispatch_task_flag = 0;
 
 volatile process_id_type current_process_id = PROCESS_ID_KERNEL;
 volatile cluster_id_type current_cluster_id = CLUSTER_ID_KERNEL;
 volatile thread_id_type current_thread_id = THREAD_ID_KERNEL;
 volatile time_type timeslice = 0;
 storm_tss_type *current_tss = (storm_tss_type *) BASE_VIRTUAL_KERNEL_TSS;
-u32 jump_data[2] = { 0, 0 };
+uint32_t jump_data[2] = { 0, 0 };
 tss_list_type *current_tss_node;
 
 void dispatch_init(void)
@@ -62,7 +62,7 @@ static void timers_update(void)
 // FIXME: Get rid of these 0 and 1 return values.
 static int update_data(void)
 {
-    u32 counter = 0;
+    uint32_t counter = 0;
     tss_list_type *tss_node = current_tss_node;
 #ifdef DEBUG_IDLE
     screen_type *screen = (screen_type *) BASE_SCREEN;
@@ -187,8 +187,8 @@ void dispatch_next(void)
 #if !OPTION_RELEASE
     if (tss_tree_mutex == MUTEX_LOCKED)
     {
-        u32 esp __attribute__ ((unused)) = cpu_get_esp();
-        DEBUG_MESSAGE(TRUE, "Called from %p", ((u32 *) esp)[7]);
+        uint32_t esp __attribute__ ((unused)) = cpu_get_esp();
+        DEBUG_MESSAGE(TRUE, "Called from %p", ((uint32_t *) esp)[7]);
         DEBUG_HALT("We was called when the TSS tree mutex was locked. This should not happen.");
     }
 #endif

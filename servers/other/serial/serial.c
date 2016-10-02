@@ -34,13 +34,13 @@
 
 #include <serial/serial.h>
 
-static u16 io_ports[NUMBER_OF_PORTS] =
+static uint16_t io_ports[NUMBER_OF_PORTS] =
 {
   0x3F8,
   0x2F8
 };
 
-static u8 irqs[NUMBER_OF_PORTS] =
+static uint8_t irqs[NUMBER_OF_PORTS] =
 {
   4,
   3
@@ -153,8 +153,8 @@ static void handle_connection (unsigned int port_number,
   message_parameter_type message_parameter;
   serial_data_type data;
   ipc_structure_type ipc_structure;
-  u16 x;
-  u16 base;
+  uint16_t x;
+  uint16_t base;
 
   /* Accept the connection. */ 
 
@@ -257,8 +257,8 @@ static void handle_connection (unsigned int port_number,
         /* Enable Tx IRQ. */
 
         base = io_ports[port_number];
-        system_port_out_u8 (base + REGISTER_IER,
-                            system_port_in_u8 (base + REGISTER_IER) | 0x02);
+        system_port_out_uint8_t (base + REGISTER_IER,
+                            system_port_in_uint8_t (base + REGISTER_IER) | 0x02);
 
         serial_port[port_number].lock_tx = FALSE;
 
@@ -387,10 +387,10 @@ static void handle_connection (unsigned int port_number,
 }
 
 
-static int task_port (u8 port_number)
+static int task_port (uint8_t port_number)
 {
   ipc_structure_type ipc_structure;
-  u8 *service_name = "serial0";
+  uint8_t *service_name = "serial0";
 
   /* TODO: command-line options. */
   

@@ -24,15 +24,15 @@
 // Execute an ELF image located at the linear virtual `image'.
 // FIXME: Figure out a way to modularize this part of the kernel.
 // FIXME: image should be elf_header_type *elf_header.
-return_type elf_execute(u8 *image, char *parameter_string, process_id_type *process_id)
+return_type elf_execute(uint8_t *image, char *parameter_string, process_id_type *process_id)
 {
     elf_header_type *elf_header = (elf_header_type *) image;
     section_header_type *section_header;
-    u32 index;
-    u32 code_section_base = 0, data_section_base = 0, bss_section_base = 0;
-    u32 code_section_size = 0, data_section_size = 0, bss_section_size = 0;
-    u8 *code_section_address = NULL;
-    u8 *data_section_address = NULL;
+    uint32_t index;
+    uint32_t code_section_base = 0, data_section_base = 0, bss_section_base = 0;
+    uint32_t code_section_size = 0, data_section_size = 0, bss_section_size = 0;
+    uint8_t *code_section_address = NULL;
+    uint8_t *data_section_address = NULL;
     process_create_type elf_process_create;
 
     // First of all, make sure this is a valid ELF image.
@@ -131,7 +131,7 @@ return_type elf_execute(u8 *image, char *parameter_string, process_id_type *proc
                         DEBUG_MESSAGE(DEBUG, ".data is section %u", index);
                         data_section_size = section_header->size;
                         data_section_base = section_header->address;
-                        data_section_address = (u8 *) image + section_header->offset;
+                        data_section_address = (uint8_t *) image + section_header->offset;
 
                         break;
                     }
@@ -147,7 +147,7 @@ return_type elf_execute(u8 *image, char *parameter_string, process_id_type *proc
                         DEBUG_MESSAGE(DEBUG, ".text is section %u", index);
                         code_section_size = section_header->size;
                         code_section_base = section_header->address;
-                        code_section_address = (u8 *) image + section_header->offset;
+                        code_section_address = (uint8_t *) image + section_header->offset;
 
                         break;
                     }

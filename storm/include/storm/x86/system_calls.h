@@ -12,9 +12,9 @@
 
 typedef struct
 {
-    u32 number;
+    uint32_t number;
     function_type handler;
-    u8 arguments;
+    uint8_t arguments;
 } system_call_type;
 
 C_EXTERN_BEGIN

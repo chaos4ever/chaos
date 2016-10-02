@@ -106,7 +106,7 @@ void avl_update_mappings(avl_header_type *avl_header)
         (avl_header->pages_allocated_bitmap * SIZE_PAGE - 1) &&
         avl_header->limit_pages_bitmap > avl_header->pages_allocated_bitmap)
     {
-        u32 new_page;
+        uint32_t new_page;
 
         // FIXME: It is uneccessary to clear this flag for all AVL-trees, find out a smart way of doing this.
         // This flag is set to FALSE, or else this will recurse unpredicable.
@@ -118,7 +118,7 @@ void avl_update_mappings(avl_header_type *avl_header)
         // FIXME: Check return value.
         memory_physical_allocate(&new_page, 1, "AVL bitmap");
 
-        memory_virtual_map(GET_PAGE_NUMBER((u32) avl_header) + avl_header->pages_allocated_bitmap, new_page, 1, PAGE_KERNEL);
+        memory_virtual_map(GET_PAGE_NUMBER((uint32_t) avl_header) + avl_header->pages_allocated_bitmap, new_page, 1, PAGE_KERNEL);
 
         avl_header->pages_allocated_bitmap++;
     }
@@ -130,12 +130,12 @@ void avl_update_mappings(avl_header_type *avl_header)
          (4 * sizeof (avl_node_type))) &&
         avl_header->limit_pages_array > avl_header->pages_allocated_array)
     {
-        u32 new_page;
+        uint32_t new_page;
 
         // This flag is set to FALSE, or else this will recurse unpredicable.
 
         //    debug_print ("Nodearray at 0x%x is growing...",
-        //                 (u32) avl_header->node_array);
+        //                 (uint32_t) avl_header->node_array);
         //    avl_dump_header (avl_header);
 
         avl_header->growable = FALSE;
@@ -143,7 +143,7 @@ void avl_update_mappings(avl_header_type *avl_header)
         // FIXME: Check return value.
         memory_physical_allocate(&new_page, 1, "AVL node array");
 
-        memory_virtual_map(GET_PAGE_NUMBER((u32) avl_header->node_array) + avl_header->pages_allocated_array, new_page, 1, PAGE_KERNEL);
+        memory_virtual_map(GET_PAGE_NUMBER((uint32_t) avl_header->node_array) + avl_header->pages_allocated_array, new_page, 1, PAGE_KERNEL);
 
         avl_header->pages_allocated_array++;
     }

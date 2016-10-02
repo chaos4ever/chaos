@@ -16,16 +16,16 @@
 #include "mouse.h"
 
 // This reads the controller status port, and does the appropriate action.
-u8 handle_event(void)
+uint8_t handle_event(void)
 {
-    u8 status = controller_read_status();
+    uint8_t status = controller_read_status();
     unsigned int work;
 
     for (work = 0;
          (work < 10000) && ((status & CONTROLLER_STATUS_OUTPUT_BUFFER_FULL) != 0);
          work++)
     {
-        u8 scancode;
+        uint8_t scancode;
 
         scancode = controller_read_input();
 
@@ -107,14 +107,14 @@ int controller_wait_for_input(void)
 }
 
 // Write a command word to the keyboard controller.
-void controller_write_command_word(u8 data)
+void controller_write_command_word(uint8_t data)
 {
     controller_wait();
     controller_write_command(data);
 }
 
 // Write an output word to the keyboard controller.
-void controller_write_output_word(u8 data)
+void controller_write_output_word(uint8_t data)
 {
     controller_wait();
     controller_write_output(data);
@@ -138,13 +138,13 @@ void keyboard_clear_input(void)
 int controller_read_data(void)
 {
     int return_value = KEYBOARD_NO_DATA;
-    u8 status;
+    uint8_t status;
 
     status = controller_read_status();
     if ((status & CONTROLLER_STATUS_OUTPUT_BUFFER_FULL) ==
             CONTROLLER_STATUS_OUTPUT_BUFFER_FULL)
     {
-        u8 data = controller_read_input();
+        uint8_t data = controller_read_input();
 
         return_value = data;
         if ((status & (CONTROLLER_STATUS_GENERAL_TIMEOUT |

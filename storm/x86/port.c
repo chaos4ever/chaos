@@ -149,7 +149,7 @@ return_type port_range_register(unsigned int start, unsigned int ports, char *de
         memory_copy(current_tss, old_tss, sizeof(storm_tss_type) + old_iomap_size);
 
         current_tss->iomap_size = BIT_IN_BYTES(start + ports);
-        memory_set_u8(current_tss->iomap + old_iomap_size, 0xFF, current_tss->iomap_size - old_iomap_size);
+        memory_set_uint8_t(current_tss->iomap + old_iomap_size, 0xFF, current_tss->iomap_size - old_iomap_size);
         DEBUG_MESSAGE(DEBUG, "Clearing %u bytes", current_tss->iomap_size - old_iomap_size)
         
         thread_unlink(old_tss->thread_id);

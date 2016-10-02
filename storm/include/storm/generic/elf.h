@@ -150,81 +150,81 @@ enum
 typedef struct
 {
     // Must be 0x7F, 'E, 'L', 'F' in this order.
-    u8 identification[4];
+    uint8_t identification[4];
 
     // The class of this executable. ELF_CLASS_WHATEVER.
-    u8 class;
+    uint8_t class;
 
     // The endianess of the data in this file. ELF_ENDIAN_*
-    u8 endian;
+    uint8_t endian;
 
     // Current version is ELF_VERSION_CURRENT.
-    u8 version;
+    uint8_t version;
 
     // Should be zero. FreeBSD uses those to put 'FreeBSD' in the ELF header. We could do the same...
-    u8 pad[9];
+    uint8_t pad[9];
 
     // The type of ELF. ELF_TYPE_WHATEVER.
-    u16 type;
+    uint16_t type;
 
     // The machine type this ELF is designed to run on. ELF_MACHINE_WHATEVER.
-    u16 machine;
+    uint16_t machine;
 
     // Current version is still ELF_VERSION_CURRENT. (Don't ask me why they put the version ID in two places...)
-    u32 version2;
+    uint32_t version2;
 
     // The location of the program entry point.
-    u32 entry_point;
+    uint32_t entry_point;
 
     // Offset of program header table.
-    u32 program_header_offset;
+    uint32_t program_header_offset;
 
     // Offset of section header table.
-    u32 section_header_offset;
-    u32 flags;
+    uint32_t section_header_offset;
+    uint32_t flags;
 
     // The size of the ELF header.
-    u16 elf_header_size;
+    uint16_t elf_header_size;
 
     // The size of a program header table entry.
-    u16 program_header_entry_size;
+    uint16_t program_header_entry_size;
 
     // The number of program header entries.
-    u16 program_header_entries;
+    uint16_t program_header_entries;
 
     // The size of a section header table entry.
-    u16 section_header_entry_size;
+    uint16_t section_header_entry_size;
 
     // The number of section header entries.
-    u16 section_header_entries;
+    uint16_t section_header_entries;
 
     // The section header table index of the section name string table.
 
-    u16 section_string_index;
+    uint16_t section_string_index;
 } PACKED elf_header_type;
 
 // A section header entry.
 typedef struct
 {
     // The name of the section (index of the string table).
-    u32 name;
-    u32 type;
-    u32 flags;
+    uint32_t name;
+    uint32_t type;
+    uint32_t flags;
 
     // The start of the section in memory.
-    u32 address;
+    uint32_t address;
 
     // The start of the section in the file.
-    u32 offset;
+    uint32_t offset;
 
     // The size of the section.
-    u32 size;
-    u32 link;
-    u32 info;
-    u32 address_align;
+    uint32_t size;
+    uint32_t link;
+    uint32_t info;
+    uint32_t address_align;
 
     // The size of each section entry.
-    u32 entry_size;
+    uint32_t entry_size;
 } PACKED section_header_type;
 
-return_type elf_execute(u8 *image, char *parameter_string, process_id_type *process_id) INIT_CODE;
+return_type elf_execute(uint8_t *image, char *parameter_string, process_id_type *process_id) INIT_CODE;

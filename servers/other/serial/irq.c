@@ -34,14 +34,14 @@
 
 static void handle_irq (unsigned int port_number)
 {
-  u8 iir;
-  u8 data;
-  u8 tx_chars;
-  u16 base;
-  u16 tmp = 0;
+  uint8_t iir;
+  uint8_t data;
+  uint8_t tx_chars;
+  uint16_t base;
+  uint16_t tmp = 0;
 
   base = serial_port[port_number].port;
-  iir = system_port_in_u8 (base + REGISTER_IIR);
+  iir = system_port_in_uint8_t (base + REGISTER_IIR);
 
   while ((iir & 0x01) == 0)
   {
@@ -53,7 +53,7 @@ static void handle_irq (unsigned int port_number)
       /* Modem status. */
 
       log_print (&log_structure, LOG_URGENCY_DEBUG, "Serial modem IRQ.");
-      (void) system_port_in_u8 (base + REGISTER_MSR);
+      (void) system_port_in_uint8_t (base + REGISTER_MSR);
     }
     else if (iir == 1)
     {
@@ -83,15 +83,15 @@ static void handle_irq (unsigned int port_number)
           data = serial_port[port_number].tx_buffer[serial_port[port_number].tx_current];
           serial_port[port_number].tx_current++;
           serial_port[port_number].tx_current %= BUFFER_SIZE;
-          system_port_out_u8 (base + REGISTER_DATA, data);
+          system_port_out_uint8_t (base + REGISTER_DATA, data);
         }
         else
         {
           /* No more data. Disable Tx interrupt. */
 
-          data = system_port_in_u8 (base + REGISTER_IER);
+          data = system_port_in_uint8_t (base + REGISTER_IER);
           data &= 0xFD;
-          system_port_out_u8 (base + REGISTER_IER, data);
+          system_port_out_uint8_t (base + REGISTER_IER, data);
           break;
         }
       }
@@ -110,7 +110,7 @@ static void handle_irq (unsigned int port_number)
       do
       {
         tmp++;
-        data = system_port_in_u8 (base + REGISTER_DATA);
+        data = system_port_in_uint8_t (base + REGISTER_DATA);
         serial_port[port_number].rx_buffer[serial_port[port_number].rx_end] =
           data;
         serial_port[port_number].rx_end++;
@@ -122,7 +122,7 @@ static void handle_irq (unsigned int port_number)
           log_print (&log_structure, LOG_URGENCY_ERROR,
                      "Rx buffer overflow.");
         }
-      } while ((system_port_in_u8 (base + REGISTER_LSR) & 0x01) == 0x01);
+      } while ((system_port_in_uint8_t (base + REGISTER_LSR) & 0x01) == 0x01);
 
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                            "Received %d chars.", tmp);
@@ -148,7 +148,7 @@ static void handle_irq (unsigned int port_number)
       log_print (&log_structure, LOG_URGENCY_DEBUG, "Serial line IRQ.");
       serial_port[port_number].line_error++;
 
-      data = system_port_in_u8 (base + REGISTER_LSR);
+      data = system_port_in_uint8_t (base + REGISTER_LSR);
 
       if ((data & 0x02) != 0)
       {
@@ -166,11 +166,11 @@ static void handle_irq (unsigned int port_number)
         serial_port[port_number].framing_error++;
       }
       
-      (void) system_port_in_u8 (base + REGISTER_DATA);
+      (void) system_port_in_uint8_t (base + REGISTER_DATA);
       serial_port[port_number].errors++;
     }
     
-    iir = system_port_in_u8 (base + REGISTER_IIR);
+    iir = system_port_in_uint8_t (base + REGISTER_IIR);
   }
 }
 

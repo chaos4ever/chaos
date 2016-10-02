@@ -89,7 +89,7 @@ void process_init(void)
     kernel_tss->state = STATE_IDLE;
     kernel_tss->process_id = PROCESS_ID_KERNEL;
     kernel_tss->thread_id = THREAD_ID_KERNEL;
-    kernel_tss->cr3 = (u32) kernel_page_directory;
+    kernel_tss->cr3 = (uint32_t) kernel_page_directory;
     thread_link(kernel_tss);
     number_of_tasks++;
 
@@ -129,11 +129,11 @@ return_type process_create(process_create_type *process_data)
     unsigned page_directory_page;
     unsigned counter;
     page_directory_entry_page_table *page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
-    u32 code_base, data_base = 0;
-    u32 avl_intro_base, avl_array_base;
+    uint32_t code_base, data_base = 0;
+    uint32_t avl_intro_base, avl_array_base;
     avl_header_type *new_avl_header;
     unsigned int process_avl_intro_pages, process_avl_array_pages;
-    u32 physical_page;
+    uint32_t physical_page;
     process_info_type *process_info;
 
     // Make sure all sections take up some space.
@@ -177,7 +177,7 @@ return_type process_create(process_create_type *process_data)
     DEBUG_MESSAGE(DEBUG, "Allocating memory for the process TSS.");
 
     process_tss = (storm_tss_type *) memory_global_allocate(sizeof (storm_tss_type));
-    memory_set_u8((u8 *) process_tss, 0, sizeof (storm_tss_type));
+    memory_set_uint8_t((uint8_t *) process_tss, 0, sizeof (storm_tss_type));
 
     DEBUG_MESSAGE(DEBUG, "Adding thread to TSS structures.");
     mutex_kernel_wait(&tss_tree_mutex);
@@ -201,7 +201,7 @@ return_type process_create(process_create_type *process_data)
     // Map it for ourselves so that we can clear it out.
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_page, 1, PAGE_KERNEL);
 
-    memory_set_u8((u8 *) BASE_PROCESS_TEMPORARY, 0, SIZE_PAGE);
+    memory_set_uint8_t((uint8_t *) BASE_PROCESS_TEMPORARY, 0, SIZE_PAGE);
 
     // Map it for the new task.
     memory_virtual_map_other(process_tss,
@@ -215,7 +215,7 @@ return_type process_create(process_create_type *process_data)
     // Map kernel.
     memory_virtual_map_other(process_tss, GET_PAGE_NUMBER(BASE_KERNEL),
                              GET_PAGE_NUMBER(BASE_KERNEL),
-                             SIZE_IN_PAGES((u32) & _end - BASE_KERNEL),
+                             SIZE_IN_PAGES((uint32_t) & _end - BASE_KERNEL),
                              PAGE_KERNEL | PAGE_GLOBAL);
 
     // Map kernel TSS.
@@ -304,7 +304,7 @@ return_type process_create(process_create_type *process_data)
 
     if (process_data->code_section_size % SIZE_PAGE != 0)
     {
-        memory_set_u8((u8 *) (BASE_PROCESS_CREATE +
+        memory_set_uint8_t((uint8_t *) (BASE_PROCESS_CREATE +
                               process_data->code_section_size), 0,
                       SIZE_PAGE - (process_data->code_section_size % SIZE_PAGE));
     }
@@ -339,7 +339,7 @@ return_type process_create(process_create_type *process_data)
                       (process_data->bss_section_base -
                        process_data->data_section_base));
 
-        memory_set_u8((u8 *) BASE_PROCESS_CREATE +
+        memory_set_uint8_t((uint8_t *) BASE_PROCESS_CREATE +
                       (process_data->bss_section_base -
                        process_data->data_section_base), 0,
                       process_data->bss_section_size);
@@ -427,7 +427,7 @@ return_type process_create(process_create_type *process_data)
 
     for (counter = 0; counter < SIZE_IN_PAGES(SIZE_GLOBAL) / 1024; counter++)
     {
-        u32 index = (GET_PAGE_NUMBER(BASE_GLOBAL) / 1024) + counter;
+        uint32_t index = (GET_PAGE_NUMBER(BASE_GLOBAL) / 1024) + counter;
 
         page_directory[index].present = 1;
 

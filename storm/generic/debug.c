@@ -26,14 +26,14 @@
 #if !OPTION_RELEASE
 
 // Global variables.
-u32 debug_text_attribute = DEBUG_ATTRIBUTE_TEXT;
-u32 debug_background_attribute = DEBUG_ATTRIBUTE_BACKGROUND;
+uint32_t debug_text_attribute = DEBUG_ATTRIBUTE_TEXT;
+uint32_t debug_background_attribute = DEBUG_ATTRIBUTE_BACKGROUND;
 
 // Should debug messages go to the kernel log? (Not implemented fully yet..)
 bool debug_log_enable = FALSE;
 
-static u32 volatile x_position = 0;
-static u32 volatile y_position = 0;
+static uint32_t volatile x_position = 0;
+static uint32_t volatile y_position = 0;
 static debug_screen_type *screen = (debug_screen_type *) BASE_SCREEN;
 static char input_string[DEBUG_MAX_INPUT + 1];
 
@@ -120,7 +120,7 @@ static debug_command_type command[] =
 
 static int number_of_commands = (sizeof(command) / sizeof(debug_command_type));
 
-void debug_memory_dump(u32 *memory, u32 length)
+void debug_memory_dump(uint32_t *memory, uint32_t length)
 {
     unsigned int index;
 
@@ -245,19 +245,19 @@ void debug_init(void)
 // Move the cursor to the given position. Only moves the physical cursor; x_position and y_position is untouched.
 static void place_cursor(unsigned int x, unsigned int y)
 {
-    u16 c;
+    uint16_t c;
 
     if (x < dataarea.x_size && y < dataarea.y_size)
     {
         c = y * dataarea.x_size + x;
 
         // Cursor position high.
-        port_out_u8(0x3D4, 0x0E);
-        port_out_u8(0x3D5, c >> 8);
+        port_out_uint8_t(0x3D4, 0x0E);
+        port_out_uint8_t(0x3D5, c >> 8);
 
         // Cursor position lo.
-        port_out_u8(0x3D4, 0x0F);
-        port_out_u8(0x3D5, c);
+        port_out_uint8_t(0x3D4, 0x0F);
+        port_out_uint8_t(0x3D5, c);
     }
 }
 
@@ -271,7 +271,7 @@ static inline void put_character(int x, int y, int character, int character_attr
 // Basic printing function.
 static int print_simple(const char *string)
 {
-    u32 index;
+    uint32_t index;
 
     // Handle the NULL string.
     if (string == NULL)
@@ -298,7 +298,7 @@ static int print_simple(const char *string)
                 y_position  = dataarea.y_size - 1;
                 memory_copy((void *) screen, (void *) &screen[dataarea.x_size],
                             (dataarea.x_size * (dataarea.y_size - 1)) * 2);
-                memory_set_u16((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
+                memory_set_uint16_t((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
                                debug_background_attribute * 256 + ' ', dataarea.x_size);
             }
         }
@@ -334,7 +334,7 @@ void debug_print_simple(const char *string)
         y_position  = dataarea.y_size - 1;
         memory_copy((void *) screen, (void *) &screen[dataarea.x_size],
                     (dataarea.x_size * (dataarea.y_size - 1)) * 2);
-        memory_set_u16((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
+        memory_set_uint16_t((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
                        debug_background_attribute * 256 + ' ', dataarea.x_size);
     }
 
@@ -541,7 +541,7 @@ void debug_print(const char *format_string, ...)
             y_position--;
             memory_copy((void *) screen, (void *) &screen[dataarea.x_size],
                         (dataarea.x_size * (dataarea.y_size - 1)) * 2);
-            memory_set_u16((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
+            memory_set_uint16_t((void *) &screen[dataarea.x_size * (dataarea.y_size - 1)],
                            debug_background_attribute * 256 + ' ', dataarea.x_size);
         }
 
@@ -582,16 +582,16 @@ void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss)
 // Display a real crasch screen, including memory and process information.
 void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss)
 {
-    u32 saved_attribute;
+    uint32_t saved_attribute;
     unsigned int seconds = timeslice / hz;
 
-    //  u16 page_directory_entry, page_table_entry;
+    //  uint16_t page_directory_entry, page_table_entry;
 
     //  pagedirectory_entry_pagetable *page_directory;
 
     //  pagetable_entry *page_table;
 
-    memory_set_u16((void *) screen, DEBUG_ATTRIBUTE_CRASH * 256 + ' ', dataarea.x_size * dataarea.y_size);
+    memory_set_uint16_t((void *) screen, DEBUG_ATTRIBUTE_CRASH * 256 + ' ', dataarea.x_size * dataarea.y_size);
     place_cursor(0, 0);
     x_position = 0;
     y_position = 0;
@@ -635,16 +635,16 @@ void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss)
         page_directory_entry = dump_tss->esp / (SIZE_PAGE * 1024);
         page_table_entry = (dump_tss->esp / SIZE_PAGE) % 1024;
         debug_print("%x %x\n", page_directory_entry, page_table_entry);
-        
+
         memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), dump_tss->cr3, 1, PAGE_KERNEL);
-        
+
         page_directory = (pagedirectory_entry_pagetable *) BASE_PROCESS_TEMPORARY;
         memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY) + 1, page_directory[page_directory_entry].pagetable_base, 1, PAGE_KERNEL);
-        
+
         page_table = (pagetable_entry *) BASE_PROCESS_TEMPORARY + SIZE_PAGE;
         memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_table[page_table_entry].page_base, 1, PAGE_KERNEL);
 
-        debug_memory_dump((u32 *) BASE_PROCESS_TEMPORARY + dump_tss->esp % SIZE_PAGE,
+        debug_memory_dump((uint32_t *) BASE_PROCESS_TEMPORARY + dump_tss->esp % SIZE_PAGE,
                           SIZE_PAGE - (dump_tss->esp % SIZE_PAGE) < 20 * 4 ?
                           (SIZE_PAGE - (dump_tss->esp % SIZE_PAGE) / 4) :
                           20);
@@ -767,11 +767,11 @@ static int debug_line_parse(char *source, debug_arguments_type *destination)
 // FIXME: This is not really generic...
 void debug_run(void)
 {
-    u8 character_code;
+    uint8_t character_code;
     char character;
     unsigned int where;
     unsigned int words;
-    u32 esp = cpu_get_esp();
+    uint32_t esp = cpu_get_esp();
 
     debug_print("Stack pointer: %x\n", esp);
 
@@ -784,8 +784,8 @@ void debug_run(void)
         while (character != '\n')
         {
             // Wait for input.
-            while ((port_in_u8(DEBUG_KEYBOARD_STATUS) & DEBUG_KEYBOARD_INPUT_FULL) == 0);
-            character_code = port_in_u8(DEBUG_KEYBOARD_DATA);
+            while ((port_in_uint8_t(DEBUG_KEYBOARD_STATUS) & DEBUG_KEYBOARD_INPUT_FULL) == 0);
+            character_code = port_in_uint8_t(DEBUG_KEYBOARD_DATA);
 
             // Is this a 'release' scan code or a regular key press?
             if (character_code < 0x80)
@@ -876,7 +876,7 @@ void debug_run(void)
         input_string[where] = '\0';
 
         // Now, parse this command line...
-        memory_set_u8((u8 *) parsed_command.arguments, 0, 512);
+        memory_set_uint8_t((uint8_t *) parsed_command.arguments, 0, 512);
         words = debug_line_parse(input_string, &parsed_command);
 
         if (words > 0)

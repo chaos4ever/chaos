@@ -115,7 +115,7 @@ return_type memory_allocate(void **pointer, unsigned int bytes)
 // Deallocate a previously allocated memory buffer.
 return_type memory_deallocate(void **pointer)
 {
-    slab_superblock_type *superblock = (slab_superblock_type *) ((u32) * pointer & 0xFFFFF000);
+    slab_superblock_type *superblock = (slab_superblock_type *) ((uint32_t) * pointer & 0xFFFFF000);
     slab_block_type *block = (slab_block_type *) *pointer;
     int index = slab_heap_index(superblock->header.buffer_size);
 

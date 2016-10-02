@@ -9,19 +9,19 @@
 #include "fat.h"
 
 // Get the next cluster number in the chain for the given cluster.
-u32 get_next_cluster(u32 cluster_number, void *fat, int bits)
+uint32_t get_next_cluster(uint32_t cluster_number, void *fat, int bits)
 {
     switch (bits)
     {
         case 12:
         {
             fat12_type *fat12 = fat;
-            u32 new_cluster_number = FAT12_READ_ENTRY(fat12, cluster_number);
+            uint32_t new_cluster_number = FAT12_READ_ENTRY(fat12, cluster_number);
 
             if (new_cluster_number == FAT12_BAD_CLUSTER ||
                     new_cluster_number >= FAT12_END_OF_CLUSTER_CHAIN)
             {
-                return MAX_U32;
+                return UINT32_MAX;
             }
             else
             {
@@ -34,11 +34,11 @@ u32 get_next_cluster(u32 cluster_number, void *fat, int bits)
         case 16:
         {
             fat16_type *fat16 = fat;
-            u32 new_cluster_number = fat16[cluster_number];
+            uint32_t new_cluster_number = fat16[cluster_number];
 
             if (new_cluster_number >= FAT16_END_OF_CLUSTER_CHAIN)
             {
-                return MAX_U32;
+                return UINT32_MAX;
             }
             else
             {
@@ -50,11 +50,11 @@ u32 get_next_cluster(u32 cluster_number, void *fat, int bits)
         case 32:
         {
             fat32_type *fat32 = fat;
-            u32 new_cluster_number = fat32[cluster_number];
+            uint32_t new_cluster_number = fat32[cluster_number];
 
             if (new_cluster_number >= FAT32_END_OF_CLUSTER_CHAIN)
             {
-                return MAX_U32;
+                return UINT32_MAX;
             }
             else
             {
@@ -64,7 +64,7 @@ u32 get_next_cluster(u32 cluster_number, void *fat, int bits)
         }
         default:
         {
-            return MAX_U32;
+            return UINT32_MAX;
         }
     }
 }
@@ -72,10 +72,10 @@ u32 get_next_cluster(u32 cluster_number, void *fat, int bits)
 // Read the contents of the given cluster chain, starting from start_cluster + skip, and going number_of_clusters or until the end
 // of the chain, depending on which is encountered first. Returns the cluster number where we ended, or U32_MAX if we got to the
 // end of the file/directory/whatever.
-u32 read_clusters(fat_info_type *fat_info, void *output, u32 start_cluster, u32 skip, u32 number_of_clusters)
+uint32_t read_clusters(fat_info_type *fat_info, void *output, uint32_t start_cluster, uint32_t skip, uint32_t number_of_clusters)
 {
-    u32 cluster_number = start_cluster;
-    u32 clusters_read = 0;
+    uint32_t cluster_number = start_cluster;
+    uint32_t clusters_read = 0;
 
     do
     {
@@ -88,19 +88,19 @@ u32 read_clusters(fat_info_type *fat_info, void *output, u32 start_cluster, u32 
             //      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
             //                           "Reading cluster number %lu", cluster_number);
             read_single_cluster(fat_info, cluster_number, (void *)
-                                ((u32) output + (clusters_read *
+                                ((uint32_t) output + (clusters_read *
                                                  fat_info->bytes_per_sector *
                                                  fat_info->sectors_per_cluster)));
             clusters_read++;
         }
         cluster_number = get_next_cluster(cluster_number, fat_info->fat, fat_info->bits);
-    } while (cluster_number != MAX_U32 && clusters_read < number_of_clusters);
+    } while (cluster_number != MAX_uint32_t && clusters_read < number_of_clusters);
 
     return cluster_number;
 }
 
 // Read the given cluster to the given buffer.
-bool read_single_cluster(fat_info_type *fat_info, u32 cluster_number, void *data_buffer)
+bool read_single_cluster(fat_info_type *fat_info, uint32_t cluster_number, void *data_buffer)
 {
     message_parameter_type message_parameter;
     ipc_block_read_type ipc_block_read;

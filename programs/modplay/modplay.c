@@ -42,10 +42,10 @@ tag_type empty_tag =
 
 typedef struct
 {
-  u8 name[20];
-  u8 song_length;
-  u8 play_sequence[128];
-  u8 id[4];
+  uint8_t name[20];
+  uint8_t song_length;
+  uint8_t play_sequence[128];
+  uint8_t id[4];
   unsigned int physical_patterns;
 } module_type;
 
@@ -53,42 +53,42 @@ module_type module;
 
 typedef struct
 {
-  u8 name[22];
-  u16 length;
-  u8 finetune;
-  u8 volume;
-  u16 repeat_point;
-  u16 repeat_length;
-  u8 *data;
+  uint8_t name[22];
+  uint16_t length;
+  uint8_t finetune;
+  uint8_t volume;
+  uint16_t repeat_point;
+  uint16_t repeat_length;
+  uint8_t *data;
 } sample_type;
 
 typedef struct
 {
   unsigned int sample_number;
-  u16 length;
-  u8 finetune;
-  u8 volume;
-  u16 repeat_point;
-  u16 repeat_length;
-  u32 scaling_factor;
-  u8 *sample_data;
-  u16 period_frequency;
-  u32 ticks;
+  uint16_t length;
+  uint8_t finetune;
+  uint8_t volume;
+  uint16_t repeat_point;
+  uint16_t repeat_length;
+  uint32_t scaling_factor;
+  uint8_t *sample_data;
+  uint16_t period_frequency;
+  uint32_t ticks;
 } channel_type;
 
 typedef struct
 {
-  u8 sample_number : 8;
-  u16 period_frequency : 12;
-  u8 effect_number : 4;
-  u8 effect_parameter : 8;
+  uint8_t sample_number : 8;
+  uint16_t period_frequency : 12;
+  uint8_t effect_number : 4;
+  uint8_t effect_parameter : 8;
 } __attribute__ ((packed)) note_type;
 
 channel_type channel[CHANNELS];
 
 sample_type sample[31];
-u8 *pattern_data;
-u8 *pattern[256];
+uint8_t *pattern_data;
+uint8_t *pattern[256];
 
 unsigned int bpm;
 unsigned int speed;
@@ -98,7 +98,7 @@ unsigned int current_pattern;
 unsigned int tick_length;
 int current_row;
 
-void fill_buffer (u8 *buffer);
+void fill_buffer (uint8_t *buffer);
 void load_module (void);
 void do_note (note_type *work_note, channel_type *work_channel);
 
@@ -208,11 +208,11 @@ void load_module (void)
 {
   unsigned int i, j;
   unsigned int current_position;
-  u8 temp_char1;
-  u8 temp_char2;
+  uint8_t temp_char1;
+  uint8_t temp_char2;
   note_type *note;
-  u8 temp_note[4];
-  u8 *modfile_ptr;
+  uint8_t temp_note[4];
+  uint8_t *modfile_ptr;
 
 #if FALSE
   /* Check to see if the module is of type "M.K." -> 31 channels. */
@@ -235,15 +235,15 @@ void load_module (void)
     sample[i].name[21] = '\0';
     temp_char1 = modfile[20 + i * 30 + 22];
     temp_char2 = modfile[20 + i * 30 + 23];
-    sample[i].length = ((u16) temp_char1 * 256 + temp_char2) * 2;
+    sample[i].length = ((uint16_t) temp_char1 * 256 + temp_char2) * 2;
     sample[i].finetune = modfile[20 + i * 30 + 24];
     sample[i].volume = modfile[20 + i * 30 + 25];
     temp_char1 = modfile[20 + i * 30 + 26];
     temp_char2 = modfile[20 + i * 30 + 27];
-    sample[i].repeat_point = ((u16) temp_char1 * 256 + temp_char2) * 2;
+    sample[i].repeat_point = ((uint16_t) temp_char1 * 256 + temp_char2) * 2;
     temp_char1 = modfile[20 + i * 30 + 28];
     temp_char2 = modfile[20 + i * 30 + 29];
-    sample[i].repeat_length = ((u16) temp_char1 * 256 + temp_char2) * 2;
+    sample[i].repeat_length = ((uint16_t) temp_char1 * 256 + temp_char2) * 2;
   }
 
   /* Load the song length (number of patterns to play), pattern
@@ -286,7 +286,7 @@ void load_module (void)
      originally arranged in a really weird way. */
 
   note = (note_type *) pattern_data;
-  modfile_ptr = (u8 *) &modfile[1084];
+  modfile_ptr = (uint8_t *) &modfile[1084];
 
   for (i = 0; i < module.physical_patterns; i++)
   {
@@ -294,7 +294,7 @@ void load_module (void)
     {
       memory_copy (temp_note, modfile_ptr, 4);
       note->sample_number = (temp_note[0] & 0xF0) | ((temp_note[2] & 0xF0) >> 4);
-      note->period_frequency = (u16) ((temp_note[0] & 0x0F) << 8) | temp_note[1];
+      note->period_frequency = (uint16_t) ((temp_note[0] & 0x0F) << 8) | temp_note[1];
       note->effect_number = temp_note[2] & 0x0F;
       note->effect_parameter = temp_note[3];
 
@@ -325,12 +325,12 @@ void load_module (void)
   }
 }
 
-void fill_buffer (u8 *buffer)
+void fill_buffer (uint8_t *buffer)
 {
   unsigned int i, j;
-  u32 k;
+  uint32_t k;
   note_type *note;
-  u16 data;
+  uint16_t data;
 
   for (i = 0; i < BUFFER_SIZE; i++)
   {
@@ -405,7 +405,7 @@ void do_note (note_type *work_note, channel_type *work_channel)
     work_channel->ticks = 0;
 
     work_channel->scaling_factor =
-      (PAL / (u32) (work_channel->period_frequency)) << 8;
+      (PAL / (uint32_t) (work_channel->period_frequency)) << 8;
     work_channel->scaling_factor /= FREQUENCY;
   }
 

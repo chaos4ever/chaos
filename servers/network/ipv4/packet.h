@@ -16,5 +16,5 @@ typedef struct
 
     // The source port and address of this packet, since they may be just anything for UDP packets.
     ipv4_address_type source_address;
-    u16 source_port;
+    uint16_t source_port;
 } packet_list_type;

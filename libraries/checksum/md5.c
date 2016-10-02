@@ -25,7 +25,7 @@
 #include <checksum/checksum.h>
 #include <memory/memory.h>
 
-static void checksum_md5_transform (u32 state[4], const u8 block[64]);
+static void checksum_md5_transform (uint32_t state[4], const uint8_t block[64]);
 
 
 /* Check endianess. */
@@ -38,33 +38,33 @@ static void checksum_md5_transform (u32 state[4], const u8 block[64]);
 
 /* Encodes input into output. Assumes length is a multiple of 4. */
 
-static void encode (u8 *output, const u32 *input, unsigned int length)
+static void encode (uint8_t *output, const uint32_t *input, unsigned int length)
 {
   unsigned int input_index, output_index;
   
   for (input_index = 0, output_index = 0; output_index < length;
        input_index++, output_index += 4) 
   {
-    output[output_index + 0] = (u8)((input[input_index] >> 0)  & 0xFF);
-    output[output_index + 1] = (u8)((input[input_index] >> 8)  & 0xFF);
-    output[output_index + 2] = (u8)((input[input_index] >> 16) & 0xFF);
-    output[output_index + 3] = (u8)((input[input_index] >> 24) & 0xFF);
+    output[output_index + 0] = (uint8_t)((input[input_index] >> 0)  & 0xFF);
+    output[output_index + 1] = (uint8_t)((input[input_index] >> 8)  & 0xFF);
+    output[output_index + 2] = (uint8_t)((input[input_index] >> 16) & 0xFF);
+    output[output_index + 3] = (uint8_t)((input[input_index] >> 24) & 0xFF);
   }
 }
 
 /* Decodes input into output. Assumes length is a multiple of 4. */
 
-static void decode (u32 *output, const u8 *input, unsigned int length)
+static void decode (uint32_t *output, const uint8_t *input, unsigned int length)
 {
   unsigned int output_index, input_index;
   
   for (output_index = 0, input_index = 0; input_index < length; 
        output_index++, input_index += 4)
   {
-    output[output_index] = ((((u32) input[input_index + 0]) << 0)  |
-                            (((u32) input[input_index + 1]) << 8)  |
-                            (((u32) input[input_index + 2]) << 16) |
-                            (((u32) input[input_index + 3]) << 24);
+    output[output_index] = ((((uint32_t) input[input_index + 0]) << 0)  |
+                            (((uint32_t) input[input_index + 1]) << 8)  |
+                            (((uint32_t) input[input_index + 2]) << 16) |
+                            (((uint32_t) input[input_index + 3]) << 24);
   }
 }
 
@@ -93,22 +93,22 @@ static unsigned char PADDING[64] =
    Rotation is separate from addition to prevent recomputation. */
 
 #define FF(a, b, c, d, x, s, ac) { \
-	(a) += F ((b), (c), (d)) + (x) + (u32) (ac); \
+	(a) += F ((b), (c), (d)) + (x) + (uint32_t) (ac); \
 	(a) = ROTATE_LEFT ((a), (s)); \
 	(a) += (b); \
 	}
 #define GG(a, b, c, d, x, s, ac) { \
-	(a) += G ((b), (c), (d)) + (x) + (u32) (ac); \
+	(a) += G ((b), (c), (d)) + (x) + (uint32_t) (ac); \
 	(a) = ROTATE_LEFT ((a), (s)); \
 	(a) += (b); \
 	}
 #define HH(a, b, c, d, x, s, ac) { \
-	(a) += H ((b), (c), (d)) + (x) + (u32) (ac); \
+	(a) += H ((b), (c), (d)) + (x) + (uint32_t) (ac); \
 	(a) = ROTATE_LEFT ((a), (s)); \
 	(a) += (b); \
 	}
 #define II(a, b, c, d, x, s, ac) { \
-	(a) += I ((b), (c), (d)) + (x) + (u32) (ac); \
+	(a) += I ((b), (c), (d)) + (x) + (uint32_t) (ac); \
 	(a) = ROTATE_LEFT ((a), (s)); \
 	(a) += (b); \
 	}
@@ -132,7 +132,7 @@ static void checksum_md5_init (checksum_md5_context_type *context)
    context. */
 
 static void checksum_md5_update
-  (checksum_md5_context_type *context, const u8 *input, 
+  (checksum_md5_context_type *context, const uint8_t *input, 
    unsigned int input_length)
 {
   unsigned int i, index, part_length;
@@ -143,13 +143,13 @@ static void checksum_md5_update
   
   /* Update number of bits */
   
-  context->count[0] += ((u32) input_length << 3);
+  context->count[0] += ((uint32_t) input_length << 3);
 
   if (context->count[0] < input_length << 3)
   {
     context->count[1]++;
   }
-  context->count[1] += ((u32) input_length >> 29);
+  context->count[1] += ((uint32_t) input_length >> 29);
   
   part_length = 64 - index;
   
@@ -217,14 +217,14 @@ static void checksum_md5_final
 
   /* Zeroize sensitive information. */
 
-  memory_set_u8 ((u8 *) context, 0, sizeof (checksum_md5_context_type));
+  memory_set_uint8_t ((uint8_t *) context, 0, sizeof (checksum_md5_context_type));
 }
 
 /* MD5 basic transformation. Transforms state based on block. */
 
-static void checksum_md5_transform (u32 state[4], const u8 block[64])
+static void checksum_md5_transform (uint32_t state[4], const uint8_t block[64])
 {
-  u32 a = state[0], b = state[1], c = state[2], d = state[3], x[16];
+  uint32_t a = state[0], b = state[1], c = state[2], d = state[3], x[16];
   
   decode (x, block, 64);
   
@@ -331,7 +331,7 @@ static void checksum_md5_transform (u32 state[4], const u8 block[64])
   
   /* Zeroize sensitive information. */
 
-  memory_set_u8 ((u8 *) x, 0, sizeof (x));
+  memory_set_uint8_t ((uint8_t *) x, 0, sizeof (x));
 }
 
 /* Wrapper function that does everything. */

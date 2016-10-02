@@ -9,7 +9,7 @@
 #include <storm/generic/memory_global.h>
 #include <storm/generic/return_values.h>
 
-return_type memory_physical_allocate(u32 *page, unsigned int length, char *description)
+return_type memory_physical_allocate(uint32_t *page, unsigned int length, char *description)
 {
     void *p;
     int return_value = posix_memalign(&p, SIZE_PAGE, SIZE_PAGE * length);
@@ -18,7 +18,7 @@ return_type memory_physical_allocate(u32 *page, unsigned int length, char *descr
     return RETURN_SUCCESS;
 }
 
-return_type memory_virtual_map(u32 virtual_page, u32 physical_page, u32 pages, u32 flags)
+return_type memory_virtual_map(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
     return RETURN_SUCCESS;
 }

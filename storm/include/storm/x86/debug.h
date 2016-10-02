@@ -12,4 +12,4 @@
 #include <storm/x86/descriptor.h>
 
 extern void debug_dump_descriptor(descriptor_type *desc);
-extern void debug_memory_dump(u32 *memory, u32 length);
+extern void debug_memory_dump(uint32_t *memory, uint32_t length);

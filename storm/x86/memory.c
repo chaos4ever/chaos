@@ -14,8 +14,8 @@
 return_type memory_get_physical_address (void *virtual_address, 
                                          void **physical_address)
 {
-  u32 page_directory_index = ((u32) virtual_address / SIZE_PAGE) / 1024;
-  u32 page_table_index = ((u32) virtual_address / SIZE_PAGE) % 1024;
+  uint32_t page_directory_index = ((uint32_t) virtual_address / SIZE_PAGE) / 1024;
+  uint32_t page_table_index = ((uint32_t) virtual_address / SIZE_PAGE) % 1024;
   page_table_entry *page_table;
 
   /* Make sure the page table we are going to access is mapped. */

@@ -74,5 +74,5 @@ typedef struct
     time_type time;
 
     // Entity size. If a file or link, in bytes. If a directory, the number of files in the directory.
-    u32 size;
+    uint32_t size;
 } file_verbose_directory_entry_type;

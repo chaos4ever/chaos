@@ -35,8 +35,8 @@
 
 typedef struct
 {
-    u8 character;
-    u8 attribute;
+    uint8_t character;
+    uint8_t attribute;
 } PACKED debug_screen_type;
 
 typedef struct
@@ -54,12 +54,12 @@ typedef struct
     void *pointer;
 } debug_command_type;
 
-extern u32 debug_text_attribute;
-extern u32 debug_background_attribute;
+extern uint32_t debug_text_attribute;
+extern uint32_t debug_background_attribute;
 extern bool debug_log_enable;
 
 extern void debug_init(void) INIT_CODE;
-extern void debug_memdump(u32 *memory, int length);
+extern void debug_memdump(uint32_t *memory, int length);
 extern void debug_print(const char *string, ...);
 extern void debug_print_simple(const char *string);
 extern void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss);

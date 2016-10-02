@@ -16,19 +16,19 @@
 extern void memory_virtual_init(void) INIT_CODE;
 extern void memory_virtual_enable(void) INIT_CODE;
 
-extern return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_directory, u32 virtual_page, u32 physical_page,
-                                             u32 pages, u32 flags) INIT_CODE;
-extern return_type memory_virtual_map_other(storm_tss_type *tss, u32 virtual_page, u32 physical_page, u32 pages, u32 flags);
-extern return_type memory_virtual_map(u32 virtual_page, u32 physical_page, u32 pages, u32 flags) WEAK;
-extern void memory_virtual_unmap(u32 virtual_page, u32 pages);
-extern return_type map(process_id_type pid, u32 linear_page, u32 physical_page, u32 pages);
+extern return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_directory, uint32_t virtual_page, uint32_t physical_page,
+                                             uint32_t pages, uint32_t flags) INIT_CODE;
+extern return_type memory_virtual_map_other(storm_tss_type *tss, uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags);
+extern return_type memory_virtual_map(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags) WEAK;
+extern void memory_virtual_unmap(uint32_t virtual_page, uint32_t pages);
+extern return_type map(process_id_type pid, uint32_t linear_page, uint32_t physical_page, uint32_t pages);
 
 extern page_directory_entry_page_table *memory_virtual_clone_page_directory(page_directory_entry_page_table *source);
 
 extern void memory_virtual_dump_map(page_directory_entry_page_table *page_directory);
 
-extern return_type memory_virtual_allocate(u32 *page_number, u32 pages);
-extern return_type memory_virtual_deallocate(u32 page_number);
+extern return_type memory_virtual_allocate(uint32_t *page_number, uint32_t pages);
+extern return_type memory_virtual_deallocate(uint32_t page_number);
 extern return_type memory_virtual_reserve(unsigned int start_page, unsigned int pages);
 
 extern avl_header_type *process_avl_header;

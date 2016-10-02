@@ -676,8 +676,8 @@ typedef struct
     struct pci_operation_type *operation;
 
     char name[48];
-    u16 vendor_id;
-    u16 device_id;
+    uint16_t vendor_id;
+    uint16_t device_id;
 
     // Serial number.
     unsigned int serial;
@@ -708,23 +708,23 @@ typedef struct
     // Encoded device & function index (7 bits device, 3 bits function).
     unsigned int device_function;
 
-    u16 vendor_id;
-    u16 device_id;
-    u16 subsystem_vendor_id;
-    u16 subsystem_device_id;
+    uint16_t vendor_id;
+    uint16_t device_id;
+    uint16_t subsystem_vendor_id;
+    uint16_t subsystem_device_id;
 
     // 3 bytes: (base, sub, prog-if)
-    u32 class;
+    uint32_t class;
 
     // PCI header type (`multi' flag masked out).
-    u8 header_type;
+    uint8_t header_type;
 
     // Which config register controls the ROM?
-    u8 rom_base_reg;
+    uint8_t rom_base_reg;
 
     // Device is compatible with these IDs.
-    u16 vendor_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
-    u16 device_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
+    uint16_t vendor_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
+    uint16_t device_compatible[PCI_DEVICE_COUNT_COMPATIBLE];
 
     // The IRQ line this device is using, if any.
     unsigned int irq;
@@ -741,23 +741,23 @@ typedef struct
 
 typedef struct
 {
-    u8(*read_u8)(pci_device_type *, int where);
-    u16(*read_u16)(pci_device_type *, int where);
-    u32(*read_u32)(pci_device_type *, int where);
-    void (*write_u8)(pci_device_type *, int where, u8 value);
-    void (*write_u16)(pci_device_type *, int where, u16 value);
-    void (*write_u32)(pci_device_type *, int where, u32 value);
+    uint8_t(*read_uint8_t)(pci_device_type *, int where);
+    uint16_t(*read_uint16_t)(pci_device_type *, int where);
+    uint32_t(*read_uint32_t)(pci_device_type *, int where);
+    void (*write_uint8_t)(pci_device_type *, int where, uint8_t value);
+    void (*write_uint16_t)(pci_device_type *, int where, uint16_t value);
+    void (*write_uint32_t)(pci_device_type *, int where, uint32_t value);
 } pci_operation_type;
 
 typedef struct
 {
-    u16 device_id;
-    u16 vendor_id;
+    uint16_t device_id;
+    uint16_t vendor_id;
     char *name;
 } pci_device_id_type;
 
 typedef struct
 {
-    u16 vendor_id;
+    uint16_t vendor_id;
     char *name;
 } pci_vendor_id_type;

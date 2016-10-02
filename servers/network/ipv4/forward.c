@@ -19,7 +19,7 @@ void forward_packet(ipv4_ethernet_header_type *ethernet_header, unsigned int len
     ipv4_header_type *ipv4_header = (ipv4_header_type *) &ethernet_header->data;
     ipv4_interface_type *interface;
     bool direct;
-    u8 ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    uint8_t ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
     ipc_structure_type *ethernet_structure;
     message_parameter_type message_parameter;
 
@@ -56,7 +56,7 @@ void forward_packet(ipv4_ethernet_header_type *ethernet_header, unsigned int len
     while (!arp_ip_to_ethernet_address(ipv4_header->destination_address, ethernet_address))
     {
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
-                            "Sending ARP who-has for %lX on %s.",
+                            "Sending ARP who-has for %X on %s.",
                             ipv4_header->destination_address,
                             interface->identification);
         arp_who_has(ipv4_header->destination_address, interface, ethernet_structure);

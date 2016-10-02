@@ -29,8 +29,8 @@ enum
 
 typedef struct
 {
-    u8 character;
-    u8 attribute;
+    uint8_t character;
+    uint8_t attribute;
 } PACKED character_type;
 
 // A console application structure.
@@ -73,7 +73,7 @@ typedef struct
     int numeric_argument[MAX_NUMBER_OF_NUMERIC_PARAMETERS];
 
     // FIXME: This should be extended to support other formats. Right now, we just use the EGA attribute.
-    u8 current_attribute;
+    uint8_t current_attribute;
 
     // Pointer to the buffer for this console.
     character_type *buffer;
@@ -82,7 +82,7 @@ typedef struct
     character_type *output;
 
     // FIXME: This isn't neccessary.
-    u8 modified_attribute;
+    uint8_t modified_attribute;
 
     int character_width;
     int character_height;

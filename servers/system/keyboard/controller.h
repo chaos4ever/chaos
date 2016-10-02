@@ -111,15 +111,15 @@
 #define CONTROLLER_PORTS                                0x10
 
 // Macros for accessing the keyboard controller on this platform.
-#define controller_read_input() system_port_in_u8 (CONTROLLER_REGISTER_DATA)
-#define controller_read_status() system_port_in_u8 (CONTROLLER_REGISTER_STATUS)
-#define controller_write_output(value) system_port_out_u8 (CONTROLLER_REGISTER_DATA, value)
-#define controller_write_command(value) system_port_out_u8 (CONTROLLER_REGISTER_CONTROL, value)
+#define controller_read_input() system_port_in_uint8_t (CONTROLLER_REGISTER_DATA)
+#define controller_read_status() system_port_in_uint8_t (CONTROLLER_REGISTER_STATUS)
+#define controller_write_output(value) system_port_out_uint8_t (CONTROLLER_REGISTER_DATA, value)
+#define controller_write_command(value) system_port_out_uint8_t (CONTROLLER_REGISTER_CONTROL, value)
 
 // Function prototypes.
 extern void controller_wait(void);
 extern int controller_wait_for_input(void);
 extern int controller_read_data(void);
-extern void controller_write_command_word(u8 data);
-extern void controller_write_output_word(u8 data);
-extern u8 handle_event(void);
+extern void controller_write_command_word(uint8_t data);
+extern void controller_write_output_word(uint8_t data);
+extern uint8_t handle_event(void);

@@ -13,11 +13,11 @@
 extern void memory_physical_init(void) INIT_CODE;
 
 extern return_type memory_physical_reserve(unsigned int start, unsigned int length, const char *description);
-extern return_type memory_physical_allocate(u32 *page, unsigned int length, const char *description) WEAK;
+extern return_type memory_physical_allocate(uint32_t *page, unsigned int length, const char *description) WEAK;
 extern return_type memory_physical_deallocate(unsigned int start);
-extern u32 memory_physical_get_number_of_pages(void);
-extern u32 memory_physical_get_free(void);
-extern u32 memory_physical_get_used(void);
+extern uint32_t memory_physical_get_number_of_pages(void);
+extern uint32_t memory_physical_get_free(void);
+extern uint32_t memory_physical_get_used(void);
 
 extern avl_header_type *page_avl_header;
-extern u32 page_avl_pages;
+extern uint32_t page_avl_pages;

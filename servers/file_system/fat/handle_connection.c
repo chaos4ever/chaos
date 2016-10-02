@@ -21,8 +21,8 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
     bool mounted = FALSE;
     fat_info_type fat_info;
     ipc_structure_type ipc_structure;
-    u8 *data;
-    u8 **data_pointer = &data;
+    uint8_t *data;
+    uint8_t **data_pointer = &data;
     unsigned int data_size = 16384;
 
     memory_allocate((void **) data_pointer, data_size);
@@ -133,8 +133,8 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
             case IPC_FILE_READ:
             {
                 file_read_type *read = (file_read_type *) data;
-                u8 *read_buffer;
-                u8 **read_buffer_pointer = &read_buffer;
+                uint8_t *read_buffer;
+                uint8_t **read_buffer_pointer = &read_buffer;
 
                 memory_allocate((void **) read_buffer_pointer, read->bytes);
 

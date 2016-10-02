@@ -27,7 +27,7 @@
 #define B00000001 0x01
 
 // Convert a UCS-2 character to UTF-8.
-return_type unicode_ucs2_to_utf8(u8 *utf8_char, ucs2_type ucs2_char)
+return_type unicode_ucs2_to_utf8(uint8_t *utf8_char, ucs2_type ucs2_char)
 {
     int utf8_bytes;
 
@@ -35,22 +35,22 @@ return_type unicode_ucs2_to_utf8(u8 *utf8_char, ucs2_type ucs2_char)
     {
         // 0xxxxxxx
         utf8_bytes = 1;
-        utf8_char[0] = (u8) ucs2_char;
+        utf8_char[0] = (uint8_t) ucs2_char;
     }
     else if (ucs2_char <= 0x000007FF)
     {
         // 110xxxxx 10xxxxxx
         utf8_bytes = 2;
-        utf8_char[0] = (u8) ((ucs2_char >> 6) | B11000000);
-        utf8_char[1] = (u8) ((ucs2_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs2_char >> 6) | B11000000);
+        utf8_char[1] = (uint8_t) ((ucs2_char & B00111111) | B10000000);
     }
     else // (ucs2_char <= 0x0000FFFF)
     {
         // 1110xxxx 10xxxxxx 10xxxxxx
         utf8_bytes = 3;
-        utf8_char[0] = (u8) ((ucs2_char >> 12) | B11100000);
-        utf8_char[1] = (u8) (((ucs2_char >> 6) & B00111111) | B10000000);
-        utf8_char[2] = (u8) ((ucs2_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs2_char >> 12) | B11100000);
+        utf8_char[1] = (uint8_t) (((ucs2_char >> 6) & B00111111) | B10000000);
+        utf8_char[2] = (uint8_t) ((ucs2_char & B00111111) | B10000000);
     }
 
     utf8_char[utf8_bytes] = '\0';
@@ -59,7 +59,7 @@ return_type unicode_ucs2_to_utf8(u8 *utf8_char, ucs2_type ucs2_char)
 }
 
 // Convert a UCS-4 character to UTF-8.
-return_type unicode_ucs4_to_utf8(u8 *utf8_char, ucs4_type ucs4_char)
+return_type unicode_ucs4_to_utf8(uint8_t *utf8_char, ucs4_type ucs4_char)
 {
     int utf8_bytes;
 
@@ -67,52 +67,52 @@ return_type unicode_ucs4_to_utf8(u8 *utf8_char, ucs4_type ucs4_char)
     {
         // 0xxxxxxx
         utf8_bytes = 1;
-        utf8_char[0] = (u8) ucs4_char;
+        utf8_char[0] = (uint8_t) ucs4_char;
     }
     else if (ucs4_char <= 0x000007FF)
     {
         // 110xxxxx 10xxxxxx
         utf8_bytes = 2;
-        utf8_char[0] = (u8) ((ucs4_char >> 6) | B11000000);
-        utf8_char[1] = (u8) ((ucs4_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs4_char >> 6) | B11000000);
+        utf8_char[1] = (uint8_t) ((ucs4_char & B00111111) | B10000000);
     }
     else if (ucs4_char <= 0x0000FFFF)
     {
         // 1110xxxx 10xxxxxx 10xxxxxx
         utf8_bytes = 3;
-        utf8_char[0] = (u8) ((ucs4_char >> 12) | B11100000);
-        utf8_char[1] = (u8) (((ucs4_char >> 6) & B00111111) | B10000000);
-        utf8_char[2] = (u8) ((ucs4_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs4_char >> 12) | B11100000);
+        utf8_char[1] = (uint8_t) (((ucs4_char >> 6) & B00111111) | B10000000);
+        utf8_char[2] = (uint8_t) ((ucs4_char & B00111111) | B10000000);
     }
     else if (ucs4_char <= 0x001FFFFF)
     {
         // 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
         utf8_bytes = 4;
-        utf8_char[0] = (u8) ((ucs4_char >> 18) | B11110000);
-        utf8_char[1] = (u8) (((ucs4_char >> 12) & B00111111) | B10000000);
-        utf8_char[2] = (u8) (((ucs4_char >> 6) & B00111111) | B10000000);
-        utf8_char[3] = (u8) ((ucs4_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs4_char >> 18) | B11110000);
+        utf8_char[1] = (uint8_t) (((ucs4_char >> 12) & B00111111) | B10000000);
+        utf8_char[2] = (uint8_t) (((ucs4_char >> 6) & B00111111) | B10000000);
+        utf8_char[3] = (uint8_t) ((ucs4_char & B00111111) | B10000000);
     }
     else if (ucs4_char <= 0x03FFFFFF)
     {
         // 111110xx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
         utf8_bytes = 5;
-        utf8_char[0] = (u8) ((ucs4_char >> 24) | B11111000);
-        utf8_char[1] = (u8) (((ucs4_char >> 18) & B00111111) | B10000000);
-        utf8_char[2] = (u8) (((ucs4_char >> 12) & B00111111) | B10000000);
-        utf8_char[3] = (u8) (((ucs4_char >> 6) & B00111111) | B10000000);
-        utf8_char[4] = (u8) ((ucs4_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs4_char >> 24) | B11111000);
+        utf8_char[1] = (uint8_t) (((ucs4_char >> 18) & B00111111) | B10000000);
+        utf8_char[2] = (uint8_t) (((ucs4_char >> 12) & B00111111) | B10000000);
+        utf8_char[3] = (uint8_t) (((ucs4_char >> 6) & B00111111) | B10000000);
+        utf8_char[4] = (uint8_t) ((ucs4_char & B00111111) | B10000000);
     }
     else if (ucs4_char <= 0x7FFFFFFF)
     {
         // 1111110x 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx 10xxxxxx
         utf8_bytes = 6;
-        utf8_char[0] = (u8) ((ucs4_char >> 30) | B11111100);
-        utf8_char[1] = (u8) (((ucs4_char >> 24) & B00111111) | B10000000);
-        utf8_char[2] = (u8) (((ucs4_char >> 18) & B00111111) | B10000000);
-        utf8_char[3] = (u8) (((ucs4_char >> 12) & B00111111) | B10000000);
-        utf8_char[4] = (u8) (((ucs4_char >> 6) & B00111111) | B10000000);
-        utf8_char[5] = (u8) ((ucs4_char & B00111111) | B10000000);
+        utf8_char[0] = (uint8_t) ((ucs4_char >> 30) | B11111100);
+        utf8_char[1] = (uint8_t) (((ucs4_char >> 24) & B00111111) | B10000000);
+        utf8_char[2] = (uint8_t) (((ucs4_char >> 18) & B00111111) | B10000000);
+        utf8_char[3] = (uint8_t) (((ucs4_char >> 12) & B00111111) | B10000000);
+        utf8_char[4] = (uint8_t) (((ucs4_char >> 6) & B00111111) | B10000000);
+        utf8_char[5] = (uint8_t) ((ucs4_char & B00111111) | B10000000);
     }
     else
     {
@@ -125,9 +125,9 @@ return_type unicode_ucs4_to_utf8(u8 *utf8_char, ucs4_type ucs4_char)
 }
 
 // Convert a UTF-8 encoded character to UCS-2.
-return_type unicode_utf8_to_ucs2(ucs2_type *ucs2, u8 *utf8_string, unsigned int *length)
+return_type unicode_utf8_to_ucs2(ucs2_type *ucs2, uint8_t *utf8_string, unsigned int *length)
 {
-    u8 utf8_character = utf8_string[0];
+    uint8_t utf8_character = utf8_string[0];
 
     // Is the character in the ASCII range? If so, just copy it to the output.
     if (utf8_character <= 0x7F)
@@ -175,9 +175,9 @@ return_type unicode_utf8_to_ucs2(ucs2_type *ucs2, u8 *utf8_string, unsigned int 
 // Convert a UTF-8 encoded character to UCS-4.
 // FIXME: A good refactoring candidate. Methods shouldn't really be a long as this is. Each case in the "else if" block could
 // really be refactored out into a helper method of its own.
-return_type unicode_utf8_to_ucs4(ucs4_type *ucs4, u8 *utf8_string, unsigned int *length)
+return_type unicode_utf8_to_ucs4(ucs4_type *ucs4, uint8_t *utf8_string, unsigned int *length)
 {
-    u8 utf8_character = utf8_string[0];
+    uint8_t utf8_character = utf8_string[0];
 
     // Is the character in the ASCII range? If so, just copy it to the output.
     if (utf8_character <= 0x7F)
@@ -292,12 +292,12 @@ return_type unicode_utf8_to_ucs4(ucs4_type *ucs4, u8 *utf8_string, unsigned int 
 }
 
 // Convert a UCS-2 string to UTF-8 encoding.
-return_type unicode_ucs2_to_utf8_string(u8 *utf8_string, ucs2_type *ucs2_string, unsigned int max_utf8_bytes)
+return_type unicode_ucs2_to_utf8_string(uint8_t *utf8_string, ucs2_type *ucs2_string, unsigned int max_utf8_bytes)
 {
     unsigned int ucs2_index = 0;
     unsigned int utf8_index = 0;
     ucs2_type ucs2_char;
-    u8 utf8_char[6];
+    uint8_t utf8_char[6];
 
     ucs2_char = ucs2_string[ucs2_index];
 
@@ -326,12 +326,12 @@ return_type unicode_ucs2_to_utf8_string(u8 *utf8_string, ucs2_type *ucs2_string,
 }
 
 // Convert a UCS-4 string to UTF-8 encoding.
-return_type unicode_ucs4_to_utf8_string(u8 *utf8_string, ucs4_type *ucs4_string, unsigned int max_utf8_bytes)
+return_type unicode_ucs4_to_utf8_string(uint8_t *utf8_string, ucs4_type *ucs4_string, unsigned int max_utf8_bytes)
 {
     int ucs4_index = 0;
     int utf8_index = 0;
     ucs4_type ucs4_char;
-    u8 utf8_char[6];
+    uint8_t utf8_char[6];
 
     while (ucs4_string[ucs4_index] != 0)
     {
@@ -359,7 +359,7 @@ return_type unicode_ucs4_to_utf8_string(u8 *utf8_string, ucs4_type *ucs4_string,
 }
 
 // Convert a UTF-8 encoded string to UCS-2.
-return_type unicode_utf8_to_ucs2_string(ucs2_type *ucs2_string, u8 *utf8_string, unsigned int max_ucs2_characters)
+return_type unicode_utf8_to_ucs2_string(ucs2_type *ucs2_string, uint8_t *utf8_string, unsigned int max_ucs2_characters)
 {
     unsigned int input_index = 0;
     unsigned int output_index = 0;
@@ -385,7 +385,7 @@ return_type unicode_utf8_to_ucs2_string(ucs2_type *ucs2_string, u8 *utf8_string,
 }
 
 // Convert a UTF-8 encoded string to UCS-4.
-return_type unicode_utf8_to_ucs4_string(ucs4_type *ucs4_string, u8 *utf8_string, unsigned int max_ucs4_characters)
+return_type unicode_utf8_to_ucs4_string(ucs4_type *ucs4_string, uint8_t *utf8_string, unsigned int max_ucs4_characters)
 {
     unsigned int input_index = 0;
     unsigned int output_index = 0;
@@ -440,7 +440,7 @@ unsigned int unicode_utf8_previous_character_length(char *utf8_string, unsigned 
 }
 
 // Return the character after the character at the given position's length.
-unsigned int unicode_utf8_next_character_length(u8 *utf8_string, unsigned int string_position)
+unsigned int unicode_utf8_next_character_length(uint8_t *utf8_string, unsigned int string_position)
 {
     unsigned int character_length;
 
@@ -464,7 +464,7 @@ unsigned int unicode_utf8_next_character_length(u8 *utf8_string, unsigned int st
 }
 
 // Return the number of characters in a UTF-8 encoded string.
-unsigned int unicode_utf8_string_characters(u8 *utf8_string)
+unsigned int unicode_utf8_string_characters(uint8_t *utf8_string)
 {
     unsigned int input_index = 0;
     unsigned int string_characters = 0;

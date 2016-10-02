@@ -5,6 +5,7 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015-2016 chaos development
 
+#include <inttypes.h>
 #include <memory/memory.h>
 #include <time/time.h>
 
@@ -16,7 +17,7 @@ static arp_cache_entry_type *arp_cache = NULL;
 static mutex_type arp_mutex = MUTEX_UNLOCKED;
 
 // Get the ethernet address for the given IP address.
-bool arp_ip_to_ethernet_address(u32 ip_address, u8 ethernet_address[])
+bool arp_ip_to_ethernet_address(uint32_t ip_address, uint8_t ethernet_address[])
 {
     arp_cache_entry_type *entry;
 
@@ -25,7 +26,7 @@ bool arp_ip_to_ethernet_address(u32 ip_address, u8 ethernet_address[])
     entry = arp_cache;
     while (entry != NULL)
     {
-        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "%s: %lX %lX %p", __FUNCTION__,
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "%s: %X %X %p", __FUNCTION__,
                             entry->ip_address, ip_address, entry);
 
         if (entry->ip_address == ip_address)
@@ -43,7 +44,7 @@ bool arp_ip_to_ethernet_address(u32 ip_address, u8 ethernet_address[])
 }
 
 // Insert an entry into the list.
-void arp_insert_entry(u32 ip_address, u8 ethernet_address[])
+void arp_insert_entry(uint32_t ip_address, uint8_t ethernet_address[])
 {
     arp_cache_entry_type *entry;
     arp_cache_entry_type **entry_pointer = &entry;
@@ -101,20 +102,20 @@ void arp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
     ipv4_address_to_string(tmpstr2, arp_packet->sender_protocol_address);
 
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "%s: ARP %s: for %s from %s.",
-                        arp_packet->opcode == system_byte_swap_u16(ARP_REQUEST) ? "who-has" : "reply",
+                        arp_packet->opcode == system_byte_swap_uint16_t(ARP_REQUEST) ? "who-has" : "reply",
                         interface->identification, tmpstr, tmpstr2);
 
     // If this is an ARP reply, save it in our ARP cache.
-    if (arp_packet->opcode == system_byte_swap_u16(ARP_REPLY))
+    if (arp_packet->opcode == system_byte_swap_uint16_t(ARP_REPLY))
     {
-        u8 ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+        uint8_t ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
 
         if (!arp_ip_to_ethernet_address(arp_packet->sender_protocol_address, ethernet_address))
         {
             arp_insert_entry(arp_packet->sender_protocol_address, arp_packet->sender_hardware_address);
         }
     }
-    else if (arp_packet->opcode == system_byte_swap_u16(ARP_REQUEST) &&
+    else if (arp_packet->opcode == system_byte_swap_uint16_t(ARP_REQUEST) &&
              arp_packet->target_protocol_address == interface->ip_address)
     {
         // If someone is asking for us, then reply.
@@ -137,7 +138,7 @@ void arp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
         arp_packet->hardware_address_length = IPV4_ETHERNET_ADDRESS_LENGTH;
         arp_packet->protocol_address_length = 4;
 
-        arp_packet->opcode = system_byte_swap_u16(ARP_REPLY);
+        arp_packet->opcode = system_byte_swap_uint16_t(ARP_REPLY);
         arp_packet->target_protocol_address = arp_packet->sender_protocol_address;
         arp_packet->sender_protocol_address = interface->ip_address;
 
@@ -158,7 +159,7 @@ void arp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
 }
 
 // Send an ARP packet for the given IP address.
-void arp_who_has(u32 ip_address, ipv4_interface_type *interface, ipc_structure_type *ethernet_structure)
+void arp_who_has(uint32_t ip_address, ipv4_interface_type *interface, ipc_structure_type *ethernet_structure)
 {
     ipv4_ethernet_header_type *ethernet_header;
     ipv4_ethernet_header_type **ethernet_header_pointer = &ethernet_header;
@@ -171,16 +172,16 @@ void arp_who_has(u32 ip_address, ipv4_interface_type *interface, ipc_structure_t
 
     memory_copy(ethernet_header->source_address, interface->hardware_address, IPV4_ETHERNET_ADDRESS_LENGTH);
     memory_copy(ethernet_header->destination_address, ethernet_broadcast, IPV4_ETHERNET_ADDRESS_LENGTH);
-    ethernet_header->protocol_type = system_byte_swap_u16(IPV4_ETHERNET_PROTOCOL_ARP);
+    ethernet_header->protocol_type = system_byte_swap_uint16_t(IPV4_ETHERNET_PROTOCOL_ARP);
     arp_packet = (arp_packet_type *) &ethernet_header->data;
 
     // Ethernet.
-    arp_packet->hardware_address_space = system_byte_swap_u16(1);
+    arp_packet->hardware_address_space = system_byte_swap_uint16_t(1);
 
-    arp_packet->protocol_address_space = system_byte_swap_u16(IPV4_ETHERNET_PROTOCOL_IPV4);
+    arp_packet->protocol_address_space = system_byte_swap_uint16_t(IPV4_ETHERNET_PROTOCOL_IPV4);
     arp_packet->hardware_address_length = IPV4_ETHERNET_ADDRESS_LENGTH;
     arp_packet->protocol_address_length = 4;
-    arp_packet->opcode = system_byte_swap_u16(ARP_REQUEST);
+    arp_packet->opcode = system_byte_swap_uint16_t(ARP_REQUEST);
     memory_copy(arp_packet->sender_hardware_address, interface->hardware_address, IPV4_ETHERNET_ADDRESS_LENGTH);
     arp_packet->sender_protocol_address = interface->ip_address;
     arp_packet->target_protocol_address = ip_address;

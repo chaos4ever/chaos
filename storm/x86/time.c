@@ -21,8 +21,8 @@
 static inline unsigned int cmos_read (unsigned int which)
 {
   unsigned int data;
-  port_out_u8 (CMOS_BASE, which);
-  data = port_in_u8 (CMOS_BASE + 1);
+  port_out_uint8_t (CMOS_BASE, which);
+  data = port_in_uint8_t (CMOS_BASE + 1);
   data = ((data & 0x0F) + (data >> 4) * 10);
 
   return data;

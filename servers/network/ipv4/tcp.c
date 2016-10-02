@@ -23,11 +23,11 @@
 void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_type *old_ethernet_header,
                         int length __attribute__((unused)), mailbox_id_type output_mailbox_id)
 {
-    u32 *packet;
+    uint32_t *packet;
 
     // Those point into the packet we're processing.
     ipv4_header_type *old_ipv4_header = (ipv4_header_type *) &old_ethernet_header->data;
-    tcp_header_type *old_tcp_header = (tcp_header_type *)((u8 *) old_ipv4_header + old_ipv4_header->header_length * 4);
+    tcp_header_type *old_tcp_header = (tcp_header_type *)((uint8_t *) old_ipv4_header + old_ipv4_header->header_length * 4);
 
     // Those point into the new packet we're generating. (Well, not right now, but when the packet has been allocated, it will...)
     ipv4_ethernet_header_type *ethernet_header;
@@ -52,9 +52,9 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
                         "TCP packet from: %s:%u to %s:%u (%s)",
                         source_address,
-                        system_byte_swap_u16(old_tcp_header->source_port),
+                        system_byte_swap_uint16_t(old_tcp_header->source_port),
                         destination_address,
-                        system_byte_swap_u16(old_tcp_header->destination_port),
+                        system_byte_swap_uint16_t(old_tcp_header->destination_port),
                         tmpstr);
 
     // Is anyone listening to this port? If not, politely tell the remote that we dropped this packet into the void.
@@ -69,7 +69,7 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
 
     // Allocate memory for the new packet.
     // FIXME: We should really calculate the size needed, or at least have some fixed maximum. This is ugly.
-    u32 **packet_pointer = &packet;
+    uint32_t **packet_pointer = &packet;
     memory_allocate((void **) packet_pointer, 1024);
 
     ethernet_header = (ipv4_ethernet_header_type *) packet;
@@ -87,7 +87,7 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
                        IP_PROTOCOL_TCP, sizeof(tcp_header_type),
                        ipv4_header);
 
-    memory_set_u8((u8 *) tcp_header, 0, sizeof(tcp_header_type));
+    memory_set_uint8_t((uint8_t *) tcp_header, 0, sizeof(tcp_header_type));
 
     if (old_tcp_header->acknowledge == 0)
     {
@@ -102,7 +102,7 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
 
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
                             "%u",
-                            system_byte_swap_u16(old_ipv4_header->total_length) -
+                            system_byte_swap_uint16_t(old_ipv4_header->total_length) -
                             (old_ipv4_header->header_length * 4) -
                             (old_tcp_header->data_offset * 4));
 
@@ -120,7 +120,7 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
     tcp_header->destination_port = old_tcp_header->source_port;
     tcp_header->data_offset = sizeof(tcp_header_type) / 4;
 
-    memory_set_u8((u8 *) &tcp_pseudo_header, 0, sizeof(tcp_pseudo_header_type));
+    memory_set_uint8_t((uint8_t *) &tcp_pseudo_header, 0, sizeof(tcp_pseudo_header_type));
     tcp_pseudo_header.source_address = ipv4_header->source_address;
     tcp_pseudo_header.destination_address = ipv4_header->destination_address;
     tcp_pseudo_header.protocol_type = ipv4_header->protocol;
@@ -128,8 +128,8 @@ void tcp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_typ
 
     tcp_header->checksum = 0;
     tcp_header->checksum =
-        ipv4_checksum((u16 *) &tcp_pseudo_header, sizeof(tcp_pseudo_header_type)) +
-        ipv4_checksum((u16 *) tcp_header, sizeof(tcp_header_type));
+        ipv4_checksum((uint16_t *) &tcp_pseudo_header, sizeof(tcp_pseudo_header_type)) +
+        ipv4_checksum((uint16_t *) tcp_header, sizeof(tcp_header_type));
 
     // Let's kick shell!
     message_parameter.protocol = IPC_PROTOCOL_ETHERNET;

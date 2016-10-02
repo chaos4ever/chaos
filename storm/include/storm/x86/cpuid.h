@@ -12,70 +12,70 @@
 typedef struct
 {
     // Feature flags.
-    u32 fpu:        1;
-    u32 vme:        1;
-    u32 de:         1;
-    u32 pse:        1;
-    u32 tsc:        1;
-    u32 msr:        1;
-    u32 pae:        1;
-    u32 mce:        1;
-    u32 cx8:        1;
-    u32 apic:       1;
-    u32 ff_res0:    1;
-    u32 sep:        1;
-    u32 mtrr:       1;
-    u32 pge:        1;
-    u32 mca:        1;
-    u32 cmov:       1;
-    u32 pat:        1;
-    u32 pse_36:     1;
-    u32 ff_res1:    5;
-    u32 mmx:        1;
-    u32 fxsr:       1;
-    u32 sse:        1;
-    u32 ff_res2:    5;
-    u32 amd_3dnow:  1;
+    uint32_t fpu:        1;
+    uint32_t vme:        1;
+    uint32_t de:         1;
+    uint32_t pse:        1;
+    uint32_t tsc:        1;
+    uint32_t msr:        1;
+    uint32_t pae:        1;
+    uint32_t mce:        1;
+    uint32_t cx8:        1;
+    uint32_t apic:       1;
+    uint32_t ff_res0:    1;
+    uint32_t sep:        1;
+    uint32_t mtrr:       1;
+    uint32_t pge:        1;
+    uint32_t mca:        1;
+    uint32_t cmov:       1;
+    uint32_t pat:        1;
+    uint32_t pse_36:     1;
+    uint32_t ff_res1:    5;
+    uint32_t mmx:        1;
+    uint32_t fxsr:       1;
+    uint32_t sse:        1;
+    uint32_t ff_res2:    5;
+    uint32_t amd_3dnow:  1;
 } PACKED cpuid_flags_type;
 
 typedef struct
 {
-    u32 cpuid;
+    uint32_t cpuid;
 
     const char *name;
 
     // Phony variable. Since C is so stupid it won't let me have union elements accessed the same way as the rest of the
     // structure, we have to hack it a little..
-    u32 signature[0];
+    uint32_t signature[0];
 
     // CPU signature.
-    u32 stepping :  4;
-    u32 model:      4;
-    u32 family:     4;
-    u32 type:       2;
-    u32 s_res0:     18;
+    uint32_t stepping :  4;
+    uint32_t model:      4;
+    uint32_t family:     4;
+    uint32_t type:       2;
+    uint32_t s_res0:     18;
 
     union
     {
-        u32 real_flags;
+        uint32_t real_flags;
         cpuid_flags_type flags;
     } flags;
 
     // CPU configuration.
-    u32 configuration;
+    uint32_t configuration;
 } PACKED cpu_info_type;
 
 typedef struct
 {
     const char *name;
     const char *vendor;
-    u32 speed;
+    uint32_t speed;
 } PACKED parsed_cpu_type;
 
 typedef struct
 {
-    u32 vendor;
-    u32 x86;
+    uint32_t vendor;
+    uint32_t x86;
     const char *name[32];
 } cpu_model_type;
 

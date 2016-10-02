@@ -24,21 +24,21 @@
 #define FALSE (!TRUE)
 
 // Other definitions.
-#define PROCESS_ID_NONE         (MAX_U32)
+#define PROCESS_ID_NONE         (UINT32_MAX)
 #define PROCESS_ID_KERNEL       (0)
 #define PROCESS_ID_USED         (1)
 #define CLUSTER_ID_KERNEL       (0)
-#define CLUSTER_ID_NONE         (MAX_U32)
+#define CLUSTER_ID_NONE         (UINT32_MAX)
 #define THREAD_ID_KERNEL        (0)
-#define THREAD_ID_NONE          (MAX_U32)
+#define THREAD_ID_NONE          (UINT32_MAX)
 #define TASK_ID_KERNEL          (0)
-#define TASK_ID_MAX             (MAX_U32)
-#define MAILBOX_ID_NONE         (MAX_U32)
+#define TASK_ID_MAX             (UINT32_MAX)
+#define MAILBOX_ID_NONE         (UINT32_MAX)
 
 // Some sizes.
-#define KB                      ((u32) 1024)
-#define MB                      ((u32) 1024 * KB)
-#define GB                      ((u32) 1024 * MB)
+#define KB                      ((uint32_t) 1024)
+#define MB                      ((uint32_t) 1024 * KB)
+#define GB                      ((uint32_t) 1024 * MB)
 
 // Convert a number to the closest aligned address above x.
 #define ALIGN(x, align)         ((x) % (align) == 0 ? \

@@ -13,7 +13,7 @@
 
 void debug_dump_descriptor (descriptor_type *desc)
 {
-  u32 limit, base;
+  uint32_t limit, base;
 
   limit = (desc->limit_lo + (desc->limit_hi << 16)) * (desc->granularity ? 4096 : 1) + (desc->granularity ^ 1);
   base = desc->base_lo + (desc->base_hi << 16) + (desc->base_hi2 << 24);

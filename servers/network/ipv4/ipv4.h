@@ -98,25 +98,25 @@ enum
 typedef struct
 {
     // Header length, in u32:s.
-    u8 header_length: 4;
-    u8 version: 4;
-    u8 type_of_service;
-    u16 total_length;
-    u16 id;
-    u16 fragment_offset;
-    u8 time_to_live;
-    u8 protocol;
+    uint8_t header_length: 4;
+    uint8_t version: 4;
+    uint8_t type_of_service;
+    uint16_t total_length;
+    uint16_t id;
+    uint16_t fragment_offset;
+    uint8_t time_to_live;
+    uint8_t protocol;
 
     // Two-complement additive checksum.
-    u16 checksum;
-    u32 source_address;
-    u32 destination_address;
+    uint16_t checksum;
+    uint32_t source_address;
+    uint32_t destination_address;
 
     // Options start here.
-    u8 options[0];
+    uint8_t options[0];
 
     // After the options, the data follows. This element can only be used if no options are used, of course.
-    u8 data[0];
+    uint8_t data[0];
 } __attribute__((packed)) ipv4_header_type;
 
 // IP otions.
@@ -124,41 +124,41 @@ typedef struct
 typedef struct
 {
     // Saved first hop address.
-    u32 first_hop_address;
-    u8 optlen;
-    u8 srr;
-    u8 rr;
-    u8 ts;
+    uint32_t first_hop_address;
+    uint8_t optlen;
+    uint8_t srr;
+    uint8_t rr;
+    uint8_t ts;
 
     // Set by setsockopt?
-    u8 is_setbyuser: 1;
+    uint8_t is_setbyuser: 1;
 
     // Options in __data, rather than skb.
-    u8 is_data: 1;
+    uint8_t is_data: 1;
 
     // Strict source route.
-    u8 is_strictroute: 1;
+    uint8_t is_strictroute: 1;
 
     // Packet destination address was our one.
-    u8 srr_is_hit: 1;
+    uint8_t srr_is_hit: 1;
 
     // IP checksum more not valid.
-    u8 is_changed: 1;
+    uint8_t is_changed: 1;
 
     // Need to record addr of outgoing device.
-    u8 rr_needaddr: 1;
+    uint8_t rr_needaddr: 1;
 
     // Need to record timestamp.
-    u8 ts_needtime: 1;
+    uint8_t ts_needtime: 1;
 
     // Need to record addr of outgoing device.
-    u8 ts_needaddr: 1;
-    u8 router_alert;
-    u8 __pad1;
-    u8 __pad2;
+    uint8_t ts_needaddr: 1;
+    uint8_t router_alert;
+    uint8_t __pad1;
+    uint8_t __pad2;
 
     // Data start here.
-    u8 data[0];
+    uint8_t data[0];
 } __attribute__((packed)) ipv4_options_type;
 
 // A generic IP header.
@@ -168,14 +168,14 @@ typedef struct
     ipv4_options_type options;
 
     // Data starts here.
-    u8 data[0];
+    uint8_t data[0];
 } __attribute__((packed)) ipv4_packet_type;
 
 // A protocol type definition. This provides the modular core of the IPv4 server.
 typedef struct
 {
     void (*function)(ipv4_interface_type *interface, ipv4_ethernet_header_type *ethernet_header, int length, mailbox_id_type output_mailbox_id);
-    u8 type;
+    uint8_t type;
 } ipv4_protocol_type;
 
 // A node in the IPv4 interface list.
@@ -190,10 +190,10 @@ typedef struct
 extern log_structure_type log_structure;
 extern ipv4_interface_list_type *interface_list;
 extern mutex_type interface_list_mutex;
-extern u8 ethernet_broadcast[];
+extern uint8_t ethernet_broadcast[];
 
 // Function prototypes.
 
-extern void ipv4_header_create(u32 destination, u32 source, u8 protocol_type, unsigned int length, ipv4_header_type *ipv4_header);
-extern void ipv4_ethernet_header_create(void *destination, void *source, u16 protocol_type, ipv4_ethernet_header_type *buffer);
-extern u16 ipv4_checksum(u16 *data, unsigned int length);
+extern void ipv4_header_create(uint32_t destination, uint32_t source, uint8_t protocol_type, unsigned int length, ipv4_header_type *ipv4_header);
+extern void ipv4_ethernet_header_create(void *destination, void *source, uint16_t protocol_type, ipv4_ethernet_header_type *buffer);
+extern uint16_t ipv4_checksum(uint16_t *data, unsigned int length);

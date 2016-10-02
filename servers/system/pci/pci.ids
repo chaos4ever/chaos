@@ -7389,7 +7389,7 @@
 	622a  GA622
 	630a  GA630 Gigabit Ethernet
 	6b00  WG311v3 54 Mbps Wireless PCI Adapter
-	6d00  WPNT511  RangeMax™ 240 Mbps Wireless PC Card
+	6d00  WPNT511  RangeMaxï¿½ 240 Mbps Wireless PC Card
 	f004  FA310TX
 1386  Video Domain Technologies
 1387  Systran Corp
@@ -9645,7 +9645,7 @@
 		8086 01af  SRCZCR
 		8086 01c1  ICP Vortex GDT8546RZ
 		8086 01f7  SCRU32
-# uninitialized SRCU32 RAID Controller
+# uninitialized SRCuint32_t RAID Controller
 	061f  80303 I/O Processor
 	0960  80960RP [i960 RP Microprocessor/Bridge]
 	0962  80960RM [i960RM Bridge]

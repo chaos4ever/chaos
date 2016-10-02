@@ -34,58 +34,58 @@
 
 unsigned int uart_probe (unsigned int port_number)
 {
-  u16 base, x, olddata;
+  uint16_t base, x, olddata;
   
   base = serial_port[port_number].port;
 
   /* Check if a UART is present anyway. */
 
-  olddata = system_port_in_u8 (base + REGISTER_MCR);
-  system_port_out_u8 (base + REGISTER_MCR, 0x10);
+  olddata = system_port_in_uint8_t (base + REGISTER_MCR);
+  system_port_out_uint8_t (base + REGISTER_MCR, 0x10);
 
-  if ((system_port_in_u8 (base + REGISTER_MSR) & 0xF0) == 0xF0)
+  if ((system_port_in_uint8_t (base + REGISTER_MSR) & 0xF0) == 0xF0)
   {
     return UART_TYPE_NONE;
   }
 
-  system_port_out_u8 (base + REGISTER_MCR, 0x1F);
+  system_port_out_uint8_t (base + REGISTER_MCR, 0x1F);
 
-  if ((system_port_in_u8 (base + REGISTER_MSR) & 0xF0) != 0xF0)
+  if ((system_port_in_uint8_t (base + REGISTER_MSR) & 0xF0) != 0xF0)
   {
     return UART_TYPE_NONE;
   }
 
-  system_port_out_u8 (base + REGISTER_MCR, olddata);
+  system_port_out_uint8_t (base + REGISTER_MCR, olddata);
   
   /* Next thing to do is look for the scratch register. */
 
-  olddata = system_port_in_u8 (base + REGISTER_SCR);
-  system_port_out_u8 (base + REGISTER_SCR, 0x55);
+  olddata = system_port_in_uint8_t (base + REGISTER_SCR);
+  system_port_out_uint8_t (base + REGISTER_SCR, 0x55);
 
-  if (system_port_in_u8 (base + REGISTER_SCR) != 0x55)
+  if (system_port_in_uint8_t (base + REGISTER_SCR) != 0x55)
   {
     return UART_TYPE_8250;
   }
 
-  system_port_out_u8 (base + REGISTER_SCR, 0xAA);
+  system_port_out_uint8_t (base + REGISTER_SCR, 0xAA);
 
-  if (system_port_in_u8 (base + REGISTER_SCR) != 0xAA)
+  if (system_port_in_uint8_t (base + REGISTER_SCR) != 0xAA)
   {
     return UART_TYPE_8250;
   }
 
   /* We don't need to restore it if it's not there. */
 
-  system_port_out_u8 (base + REGISTER_SCR, olddata); 
+  system_port_out_uint8_t (base + REGISTER_SCR, olddata); 
 
   /* Then check if there's a FIFO. */
 
-  system_port_out_u8 (base + REGISTER_IIR, 1);
-  x = system_port_in_u8 (base + REGISTER_IIR);
+  system_port_out_uint8_t (base + REGISTER_IIR, 1);
+  x = system_port_in_uint8_t (base + REGISTER_IIR);
 
   /* Some old-fashioned software relies on this! */
   
-  system_port_out_u8 (base + REGISTER_IIR, 0x0);
+  system_port_out_uint8_t (base + REGISTER_IIR, 0x0);
  
   if ((x & 0x80) == 0)
   {
@@ -104,25 +104,25 @@ unsigned int uart_probe (unsigned int port_number)
 
 void uart_irq_init (unsigned int port_number)
 {
-  u16 base;
+  uint16_t base;
   
   base = serial_port[port_number].port;
 
   /* MCR. Enable interrupt to PIC. */
 
-  system_port_out_u8 (base + REGISTER_MCR, 0x08);
+  system_port_out_uint8_t (base + REGISTER_MCR, 0x08);
 
   /* Enable Rx and Line interrupts. */
 
-  system_port_out_u8 (base + REGISTER_IER, 0x05);
+  system_port_out_uint8_t (base + REGISTER_IER, 0x05);
 }
 
 /* Initialize FIFO. */
 
 void uart_fifo_init (unsigned int port_number)
 {
-  u16 base;
-  u8 data;
+  uint16_t base;
+  uint8_t data;
   
   base = serial_port[port_number].port;
 
@@ -145,36 +145,36 @@ void uart_fifo_init (unsigned int port_number)
       data = 0x87;
     }
     
-    system_port_out_u8 (base + REGISTER_FCR, data);
+    system_port_out_uint8_t (base + REGISTER_FCR, data);
   } 
 }
 
 void uart_set_baudrate (unsigned int port_number)
 {
-  u16 base;
+  uint16_t base;
   
   base = serial_port[port_number].port;
 
   /* Set DLAB. */
 
-  system_port_out_u8 (base + REGISTER_LCR,
-                      system_port_in_u8 (base + REGISTER_LCR) | 0x80);
+  system_port_out_uint8_t (base + REGISTER_LCR,
+                      system_port_in_uint8_t (base + REGISTER_LCR) | 0x80);
 
   /* Baud rate divisor. */
 
-  system_port_out_u16 (base,
+  system_port_out_uint16_t (base,
                        (CLOCK_FREQUENCY / 16) / serial_port[port_number].baudrate);
 
   /* Clear DLAB. */
 
-  system_port_out_u8 (base + REGISTER_LCR,
-                      system_port_in_u8 (base + REGISTER_LCR) & 0x7F);
+  system_port_out_uint8_t (base + REGISTER_LCR,
+                      system_port_in_uint8_t (base + REGISTER_LCR) & 0x7F);
 }
 
 void uart_set_line_settings (unsigned int port_number)
 {
-  u16 base;
-  u8 value;
+  uint16_t base;
+  uint8_t value;
   
   base = serial_port[port_number].port;
 
@@ -234,14 +234,14 @@ void uart_set_line_settings (unsigned int port_number)
 
   /* Write LCR register. */
 
-  system_port_out_u8 (base + REGISTER_LCR, value);
+  system_port_out_uint8_t (base + REGISTER_LCR, value);
 }
 
 
 void uart_set_modem_settings (unsigned int port_number)
 {
-  u16 base;
-  u8 value;
+  uint16_t base;
+  uint8_t value;
   
   base = serial_port[port_number].port;
 
@@ -257,17 +257,17 @@ void uart_set_modem_settings (unsigned int port_number)
 
   value |= serial_port[port_number].rts >> 1;
   
-  system_port_out_u8 (base + REGISTER_MCR, value);
+  system_port_out_uint8_t (base + REGISTER_MCR, value);
 }
 
 void uart_get_modem_settings (unsigned int port_number)
 {
-  u16 base;
-  u8 value;
+  uint16_t base;
+  uint8_t value;
   
   base = serial_port[port_number].port;
 
-  value = system_port_in_u8 (base + REGISTER_MSR);
+  value = system_port_in_uint8_t (base + REGISTER_MSR);
 
   /* CTS value. */
 
@@ -292,7 +292,7 @@ void send_data (unsigned int port_number)
 {
   message_parameter_type message_parameter;
   serial_data_type data;
-  u16 tmp;
+  uint16_t tmp;
   
   /* Send it to caller. */
 
@@ -323,7 +323,7 @@ void send_data (unsigned int port_number)
 
 unsigned int unread_size (unsigned int port_number)
 {
-  u16 size;
+  uint16_t size;
 
   if (serial_port[port_number].rx_end >= serial_port[port_number].rx_current)
   {

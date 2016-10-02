@@ -11,9 +11,9 @@ char arguments_kernel[MAX_KERNEL_PARAMETER_LENGTH];
 /* Split the command line parameters in words (separated by one or
    more spaces). */
 
-u32 arguments_parse (char *source, char *destination, u32 delta)
+uint32_t arguments_parse (char *source, char *destination, uint32_t delta)
 {
-  u32 args = 0, position, arg, length;
+  uint32_t args = 0, position, arg, length;
   char **word_pointer, *word;
 
   /* First of all, find out how many parameters we have. */
@@ -38,7 +38,7 @@ u32 arguments_parse (char *source, char *destination, u32 delta)
 
   /* Save this value. */
   
-  *((u32 *) destination) = args;
+  *((uint32_t *) destination) = args;
 
   /* Now, go through the string again and copy the parameters into the
      data area and set the pointers correctly. */

@@ -35,7 +35,7 @@ console_structure_type console_structure;
 volatile bool lock = FALSE;
 bool config1 = TRUE;
 bool config2 = TRUE;
-u8 port_num = SERIAL_TTYS0;
+uint8_t port_num = SERIAL_TTYS0;
 tag_type empty_tag = 
 {
   0, 0, ""

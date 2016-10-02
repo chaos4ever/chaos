@@ -31,7 +31,7 @@ void handle_connection (mailbox_id_type reply_mailbox_id,
   message_parameter_type message_parameter;
   ipc_structure_type ipc_structure;
   bool done = FALSE;
-  u32 *data;
+  uint32_t *data;
   unsigned int data_size = 1024;
 
   memory_allocate ((void **) &data, data_size);

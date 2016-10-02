@@ -10,13 +10,13 @@
 
 #include "fat.h"
 
-static u8 global_fat[16384];
+static uint8_t global_fat[16384];
 
 // Detects wether there is a FAT file system on the given mailbox ID.
 bool detect_fat(fat_info_type *fat_info)
 {
     message_parameter_type message_parameter;
-    u8 *sector = (u8 *) buffer;
+    uint8_t *sector = (uint8_t *) buffer;
     ipc_block_read_type ipc_block_read;
 
     //  log_print (&log_structure, LOG_URGENCY_DEBUG, "Detecting a FAT volume.");
@@ -105,7 +105,7 @@ bool detect_fat(fat_info_type *fat_info)
 
         ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter);
 
-        memory_set_u8((u8 *) &global_fat, 0, 16384);
+        memory_set_uint8_t((uint8_t *) &global_fat, 0, 16384);
         message_parameter.length = 16384;
         message_parameter.data = &global_fat;
         ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL);

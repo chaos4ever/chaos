@@ -15,7 +15,7 @@ void icmp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_ty
 {
     // Check if we've received an ICMP echo request (aka 'ping'). If so, reply. Perhaps send a winnuke too. ;)
     ipv4_header_type *ipv4_header = (ipv4_header_type *) &ethernet_header->data;
-    icmp_header_type *icmp_header = (icmp_header_type *)((u8 *) ipv4_header + ipv4_header->header_length * 4);
+    icmp_header_type *icmp_header = (icmp_header_type *)((uint8_t *) ipv4_header + ipv4_header->header_length * 4);
     message_parameter_type message_parameter;
 
     switch (icmp_header->type)
@@ -49,7 +49,7 @@ void icmp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_ty
             ipv4_header->source_address = interface->ip_address;
             ipv4_header->time_to_live = 255;
             ipv4_header->checksum = 0;
-            ipv4_header->checksum = ipv4_checksum((u16 *) ipv4_header, sizeof(ipv4_header_type));
+            ipv4_header->checksum = ipv4_checksum((uint16_t *) ipv4_header, sizeof(ipv4_header_type));
 
             message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
             message_parameter.message_class = IPC_ETHERNET_PACKET_SEND;

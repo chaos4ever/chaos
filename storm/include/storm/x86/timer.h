@@ -11,7 +11,7 @@
 #include <storm/x86/tss.h>
 
 extern void timer_init(void) INIT_CODE;
-extern void timer_add_event(time_type milliseconds, u32 action, storm_tss_type *tss);
+extern void timer_add_event(time_type milliseconds, uint32_t action, storm_tss_type *tss);
 extern void timer_check_events(void);
 
 typedef struct
@@ -19,7 +19,7 @@ typedef struct
     struct timer_event_type *previous;
     struct timer_event_type *next;
     time_type timeslice;
-    u32 action;
+    uint32_t action;
     storm_tss_type *tss;
 } PACKED timer_event_type;
 

@@ -40,7 +40,7 @@ enum
   GET_CPU_INFO,
 };
 
-static inline void rdtsc (u32 *low, u32 *high)
+static inline void rdtsc (uint32_t *low, uint32_t *high)
 {
   asm volatile
   ("rdtsc"
@@ -138,7 +138,7 @@ static void INIT_CODE corrupted_struct (void)
 
 /* Generic CPUID function */
 
-static inline void cpuid (u32 command, u32 *eax, u32 *ebx, u32 *ecx, u32 *edx)
+static inline void cpuid (uint32_t command, uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx)
 {
   asm volatile ("cpuid"
        : "=a" (*eax), "=b" (*ebx), "=c" (*ecx), "=d" (*edx)
@@ -243,7 +243,7 @@ static void INIT_CODE cpu_examine (void)
 
   if (has_cpuid ())
   {
-    u32 dummy;
+    uint32_t dummy;
 
     DEBUG_MESSAGE (DEBUG, "Passed");
 
@@ -251,15 +251,15 @@ static void INIT_CODE cpu_examine (void)
 
     /* Get CPU vendor name. */
 
-    cpuid (GET_CPU_VENDOR, &dummy, (u32 *) &cpuid_string[0],
-           (u32 *) &cpuid_string[8], (u32 *) &cpuid_string[4]);
+    cpuid (GET_CPU_VENDOR, &dummy, (uint32_t *) &cpuid_string[0],
+           (uint32_t *) &cpuid_string[8], (uint32_t *) &cpuid_string[4]);
 
     cpu_info.name = cpuid_string;
 
     /* Get model type and flags. */
 
-    cpuid (GET_CPU_INFO, (u32 *) &cpu_info.signature, &dummy, &dummy,
-           (u32 *) &cpu_info.flags.real_flags);
+    cpuid (GET_CPU_INFO, (uint32_t *) &cpu_info.signature, &dummy, &dummy,
+           (uint32_t *) &cpu_info.flags.real_flags);
   }
   else
   {
@@ -296,15 +296,15 @@ static void INIT_CODE cpu_examine (void)
 #define CALIBRATE_LATCH (5 * LATCH)
 #define CALIBRATE_TIME  (5 * 1000020 / hz)
 
-static u32 INIT_CODE calibrate_tsc (void)
+static uint32_t INIT_CODE calibrate_tsc (void)
 {
-  u32 startlow, starthigh;
-  u32 endlow, endhigh;
-  u32 count;
+  uint32_t startlow, starthigh;
+  uint32_t endlow, endhigh;
+  uint32_t count;
 
   /* Set the gate high, disable speaker. */
 
-  port_out_u8 (0x61, (port_in_u8 (0x61) & ~0x02) | 0x01);
+  port_out_uint8_t (0x61, (port_in_uint8_t (0x61) & ~0x02) | 0x01);
 
   /* Now let's take care of CTC channel 2. */
 
@@ -314,15 +314,15 @@ static u32 INIT_CODE calibrate_tsc (void)
 
   /* Binary, mode 0, LSB/MSB, Ch 2 */
 
-  port_out_u8 (0x43, 0xB0);
+  port_out_uint8_t (0x43, 0xB0);
 
   /* LSB of count */
 
-  port_out_u8 (0x42, CALIBRATE_LATCH & 0xFF);
+  port_out_uint8_t (0x42, CALIBRATE_LATCH & 0xFF);
 
   /* MSB of count */
 
-  port_out_u8 (0x42, CALIBRATE_LATCH >> 8);
+  port_out_uint8_t (0x42, CALIBRATE_LATCH >> 8);
 
   rdtsc (&startlow, &starthigh);
   count = 0;
@@ -330,7 +330,7 @@ static u32 INIT_CODE calibrate_tsc (void)
   do
   {
     count++;
-  } while ((port_in_u8 (0x61) & 0x20) == 0);
+  } while ((port_in_uint8_t (0x61) & 0x20) == 0);
 
   rdtsc (&endlow, &endhigh);
 
@@ -373,10 +373,10 @@ static u32 INIT_CODE calibrate_tsc (void)
 
 /* Get the CPU speed in MHz. This requires TSC support. */
 
-static u32 INIT_CODE cpuid_get_cpu_speed (void)
+static uint32_t INIT_CODE cpuid_get_cpu_speed (void)
 {
-  u32 tsc_quotient = calibrate_tsc ();
-  u32 cpu_hz;
+  uint32_t tsc_quotient = calibrate_tsc ();
+  uint32_t cpu_hz;
 
   if (tsc_quotient != 0)
   {
@@ -385,7 +385,7 @@ static u32 INIT_CODE cpuid_get_cpu_speed (void)
        100 ppm. */
 
     {
-      u32 eax = 0, edx = 1000000;
+      uint32_t eax = 0, edx = 1000000;
       asm ("divl %2"
            : "=a" (cpu_hz), "=d" (edx)
            : "r" (tsc_quotient), "0" (eax), "1" (edx));
@@ -402,12 +402,12 @@ static u32 INIT_CODE cpuid_get_cpu_speed (void)
 
 void cpuid_init (void)
 {
-  u8 vendor;
-  u8 c;
+  uint8_t vendor;
+  uint8_t c;
 
   /* Make sure we clear this structure. */
 
-  memory_set_u8 ((u8 *) &cpu_info, 0, sizeof (cpu_info_type));
+  memory_set_uint8_t ((uint8_t *) &cpu_info, 0, sizeof (cpu_info_type));
 
   DEBUG_MESSAGE (DEBUG, "Passed");
 

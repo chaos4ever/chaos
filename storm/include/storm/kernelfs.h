@@ -80,7 +80,7 @@ typedef struct
     char state[MAX_STATE_NAME_LENGTH];
 
     // Memory usage (in bytes).
-    u32 memory_usage;
+    uint32_t memory_usage;
 } kernelfs_thread_info_type;
 
 typedef struct
@@ -98,13 +98,13 @@ typedef struct
     time_type timeslices;
 
     // The number of memory bytes this process is using.
-    u32 main_memory;
-    u32 stack_memory;
+    uint32_t main_memory;
+    uint32_t stack_memory;
 
     char thread_name[MAX_THREAD_NAME_LENGTH];
 
     // The current instruction pointer of the thread.
-    u32 instruction_pointer;
+    uint32_t instruction_pointer;
 } kernelfs_thread_info_verbose_type;
 
 typedef struct
@@ -125,7 +125,7 @@ typedef struct
     // Output parameters.
     //
     // The exact speed of this CPU.
-    u32 hz;
+    uint32_t hz;
 
     // 486 DX/4, K6-2, Athlon, etc.
     // FIXME: Get this from CPUID if AMD.
@@ -140,11 +140,11 @@ typedef struct
     unsigned int kernelfs_class;
 
     // Output parameters.
-    u32 total_memory;
-    u32 free_memory;
+    uint32_t total_memory;
+    uint32_t free_memory;
 
-    u32 total_global_memory;
-    u32 free_global_memory;
+    uint32_t total_global_memory;
+    uint32_t free_global_memory;
 } kernelfs_memory_info_type;
 
 typedef struct
@@ -152,10 +152,10 @@ typedef struct
     unsigned int kernelfs_class;
 
     // Output parameters.
-    u32 mode_type;
-    u32 width;
-    u32 height;
-    u32 depth;
+    uint32_t mode_type;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
     void *frame_buffer_address;
 } kernelfs_video_info_type;
 

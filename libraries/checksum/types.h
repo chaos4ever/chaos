@@ -32,11 +32,11 @@ typedef struct
 {
   /* State (ABCD). */
 
-  u32 state[4];
+  uint32_t state[4];
 
   /* Number of bits, modulo 2^64 (lsb first). */
 
-  u32 count[2];
+  uint32_t count[2];
 
   /* Input buffer. */
 

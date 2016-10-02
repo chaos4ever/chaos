@@ -31,7 +31,7 @@ extern return_type system_call_mailbox_destroy(mailbox_id_type mailbox_id);
 extern return_type system_call_mailbox_flush(mailbox_id_type mailbox_id);
 extern return_type system_call_mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *message_parameter);
 extern return_type system_call_mailbox_receive(mailbox_id_type mailbox_id, message_parameter_type *message_parameter);
-extern return_type system_call_memory_allocate(void **address, u32 pages, bool cacheable);
+extern return_type system_call_memory_allocate(void **address, uint32_t pages, bool cacheable);
 extern return_type system_call_memory_deallocate(void **address);
 extern return_type system_call_memory_get_physical_address(void *virtual_address, void **physical_address);
 extern return_type system_call_memory_reserve(address_type start, unsigned int size, void **virtual_address);

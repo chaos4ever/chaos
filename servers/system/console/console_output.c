@@ -14,7 +14,7 @@
 #include "unicode_to_cp437.h"
 
 // Table for converting between ANSI and EGA colors.
-u8 color_table[] = { 0, 4, 2, 6, 1, 5, 3, 7 };
+uint8_t color_table[] = { 0, 4, 2, 6, 1, 5, 3, 7 };
 
 // Function:    console_scroll ()
 // Purpose:     Scroll a console up requested number of lines.
@@ -32,9 +32,9 @@ static void console_scroll(console_type *console, int number_of_lines)
 {
     memory_copy(console->output, console->output + console->width,
                 console->width * (console->height - 1) * sizeof(character_type));
-    memory_set_u16((u16 *) (console->output + (console->height - 1) * console->width),
+    memory_set_uint16_t((uint16_t *) (console->output + (console->height - 1) * console->width),
                    ((console->current_attribute) << 8) + ' ',
-                   console->width * sizeof(character_type) / sizeof(u16));
+                   console->width * sizeof(character_type) / sizeof(uint16_t));
 
     if (console->cursor_saved_y != -1 &&
         console->cursor_saved_y >= number_of_lines)
@@ -50,7 +50,7 @@ static void console_scroll(console_type *console, int number_of_lines)
 // Returns:     Nothing.
 // Parameters:  Pointer to console-struct for console.
 //              chaos color code.
-static void console_set_foreground(console_type *console, u32 color)
+static void console_set_foreground(console_type *console, uint32_t color)
 {
     console->current_attribute = (console->current_attribute & 0xF0) + color_table[color];
 
@@ -71,7 +71,7 @@ static void console_set_foreground(console_type *console, u32 color)
 // Returns:     Nothing.
 // Parameters:  Pointer to console-struct for console.
 //              chaos color code.
-static void console_set_background(console_type *console, u32 color)
+static void console_set_background(console_type *console, uint32_t color)
 {
     console->current_attribute = (console->current_attribute & 0x0F) + (color_table[color] << 4);
 
@@ -94,7 +94,7 @@ static void console_kill_line(console_type *console, int argument)
         case 0:
         {
             // Clear line from cursor position.
-            memory_set_u16((u16 *) ((u32) console->output +
+            memory_set_uint16_t((uint16_t *) ((uint32_t) console->output +
                                     (console->cursor_y * console->width + console->cursor_x) * sizeof(character_type)),
                            (console->modified_attribute << 8) + ' ',
                            (console->width - console->cursor_x) * sizeof(character_type) / 2);
@@ -104,7 +104,7 @@ static void console_kill_line(console_type *console, int argument)
         case 1:
         {
             // Clear from start of line to cursor position (inclusive).
-            memory_set_u16((u16 *) ((u32) console->output +
+            memory_set_uint16_t((uint16_t *) ((uint32_t) console->output +
                                     console->cursor_y * console->width * sizeof(character_type)),
                            (console->modified_attribute << 8) + ' ',
                            console->cursor_x * sizeof(character_type) / 2);
@@ -114,7 +114,7 @@ static void console_kill_line(console_type *console, int argument)
         case 2:
         {
             // Clear whole line.
-            memory_set_u16((u16 *) ((u32) console->output + console->cursor_y * console->width * sizeof(character_type)),
+            memory_set_uint16_t((uint16_t *) ((uint32_t) console->output + console->cursor_y * console->width * sizeof(character_type)),
                            (console->modified_attribute << 8) + ' ',
                            console->width * sizeof (character_type) / 2);
             break;
@@ -131,7 +131,7 @@ static void console_kill_screen(console_type *console, int argument)
             unsigned int cursor_address = (console->cursor_y * console->width + console->cursor_x) * sizeof(character_type);
 
             // Clear screen from cursor position (inclusive) to end.
-            memory_set_u16((u16 *) ((u32) console->output + cursor_address),
+            memory_set_uint16_t((uint16_t *) ((uint32_t) console->output + cursor_address),
                            (console->current_attribute << 8),
                            console->width * console->height * sizeof(character_type) / 2 - cursor_address);
             break;
@@ -142,7 +142,7 @@ static void console_kill_screen(console_type *console, int argument)
             unsigned int cursor_address = (console->cursor_y * console->width + console->cursor_x) * sizeof(character_type) / 2;
 
             // Clear screen from start to cursor position (inclusive).
-            memory_set_u16((u16 *) console->output,
+            memory_set_uint16_t((uint16_t *) console->output,
                            (console->current_attribute << 8),
                            console->width * console->height * sizeof(character_type) / 2 - cursor_address);
             break;
@@ -151,7 +151,7 @@ static void console_kill_screen(console_type *console, int argument)
         case 2:
         {
             // Clear the screen entire screen.
-            memory_set_u16((u16 *) console->output,
+            memory_set_uint16_t((uint16_t *) console->output,
                            (console->current_attribute << 8),
                            console->width * console->height * sizeof(character_type) / 2);
             break;
@@ -324,7 +324,7 @@ void console_output(console_type *console, const char *string)
                         ucs2_type ucs2;
 
                         // If this is an UTF-8 character, convert it to UCS-2.
-                        if (unicode_utf8_to_ucs2(&ucs2, (u8 *) &string[string_index], &length) != UNICODE_RETURN_SUCCESS)
+                        if (unicode_utf8_to_ucs2(&ucs2, (uint8_t *) &string[string_index], &length) != UNICODE_RETURN_SUCCESS)
                         {
                             break;
                         }

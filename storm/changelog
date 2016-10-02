@@ -616,7 +616,7 @@
 	* generic/debug.c: Changed screen to point to BASE_SCREEN instead
 	of a hard-coded value.
 
-	* Changed u8 to char everywhere when strings are used.
+	* Changed uint8_t to char everywhere when strings are used.
 	
 	* include/storm/i386/ctype.h: Removed this file.
 

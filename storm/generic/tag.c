@@ -14,7 +14,7 @@ unsigned int tag_get_length(tag_type *tag)
     while (where->type != 0)
     {
         length += where->length + sizeof(unsigned int) * 2;
-        where = (tag_type *) ((u32) where + (u32) where->length + sizeof(unsigned int) * 2);
+        where = (tag_type *) ((uint32_t) where + (uint32_t) where->length + sizeof(unsigned int) * 2);
     }
 
     length += sizeof (unsigned int) * 2;
@@ -40,7 +40,7 @@ bool tag_masked_compare(tag_type *tag, tag_type *tag_mask)
             }
 
             // TODO: Very ugly way of doing pointer arithmetics if you ask me...
-            where = (tag_type *) ((u32) where + (u32) where->length + sizeof(unsigned int) * 2);
+            where = (tag_type *) ((uint32_t) where + (uint32_t) where->length + sizeof(unsigned int) * 2);
         }
 
         if (where->type == 0)
@@ -48,7 +48,7 @@ bool tag_masked_compare(tag_type *tag, tag_type *tag_mask)
             return FALSE;
         }
 
-        mask = (tag_type *) ((u32) mask + (u32) mask->length + sizeof(unsigned int) * 2);
+        mask = (tag_type *) ((uint32_t) mask + (uint32_t) mask->length + sizeof(unsigned int) * 2);
     }
 
     return TRUE;

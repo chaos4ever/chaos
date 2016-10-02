@@ -18,7 +18,7 @@
 
 // The startup GDT we use. This is copied to its real location on startup, which is defined by BASE_GDT. For the descriptor format,
 // see the Intel reference documentation or the OSDev wiki: http://wiki.osdev.org/Global_Descriptor_Table
-static u16 temporary_gdt[] INIT_DATA =
+static uint16_t temporary_gdt[] INIT_DATA =
 {
     // Null descriptor. Generates GPF on access.
     0x0000,
@@ -52,7 +52,7 @@ static u16 temporary_gdt[] INIT_DATA =
 };
 
 // The GDT ant IDT fits into the first physical page.
-u16 idtr[] UNUSED INIT_DATA =
+uint16_t idtr[] UNUSED INIT_DATA =
 {
     // IDT limit, 256 IDT entries.
     0x7FF,
@@ -62,7 +62,7 @@ u16 idtr[] UNUSED INIT_DATA =
     HIGH_U16(BASE_IDT)
 };
 
-u16 gdtr[] UNUSED INIT_DATA =
+uint16_t gdtr[] UNUSED INIT_DATA =
 {
     // GDT limit, 256 GDT entries.
     0x7FF,
@@ -73,7 +73,7 @@ u16 gdtr[] UNUSED INIT_DATA =
 };
 
 // Multiboot header.
-u32 multiboot_header[] __attribute__ ((section(".init.pre"), unused)) =
+uint32_t multiboot_header[] __attribute__ ((section(".init.pre"), unused)) =
 {
     MULTIBOOT_MAGIC,
     MULTIBOOT_FLAGS,
@@ -90,7 +90,7 @@ extern int kernel_main (int arguments, char *argument[]);
 // MMX-based CPUs.
 void _start(void)
 {
-    u8 *bios_data_area = (u8 *) 0x400;
+    uint8_t *bios_data_area = (uint8_t *) 0x400;
 
     // EBX contains the address to the multiboot table. Save this in the kernel data table.
     asm ("movl    %0, %%edi\n"
@@ -98,7 +98,7 @@ void _start(void)
          "movl    %1, %%ecx\n"
          "rep     movsl"
          :
-         : "g" ((u32) & multiboot_info), "g" (sizeof (multiboot_info_type) / 4));
+         : "g" ((uint32_t) & multiboot_info), "g" (sizeof (multiboot_info_type) / 4));
 
     // FIXME: Update to new Multiboot video-standard.
     dataarea.x_size = bios_data_area[0x4A];
@@ -117,8 +117,8 @@ void _start(void)
          "movl    $0, %%eax\n"
          "rep     stosl"
          :
-         : "g" ((u32) BASE_GDT),
-         "g" ((u32) & temporary_gdt),
+         : "g" ((uint32_t) BASE_GDT),
+         "g" ((uint32_t) & temporary_gdt),
          "n" (sizeof (temporary_gdt) / 4),
          "n" ((0x800 - sizeof (temporary_gdt)) / 4));
 
@@ -160,7 +160,7 @@ static void INIT_CODE kernel_entry(void)
 {
     multiboot_init();
 
-    kernel_main(((u8 *) arguments_kernel)[0], (char **) &arguments_kernel[4]);
+    kernel_main(((uint8_t *) arguments_kernel)[0], (char **) &arguments_kernel[4]);
 
     // This code should never really get called.
     idle();

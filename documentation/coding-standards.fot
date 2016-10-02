@@ -345,7 +345,7 @@
 <a name="56"/>
 <text>      extern inline return_type system_call_thread_control
 </text>
-<text>        (process_id_type process_id, u32 class, u32 parameter)
+<text>        (process_id_type process_id, uint32_t class, uint32_t parameter)
 </text>
 <text>    </text>
 <a name="57"/>

@@ -15,7 +15,7 @@
 #include <storm/current-arch/thread.h>
 
 // External variables.
-extern volatile u32 number_of_tasks;
+extern volatile uint32_t number_of_tasks;
 extern mutex_kernel_type tss_tree_mutex;
 extern tss_list_type *tss_list;
 extern tss_list_type *idle_tss_node;

@@ -7,5 +7,5 @@
 
 #include <system/system.h>
 
-typedef u32 ucs4_type;
-typedef u16 ucs2_type;
+typedef uint32_t ucs4_type;
+typedef uint16_t ucs2_type;

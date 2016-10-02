@@ -55,16 +55,16 @@
 
 typedef struct
 {
-  u16 id[256];
+  uint16_t id[256];
 
   char model_number[41];
   char serial_number[21];
   bool lba;
   bool dma;
-  u32 number_of_sectors;
-  u32 number_of_heads;
-  u32 sectors_per_track;
-  u32 number_of_cylinders;
+  uint32_t number_of_sectors;
+  uint32_t number_of_heads;
+  uint32_t sectors_per_track;
+  uint32_t number_of_cylinders;
 
   unsigned int type;
 } device_type;
@@ -90,8 +90,8 @@ typedef struct
 
   /* Where on this ATA device is it located and how big is it? */
 
-  u32 start_sector;
-  u32 number_of_sectors;
+  uint32_t start_sector;
+  uint32_t number_of_sectors;
 } service_type;
 
 /* Internal ATA device types. */
@@ -155,7 +155,7 @@ extern void handle_service (service_type *service) __attribute__ ((noreturn));
 extern bool ata_init_interface (interface_type *interface);
 
 extern bool ata_read_sectors (interface_type *interface, unsigned int device,
-                              u32 sector_number, unsigned int number_of_sectors,
+                              uint32_t sector_number, unsigned int number_of_sectors,
                               void *buffer);
 
 #endif /* !__ATA_H__ */

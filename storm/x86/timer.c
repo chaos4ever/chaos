@@ -23,13 +23,13 @@
 
 #define DEBUG FALSE
 
-u32 hz = 32;
+uint32_t hz = 32;
 timer_event_type *timer_event_list = NULL;
 volatile time_type uptime = 0;
 
 /* Read the timer chip. */
 
-static inline void rdtsc (u32 *low, u32 *high)
+static inline void rdtsc (uint32_t *low, uint32_t *high)
 {
   asm volatile 
   (\
@@ -43,28 +43,28 @@ void timer_init (void)
 {
   /* Channel 0. */
   
-  port_out_u8 (PIT_MODE_PORT, 
+  port_out_uint8_t (PIT_MODE_PORT, 
                (COUNTER_0_SELECT | ACCESS_LOW_COUNTER_U8 |
                 ACCESS_HIGH_COUNTER_U8 | MODE_3_SELECT | BINARY_COUNTER));
 
   /* LSB first, then MSB. */
 
-  port_out_u8 (PIT_COUNTER_DIVISOR, LOW_U8 (COUNTER_DIVISOR (hz)));
-  port_out_u8 (PIT_COUNTER_DIVISOR, HIGH_U8 (COUNTER_DIVISOR (hz)));
+  port_out_uint8_t (PIT_COUNTER_DIVISOR, LOW_U8 (COUNTER_DIVISOR (hz)));
+  port_out_uint8_t (PIT_COUNTER_DIVISOR, HIGH_U8 (COUNTER_DIVISOR (hz)));
 
   /* Channel 2. We use this to get a good timer. Or, more correctly,
      we should use it. ;) FIXME */
 
-  port_out_u8 (PIT_MODE_PORT,
+  port_out_uint8_t (PIT_MODE_PORT,
                (COUNTER_2_SELECT | ACCESS_LOW_COUNTER_U8 |
                 ACCESS_HIGH_COUNTER_U8 | MODE_3_SELECT | BINARY_COUNTER));
-  port_out_u8 (PIT_COUNTER_2, LOW_U8 (COUNTER_DIVISOR (1000)));
-  port_out_u8 (PIT_COUNTER_2, HIGH_U8 (COUNTER_DIVISOR (1000)));
+  port_out_uint8_t (PIT_COUNTER_2, LOW_U8 (COUNTER_DIVISOR (1000)));
+  port_out_uint8_t (PIT_COUNTER_2, HIGH_U8 (COUNTER_DIVISOR (1000)));
 }
 
 /* Add an event. */
 
-void timer_add_event (time_type milliseconds, u32 action, storm_tss_type *tss)
+void timer_add_event (time_type milliseconds, uint32_t action, storm_tss_type *tss)
 {
   timer_event_type *event = memory_global_allocate (sizeof (timer_event_type));
   timer_event_type *node = timer_event_list;

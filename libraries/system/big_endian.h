@@ -24,21 +24,20 @@
 
 #define SYSTEM_BIG_ENDIAN
 
-#define system_big_endian_to_native_u64(x) ((u64) x)
-#define system_big_endian_to_native_u32(x) ((u32) x)
-#define system_big_endian_to_native_u16(x) ((u16) x)
+#define system_big_endian_to_native_uint64_t(x) ((uint64_t) x)
+#define system_big_endian_to_native_u32(x) ((uint32_t) x)
+#define system_big_endian_to_native_uint16_t(x) ((uint16_t) x)
 
-#define system_little_endian_to_native_u64(x) (system_byte_swap_u64 (x))
-#define system_little_endian_to_native_u32(x) (system_byte_swap_u32 (x))
-#define system_little_endian_to_native_u16(x) (system_byte_swap_u16 (x))
+#define system_little_endian_to_native_uint64_t(x) (system_byte_swap_uint64_t (x))
+#define system_little_endian_to_native_u32(x) (system_byte_swap_uint32_t (x))
+#define system_little_endian_to_native_uint16_t(x) (system_byte_swap_uint16_t (x))
 
-#define system_native_to_big_endian_u64(x) (x)
+#define system_native_to_big_endian_uint64_t(x) (x)
 #define system_native_to_big_endian_u32(x) (x)
-#define system_native_to_big_endian_u16(x) (x)(system_byte_swap_u16 (x))
+#define system_native_to_big_endian_uint16_t(x) (x)(system_byte_swap_uint16_t (x))
 
-#define system_native_to_little_endian_u64(x) (system_byte_swap_u64 (x))
-#define system_native_to_little_endian_u32(x) (system_byte_swap_u32 (x))
-#define system_native_to_little_endian_u16(x) (system_byte_swap_u16 (x))
+#define system_native_to_little_endian_uint64_t(x) (system_byte_swap_uint64_t (x))
+#define system_native_to_little_endian_u32(x) (system_byte_swap_uint32_t (x))
+#define system_native_to_little_endian_uint16_t(x) (system_byte_swap_uint16_t (x))
 
 #endif /* !__LIBRARY_SYSTEM_LITTLE_ENDIAN_H__ */
-

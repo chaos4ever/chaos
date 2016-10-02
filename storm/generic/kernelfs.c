@@ -207,7 +207,7 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
         // Get the amount of processes.
         case KERNELFS_CLASS_PROCESS_AMOUNT:
         {
-            u32 *processes = (u32 *) kernelfs_generic;
+            uint32_t *processes = (uint32_t *) kernelfs_generic;
 
             *processes = number_of_processes;
             break;
@@ -260,7 +260,7 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
         // Get information about the uptime of the system.
         case KERNELFS_CLASS_UPTIME_INFO:
         {
-            u32 *uptime_info = (u32 *) kernelfs_generic;
+            uint32_t *uptime_info = (uint32_t *) kernelfs_generic;
 
             *uptime_info = uptime;
             break;
@@ -280,7 +280,7 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
 
         case KERNELFS_CLASS_NUMBER_OF_TIMESLICES:
         {
-          u32 *number_of_timeslices = (u32 *) kernelfs_generic;
+          uint32_t *number_of_timeslices = (uint32_t *) kernelfs_generic;
           *number_of_timeslices = 0;
 
           mutex_kernel_wait(&tss_tree_mutex);

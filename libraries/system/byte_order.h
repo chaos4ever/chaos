@@ -9,7 +9,7 @@
 
 // 486 and above have the neat instruction 'bswap' which makes life a lot easier. Since 99,9% of all Intel machines that you
 // reasonably want to run chaos on is 486 or greater, there's little point in supporting 386 at this point.
-static inline u32 system_byte_swap_u32(u32 x)
+static inline uint32_t system_byte_swap_u32(uint32_t x)
 {
 
     // Swap the bytes.
@@ -21,7 +21,7 @@ static inline u32 system_byte_swap_u32(u32 x)
     return x;
 }
 
-static inline u16 system_byte_swap_u16(u16 x)
+static inline uint16_t system_byte_swap_uint16_t(uint16_t x)
 {
     asm
     ("xchgb   %b0, %h0"

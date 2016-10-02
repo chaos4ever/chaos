@@ -47,36 +47,36 @@ static void INIT_CODE irq_remap (void)
 {
   /* Send initialisation sequence to 8259A-1 and 8259A-2. */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_MASTER, 0x11);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER, 0x11);
   delay ();
-  port_out_u8 (INTERRUPT_CONTROLLER_SLAVE, 0x11);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE, 0x11);
   delay ();
 
   /* Start of hardware int's (0x20). */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, BASE_IRQ);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, BASE_IRQ);
   delay ();
 
   /* Start of hardware int's 2 (0x28). */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, BASE_IRQ + 8);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, BASE_IRQ + 8);
   delay ();
 
   /* 8259-1 is master. */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, 0x04);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, 0x04);
   delay ();
 
   /* 8259-2 is slave. */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, 0x02);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, 0x02);
   delay ();
 
   /* 8086 mode for both. */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, 0x01);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, 0x01);
   delay ();
-  port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, 0x01);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, 0x01);
   delay ();
 }
 
@@ -84,21 +84,21 @@ static void INIT_CODE irq_remap (void)
 
 void irq_enable (unsigned int irq_number)
 {
-  u8 mask;
+  uint8_t mask;
 
   /* Check which interrupt controller to use. */
 
   if (irq_number < 8)
   {
-    mask = port_in_u8 (INTERRUPT_CONTROLLER_MASTER + 1) &
+    mask = port_in_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1) &
       ~BIT_VALUE (irq_number);
-    port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, mask);
+    port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, mask);
   }
   else
   {
-    mask = port_in_u8 (INTERRUPT_CONTROLLER_SLAVE + 1) &
+    mask = port_in_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1) &
       ~BIT_VALUE (irq_number - 8);
-    port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, mask);
+    port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, mask);
   }
 }
 
@@ -106,21 +106,21 @@ void irq_enable (unsigned int irq_number)
 
 void irq_disable (unsigned int irq_number)
 {
-  u8 mask;
+  uint8_t mask;
 
   /* Check which interrupt controller to use. */
   
   if (irq_number < 8)
   {
-    mask = port_in_u8 (INTERRUPT_CONTROLLER_MASTER + 1) | 
+    mask = port_in_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1) | 
       BIT_VALUE (irq_number);
-    port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, mask);
+    port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, mask);
   }
   else
   {
-    mask = port_in_u8 (INTERRUPT_CONTROLLER_SLAVE + 1) |
+    mask = port_in_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1) |
       BIT_VALUE (irq_number - 8);
-    port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, mask);
+    port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, mask);
   }
 }
 
@@ -128,7 +128,7 @@ void irq_disable (unsigned int irq_number)
 
 void irq_init (void)
 {
-  memory_set_u8 ((u8 *) irq, 0, sizeof (irq_type) * IRQ_LEVELS);
+  memory_set_uint8_t ((uint8_t *) irq, 0, sizeof (irq_type) * IRQ_LEVELS);
 
   /* Remap the IRQs to 20-2F. The defaults are Very Bad, since they
      overlap the exceptions... */
@@ -175,8 +175,8 @@ void irq_init (void)
 
   /* Disable all IRQs. */
 
-  port_out_u8 (INTERRUPT_CONTROLLER_MASTER + 1, 0xFF);
-  port_out_u8 (INTERRUPT_CONTROLLER_SLAVE + 1, 0xFF);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_MASTER + 1, 0xFF);
+  port_out_uint8_t (INTERRUPT_CONTROLLER_SLAVE + 1, 0xFF);
 
   /* Allocate IRQ 0 and 2 for the system. */
 
@@ -376,12 +376,12 @@ return_type irq_acknowledge (unsigned int irq_number)
 
   if (irq_number < 8)
   {
-    port_out_u8 (0x20, 0x20);
+    port_out_uint8_t (0x20, 0x20);
   }
   else
   {
-    port_out_u8 (0xA0, 0x20);
-    port_out_u8 (0x20, 0x20);
+    port_out_uint8_t (0xA0, 0x20);
+    port_out_uint8_t (0x20, 0x20);
   }
 
   return STORM_RETURN_SUCCESS;

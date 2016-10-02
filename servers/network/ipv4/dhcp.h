@@ -44,63 +44,63 @@ enum
 typedef struct
 {
     // Message type. 1 = BOOTREQUEST, 2 = BOOTREPLY.
-    u8 operation;
+    uint8_t operation;
 
     // 1 = 10Base-X. FIXME: Support this field properly.
-    u8 hardware_type;
+    uint8_t hardware_type;
 
-    u8 header_length;
+    uint8_t header_length;
 
     // Set to zero by client and updated by relay agents.
-    u8 hops;
+    uint8_t hops;
 
     // Transaction ID, chosen by client and used to identify the session.
-    u32 transaction_id;
+    uint32_t transaction_id;
 
     // Filled in by the client and shows the seconds elapsed since the address requisition started.
-    u16 seconds;
-    u16 flags;
+    uint16_t seconds;
+    uint16_t flags;
 
     // Only filled in if IP is up.
-    u32 client_ip_address;
+    uint32_t client_ip_address;
 
     // Used by BOOTREPLY.
-    u32 assigned_ip_address;
-    u32 next_server_ip_address;
-    u32 relay_agent_ip_address;
-    u8 client_hardware_address[16];
+    uint32_t assigned_ip_address;
+    uint32_t next_server_ip_address;
+    uint32_t relay_agent_ip_address;
+    uint8_t client_hardware_address[16];
 
     // Optional server host name.
-    u8 server_host_name[64];
+    uint8_t server_host_name[64];
 
     // Boot file name.
-    u8 file[128];
+    uint8_t file[128];
 
     // Should be 99, 130, 83, 99
-    u8 magic_cookie[4];
+    uint8_t magic_cookie[4];
 
     // DHCP options are stored right here.
-    u8 dhcp_options[0];
+    uint8_t dhcp_options[0];
 } __attribute__((packed)) dhcp_message_type;
 
 typedef struct
 {
     // 53.
-    u8 code;
+    uint8_t code;
 
     // 1.
-    u8 length;
-    u8 type;
+    uint8_t length;
+    uint8_t type;
 } __attribute__((packed)) dhcp_option_message_type;
 
 typedef struct
 {
     // 50.
-    u8 code;
+    uint8_t code;
 
     // 1.
-    u8 length;
-    u32 ip;
+    uint8_t length;
+    uint32_t ip;
 } __attribute__((packed)) dhcp_option_requested_ip_type;
 
 typedef struct

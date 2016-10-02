@@ -50,7 +50,7 @@ void mailbox_init(void)
 
     // Initially set all pointers to NULL. This isn't entirely nice, but doing this as a for loop wouldn't even be
     // close to cool.
-    memory_set_u8((u8 *) mailbox_hash_table, 0, limit_mailbox_hash_entries * sizeof (mailbox_type *));
+    memory_set_uint8_t((uint8_t *) mailbox_hash_table, 0, limit_mailbox_hash_entries * sizeof (mailbox_type *));
 }
 
 // Looks the given mailbox ID up in the hash table.

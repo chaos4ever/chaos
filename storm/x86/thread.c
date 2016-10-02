@@ -38,7 +38,7 @@
 static tss_list_type **tss_hash;
 mutex_kernel_type tss_tree_mutex = MUTEX_UNLOCKED;
 
-volatile u32 number_of_tasks = 0;
+volatile uint32_t number_of_tasks = 0;
 storm_tss_type *kernel_tss;
 
 // A linked list of all the threads in the system. Used by the dispatcher.
@@ -58,7 +58,7 @@ static unsigned int hash(thread_id_type thread_id)
 void thread_init(void)
 {
     tss_hash = memory_global_allocate(sizeof (tss_list_type *) * limit_thread_hash_entries);
-    memory_set_u8((u8 *) tss_hash, 0, sizeof (tss_list_type *) * limit_thread_hash_entries);
+    memory_set_uint8_t((uint8_t *) tss_hash, 0, sizeof (tss_list_type *) * limit_thread_hash_entries);
 }
 
 // Links the given TSS into the TSS list.
@@ -222,7 +222,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     storm_tss_type *new_tss;
     page_directory_entry_page_table *new_page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
     page_table_entry *new_page_table = (page_table_entry *) (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
-    u32 stack_physical_page, page_directory_physical_page, page_table_physical_page;
+    uint32_t stack_physical_page, page_directory_physical_page, page_table_physical_page;
     int index;
     process_info_type *process_info;
 
@@ -247,7 +247,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     mutex_kernel_signal(&memory_mutex);
 
     // Clone the TSS.
-    memory_copy((u8 *) new_tss, (u8 *) current_tss, sizeof (storm_tss_type) + current_tss->iomap_size);
+    memory_copy((uint8_t *) new_tss, (uint8_t *) current_tss, sizeof (storm_tss_type) + current_tss->iomap_size);
 
     // FIXME: tss_tree_mutex should be changed to a 'dispatcher_mutex', or something... This looks a little weird if
     // you don't know why it's written this way.
@@ -257,15 +257,15 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     mutex_kernel_signal(&tss_tree_mutex);
 
     // What has changed in the TSS is the ESP/ESP0 and the EIP. We must update those fields.
-    new_tss->eip = (u32) start_routine;
+    new_tss->eip = (uint32_t) start_routine;
     new_tss->cr3 = page_directory_physical_page * SIZE_PAGE;
 
     //  debug_print ("thread: %u\n", new_tss->thread_id);
 
     /* Clone the page directory and the lowest page table. */
 
-    memory_copy((u8 *) new_page_directory, (u8 *) BASE_PROCESS_PAGE_DIRECTORY, SIZE_PAGE);
-    memory_copy((u8 *) new_page_table, (u8 *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
+    memory_copy((uint8_t *) new_page_directory, (uint8_t *) BASE_PROCESS_PAGE_DIRECTORY, SIZE_PAGE);
+    memory_copy((uint8_t *) new_page_table, (uint8_t *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
 
     // Set the stack as non-present.
     // FIXME: defines.
@@ -289,7 +289,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY) + 1,
                        page_table_physical_page, 1, PAGE_KERNEL);
 
-    memory_copy((u8 *) new_page_table, (u8 *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
+    memory_copy((uint8_t *) new_page_table, (uint8_t *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
 
     new_page_directory[8].page_table_base = page_table_physical_page;
     memory_virtual_map_other(new_tss,
@@ -305,7 +305,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, 1, "Thread PL0 stack.");
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, 1, PAGE_KERNEL);
-    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
+    memory_copy((uint8_t *) BASE_PROCESS_CREATE, (uint8_t *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
     memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1, PAGE_KERNEL);
 
     new_tss->esp = cpu_get_esp();
@@ -313,7 +313,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     // This stuff needs to run while the PL0 stack is being mapped, since ESP will (because of technical reasons ;)
     // currently point into the PL0 stack. This happens because we are currently running kernel code, so it's not really that
     // weird after all.
-    u32 new_stack_in_current_address_space = BASE_PROCESS_CREATE + (new_tss->esp - BASE_PROCESS_STACK);
+    uint32_t new_stack_in_current_address_space = BASE_PROCESS_CREATE + (new_tss->esp - BASE_PROCESS_STACK);
     new_tss->esp -= 4;
     new_stack_in_current_address_space -= 4;
     *(void **)new_stack_in_current_address_space = argument;
@@ -330,7 +330,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     // FIXME: Check return value.
     memory_physical_allocate(&stack_physical_page, current_tss->stack_pages, "Thread PL3 stack.");
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, current_tss->stack_pages, PAGE_KERNEL);
-    memory_copy((u8 *) BASE_PROCESS_CREATE, (u8 *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
+    memory_copy((uint8_t *) BASE_PROCESS_CREATE, (uint8_t *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
                 current_tss->stack_pages * SIZE_PAGE);
     memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page, current_tss->stack_pages,
                              PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
@@ -462,9 +462,9 @@ return_type thread_control(thread_id_type thread_id, unsigned int class, unsigne
 void thread_block_kernel_mutex(storm_tss_type *tss, mutex_kernel_type *mutex_kernel)
 {
 #if FALSE
-    u32 esp = cpu_get_esp();
+    uint32_t esp = cpu_get_esp();
 
-    DEBUG_MESSAGE(DEBUG, "Called from %p", ((u32 *) esp)[8]);
+    DEBUG_MESSAGE(DEBUG, "Called from %p", ((uint32_t *) esp)[8]);
 #endif
 
     // FIXME: Security.

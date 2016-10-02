@@ -30,25 +30,25 @@ typedef struct
 {
   /* Active flag. */
 
-  u8 reserved : 7;
-  u8 active : 1;
+  uint8_t reserved : 7;
+  uint8_t active : 1;
 
-  u8 starting_head;
-  u16 starting_sector : 6;
-  u16 starting_cylinder : 10;
+  uint8_t starting_head;
+  uint16_t starting_sector : 6;
+  uint16_t starting_cylinder : 10;
 
   /* Type of the partition. */
 
-  u8 type;
+  uint8_t type;
 
-  u8 ending_head;
-  u16 ending_sector : 6;
-  u16 ending_cylinder : 10;
+  uint8_t ending_head;
+  uint16_t ending_sector : 6;
+  uint16_t ending_cylinder : 10;
 
   /* The partition descibed in a 'correct' way. */
 
-  u32 lba_starting_sector_number;
-  u32 lba_number_of_sectors;
+  uint32_t lba_starting_sector_number;
+  uint32_t lba_number_of_sectors;
 } __attribute__ ((packed)) partition_entry_type;
 
 #define PARTITION_TYPE_EXTENDED_DOS             0x05

@@ -72,7 +72,7 @@
 #define MOUSE_IRQ                       12
 
 // Function prototypes.
-extern void mouse_handle_event(u8 scancode);
+extern void mouse_handle_event(uint8_t scancode);
 extern bool mouse_init(void);
 extern void mouse_irq_handler(void *argument);
 extern void mouse_main(void *argument);

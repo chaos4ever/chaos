@@ -15,19 +15,19 @@ enum
 // The ICMP header type
 typedef struct
 {
-    u8 type;
-    u8 data[0];
+    uint8_t type;
+    uint8_t data[0];
 } __attribute__((packed)) icmp_header_type;
 
 // An ICMP echo packet.
 typedef struct
 {
     icmp_header_type header;
-    u8 code;
-    u16 checksum;
-    u16 identifier;
-    u16 sequence_number;
-    u8 data[0];
+    uint8_t code;
+    uint16_t checksum;
+    uint16_t identifier;
+    uint16_t sequence_number;
+    uint8_t data[0];
 } __attribute__((packed)) icmp_echo_type;
 
 // Function prototypes.

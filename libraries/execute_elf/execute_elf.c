@@ -28,8 +28,8 @@ return_type execute_elf (elf_header_type *elf_header, char *parameter_string,
 {
   section_header_type *section_header;
   int index;
-  u32 code_section_base = 0, data_section_base = 0, bss_section_base = 0;
-  u32 code_section_size = 0, data_section_size = 0, bss_section_size = 0;
+  uint32_t code_section_base = 0, data_section_base = 0, bss_section_base = 0;
+  uint32_t code_section_size = 0, data_section_size = 0, bss_section_size = 0;
   void *code_section_address = NULL;
   void *data_section_address = NULL;
   process_create_type elf_process_create;
@@ -90,7 +90,7 @@ return_type execute_elf (elf_header_type *elf_header, char *parameter_string,
   for (index = 1; index < elf_header->section_header_entries; index++)
   {
     section_header = (section_header_type *)
-      ((u32) elf_header + elf_header->section_header_offset +
+      ((uint32_t) elf_header + elf_header->section_header_offset +
        index * elf_header->section_header_entry_size);
     
     if (section_header->flags ==
@@ -108,7 +108,7 @@ return_type execute_elf (elf_header_type *elf_header, char *parameter_string,
   for (index = 1; index < elf_header->section_header_entries; index++)
   {
     section_header = (section_header_type *)
-      ((u32) elf_header + elf_header->section_header_offset +
+      ((uint32_t) elf_header + elf_header->section_header_offset +
        index * elf_header->section_header_entry_size);
 
     /* Check which type of section this is. */
@@ -133,7 +133,7 @@ return_type execute_elf (elf_header_type *elf_header, char *parameter_string,
           {
             data_section_size = section_header->size;
             data_section_base = section_header->address;
-            data_section_address = (void *) ((u32) elf_header + section_header->offset);
+            data_section_address = (void *) ((uint32_t) elf_header + section_header->offset);
             
             break; 
           }
@@ -144,7 +144,7 @@ return_type execute_elf (elf_header_type *elf_header, char *parameter_string,
           {
             code_section_size = section_header->size;
             code_section_base = section_header->address;
-            code_section_address = (void *) ((u32) elf_header + section_header->offset);
+            code_section_address = (void *) ((uint32_t) elf_header + section_header->offset);
 
             break;
           }

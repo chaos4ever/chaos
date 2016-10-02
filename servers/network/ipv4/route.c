@@ -8,7 +8,7 @@
 #include "route.h"
 
 // Find the way to route packets to this address.
-bool route_find(u32 address, ipv4_interface_type **interface, bool *direct, ipc_structure_type **ethernet_structure)
+bool route_find(uint32_t address, ipv4_interface_type **interface, bool *direct, ipc_structure_type **ethernet_structure)
 {
     ipv4_interface_list_type *entry;
 
