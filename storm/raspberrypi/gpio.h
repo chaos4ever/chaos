@@ -1,3 +1,7 @@
+// Abstract: General Purpose I/O for Raspberry Pi
+// Author: Johannes Ridderstedt <jojo@chaosdev.io>
+//
+// © Copyright 2016 chaos development.
 
 #pragma once
 

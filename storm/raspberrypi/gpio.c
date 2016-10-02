@@ -1,6 +1,11 @@
+// Abstract: General Purpose I/O for Raspberry Pi
+// Author: Johannes Ridderstedt <jojo@chaosdev.io>
+//
+// © Copyright 2016 chaos development.
+
+#include <stdint.h>
 
 #include <gpio.h>
-#include <stdint.h>
 
 static volatile uint32_t *gpio_memory;
 

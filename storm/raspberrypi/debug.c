@@ -1,3 +1,8 @@
+// Abstract: Debug routines with both serial and display output
+// Author: Johannes Ridderstedt <jojo@chaosdev.io>
+//
+// © Copyright 2016 chaos development.
+
 #include <stdint.h>
 
 #include <debug.h>
