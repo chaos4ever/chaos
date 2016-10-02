@@ -4,12 +4,12 @@
 
 static volatile uint32_t *uart0_memory;
 
-void serial_init(void)
+static void serial_init(void)
 {
     uart0_memory = (uint32_t *) 0x20201000;
 }
 
-void serial_write(uint8_t byte)
+static void serial_write(uint8_t byte)
 {
     while ((uart0_memory[UART0_FR] & (1 << 5)))
     {
@@ -21,7 +21,7 @@ void serial_write(uint8_t byte)
     for (int i = 0; i < 5000; i++);
 }
 
-void serial_write_string(const char *string)
+static void serial_write_string(const char *string)
 {
     for (int i = 0; string[i] != '\0'; i++)
     {
