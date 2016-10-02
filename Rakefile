@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
-# TODO: Uncomment the rest here as soon as we have updated their build process to rake also.
-FOLDERS = [:storm, :libraries, :programs, :servers].freeze
+TARGET_ARCH = ENV['ARCH']
+
+FOLDERS = if TARGET_ARCH == 'x86'
+  [:storm, :libraries, :programs, :servers].freeze
+elsif TARGET_ARCH == 'raspberrypi'
+  # Nothing else has been ported to this arch yet.
+  [:storm].freeze
+else
+  # Error handling is taken care of by common_settings.rake
+  []
+end
 
 verbose false
 

@@ -2,7 +2,7 @@
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 task default: ['current-arch', 'include/storm/current-arch'] do
-  ['generic', 'current-arch'].each do |folder|
+  ['generic', TARGET_ARCH].each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND}"
   end
 end
@@ -10,10 +10,10 @@ end
 task :clean do
   # Cannot use current-arch here, since it may not exist any more (if you run 'rake clean' multiple times).
   ['generic', TARGET_ARCH].each do |folder|
-    sh "cd #{folder} && rake clean"
+    sh "cd #{folder} && #{RAKE_COMMAND} clean"
   end
 
-  rm_f ['current-arch', 'include/storm/' + TARGET_ARCH]
+  rm_f ['current-arch', 'include/storm/current-arch']
 end
 
 task install: :default do

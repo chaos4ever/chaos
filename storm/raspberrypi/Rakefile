@@ -1,0 +1,47 @@
+# frozen_string_literal: true
+def objects
+  %w(
+    init.o
+  )
+end
+
+OUTPUT = 'libstorm_raspberrypi.a'.freeze
+
+# TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
+GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
+
+KERNEL_OUTPUT = 'storm'.freeze
+LDFLAGS = '-nostartfiles'.freeze
+
+task default: [:banner, :prepare, :storm] + objects
+
+task :banner do
+  print 'Compiling '.bold
+  print 'storm/raspberrypi'.cyan.bold
+  puts '...'
+
+  print '    '
+end
+
+task :install do
+  sh "#{INSTALL_COMMAND} #{KERNEL_OUTPUT} #{INSTALL_ROOT}/#{KERNEL_OUTPUT}"
+  puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
+end
+
+task :prepare
+
+file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
+  begin
+    puts '    Linking...'.blue.bold
+
+    # It's crazy, but we actually have to specify the OUTPUT twice here (since ia32 has references to the generic lib and
+    # the generic lib has references to ia32... We could try to get rid of that eventually.)
+    command = "#{CC} -o #{t.name} #{OUTPUT} #{GENERIC_OUTPUT} #{OUTPUT} #{LDFLAGS}"
+    sh command
+  rescue
+    puts "Error linking kernel. Full command line was: #{command}"
+    raise
+  end
+end
+
+Rake.add_rakelib '../rakelib'

@@ -1,37 +1,39 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  cluster.o
-  cpuid.o
-  debug.o
-  dispatch.o
-  dma.o
-  elf.o
-  gdt.o
-  idt.o
-  init.o
-  irq.o
-  irq_handlers.o
-  limits.o
-  main.o
-  memory.o
-  memory_global.o
-  memory_physical.o
-  memory_virtual.o
-  multiboot.o
-  mutex.o
-  port.o
-  process.o
-  string.o
-  system_calls-auto.o
-  system_calls.o
-  thread.o
-  time.o
-  timer.o
-  trap.o
-  wrapper.o
-  compiler_rt/udivdi3.o
-  compiler_rt/umoddi3.o
-).freeze
+def objects # rubocop:disable MethodLength
+  %w(
+    cluster.o
+    cpuid.o
+    debug.o
+    dispatch.o
+    dma.o
+    elf.o
+    gdt.o
+    idt.o
+    init.o
+    irq.o
+    irq_handlers.o
+    limits.o
+    main.o
+    memory.o
+    memory_global.o
+    memory_physical.o
+    memory_virtual.o
+    multiboot.o
+    mutex.o
+    port.o
+    process.o
+    string.o
+    system_calls-auto.o
+    system_calls.o
+    thread.o
+    time.o
+    timer.o
+    trap.o
+    wrapper.o
+    compiler_rt/udivdi3.o
+    compiler_rt/umoddi3.o
+  )
+end
 
 OUTPUT = 'libstorm_x86.a'.freeze
 
@@ -85,4 +87,4 @@ file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
   end
 end
 
-load '../storm.rake'
+Rake.add_rakelib '../rakelib'

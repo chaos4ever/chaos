@@ -4,7 +4,13 @@ Style/AndOr:
   Enabled: false
 Style/AsciiComments:
   Enabled: false
+Style/ElseAlignment:
+  Enabled: false
+Style/EndAlignment:
+  Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
+Style/IndentationWidth:
+  Enabled: false
 Style/MultilineOperationIndentation:
   EnforcedStyle: indented
