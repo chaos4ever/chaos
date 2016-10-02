@@ -1295,7 +1295,7 @@ static void get_time_display_value(char *str, uint32_t timeslices, uint32_t tota
     // Easy way to get around the fact that we do not have FPU support at the moment... do it using integer calculation instead. :)
     uint32_t time_integer_part = (uint32_t) (((uint64_t) timeslices * 100) / total_timeslices);
     uint32_t time_fraction_part = (uint32_t) (((uint64_t) timeslices * 100 * 100) / total_timeslices) - time_integer_part * 100;
-    string_print(str, PRIu32 "." PRIu32, time_integer_part, time_fraction_part);
+    string_print(str, "%u.%u", time_integer_part, time_fraction_part);
 }
 
 // Unset an environment variable.
