@@ -14,5 +14,5 @@ before_script:
 script:
  - bundle exec rubocop
  - ARCH=raspberrypi rake default clean
- - ARCH=x86 rake
+ - ARCH=x86 CC=gcc rake
  - rake tests
