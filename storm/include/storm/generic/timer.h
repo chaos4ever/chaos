@@ -6,4 +6,4 @@
 #pragma once
 
 extern volatile time_type uptime;
-extern u32 hz;
+extern uint32_t hz;

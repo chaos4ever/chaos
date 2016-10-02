@@ -5,6 +5,8 @@
 // © Copyright 2007 chaos development
 // © Copyright 2015-2016 chaos development
 
+#include <inttypes.h>
+
 #include <ipc/ipc.h>
 #include <ipv4/ipv4.h>
 #include <string/string.h>
@@ -50,7 +52,7 @@ return_type ipv4_host_name_get(ipc_structure_type *ipv4_structure, char *host_na
 }
 
 // Convert a string-based IP address to the binary notation.
-return_type ipv4_string_to_binary_ip_address(char *string, u32 *ip_address)
+return_type ipv4_string_to_binary_ip_address(char *string, uint32_t *ip_address)
 {
     unsigned int characters;
     int a, b, c, d;
@@ -233,9 +235,9 @@ return_type ipv4_get_flags(ipc_structure_type *ipv4_structure, unsigned int *fla
 }
 
 // Convert an IPv4 address to string form.
-return_type ipv4_address_to_string(char *string, u32 ipv4_address)
+return_type ipv4_address_to_string(char *string, uint32_t ipv4_address)
 {
-    string_print(string, "%lu.%lu.%lu.%lu",
+    string_print(string, "%u.%u.%u.%u",
                  (ipv4_address >> 0) & 0xFF,
                  (ipv4_address >> 8) & 0xFF,
                  (ipv4_address >> 16) & 0xFF,

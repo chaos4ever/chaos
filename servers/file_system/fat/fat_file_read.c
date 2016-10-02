@@ -11,11 +11,11 @@
 #include "fat.h"
 
 // Read from a previously opened file.
-bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *read_buffer, u32 bytes)
+bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *read_buffer, uint32_t bytes)
 {
     unsigned int file;
-    u32 cluster_number;
-    u32 read_bytes = 0;
+    uint32_t cluster_number;
+    uint32_t read_bytes = 0;
 
     // Find this file in our list of opened files.
     for (file = 0; file < number_of_open_files; file++)
@@ -36,8 +36,8 @@ bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *
     // If we start in the middle of a cluster, read the part we want into our buffer.
     if (fat_open_file[file].file_position % fat_info->bytes_per_cluster != 0)
     {
-        u8 *extra_buffer;
-        u8 **extra_buffer_pointer = &extra_buffer;
+        uint8_t *extra_buffer;
+        uint8_t **extra_buffer_pointer = &extra_buffer;
         unsigned int length = min_of_two(bytes, (fat_info->bytes_per_cluster -
                                          (fat_open_file[file].file_position %
                                          fat_info->bytes_per_cluster)));
@@ -46,7 +46,7 @@ bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *
 
         read_single_cluster(fat_info, cluster_number, (void *) extra_buffer);
         memory_copy(read_buffer,
-                    (u8 *)((u32) extra_buffer + fat_open_file[file].file_position % fat_info->bytes_per_cluster),
+                    (uint8_t *)((uint32_t) extra_buffer + fat_open_file[file].file_position % fat_info->bytes_per_cluster),
                     length);
 
         memory_deallocate((void **) extra_buffer_pointer);
@@ -66,7 +66,7 @@ bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *
     while (read_bytes < bytes)
     {
         read_single_cluster(fat_info, cluster_number,
-                            (void *)((u32) read_buffer + read_bytes));
+                            (void *)((uint32_t) read_buffer + read_bytes));
         read_bytes += fat_info->bytes_per_cluster;
         fat_open_file[file].file_position +=
             min_of_two(bytes, fat_info->bytes_per_cluster);

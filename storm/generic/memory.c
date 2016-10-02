@@ -25,10 +25,10 @@ mutex_kernel_type memory_mutex = MUTEX_UNLOCKED;
 /* Allocate a memory block 'pages' pages in size, and put the
    resulting address in *address. */
 
-return_type memory_allocate (void **address, u32 pages,
+return_type memory_allocate (void **address, uint32_t pages,
                              bool cacheable)
 {
-  u32 page_number;
+  uint32_t page_number;
 
   if (!current_tss->initialised)
   {
@@ -47,7 +47,7 @@ return_type memory_allocate (void **address, u32 pages,
 
     case RETURN_SUCCESS:
     {
-      u32 physical_page;
+      uint32_t physical_page;
       unsigned int flags = PAGE_WRITABLE | PAGE_NON_PRIVILEGED;
 
       if (!cacheable)
@@ -62,13 +62,13 @@ return_type memory_allocate (void **address, u32 pages,
 
       memory_virtual_map (page_number, physical_page, pages,
                           flags);
-      *address = (void *) ((u32) page_number * SIZE_PAGE);
+      *address = (void *) ((uint32_t) page_number * SIZE_PAGE);
       mutex_kernel_signal (&memory_mutex);
       
       /* Make sure this memory is clean. Otherwise, we might have a
          security risk on our hand. */
 
-      memory_set_u8 (*address, 0, pages * SIZE_PAGE);
+      memory_set_uint8_t (*address, 0, pages * SIZE_PAGE);
 
       DEBUG_MESSAGE (DEBUG, "address = %p", *address);
       return STORM_RETURN_SUCCESS;
@@ -87,7 +87,7 @@ return_type memory_allocate (void **address, u32 pages,
 
 return_type memory_deallocate (void **address)
 {
-  u32 page_number = ((u32) *address) / SIZE_PAGE;
+  uint32_t page_number = ((uint32_t) *address) / SIZE_PAGE;
 
   if (!current_tss->initialised)
   {
@@ -106,7 +106,7 @@ return_type memory_deallocate (void **address)
     {
       page_table_entry *page_table = (page_table_entry *)
         (BASE_PROCESS_PAGE_TABLES + (page_number / (1 * MB)) * SIZE_PAGE);
-      u32 physical_page = page_table[page_number % 1024].page_base;
+      uint32_t physical_page = page_table[page_number % 1024].page_base;
       
       /* FIXME: Check the return value from this call. But what do we
          do should it fail? */

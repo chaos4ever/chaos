@@ -9,11 +9,11 @@
 
 typedef struct
 {
-  u8 display_type;
-  u16 x_size;
-  u16 y_size;
-  u8 x_position;
-  u8 y_position;
+  uint8_t display_type;
+  uint16_t x_size;
+  uint16_t y_size;
+  uint8_t x_position;
+  uint8_t y_position;
 } __attribute__ ((packed)) dataarea_type;
 
 extern dataarea_type dataarea;

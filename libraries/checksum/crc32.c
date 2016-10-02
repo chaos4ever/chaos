@@ -27,12 +27,12 @@
 /* First, the polynomial itself and its table of feedback terms. The
    polynomial is
    X^32+X^26+X^23+X^22+X^16+X^12+X^11+X^10+X^8+X^7+X^5+X^4+X^2+X^1+X^0
-                                                                      
+
    Note that we take it "backwards" and put the highest-order term in
    the lowest-order bit.  The X^32 term is "implied"; the LSB is the
    X^31 term, etc.  The X^0 term (usually shown as "+1") results in
    the MSB being 1.
-   
+
    Note that the usual hardware shift register implementation, which
    is what we're using (we're merely optimizing it by doing eight-bit
    chunks at a time) shifts bits into the lowest-order term.  In our
@@ -46,7 +46,7 @@
    shuffling on our part.  Reception works similarly.
 
    The feedback terms table consists of 256, 32-bit entries.  Notes:
-   
+
      The table can be generated at runtime if desired; code to do so
      is shown later.  It might not be obvious, but the feedback terms
      simply represent the results of eight shift/xor operations for
@@ -61,7 +61,7 @@
 
 #include <system/system.h>
 
-static u32 crc32_table[] = 
+static uint32_t crc32_table[] =
 {
   0x00000000L, 0x77073096L, 0xEE0E612CL, 0x990951BAL, 0x076DC419L,
   0x706AF48FL, 0xE963A535L, 0x9E6495A3L, 0x0EDB8832L, 0x79DCB8A4L,
@@ -119,12 +119,12 @@ static u32 crc32_table[] =
 
 /* Return a 32-bit CRC of the contents of the buffer. */
 
-u32 checksum_crc32 (u8 *buffer, unsigned int length)
+uint32_t checksum_crc32 (uint8_t *buffer, unsigned int length)
 {
   unsigned int index;
-  u32 crc32_value = 0; 
+  uint32_t crc32_value = 0;
 
-  for (index = 0; index < length; index++) 
+  for (index = 0; index < length; index++)
   {
     crc32_value = (crc32_table[(crc32_value ^ buffer[index]) & 0xFF] ^
                    (crc32_value >> 8));

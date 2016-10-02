@@ -9,9 +9,9 @@
 #include <storm/types.h>
 
 // Limits of types.
-#define MAX_U8                          ((u8) - 1)
-#define MAX_U16                         ((u16) - 1)
-#define MAX_U32                         ((u32) - 1)
+#define MAX_U8                          ((uint8_t) - 1)
+#define MAX_U16                         ((uint16_t) - 1)
+#define MAX_uint32_t                         ((uint32_t) - 1)
 #define MAX_TIME                        ((time_type) - 1)
 
 // Other limitations.

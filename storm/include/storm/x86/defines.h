@@ -15,7 +15,7 @@
 
 // FIXME: More structure, less BS.
 
-#define MAX_PAGES                       ((u32) ((4ULL * GB) / SIZE_PAGE))
+#define MAX_PAGES                       ((uint32_t) ((4ULL * GB) / SIZE_PAGE))
 
 // The maximum number of AVL nodes in the virtual allocation tree.
 #define MAX_VIRTUAL_AVL_NODES           100000
@@ -87,13 +87,13 @@
 #define BASE_PROCESS_SPACE_END          (3 * GB)
 
 // Convert a pointer to a page index.
-#define GET_PAGE_NUMBER(x)              ((u32) (x) / SIZE_PAGE)
+#define GET_PAGE_NUMBER(x)              ((uint32_t) (x) / SIZE_PAGE)
 
-// Get the low or high u16 of an u32.
+// Get the low or high uint16_t of an u32.
 #define LOW_U16(x)                      ((x) & 0xFFFF)
 #define HIGH_U16(x)                     ((x) >> 16)
 
-// Get the low or high u8 of an u16.
+// Get the low or high uint8_t of an uint16_t.
 #define LOW_U8(x)                       ((x) & 0xFF)
 #define HIGH_U8(x)                      ((x) >> 8)
 

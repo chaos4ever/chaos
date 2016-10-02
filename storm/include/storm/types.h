@@ -6,38 +6,27 @@
 // © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development
 
-#pragma once
+#include <stdint.h>
 
-// General types. Those should only be used when you actually *need* a fixed size variable (for example in IP headers); for
-// performance reasons, use int or unsigned whenever a generic type is desired. But if you do, remember to not take for granted
-// that the maximum value is 2^32 - 1 etcetera.
-typedef unsigned char u8;
-typedef unsigned short u16;
-typedef unsigned long u32;
-typedef signed char s8;
-typedef signed short s16;
-typedef signed int s32;
+#pragma once
 
 #ifndef __cplusplus
 typedef int bool;
 #endif
 
-typedef unsigned long long u64;
-typedef signed long long s64;
-
 // Specific types.
 
 #ifdef __i386__
 
-typedef u32 address_type;
-typedef s32 return_type;
-typedef u32 process_id_type;
-typedef u32 cluster_id_type;
-typedef u32 thread_id_type;
-typedef u32 user_id_type;
-typedef u32 group_id_type;
-typedef u64 time_type;
-typedef u32 state_type;
+typedef uint32_t address_type;
+typedef int32_t return_type;
+typedef uint32_t process_id_type;
+typedef uint32_t cluster_id_type;
+typedef uint32_t thread_id_type;
+typedef uint32_t user_id_type;
+typedef uint32_t group_id_type;
+typedef uint64_t time_type;
+typedef uint32_t state_type;
 
 #else // !__i386__
 #   error "Your host is not supported."
@@ -46,5 +35,5 @@ typedef u32 state_type;
 typedef unsigned int mailbox_id_type;
 typedef unsigned int mutex_id_type;
 typedef volatile int spinlock_type;
-typedef u32 limit_type;
+typedef uint32_t limit_type;
 typedef void (thread_entry_point_type)(void *);

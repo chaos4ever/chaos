@@ -11,10 +11,10 @@
 // FIXME: Put those in a structure and allocate for each thread so that we can support multiple FAT volumes.
 bios_parameter_block_type *bios_parameter_block = (bios_parameter_block_type *) &buffer;
 bios_parameter_block_32_type *bios_parameter_block_32;
-u32 buffer[256];
-u8 directory_buffer[16384];
+uint32_t buffer[256];
+uint8_t directory_buffer[16384];
 fat_open_file_type fat_open_file[FAT_MAX_OPEN_FILES];
-u8 global_root[16384];
+uint8_t global_root[16384];
 log_structure_type log_structure;
 unsigned int number_of_open_files = 0;
 

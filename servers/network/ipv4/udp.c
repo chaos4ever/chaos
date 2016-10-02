@@ -28,13 +28,13 @@ void udp_init(void)
 }
 
 // Create a UDP header.
-void udp_header_create(u16 destination_port, u16 source_port, u16 length, udp_header_type *udp_header)
+void udp_header_create(uint16_t destination_port, uint16_t source_port, uint16_t length, udp_header_type *udp_header)
 {
-    udp_header->destination_port = system_byte_swap_u16(destination_port);
-    udp_header->source_port = system_byte_swap_u16(source_port);
-    udp_header->length = system_byte_swap_u16(length + sizeof(udp_header_type));
+    udp_header->destination_port = system_byte_swap_uint16_t(destination_port);
+    udp_header->source_port = system_byte_swap_uint16_t(source_port);
+    udp_header->length = system_byte_swap_uint16_t(length + sizeof(udp_header_type));
     udp_header->check = 0;
-    //  udp_header->check = ipv4_checksum ((u16 *) udp_header,
+    //  udp_header->check = ipv4_checksum ((uint16_t *) udp_header,
     //                                     sizeof (udp_header_type));
 }
 
@@ -74,7 +74,7 @@ static unsigned int udp_find_port(void)
 }
 
 // Connect...
-return_type udp_connect(u32 destination, unsigned int destination_port, unsigned int *socket_id)
+return_type udp_connect(uint32_t destination, unsigned int destination_port, unsigned int *socket_id)
 {
     socket_type *socket;
     socket_type **socket_pointer = &socket;
@@ -97,7 +97,7 @@ return_type udp_connect(u32 destination, unsigned int destination_port, unsigned
 // Send data on the given UDP socket.
 return_type udp_send(void *data, unsigned int length, socket_type *socket)
 {
-    u8 ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    uint8_t ethernet_address[IPV4_ETHERNET_ADDRESS_LENGTH];
     ipc_structure_type *ethernet_structure;
     bool direct;
     ipv4_ethernet_header_type *ethernet_header;
@@ -128,7 +128,7 @@ return_type udp_send(void *data, unsigned int length, socket_type *socket)
     while (!arp_ip_to_ethernet_address(socket->destination_address, ethernet_address))
     {
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
-                            "Sending ARP who-has for %lX on %s.",
+                            "Sending ARP who-has for %X on %s.",
                             socket->destination_address,
                             interface->identification);
         arp_who_has(socket->destination_address, interface, ethernet_structure);
@@ -171,7 +171,7 @@ void udp_packet_receive(ipv4_interface_type *interface __attribute__((unused)), 
                         int length, mailbox_id_type output_mailbox_id __attribute__((unused)))
 {
     ipv4_header_type *ipv4_header = (ipv4_header_type *) &ethernet_header->data;
-    udp_header_type *udp_header __attribute__((unused)) = (udp_header_type *)((u8 *) ipv4_header + ipv4_header->header_length * 4);
+    udp_header_type *udp_header __attribute__((unused)) = (udp_header_type *)((uint8_t *) ipv4_header + ipv4_header->header_length * 4);
     char source_address[256], destination_address[256];
     socket_type *socket;
 
@@ -180,12 +180,12 @@ void udp_packet_receive(ipv4_interface_type *interface __attribute__((unused)), 
 
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "%s: UDP packet: %s:%u -> %s:%u.",
                         interface->identification, source_address,
-                        system_big_endian_to_native_u16(udp_header->source_port),
+                        system_big_endian_to_native_uint16_t(udp_header->source_port),
                         destination_address,
-                        system_big_endian_to_native_u16(udp_header->destination_port));
+                        system_big_endian_to_native_uint16_t(udp_header->destination_port));
 
     // Check if this packet should be delivered somewhere.
-    socket = udp_socket_find(system_big_endian_to_native_u16(udp_header->destination_port));
+    socket = udp_socket_find(system_big_endian_to_native_uint16_t(udp_header->destination_port));
 
     if (socket != NULL)
     {
@@ -197,7 +197,7 @@ void udp_packet_receive(ipv4_interface_type *interface __attribute__((unused)), 
         memory_allocate((void **) packet_pointer, sizeof(packet_list_type));
         packet->length = (length - sizeof(ipv4_ethernet_header_type) - sizeof(ipv4_header_type) - sizeof(udp_header_type));
         packet->source_address = ipv4_header->source_address;
-        packet->source_port = system_big_endian_to_native_u16(udp_header->source_port);
+        packet->source_port = system_big_endian_to_native_uint16_t(udp_header->source_port);
         memory_allocate((void **) &packet->data, packet->length);
         memory_copy(packet->data, udp_header->data, packet->length);
 

@@ -31,79 +31,79 @@ enum
 typedef struct
 {
     // The following flags determine wheter the rest of the fields are available or not.
-    u32 has_memory_info           : 1;
-    u32 has_boot_device_info      : 1;
-    u32 has_command_line          : 1;
-    u32 has_module_info           : 1;
-    u32 has_aout_info             : 1;
-    u32 has_elf_info              : 1;
-    u32 has_memory_map            : 1;
-    u32 has_drives_info           : 1;
-    u32 has_ROM_config            : 1;
-    u32 has_boot_loader_name      : 1;
-    u32 has_APM_info              : 1;
-    u32 has_video_mode_info       : 1;
-    u32 reserved                  : 20;
+    uint32_t has_memory_info           : 1;
+    uint32_t has_boot_device_info      : 1;
+    uint32_t has_command_line          : 1;
+    uint32_t has_module_info           : 1;
+    uint32_t has_aout_info             : 1;
+    uint32_t has_elf_info              : 1;
+    uint32_t has_memory_map            : 1;
+    uint32_t has_drives_info           : 1;
+    uint32_t has_ROM_config            : 1;
+    uint32_t has_boot_loader_name      : 1;
+    uint32_t has_APM_info              : 1;
+    uint32_t has_video_mode_info       : 1;
+    uint32_t reserved                  : 20;
 
-    u32 memory_lower;
-    u32 memory_upper;
+    uint32_t memory_lower;
+    uint32_t memory_upper;
 
-    u32 boot_device;
+    uint32_t boot_device;
 
-    u32 command_line;
+    uint32_t command_line;
 
-    u32 number_of_modules;
-    u32 module_base;
+    uint32_t number_of_modules;
+    uint32_t module_base;
 
     // If has_elf_info is 1 (and it is), those fields are valid.
-    u32 section_header_num;
+    uint32_t section_header_num;
 
     // ?
-    u32 section_header_size;
+    uint32_t section_header_size;
 
-    u32 section_header_address;
-    u32 section_header_string_index;
+    uint32_t section_header_address;
+    uint32_t section_header_string_index;
 
     // FIXME: Use this information.
-    u32 memory_map_length;
-    u32 memory_map_addr;
+    uint32_t memory_map_length;
+    uint32_t memory_map_addr;
 
     // The following are not implemented by GRUB yet..
 #if FALSE
-    u32 drives_count;
-    u32 drives_addr;
+    uint32_t drives_count;
+    uint32_t drives_addr;
 
-    u32 config_table;
+    uint32_t config_table;
 
     // Pointer to the boot loader name.
-    u32 boot_loader_name;
+    uint32_t boot_loader_name;
 #endif
 
     // Likewise...
 #if FALSE
     // Video mode information.
-    u32 mode_type;
-    u32 width;
-    u32 height;
-    u32 depth;
-    u32 frame_buffer_address;
+    uint32_t mode_type;
+    uint32_t width;
+    uint32_t height;
+    uint32_t depth;
+    uint32_t frame_buffer_address;
 #endif
 } PACKED multiboot_info_type;
 
 typedef struct
 {
-    u32 start;
-    u32 end;
+    uint32_t start;
+    uint32_t end;
     char *name;
-    u32 reserved;
+    uint32_t reserved;
 } PACKED multiboot_module_info_type;
 
 typedef struct
 {
-    u32 num;
-    u32 size;
-    u32 addr;
-    u32 section_header_index;
+    uint32_t num;
+    uint32_t size;
+    uint32_t addr;
+    uint32_t section_header_index;
 } PACKED multiboot_elf_info_type;
 
 extern multiboot_info_type multiboot_info;

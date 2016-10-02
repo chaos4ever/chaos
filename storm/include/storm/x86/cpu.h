@@ -56,9 +56,9 @@ static inline void cpu_no_operation(void)
     asm ("nop");
 }
 
-static inline u32 cpu_get_esp(void)
+static inline uint32_t cpu_get_esp(void)
 {
-    u32 return_value;
+    uint32_t return_value;
 
     asm volatile ("movl %%esp, %0"
                   : "=a" (return_value)
@@ -67,9 +67,9 @@ static inline u32 cpu_get_esp(void)
     return return_value;
 }
 
-static inline u32 cpu_get_eflags(void)
+static inline uint32_t cpu_get_eflags(void)
 {
-    u32 return_value;
+    uint32_t return_value;
 
     asm volatile
     ("pushf \
@@ -79,9 +79,9 @@ static inline u32 cpu_get_eflags(void)
     return return_value;
 }
 
-static inline u32 cpu_get_cs(void)
+static inline uint32_t cpu_get_cs(void)
 {
-    u32 return_value;
+    uint32_t return_value;
 
     asm volatile ("movl %%cs, %0"
                   : "=a" (return_value));
@@ -89,9 +89,9 @@ static inline u32 cpu_get_cs(void)
     return return_value;
 }
 
-static inline u32 cpu_get_cr0(void)
+static inline uint32_t cpu_get_cr0(void)
 {
-    u32 return_value;
+    uint32_t return_value;
     asm volatile ("movl %%cr0, %0"
                   : "=a" (return_value)
                   :);
@@ -99,16 +99,16 @@ static inline u32 cpu_get_cr0(void)
     return return_value;
 }
 
-static inline void cpu_set_cr0(u32 new_cr0)
+static inline void cpu_set_cr0(uint32_t new_cr0)
 {
     asm volatile ("movl %0, %%cr0"
                   :
                   : "r" (new_cr0));
 }
 
-static inline u32 cpu_get_cr2(void)
+static inline uint32_t cpu_get_cr2(void)
 {
-    u32 return_value;
+    uint32_t return_value;
     asm volatile ("movl %%cr2, %0"
                   : "=a" (return_value)
                   :);
@@ -116,23 +116,23 @@ static inline u32 cpu_get_cr2(void)
     return return_value;
 }
 
-static inline void cpu_set_cr3(u32 new_cr3)
+static inline void cpu_set_cr3(uint32_t new_cr3)
 {
     asm volatile ("movl %0, %%cr3"
                   :
                   : "r" (new_cr3));
 }
 
-static inline void cpu_set_cr4(u32 new_cr4)
+static inline void cpu_set_cr4(uint32_t new_cr4)
 {
     asm volatile ("movl %0, %%cr4"
                   :
                   : "r" (new_cr4));
 }
 
-static inline u16 cpu_get_tr(void)
+static inline uint16_t cpu_get_tr(void)
 {
-    u16 return_value;
+    uint16_t return_value;
     asm volatile ("str %0"
                   : "=a" (return_value)
                   :);
@@ -140,7 +140,7 @@ static inline u16 cpu_get_tr(void)
     return return_value;
 }
 
-static inline void cpu_set_tr(u16 new_tr)
+static inline void cpu_set_tr(uint16_t new_tr)
 {
     asm volatile ("ltr %0"
                   :
@@ -151,14 +151,14 @@ static inline void cpu_reset(void) __attribute__ ((noreturn));
 static inline void cpu_reset(void)
 {
     // Based on an approach seen at http://wiki.osdev.org/Reboot
-    const u16 keyboard_interface_port = 0x64;
-    const u8 keyboard_reset = 0xFE;
-    const u8 user_data_in_buffer = 0x02;
+    const uint16_t keyboard_interface_port = 0x64;
+    const uint8_t keyboard_reset = 0xFE;
+    const uint8_t user_data_in_buffer = 0x02;
 
     // Clear the user data first.
-    while (port_in_u8(keyboard_interface_port) & user_data_in_buffer);
+    while (port_in_uint8_t(keyboard_interface_port) & user_data_in_buffer);
 
-    port_out_u8(keyboard_interface_port, keyboard_reset);
+    port_out_uint8_t(keyboard_interface_port, keyboard_reset);
 
     // If all else fails, just halt the CPU.
     while (TRUE)

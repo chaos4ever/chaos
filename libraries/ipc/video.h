@@ -55,9 +55,9 @@ typedef struct
 
 typedef struct
 {
-  u8 red;
-  u8 green;
-  u8 blue;
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
 } video_palette_type;
 
 /* Videomode set flags. */

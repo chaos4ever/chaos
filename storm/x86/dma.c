@@ -183,14 +183,14 @@ void dma_init(void)
        unsigned int controller;
        for (controller = 0; controller < NUMBER_OF_CONTROLLERS; controller++)
        {
-        port_out_u8 (dma_master_reset[controller], DMA_RESET);
+        port_out_uint8_t (dma_master_reset[controller], DMA_RESET);
        }
      */
     /* Mask all DMA channels in all controllers */
     /*
        for (controller = 0; controller < NUMBER_OF_CONTROLLERS; controller++)
        {
-        port_out_u8 (dma_master_mask[controller], DMA_MASK_ALL_CHANNELS);
+        port_out_uint8_t (dma_master_mask[controller], DMA_MASK_ALL_CHANNELS);
        }
      */
     /* Configure DMA transfers. */
@@ -200,7 +200,7 @@ void dma_init(void)
     /*
        for (controller = 0; controller < NUMBER_OF_CONTROLLERS; controller++)
        {
-        port_out_u8 (dma_controller[controller],
+        port_out_uint8_t (dma_controller[controller],
                      DMA_COMMAND_MEMORY_TO_MEMORY_DISABLE);
        }
      */
@@ -223,13 +223,13 @@ return_type dma_transfer(unsigned int channel, unsigned int buffer_size,
                          unsigned int autoinit)
 {
     // Transfer mode.
-    u8 mode;
+    uint8_t mode;
 
     // Controller channel number.
-    u8 controller_channel;
+    uint8_t controller_channel;
 
     // Controller number.
-    u8 controller;
+    uint8_t controller;
 
     // Make sure that the given DMA channel has been reserved by the calling process.
     if (channel >= NUMBER_OF_CHANNELS)
@@ -249,10 +249,10 @@ return_type dma_transfer(unsigned int channel, unsigned int buffer_size,
     // FIXME: Mutex?
 
     // Mask channnel.
-    port_out_u8(dma_mask[controller], 0x04 | controller_channel);
+    port_out_uint8_t(dma_mask[controller], 0x04 | controller_channel);
 
     // Reset flip-flop.
-    port_out_u8(dma_flip_flop[controller], 0);
+    port_out_uint8_t(dma_flip_flop[controller], 0);
 
     /* There are 4 transfer types demand, single, block and cascade. In
        theory floppy dma channel 2 works with single transfer but I have
@@ -321,19 +321,19 @@ return_type dma_transfer(unsigned int channel, unsigned int buffer_size,
         mode |= DMA_MODE_AUTOINIT_DISABLE;
     }
 
-    port_out_u8(dma_mode[controller], mode | controller_channel);
+    port_out_uint8_t(dma_mode[controller], mode | controller_channel);
 
     // Low, high and page buffer address.
-    port_out_u8(dma_address[channel], (u8) ((unsigned int) dma_channel[channel].physical_buffer));
-    port_out_u8(dma_address[channel], (u8) ((unsigned int) dma_channel[channel].physical_buffer >> 8));
-    port_out_u8(dma_page[channel], (u8) ((unsigned int) dma_channel[channel].physical_buffer >> 16));
+    port_out_uint8_t(dma_address[channel], (uint8_t) ((unsigned int) dma_channel[channel].physical_buffer));
+    port_out_uint8_t(dma_address[channel], (uint8_t) ((unsigned int) dma_channel[channel].physical_buffer >> 8));
+    port_out_uint8_t(dma_page[channel], (uint8_t) ((unsigned int) dma_channel[channel].physical_buffer >> 16));
 
     // Low, high count.
-    port_out_u8(dma_count[channel], (u8) (buffer_size - 1));
-    port_out_u8(dma_count[channel], (u8) ((buffer_size - 1) >> 8));
+    port_out_uint8_t(dma_count[channel], (uint8_t) (buffer_size - 1));
+    port_out_uint8_t(dma_count[channel], (uint8_t) ((buffer_size - 1) >> 8));
 
     // Release_channel.
-    port_out_u8(dma_mask[controller], controller_channel);
+    port_out_uint8_t(dma_mask[controller], controller_channel);
 
     // FIXME: Mutex ends?
     return TRUE;
@@ -362,7 +362,7 @@ return_type dma_transfer_cancel(unsigned int channel)
     controller_channel = channel % NUMBER_OF_CONTROLLERS;
 
     // Mask that channel. */
-    port_out_u8(dma_mask[channel], CANCEL_DMA_TRANSFER | controller_channel);
+    port_out_uint8_t(dma_mask[channel], CANCEL_DMA_TRANSFER | controller_channel);
 
     return STORM_RETURN_SUCCESS;
 }

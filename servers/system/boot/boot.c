@@ -29,8 +29,8 @@ int main(void)
     message_parameter_type message_parameter;
     file_handle_type handle;
     file_verbose_directory_entry_type directory_entry;
-    u8 *buffer;
-    u8 **buffer_pointer = &buffer;
+    uint8_t *buffer;
+    uint8_t **buffer_pointer = &buffer;
     char *server_name_buffer;
     char *server[MAX_SERVERS];
     unsigned int where, number_of_servers = 0, server_number;
@@ -145,7 +145,7 @@ int main(void)
         file_open(&vfs_structure, server[server_number], FILE_MODE_READ, &handle);
 
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
-                            "Allocating %lu bytes for %s.",
+                            "Allocating %u bytes for %s.",
                             directory_entry.size, server[server_number]);
 
         memory_allocate((void **) buffer_pointer, directory_entry.size);
@@ -172,8 +172,7 @@ int main(void)
             case EXECUTE_ELF_RETURN_SUCCESS:
             {
                 log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
-                                    "New process ID %lu.",
-                                    process_id);
+                                    "New process ID %u.", process_id);
                 break;
             }
 

@@ -29,7 +29,7 @@ ipc_structure_type ipc_structure;
 log_structure_type log_structure;
 console_structure_type console_structure;
 
-void fill_buffer(u8 *data);
+void fill_buffer(uint8_t *data);
 
 unsigned int current_buffer = 0;
 
@@ -88,7 +88,7 @@ int main (void)
   return 0;
 }
 
-void fill_buffer(u8 *buffer)
+void fill_buffer(uint8_t *buffer)
 {
     /* This function is responsible of filling the buffer with
        BUFFER_SIZE data each time. This data could be part of a wave-file,

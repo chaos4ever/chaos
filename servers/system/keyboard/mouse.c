@@ -19,7 +19,7 @@
 bool has_mouse = FALSE;
 
 // This buffer holds the mouse scan codes. The PS/2 protocol sends three characters for each event.
-static u8 mouse_buffer[3];
+static uint8_t mouse_buffer[3];
 static int mouse_buffer_position = 0;
 
 // The number of mouse replies expected.
@@ -52,7 +52,7 @@ void mouse_irq_handler(void *argument UNUSED)
 }
 
 // Handle a mouse event.
-void mouse_handle_event(u8 scancode)
+void mouse_handle_event(uint8_t scancode)
 {
     if (mouse_replies_expected > 0)
     {
@@ -241,8 +241,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 
     bool done = FALSE;
     message_parameter_type message_parameter;
-    u8 *data;
-    u8 **data_pointer = &data;
+    uint8_t *data;
+    uint8_t **data_pointer = &data;
     ipc_structure_type ipc_structure;
     unsigned int data_size = 100;
 

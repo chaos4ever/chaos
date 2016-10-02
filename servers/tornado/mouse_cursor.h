@@ -25,7 +25,7 @@
 #define MOUSE_CURSOR_WIDTH  16
 #define MOUSE_CURSOR_HEIGHT 16
 
-const u8 tornado_standard_mouse_cursor[MOUSE_CURSOR_WIDTH][MOUSE_CURSOR_HEIGHT] =
+const uint8_t tornado_standard_mouse_cursor[MOUSE_CURSOR_WIDTH][MOUSE_CURSOR_HEIGHT] =
 {
   { 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
   { 6, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },

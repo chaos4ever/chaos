@@ -6,4 +6,4 @@
 
 #pragma once
 
-extern bool route_find(u32 address, ipv4_interface_type **interface, bool *direct, ipc_structure_type **ethernet_structure);
+extern bool route_find(uint32_t address, ipv4_interface_type **interface, bool *direct, ipc_structure_type **ethernet_structure);

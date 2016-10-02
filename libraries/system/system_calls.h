@@ -99,7 +99,7 @@ static inline return_type system_call_irq_acknowledge(unsigned int irq_number)
 }
 
 // Register a port range (one or more ports) for usage by the process.
-static inline return_type system_call_port_range_register(u32 start, u32 length, const char *description)
+static inline return_type system_call_port_range_register(uint32_t start, uint32_t length, const char *description)
 {
     return_type return_value;
 
@@ -117,7 +117,7 @@ static inline return_type system_call_port_range_register(u32 start, u32 length,
 }
 
 // Unregister an I/O port range so that someone else may use it.
-static inline return_type system_call_port_range_unregister(u32 start)
+static inline return_type system_call_port_range_unregister(uint32_t start)
 {
     return_type return_value;
 
@@ -133,7 +133,7 @@ static inline return_type system_call_port_range_unregister(u32 start)
 // Allocate memory.
 // FIXME: Replace the page concept with a block or chunk concept and add a kernelfs entry for reading the architecture's block
 // or chunk size.
-static inline return_type system_call_memory_allocate(void **address, u32 pages, bool cacheable)
+static inline return_type system_call_memory_allocate(void **address, uint32_t pages, bool cacheable)
 {
     return_type return_value;
 

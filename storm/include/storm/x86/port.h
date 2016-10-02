@@ -7,7 +7,7 @@
 
 #include <storm/generic/types.h>
 
-static inline void port_out_u8(u16 port, u8 data)
+static inline void port_out_uint8_t(uint16_t port, uint8_t data)
 {
     asm ("outb %1, %0"
          :
@@ -15,7 +15,7 @@ static inline void port_out_u8(u16 port, u8 data)
          "a" (data));
 }
 
-static inline void port_out_u16(u16 port, u16 data)
+static inline void port_out_uint16_t(uint16_t port, uint16_t data)
 {
     asm ("outw %1, %0"
          :
@@ -23,7 +23,7 @@ static inline void port_out_u16(u16 port, u16 data)
          "a" (data));
 }
 
-static inline void port_out_u32(u16 port, u32 data)
+static inline void port_out_u32(uint16_t port, uint32_t data)
 {
     asm ("outl %1, %0"
          :
@@ -31,9 +31,9 @@ static inline void port_out_u32(u16 port, u32 data)
          "a" (data));
 }
 
-static inline u8 port_in_u8(u16 port)
+static inline uint8_t port_in_uint8_t(uint16_t port)
 {
-    u8 return_value;
+    uint8_t return_value;
 
     asm volatile ("inb %1, %0"
                   : "=a" (return_value)
@@ -42,9 +42,9 @@ static inline u8 port_in_u8(u16 port)
     return return_value;
 }
 
-static inline u16 port_in_u16(u16 port)
+static inline uint16_t port_in_uint16_t(uint16_t port)
 {
-    u16 return_value;
+    uint16_t return_value;
 
     asm volatile ("inw %1, %0"
                   : "=a" (return_value)
@@ -53,9 +53,9 @@ static inline u16 port_in_u16(u16 port)
     return return_value;
 }
 
-static inline u32 port_in_u32(u16 port)
+static inline uint32_t port_in_u32(uint16_t port)
 {
-    u32 return_value;
+    uint32_t return_value;
 
     asm volatile ("inl %1, %0"
                   : "=a" (return_value)
@@ -64,7 +64,7 @@ static inline u32 port_in_u32(u16 port)
     return return_value;
 }
 
-static inline void port_out_u8_string(u16 port, u8 *data, u32 length)
+static inline void port_out_uint8_t_string(uint16_t port, uint8_t *data, uint32_t length)
 {
     asm volatile
     ("cld\n"
@@ -76,7 +76,7 @@ static inline void port_out_u8_string(u16 port, u8 *data, u32 length)
      "d" (port));
 }
 
-static inline void port_out_u32_string(u16 port, u32 *data, u32 length)
+static inline void port_out_u32_string(uint16_t port, uint32_t *data, uint32_t length)
 {
     asm volatile
     ("cld\n"
@@ -88,7 +88,7 @@ static inline void port_out_u32_string(u16 port, u32 *data, u32 length)
      "d" (port));
 }
 
-static inline void port_in_u32_string(u16 port, u32 *data, u32 length)
+static inline void port_in_u32_string(uint16_t port, uint32_t *data, uint32_t length)
 {
     asm volatile
     ("cld\n"

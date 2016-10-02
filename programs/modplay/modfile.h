@@ -22,6 +22,6 @@
 
 #include <system/system.h>
 
-extern u8 modfile[];
+extern uint8_t modfile[];
 
 #endif /* !__MODFILE_H__ */

@@ -17,12 +17,12 @@ long no_idt[2] = { 0, 0 };
 
 /* Create an interrupt gate. */
 
-void idt_setup_interrupt_gate (u8 number, u16 selector, void *address, u8 pl)
+void idt_setup_interrupt_gate (uint8_t number, uint16_t selector, void *address, uint8_t pl)
 {
   gate_descriptor_type gate_descriptor;
 
-  gate_descriptor.offset_lo = (u32) address & 0xFFFF;
-  gate_descriptor.offset_hi = ((u32) address >> 16) & 0xFFFF;
+  gate_descriptor.offset_lo = (uint32_t) address & 0xFFFF;
+  gate_descriptor.offset_hi = ((uint32_t) address >> 16) & 0xFFFF;
   gate_descriptor.segment_selector = selector;
   gate_descriptor.params = 0;
   gate_descriptor.zero = 0;
@@ -40,7 +40,7 @@ void idt_setup_interrupt_gate (u8 number, u16 selector, void *address, u8 pl)
 
 /* Create a task gate. */
 
-void idt_setup_task_gate (u8 number, u16 selector, u8 pl)
+void idt_setup_task_gate (uint8_t number, uint16_t selector, uint8_t pl)
 {
   gate_descriptor_type gate_descriptor;
 

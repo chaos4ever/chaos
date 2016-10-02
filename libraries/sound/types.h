@@ -32,7 +32,7 @@ typedef struct
   unsigned int length;
 
   /* A pointer to the data sent */
-  u8 data[0];
+  uint8_t data[0];
 
 } __attribute__ ((packed)) sound_message_type;
 

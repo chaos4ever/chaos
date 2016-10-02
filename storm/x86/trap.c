@@ -186,7 +186,7 @@ static void trap_general_protection_fault(void)
 static void trap_page_fault(void) __attribute__ ((noreturn));
 static void trap_page_fault(void)
 {
-    u32 address;
+    uint32_t address;
 
     while (TRUE)
     {
@@ -215,7 +215,7 @@ static void trap_page_fault(void)
             }
             else
             {
-                u32 physical_page;
+                uint32_t physical_page;
 
                 mutex_kernel_wait(&memory_mutex);
 
@@ -297,17 +297,17 @@ static void trap_machine_check_abort(void)
 }
 
 // Initialise traps. (Well, exceptions really, but they're called traps on Motorola. ;)
-static void trap_setup_handler(u32 number, tss_type *setup_tss, void *trap_pointer)
+static void trap_setup_handler(uint32_t number, tss_type *setup_tss, void *trap_pointer)
 {
     // Virtual address to the TSS.
-    u32 trap_tss_address = BASE_PROCESS_TRAP_TSS + number * 104;
+    uint32_t trap_tss_address = BASE_PROCESS_TRAP_TSS + number * 104;
 
-    setup_tss->cr3 = (u32) kernel_page_directory;
+    setup_tss->cr3 = (uint32_t) kernel_page_directory;
 
     // Set the flags to AF only.
     setup_tss->eflags = FLAG_ADJUST;
 
-    setup_tss->eip = (u32) trap_pointer;
+    setup_tss->eip = (uint32_t) trap_pointer;
     setup_tss->esp = BASE_TRAP_STACK + SIZE_PAGE;
 
     // Set up segment selectors.
@@ -341,8 +341,8 @@ static void trap_setup_handler(u32 number, tss_type *setup_tss, void *trap_point
 // Initialise traps.
 void trap_init(void)
 {
-    u32 physical_page;
-    //  u32 counter;
+    uint32_t physical_page;
+    //  uint32_t counter;
 
     // Allocate a page for the trap TSS:es.
     // FIXME: Check return value.
@@ -365,7 +365,7 @@ void trap_init(void)
         GET_PAGE_NUMBER(trap_stack), 1, PAGE_KERNEL);
 
     // Wipe the TSS.
-    memory_set_u8((u8 *) trap_tss, 0, SIZE_PAGE);
+    memory_set_uint8_t((uint8_t *) trap_tss, 0, SIZE_PAGE);
 
     // Setup exception handlers for all exceptions.
     trap_setup_handler(0, &trap_tss[0], trap_divide_error_fault);

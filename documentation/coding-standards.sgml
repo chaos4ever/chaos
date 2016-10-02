@@ -14,15 +14,15 @@
       </author>
       <author>
         <firstname>Anders</firstname>
-        <surname>Öhrt</surname>
+        <surname>Ã–hrt</surname>
       </author>
     </authorgroup>
     <pubdate>$Id$</pubdate>
   </bookinfo>
-    
+
   <preface>
     <title>Introduction</title>
-       
+
     <para>
       This is The chaos Coding Standards. It is a guide in programming
       for the chaos operating system. If you intend to submit your
@@ -31,17 +31,17 @@
       code.  It is very important to keep the same quality on all
       code.
     </para>
-    
+
     <para>
       The code formatting chapters in this publication is mostly
       C-related, but some of them can be used for other languages too.
     </para>
-    
+
   </preface>
-  
+
   <chapter>
     <title>Language choice</title>
-    
+
     <para>
       Choosing the right language for a project is very important. If
       you make a bad choice, it may render the program unusable for
@@ -70,7 +70,7 @@
 
   <chapter>
     <title>License choice</title>
-    
+
     <para>
       chaos is a free operating system, as defined by the FSF, and as
       such, all parts of it must be free. However, they do not have to
@@ -158,7 +158,7 @@
       care about the warning, why don't you turn it off?
     </para>
   </chapter>
-  
+
   <chapter>
     <title>Symbol names</title>
 
@@ -217,13 +217,13 @@
 
     <programlisting>
       /* Initialise the page allocation system. */
-      
+
       void page_init (void)
       {
         [...]
       }
     </programlisting>
-    
+
     <para>
       As you see, we do not put the function name in the leftmost
       column. There is no reason to do so. It just makes the code look
@@ -237,13 +237,13 @@
 
     <programlisting>
       extern inline return_type system_call_thread_control
-        (process_id_type process_id, u32 class, u32 parameter)
+        (process_id_type process_id, uint32_t class, uint32_t parameter)
     </programlisting>
   </chapter>
 
   <chapter>
     <title>Comments</title>
-    
+
     <para>
       Code without comments is like an operating system without
       applications -- it is not very usable. Try to comment your code
@@ -279,7 +279,7 @@
     </para>
 
   </chapter>
-  
+
   <chapter>
     <title>Indentation</title>
 
@@ -288,7 +288,7 @@
       tabs. When starting a new block, the braces should be on their own line
       at the same level of indentation as the previous line, like this:
     </para>
-    
+
     <programlisting>
       if (age > LEGAL_AGE)
       {
@@ -299,7 +299,7 @@
 
   <chapter>
     <title>Inline assembly</title>
-    
+
     <para>
       Inline assembly is a twin-edged sword. It can make
       computing-intensive programs a lot speedier, at the cost of
@@ -331,7 +331,7 @@
       : "g" (buffer), "g" (parameter), "g" (class),
         "n" (SYSTEM_CALL_KERNELFS_ENTRY_READ << 3));
     </programlisting>
-    
+
     <para>
       Do not write long blocks of uncommented inline assembly, but
       keep it into functional blocks separated with blank lines and
@@ -341,7 +341,7 @@
 
   <chapter>
     <title>Miscellaneous</title>
-    
+
     <para>
       Here you will find stuff that did not fit into one of the
       previous chapters:
@@ -353,7 +353,7 @@
             a block, even for one-line statements where it is not
             required. Like this:
           </para>
-          
+
           <programlisting>
             if (age > LEGAL_AGE)
             {
@@ -371,7 +371,7 @@
             When writing switch statements, always use braces in the
             case blocks. Like this:
           </para>
-          
+
           <programlisting>
             switch (key)
             {
@@ -390,14 +390,14 @@
             booleans. If something is not a boolean, you must compare
             it with a number. Like this:
           </para>
-            
+
           <programlisting>
             if (get_age () != 0)
             {
               do_something ();
             }
           </programlisting>
-          
+
           <para>
             This makes things much clearer. The lack of real booleans
             in C is showing, but using this fact makes your programs
@@ -410,7 +410,7 @@
 	    When declaring external functions (in library header files
 	    and elsewhere), always write like this:
 	  </para>
-	  
+
 	    <programlisting>
 	    extern my_function (void);
 	  </programlisting>
@@ -423,10 +423,10 @@
       </itemizedlist>
     </para>
   </chapter>
-  
+
   <chapter>
     <title>Whitespace</title>
-    
+
     <para>
       A lot of programmers tend to forget how important whitespace is
       to write good code. A good example of this can be found in the
@@ -437,11 +437,11 @@
       other places. Separate blocks of code with blank lines and
       comments.
     </para>
-  </chapter>    
-  
+  </chapter>
+
   <chapter>
-    <title>Documentation</title> 
-    
+    <title>Documentation</title>
+
     <para>
       Documentation is essential for a program to succeed. All
       documentation should be written in English (but may also be
@@ -451,10 +451,10 @@
       the <ulink url="http://www.docbook.org">DocBook Web Site</ulink>.
     </para>
   </chapter>
-  
+
   <appendix>
     <title>Examples</title>
-    
+
     <example>
       <title>A C example</title>
       <programlisting>
@@ -504,7 +504,7 @@ error_type semaphore_wait (kernel_semaphore_type *semaphore)
     (*semaphore)--;
     spin_unlock (semaphore_mutex);
   }
-  
+
   return ERROR_UNKNOWN;
 }
 
@@ -525,7 +525,7 @@ error_type semaphore_signal (kernel_semaphore_type *semaphore)
 }
       </programlisting>
     </example>
-    
+
     <example>
       <title>A Perl example</title>
       <programlisting>
@@ -573,7 +573,7 @@ while (&lt;CONFIGFILE&gt;)
     print ("Syntax error in config file: $_.\n");
     exit;
   }
-  
+
   my $flag = 1;
 
   foreach my $config_key (keys %config_keyword)
@@ -616,17 +616,17 @@ cleanup ();
 
   <appendix>
     <title>Emacs settings for chaos indentation</title>
-    
+
     <para>
       This is our .emacs settings for chaos indentation style for C
       code. It makes writing compliant code much easier.
     </para>
 
     <programlisting>
-      
+
       ;; chaos indentation style
-      
-      (defconst chaos-c-style 
+
+      (defconst chaos-c-style
        '(
          (c-basic-offset . 2)
          (c-comment-only-line-offset . (0 . 0))
@@ -644,17 +644,17 @@ cleanup ();
        )
        "chaos"
       )
-      
+
       (defun chaos-c-mode-common-hook ()
-      
+
       ;; add my personal style and set it for the current buffer
-      
+
       (c-add-style "chaos" chaos-c-style t)
-      
+
       ;; this will make sure spaces are used instead of tabs
-      
+
       (setq indent-tabs-mode nil))
-      
+
       (add-hook 'c-mode-common-hook 'chaos-c-mode-common-hook)
     </programlisting>
   </appendix>

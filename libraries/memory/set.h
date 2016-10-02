@@ -16,10 +16,10 @@
 
 /* Inlines. */
 
-/* Set memory in u8:s. */
+/* Set memory in uint8_t:s. */
 /* FIXME: If multiples of words, use stosd instead of stosb. */
 
-static inline void memory_set_u8 (u8 *address, u8 c, unsigned int size)
+static inline void memory_set_uint8_t (uint8_t *address, uint8_t c, unsigned int size)
 {
   int ecx, edi;
 
@@ -32,9 +32,9 @@ static inline void memory_set_u8 (u8 *address, u8 c, unsigned int size)
    : "memory");
 }
 
-/* Set memory in u16:s. */
+/* Set memory in uint16_t:s. */
 
-static inline void memory_set_u16 (u16 *address, u16 c, unsigned int size)
+static inline void memory_set_uint16_t (uint16_t *address, uint16_t c, unsigned int size)
 {
   int ecx, edi;
 
@@ -49,7 +49,7 @@ static inline void memory_set_u16 (u16 *address, u16 c, unsigned int size)
 
 /* Set memory in u32:s. */
 
-static inline void memory_set_u32 (u32 *address, u32 c, unsigned int size)
+static inline void memory_set_uint32_t (uint32_t *address, uint32_t c, unsigned int size)
 {
   int ecx, edi;
 

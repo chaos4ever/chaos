@@ -21,6 +21,6 @@
 #ifndef __WAVEFILE2_H__
 #define __WAVEFILE2_H__
 
-extern u8 wavefile2[];
+extern uint8_t wavefile2[];
 
 #endif /* !__WAVEFILE2_H__ */

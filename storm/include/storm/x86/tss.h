@@ -20,59 +20,59 @@
 typedef struct
 {
     // CPU data.
-    u16 previous_task_link;
-    u16 u0;
+    uint16_t previous_task_link;
+    uint16_t u0;
 
     // Stack pointer for PL0 code (system calls).
-    u32 esp0;
-    u16 ss0;
-    u16 u1;
-    u32 esp1;
-    u16 ss1;
-    u16 u2;
-    u32 esp2;
-    u16 ss2;
-    u16 u3;
-    u32 cr3;
+    uint32_t esp0;
+    uint16_t ss0;
+    uint16_t u1;
+    uint32_t esp1;
+    uint16_t ss1;
+    uint16_t u2;
+    uint32_t esp2;
+    uint16_t ss2;
+    uint16_t u3;
+    uint32_t cr3;
 
     // Instruction pointer and flags.
-    u32 eip;
-    u32 eflags;
+    uint32_t eip;
+    uint32_t eflags;
 
     // General-purpose registers.
-    u32 eax;
-    u32 ecx;
-    u32 edx;
-    u32 ebx;
+    uint32_t eax;
+    uint32_t ecx;
+    uint32_t edx;
+    uint32_t ebx;
 
     // Stack pointer.
-    u32 esp;
-    u32 ebp;
-    u32 esi;
-    u32 edi;
-    u16 es;
-    u16 u4;
-    u16 cs;
-    u16 u5;
-    u16 ss;
-    u16 u6;
-    u16 ds;
-    u16 u7;
-    u16 fs;
+    uint32_t esp;
+    uint32_t ebp;
+    uint32_t esi;
+    uint32_t edi;
+    uint16_t es;
+    uint16_t u4;
+    uint16_t cs;
+    uint16_t u5;
+    uint16_t ss;
+    uint16_t u6;
+    uint16_t ds;
+    uint16_t u7;
+    uint16_t fs;
 
     // Unused field number 8...
-    u16 u8;
-    u16 gs;
-    u16 u9;
+    uint16_t uint8_t;
+    uint16_t gs;
+    uint16_t u9;
 
     // This is not used by storm.
-    u16 ldt_selector;
-    u16 u10;
-    u16 t: 1;
-    u16 u11: 15;
+    uint16_t ldt_selector;
+    uint16_t u10;
+    uint16_t t: 1;
+    uint16_t u11: 15;
 
     // Base address of I/O map.
-    u16 iomap_base;
+    uint16_t iomap_base;
 
     // End of CPU data. Start of storm internal data.
 
@@ -91,13 +91,13 @@ typedef struct
     user_id_type user_id;
 
     // Priorities of the process, cluster and thread respectively.
-    u32 priority_process;
-    u32 priority_cluster;
-    u32 priority_thread;
+    uint32_t priority_process;
+    uint32_t priority_cluster;
+    uint32_t priority_thread;
 
     // Memory usage and other information regarding memory.
-    u32 stack_pages;
-    u32 allocated_pages;
+    uint32_t stack_pages;
+    uint32_t allocated_pages;
 
     // Mutex stuff.
     mutex_kernel_type *mutex_kernel;
@@ -112,14 +112,14 @@ typedef struct
     state_type state;
 
     // The number of timeslices this process has got.
-    u64 timeslices;
+    uint64_t timeslices;
 
     // The name of this thread.
     char thread_name[MAX_THREAD_NAME_LENGTH];
 
     // The following are used when creating clusters and spawning threads.
-    u32 code_base, data_base, code_pages, data_pages;
-    u32 virtual_code_base, virtual_data_base;
+    uint32_t code_base, data_base, code_pages, data_pages;
+    uint32_t virtual_code_base, virtual_data_base;
 
     // The current size of the I/O map.
     unsigned int iomap_size;
@@ -132,73 +132,73 @@ typedef struct
 
     // This is not the same as EIP; this contains the real instruction pointer. EIP always points into the dispatcher
     // because of the way our implementation of task-switching is done.
-    u32 instruction_pointer;
+    uint32_t instruction_pointer;
 
     // Pointer to the the process information structure for this process. This must be defined using the "struct"
     // keyword since there is a circular reference between the TSS and process structures.
     struct process_info_type *process_info;
 
     // Controls which ports this process can access (bit clear means access enabled).
-    u8 iomap[0];
+    uint8_t iomap[0];
 } __attribute__((packed)) storm_tss_type;
 
 // The regular Intel TSS type.
 typedef struct
 {
     // CPU data.
-    u16 previous_task_link;
-    u16 u0;
+    uint16_t previous_task_link;
+    uint16_t u0;
 
     // Stack pointer for PL0 code (system calls).
-    u32 esp0;
-    u16 ss0;
-    u16 u1;
-    u32 esp1;
-    u16 ss1;
-    u16 u2;
-    u32 esp2;
-    u16 ss2;
-    u16 u3;
-    u32 cr3;
+    uint32_t esp0;
+    uint16_t ss0;
+    uint16_t u1;
+    uint32_t esp1;
+    uint16_t ss1;
+    uint16_t u2;
+    uint32_t esp2;
+    uint16_t ss2;
+    uint16_t u3;
+    uint32_t cr3;
 
     // Instruction pointer and flags.
-    u32 eip;
-    u32 eflags;
+    uint32_t eip;
+    uint32_t eflags;
 
     // General-purpose registers.
-    u32 eax;
-    u32 ecx;
-    u32 edx;
-    u32 ebx;
+    uint32_t eax;
+    uint32_t ecx;
+    uint32_t edx;
+    uint32_t ebx;
 
     // Stack pointer.
-    u32 esp;
-    u32 ebp;
-    u32 esi;
-    u32 edi;
-    u16 es;
-    u16 u4;
-    u16 cs;
-    u16 u5;
-    u16 ss;
-    u16 u6;
-    u16 ds;
-    u16 u7;
-    u16 fs;
+    uint32_t esp;
+    uint32_t ebp;
+    uint32_t esi;
+    uint32_t edi;
+    uint16_t es;
+    uint16_t u4;
+    uint16_t cs;
+    uint16_t u5;
+    uint16_t ss;
+    uint16_t u6;
+    uint16_t ds;
+    uint16_t u7;
+    uint16_t fs;
 
     // Unused field number 8...
-    u16 u8;
-    u16 gs;
-    u16 u9;
+    uint16_t uint8_t;
+    uint16_t gs;
+    uint16_t u9;
 
     // This is not used by storm.
-    u16 ldt_selector;
-    u16 u10;
-    u16 t: 1;
-    u16 u11: 15;
+    uint16_t ldt_selector;
+    uint16_t u10;
+    uint16_t t: 1;
+    uint16_t u11: 15;
 
     // Base address of I/O map.
-    u16 iomap_base;
+    uint16_t iomap_base;
 } __attribute__((packed)) tss_type;
 
 typedef struct

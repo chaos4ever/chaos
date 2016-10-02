@@ -155,7 +155,7 @@ We do not use the errno approach at all, since it is very poor.
 @node Section 2.2
 @section The file library (library_file)
 
-@deffn Function file_handle_type file_open (u8 *@var{file})
+@deffn Function file_handle_type file_open (uint8_t *@var{file})
 Opens the given file name and associates it with a file handle (which is used
 when communicating to the VFS server). If the file does not exist, an error
 will be returned.
@@ -175,17 +175,17 @@ Reads up to @var{size} bytes to @var{data} from the file handle associated with
 @var{file}.
 @end deffn
 
-@deffn Function error_type file_create (u8 *@var{name})
+@deffn Function error_type file_create (uint8_t *@var{name})
 Creates a file with @var{name} as its full name (including path). Per default,
 the file will be unaccessible by everybody but the owner; this may later be
 changed by the @code{file_permissions_*} group of functions described later.
 @end deffn
 
-@deffn Function error_type file_permissions_delete_rule (u8 *@var{name}, acl_type @var{acl})
+@deffn Function error_type file_permissions_delete_rule (uint8_t *@var{name}, acl_type @var{acl})
 Deletes an ACL rule to the given file. Returns an error if this can't be done.
 @end deffn
 
-@deffn Function error_type file_permissions_add_rule (u8 *@var{name}, acl_type @var{acl})
+@deffn Function error_type file_permissions_add_rule (uint8_t *@var{name}, acl_type @var{acl})
 Adds an ACL rule to the given file. Returns an error if this can't be done.
 @end deffn
 
@@ -200,11 +200,11 @@ TODO: More ACL stuff, do error number stuff.
 @node Section 2.5
 @section The console I/O library (library_console)
 
-@deffn Function void console_print (u8 *@var{string})
+@deffn Function void console_print (uint8_t *@var{string})
 Prints @var{string} to the terminal owned by the program.
 @end deffn
 
-@deffn Function error_type console_print_formatted (u8 *@var{format_string}, ...)
+@deffn Function error_type console_print_formatted (uint8_t *@var{format_string}, ...)
 Prints @var{format_string}, replacing the type identifiers given
 with the parameters added to the function call. The syntax is identical to
 the ordinary ISO C @code{printf} function.

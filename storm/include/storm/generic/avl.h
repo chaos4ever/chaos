@@ -68,7 +68,7 @@ typedef struct
     unsigned int number_of_nodes;
 
     // This is a bitmap, indicating which nodes in the array are used.
-    u32 bitmap[0];
+    uint32_t bitmap[0];
 } avl_header_type;
 
 // Function prototypes.

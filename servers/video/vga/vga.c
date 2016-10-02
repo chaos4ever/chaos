@@ -17,7 +17,7 @@
 // Define this to get some debug information.
 #undef DEBUG
 
-void vga_set_mode(u32 mode);
+void vga_set_mode(uint32_t mode);
 
 typedef struct
 {
@@ -30,7 +30,7 @@ typedef struct
 
 typedef struct
 {
-    u8 red, green, blue;
+    uint8_t red, green, blue;
 } PACKED vga_palette_entry_type;
 
 vga_mode_type mode[] =
@@ -87,7 +87,7 @@ vga_palette_entry_type text_palette[] =
     { 0x38, 0x38, 0x38 }
 };
 
-u8 *graphic_video_memory = (u8 *) NULL;
+uint8_t *graphic_video_memory = (uint8_t *) NULL;
 
 // FIXME: This one is defined in lots of files. We should try to come up with a better mechanism for it.
 static tag_type empty_tag =
@@ -118,86 +118,86 @@ static bool mode_set(unsigned int width, unsigned int height, unsigned int bpp, 
 // Set the VGA palette (all 256 colors).
 static void vga_palette_set(vga_palette_entry_type *palette)
 {
-    system_port_out_u8(VGA_PALETTE_WRITE, 0);
-    system_port_out_u8_string(VGA_PALETTE_DATA, (u8 *) palette, 256 * 3);
+    system_port_out_uint8_t(VGA_PALETTE_WRITE, 0);
+    system_port_out_uint8_t_string(VGA_PALETTE_DATA, (uint8_t *) palette, 256 * 3);
 }
 
-static void vga_palette_set_entry(u8 num, vga_palette_entry_type *entry)
+static void vga_palette_set_entry(uint8_t num, vga_palette_entry_type *entry)
 {
-    system_port_out_u8(VGA_PALETTE_WRITE, num);
-    system_port_out_u8(VGA_PALETTE_DATA, entry->red);
-    system_port_out_u8(VGA_PALETTE_DATA, entry->green);
-    system_port_out_u8(VGA_PALETTE_DATA, entry->blue);
+    system_port_out_uint8_t(VGA_PALETTE_WRITE, num);
+    system_port_out_uint8_t(VGA_PALETTE_DATA, entry->red);
+    system_port_out_uint8_t(VGA_PALETTE_DATA, entry->green);
+    system_port_out_uint8_t(VGA_PALETTE_DATA, entry->blue);
 }
 
-static void vga_font_set(u8 *font_data, unsigned int length)
+static void vga_font_set(uint8_t *font_data, unsigned int length)
 {
     // First, the sequencer.
     // Synchronous reset.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x01);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x00);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x01);
 
     // CPU writes only to map 2.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x02);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x04);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x02);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x04);
 
     // Sequential addressing.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x04);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x07);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x04);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x07);
 
     // Clear synchronous reset.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x00);
 
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Now, the graphics controller.
     // Select map 2.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x04);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x02);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x04);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x02);
 
     // Disable odd-even addressing.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x05);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x00);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x05);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x00);
 
     // Map start at A0000.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x06);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x00);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x06);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x00);
 
     memory_copy(graphic_video_memory, font_data, length);
 
     // First, the sequencer.
     // Synchronous reset.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x01);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x00);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x01);
 
     // CPU writes to maps 0 and 1.
-    system_port_out_u8_pause( VGA_SEQUENCER_REGISTER, 0x02);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
+    system_port_out_uint8_t_pause( VGA_SEQUENCER_REGISTER, 0x02);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Odd-even addressing.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x04);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x04);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Character Map Select.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x03);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x03);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0);
 
     // Clear synchronous reset.
-    system_port_out_u8_pause(VGA_SEQUENCER_REGISTER, 0x00);
-    system_port_out_u8_pause(VGA_SEQUENCER_DATA, 0x03);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_REGISTER, 0x00);
+    system_port_out_uint8_t_pause(VGA_SEQUENCER_DATA, 0x03);
 
     // Now, the graphics controller.
     // Select map 0 for CPU.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x04);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x00);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x04);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x00);
 
     // Enable even-odd addressing.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x05);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x10);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x05);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x10);
 
     // Map starts at B8000.
-    system_port_out_u8_pause(VGA_GRAPHIC_REGISTER, 0x06);
-    system_port_out_u8_pause(VGA_GRAPHIC_DATA, 0x0E);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x06);
+    system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x0E);
 }
 
 // Place the text mode cursor. When in graphics mode, this function does nothing.
@@ -215,12 +215,12 @@ static void vga_cursor_place(int x, int y)
         position = y * current_mode->width + x;
 
         // Cursor position high.
-        system_port_out_u8(0x3D4, 0x0E);
-        system_port_out_u8(0x3D5, position / 256);
+        system_port_out_uint8_t(0x3D4, 0x0E);
+        system_port_out_uint8_t(0x3D5, position / 256);
 
         // Cursor position low.
-        system_port_out_u8(0x3D4, 0x0F);
-        system_port_out_u8(0x3D5, position % 256);
+        system_port_out_uint8_t(0x3D4, 0x0F);
+        system_port_out_uint8_t(0x3D5, position % 256);
     }
 }
 
@@ -228,7 +228,7 @@ static void vga_cursor_place(int x, int y)
 static void handle_connection(ipc_structure_type *ipc_structure)
 {
     bool done = FALSE;
-    u32 *data;
+    uint32_t *data;
     unsigned int data_size = 8192;
 
     memory_allocate((void **) &data, data_size);
@@ -264,7 +264,7 @@ static void handle_connection(ipc_structure_type *ipc_structure)
             case IPC_VIDEO_FONT_SET:
             {
                 // FIXME: Do security checks here.
-                vga_font_set((u8 *) data, message_parameter.length);
+                vga_font_set((uint8_t *) data, message_parameter.length);
                 break;
             }
 

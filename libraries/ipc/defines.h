@@ -25,6 +25,6 @@
 /* If you put this in message_parameter->class, you will accept
    messages of all classes. */
 
-#define IPC_CLASS_NONE      (MAX_U32)
+#define IPC_CLASS_NONE      (UINT32_MAX)
 
 #endif /* !__LIBRARY_IPC_DEFINES_H__ */

@@ -83,7 +83,7 @@ typedef struct
 
 typedef struct
 {
-  u8 *data;
+  uint8_t *data;
   bool is_full;
 } double_buffer_type;
 

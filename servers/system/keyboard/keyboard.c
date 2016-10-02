@@ -34,13 +34,13 @@ static const char **keyboard_map_shift = us_keyboard_map_shift;
 static const char **keyboard_map_altgr = us_keyboard_map_altgr;
 
 // We need to create an array of 16 bytes, for storing the currently pressed keys in. (128 scan codes / 8).
-static volatile u8 keyboard_pressed_keys[16];
+static volatile uint8_t keyboard_pressed_keys[16];
 
 // State of the *lock-keys.
 
-static volatile u8 keyboard_state_scroll = 0x0F;
-static volatile u8 keyboard_state_num = 0x0F;
-static volatile u8 keyboard_state_caps = 0x0F;
+static volatile uint8_t keyboard_state_scroll = 0x0F;
+static volatile uint8_t keyboard_state_num = 0x0F;
+static volatile uint8_t keyboard_state_caps = 0x0F;
 
 static volatile unsigned int shift_state = 0;
 
@@ -55,7 +55,7 @@ static volatile int acknowledge = 0;
 static volatile int resend = 0;
 
 // Conversion table from keyboard scan codes to the standardised 'special key' codes, which are generic between all platforms.
-static u8 special_key_conversion[] =
+static uint8_t special_key_conversion[] =
 {
     [SCAN_CODE_ESCAPE] = IPC_KEYBOARD_SPECIAL_KEY_ESCAPE,
     [SCAN_CODE_BACK_SPACE] = IPC_KEYBOARD_SPECIAL_KEY_BACK_SPACE,
@@ -149,8 +149,8 @@ static bool send_data(unsigned char data)
         {
             while (TRUE)
             {
-                u8 status = controller_read_status();
-                u8 scancode;
+                uint8_t status = controller_read_status();
+                uint8_t scancode;
 
                 // Loop until there is data available.
                 if ((status & CONTROLLER_STATUS_OUTPUT_BUFFER_FULL) == 0)
@@ -222,7 +222,7 @@ const char *keyboard_set_repeat_rate(void)
 // FIXME: Defines!!! */
 void keyboard_update_leds(void)
 {
-    u8 output = 0;
+    uint8_t output = 0;
 
     if (keyboard_state_scroll == 0xF0)
     {
@@ -249,7 +249,7 @@ void keyboard_update_leds(void)
 }
 
 // Check if the given code is currently pressed.
-static inline bool key_pressed(u8 scancode)
+static inline bool key_pressed(uint8_t scancode)
 {
     if ((keyboard_pressed_keys[scancode / 8] & (1 << (scancode % 8))) != 0)
     {
@@ -262,7 +262,7 @@ static inline bool key_pressed(u8 scancode)
 }
 
 // Translate the given key according to the current keyboard map.
-static const char *translate_key(u8 scancode)
+static const char *translate_key(uint8_t scancode)
 {
     if ((shift_state & KEYBOARD_LEFT_SHIFT) == KEYBOARD_LEFT_SHIFT ||
             (shift_state & KEYBOARD_RIGHT_SHIFT) == KEYBOARD_RIGHT_SHIFT ||
@@ -281,7 +281,7 @@ static const char *translate_key(u8 scancode)
 }
 
 // Handle a keyboard event. This function is called from the interrupt handler.
-void keyboard_handle_event(u8 scancode)
+void keyboard_handle_event(uint8_t scancode)
 {
     keyboard_exists = TRUE;
 
@@ -296,7 +296,7 @@ void keyboard_handle_event(u8 scancode)
         //    string_print (tmpstr, "ull: %u", scancode);
         //    system_call_debug_print_simple (tmpstr);
 
-        memory_set_u8((u8 *) &keyboard_packet, 0, sizeof(keyboard_packet_type));
+        memory_set_uint8_t((uint8_t *) &keyboard_packet, 0, sizeof(keyboard_packet_type));
 
         // Special case -- this one is sent to us when the keyboard is reset from an external device (like a
         // keyboard/monitor switch). It is also sent when right shift is released. What a sick world this is...
@@ -594,8 +594,8 @@ static void handle_connection(ipc_structure_type *ipc_structure)
 {
     bool done = FALSE;
     message_parameter_type message_parameter;
-    u8 *data;
-    u8 **data_pointer = &data;
+    uint8_t *data;
+    uint8_t **data_pointer = &data;
     unsigned int data_size = 100;
 
     memory_allocate((void **) data_pointer, data_size);
@@ -639,7 +639,7 @@ void keyboard_main(void *argument UNUSED)
     keyboard_update_leds();
 
     // No keys pressed at startup.
-    memory_set_u8((u8 * volatile) &keyboard_pressed_keys, 0, sizeof(keyboard_pressed_keys));
+    memory_set_uint8_t((uint8_t * volatile) &keyboard_pressed_keys, 0, sizeof(keyboard_pressed_keys));
 
     // Establish a connection to the console service.
     if (console_init(&console_structure, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_PROVIDER_KEYBOARD) != CONSOLE_RETURN_SUCCESS)

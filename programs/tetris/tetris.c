@@ -25,7 +25,7 @@
 #include "tetris.h"
 
 static void draw_playfield (void);
-static u16 read_key (void);
+static uint16_t read_key (void);
 static bool collides (int current_piece, int current_rotation,
                       int piece_x, int piece_y);
 static void fixate_piece_on_playfield (int current_piece, int current_rotation,
@@ -281,7 +281,7 @@ void tetris (void)
   time_type random_seed;
   time_type timeout_time;
   time_type current_time;
-  u16 key;
+  uint16_t key;
 
   console_clear (&console_structure);
 
@@ -527,7 +527,7 @@ static void draw_playfield (void)
   console_print (&console_structure, field);
 }
 
-static u16 read_key (void)
+static uint16_t read_key (void)
 {
   keyboard_packet_type keyboard_packet;
   int event_type;

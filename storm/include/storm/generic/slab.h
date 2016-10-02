@@ -32,7 +32,7 @@ typedef struct
 typedef struct
 {
   slab_superblock_header_type header;
-  u8 buffer[0];
+  uint8_t buffer[0];
 } slab_superblock_type;
 
 extern const int slab_block_size[];

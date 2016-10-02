@@ -42,7 +42,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
-    u32 *data;
+    uint32_t *data;
     unsigned int data_size = 1024;
 
     memory_allocate((void **) &data, data_size);
@@ -88,7 +88,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                                         ipc_block_read->start_block_number +
                                         ipc_block_read->number_of_blocks);
 #endif
-                    message_parameter.data = (u8 *) &ramdisk[ipc_block_read->start_block_number * ipc_block_info.block_size];
+                    message_parameter.data = (uint8_t *) &ramdisk[ipc_block_read->start_block_number * ipc_block_info.block_size];
                     message_parameter.length = (ipc_block_read->number_of_blocks * ipc_block_info.block_size);
                 }
                 message_parameter.block = TRUE;

@@ -56,12 +56,12 @@ static tag_type empty_tag =
 
 /* 0 = transparent, 1 = black, 2 = dark, 3 = normal, 4 = bright, 6 = white */
 
-static u8 old_mouse_cursor[16][16];
+static uint8_t old_mouse_cursor[16][16];
 
 /* This is not the final solution to the question about Life, the
    Universe, and Everything. */
 
-static u8 *screen = (u8 *) 0xA0000;
+static uint8_t *screen = (uint8_t *) 0xA0000;
 
 /* This function is used for converting a 32-bit colour value to a 332
    index. */
@@ -69,32 +69,32 @@ static u8 *screen = (u8 *) 0xA0000;
 static log_structure_type log_structure;
 static console_structure_type console_structure;
 
-static inline u8 argb_to_332 (u32 argb)
+static inline uint8_t argb_to_332 (uint32_t argb)
 {
-  u8 r = argb >> 16;
-  u8 g = argb >> 8;
-  u8 b = argb >> 0;
+  uint8_t r = argb >> 16;
+  uint8_t g = argb >> 8;
+  uint8_t b = argb >> 0;
 
   return (b >> 6) | ((g >> 3) & (B00011100)) | (r & B11100000);
 }
 
 /* Inlines for putting pixels. */
 
-static inline void tornado_putpixel8 (u8 *buffer, u32 x, u32 y, u32 argb)
+static inline void tornado_putpixel8 (uint8_t *buffer, uint32_t x, uint32_t y, uint32_t argb)
 {
-  u8 index = argb_to_332 (argb);
+  uint8_t index = argb_to_332 (argb);
 
   buffer[y * WIDTH + x] = index;
 }
 
-static inline void tornado_putpixel32 (u32 *buffer, u32 x, u32 y, u32 argb)
+static inline void tornado_putpixel32 (uint32_t *buffer, uint32_t x, uint32_t y, uint32_t argb)
 {
   buffer[y * WIDTH + x] = argb;
 }
 
-static void tornado_draw_box (u32 *buffer, unsigned int x,
+static void tornado_draw_box (uint32_t *buffer, unsigned int x,
                               unsigned int y, unsigned int width,
-                              unsigned int height, u32 colour)
+                              unsigned int height, uint32_t colour)
 {
   unsigned int x_loop, y_loop;
 
@@ -102,7 +102,7 @@ static void tornado_draw_box (u32 *buffer, unsigned int x,
   {
     for (y_loop = y; y_loop < y + height; y_loop++)
     {
-      memory_set_u32 (&buffer[y_loop * WIDTH + x], colour, width);
+      memory_set_uint32_t (&buffer[y_loop * WIDTH + x], colour, width);
     }
   }
   else if (DEPTH == 8)
@@ -111,46 +111,46 @@ static void tornado_draw_box (u32 *buffer, unsigned int x,
     {
       for (x_loop = x; x_loop < x + width; x_loop++)
       {
-        tornado_putpixel8 ((u8 *) buffer, x_loop, y_loop, colour);
+        tornado_putpixel8 ((uint8_t *) buffer, x_loop, y_loop, colour);
       }
     }
   }
 }
 
-static void tornado_fill_screen (u32 *buffer, u32 argb)
+static void tornado_fill_screen (uint32_t *buffer, uint32_t argb)
 {
   if (DEPTH == 32)
   {
-    memory_set_u32 (buffer, argb, WIDTH * HEIGHT);
+    memory_set_uint32_t (buffer, argb, WIDTH * HEIGHT);
   }
   else if (DEPTH == 8)
   {
-    u8 index = argb_to_332 (argb);
+    uint8_t index = argb_to_332 (argb);
 
-    memory_set_u8 ((u8 *) buffer, index, WIDTH * HEIGHT);
+    memory_set_uint8_t ((uint8_t *) buffer, index, WIDTH * HEIGHT);
   }
 }
 
-static void tornado_draw_hline (u32 *buffer, unsigned int x,
+static void tornado_draw_hline (uint32_t *buffer, unsigned int x,
                                 unsigned int y, unsigned int width,
-                                u32 colour)
+                                uint32_t colour)
 {
   if (DEPTH == 32)
   {
-    memory_set_u32 (&buffer[y * WIDTH + x], colour, width);
+    memory_set_uint32_t (&buffer[y * WIDTH + x], colour, width);
   }
   else if (DEPTH == 8)
   {
-    u8 index = argb_to_332 (colour);
-    u8 *buffer_u8 = (u8 *) buffer;
+    uint8_t index = argb_to_332 (colour);
+    uint8_t *buffer_uint8_t = (uint8_t *) buffer;
 
-    memory_set_u8 (&buffer_u8[y * WIDTH + x], index, width);
+    memory_set_uint8_t (&buffer_uint8_t[y * WIDTH + x], index, width);
   }
 }
 
-static void tornado_draw_vline (u32 *buffer, unsigned int x,
+static void tornado_draw_vline (uint32_t *buffer, unsigned int x,
                                 unsigned int y, unsigned int height,
-                                u32 colour)
+                                uint32_t colour)
 {
   unsigned int y_loop;
 
@@ -167,13 +167,13 @@ static void tornado_draw_vline (u32 *buffer, unsigned int x,
 
     for (y_loop = y; y_loop < y + height; y_loop++)
     {
-      ((u8 *) buffer)[y_loop * WIDTH + x] = index;
+      ((uint8_t *) buffer)[y_loop * WIDTH + x] = index;
     }
   }
 }
 
 #if FALSE
-static void tornado_draw_3dframe (u32 *buffer, unsigned int x,
+static void tornado_draw_3dframe (uint32_t *buffer, unsigned int x,
                                   unsigned int y, unsigned int width,
                                   unsigned int height, int type)
 {
@@ -209,7 +209,7 @@ static void tornado_draw_3dframe (u32 *buffer, unsigned int x,
 }
 #endif
 
-static void tornado_draw_3dframe_thin (u32 *buffer, unsigned int x,
+static void tornado_draw_3dframe_thin (uint32_t *buffer, unsigned int x,
                                        unsigned int y, unsigned int width,
                                        unsigned int height, int type)
 {
@@ -237,9 +237,9 @@ static void tornado_draw_3dframe_thin (u32 *buffer, unsigned int x,
   }
 }
 
-static void tornado_draw_frame (u32 *buffer, unsigned int x,
+static void tornado_draw_frame (uint32_t *buffer, unsigned int x,
                                 unsigned int y, unsigned int width,
-                                unsigned int height, u32 colour)
+                                unsigned int height, uint32_t colour)
 {
   tornado_draw_hline (buffer, x, y, width, colour);
   tornado_draw_hline (buffer, x, y + height - 1, width, colour);
@@ -247,16 +247,16 @@ static void tornado_draw_frame (u32 *buffer, unsigned int x,
   tornado_draw_vline (buffer, x + width - 1, y + 1, height - 2, colour);
 }
 
-static inline void tornado_flip (u32 *destination, u32 *source)
+static inline void tornado_flip (uint32_t *destination, uint32_t *source)
 {
   memory_copy (destination, source, WIDTH * HEIGHT * (DEPTH / 8));
 }
 
-static void tornado_draw_text (u32 *buffer, unsigned int x,
-                               unsigned int y, char *text, u32 colour)
+static void tornado_draw_text (uint32_t *buffer, unsigned int x,
+                               unsigned int y, char *text, uint32_t colour)
 {
-  u32 y_loop;
-  u32 x_loop;
+  uint32_t y_loop;
+  uint32_t x_loop;
 
   while (*text != '\0')
   {
@@ -272,7 +272,7 @@ static void tornado_draw_text (u32 *buffer, unsigned int x,
           }
           else if (DEPTH == 8)
           {
-            tornado_putpixel8 ((u8 *) buffer, x_loop + x, y_loop + y, colour);
+            tornado_putpixel8 ((uint8_t *) buffer, x_loop + x, y_loop + y, colour);
           }
         }
       }
@@ -282,7 +282,7 @@ static void tornado_draw_text (u32 *buffer, unsigned int x,
   }
 }
 
-static void tornado_draw_window (u32 *buffer, unsigned int x,
+static void tornado_draw_window (uint32_t *buffer, unsigned int x,
                                  unsigned int y, unsigned int width,
                                  unsigned int height, char *name)
 {
@@ -350,7 +350,7 @@ static void tornado_draw_mouse_cursor (int x_position,
       if (tornado_standard_mouse_cursor[y][x] && x_position + x < WIDTH &&
 	  y_position + y < HEIGHT)
       {
-        u32 c = 0;
+        uint32_t c = 0;
 
         switch (tornado_standard_mouse_cursor[y][x])
         {
@@ -383,12 +383,12 @@ static void tornado_draw_mouse_cursor (int x_position,
 
         if (DEPTH == 32)
         {
-          tornado_putpixel32 ((u32 *) screen, x_position + x, y_position + y,
+          tornado_putpixel32 ((uint32_t *) screen, x_position + x, y_position + y,
                               c);
         }
         else if (DEPTH == 8)
         {
-          tornado_putpixel8 ((u8 *) screen, x_position + x, y_position + y, c);
+          tornado_putpixel8 ((uint8_t *) screen, x_position + x, y_position + y, c);
         }
       }
     }
@@ -426,11 +426,11 @@ int main (void)
 
   system_sleep (1000);
 
-  tornado_fill_screen ((u32 *) screen, COLOUR_BACKGROUND);
-  tornado_draw_text ((u32 *) screen, WIDTH - string_length (tmpstr) * 8 - 2,
+  tornado_fill_screen ((uint32_t *) screen, COLOUR_BACKGROUND);
+  tornado_draw_text ((uint32_t *) screen, WIDTH - string_length (tmpstr) * 8 - 2,
                      HEIGHT - 10, tmpstr, COLOUR_TEXT);
 
-  tornado_draw_window ((u32 *) screen, 5, 5, 300, 180,
+  tornado_draw_window ((uint32_t *) screen, 5, 5, 300, 180,
                        tmpstr);
 
   tornado_draw_mouse_cursor (mouse_x, mouse_y, -1, -1);

@@ -30,7 +30,7 @@ return_type system_call_dispatch_next(void)
 
 return_type system_call_thread_name_set(char *name)
 {
-    memory_set_u8((u8 *) current_tss->thread_name, 0, MAX_THREAD_NAME_LENGTH);
+    memory_set_uint8_t((uint8_t *) current_tss->thread_name, 0, MAX_THREAD_NAME_LENGTH);
     string_copy_max(current_tss->thread_name, name,
                     MAX_THREAD_NAME_LENGTH - 1);
 
@@ -68,7 +68,7 @@ return_type system_call_process_parent_unblock(void)
 
 return_type system_call_memory_reserve(address_type start, unsigned int size, void **virtual_address)
 {
-    u32 virtual_page_number;
+    uint32_t virtual_page_number;
 
     mutex_kernel_wait(&memory_mutex);
     memory_virtual_allocate(&virtual_page_number, SIZE_IN_PAGES(size));
@@ -92,7 +92,7 @@ return_type system_call_port_range_unregister(unsigned int start)
     return port_range_unregister(start);
 }
 
-return_type system_call_memory_allocate(void **address, u32 pages, bool cacheable)
+return_type system_call_memory_allocate(void **address, uint32_t pages, bool cacheable)
 {
     return memory_allocate(address, pages, cacheable);
 }

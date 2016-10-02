@@ -21,5 +21,5 @@ extern volatile cluster_id_type current_cluster_id;
 extern volatile thread_id_type current_thread_id;
 extern volatile time_type timeslice;
 extern storm_tss_type *current_tss;
-extern volatile u8 dispatch_task_flag;
+extern volatile uint8_t dispatch_task_flag;
 extern tss_list_type *current_tss_node;

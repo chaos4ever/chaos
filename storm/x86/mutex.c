@@ -72,17 +72,17 @@ return_type mutex_kernel_wait(mutex_kernel_type *mutex)
 {
 #if FALSE
     // This is used to find places where we used dual-mutexing -- which is very bad.
-    u32 esp = cpu_get_esp();
+    uint32_t esp = cpu_get_esp();
 
     if (mutex == &tss_tree_mutex)
     {
         if (tss_tree_mutex == MUTEX_UNLOCKED)
         {
-            DEBUG_MESSAGE(TRUE, "Called from %p", ((u32 *) esp)[7]);
+            DEBUG_MESSAGE(TRUE, "Called from %p", ((uint32_t *) esp)[7]);
         }
         else
         {
-            DEBUG_MESSAGE(TRUE, "Called from %p (dispatcher locked)", ((u32 *) esp)[7]);
+            DEBUG_MESSAGE(TRUE, "Called from %p (dispatcher locked)", ((uint32_t *) esp)[7]);
         }
     }
 #endif
@@ -121,11 +121,11 @@ return_type mutex_kernel_signal(mutex_kernel_type *mutex)
 {
 #if FALSE
     // This is used to find places where we used dual-mutexing -- which is very bad.
-    u32 esp = cpu_get_esp();
+    uint32_t esp = cpu_get_esp();
 
     if (mutex == &tss_tree_mutex)
     {
-        DEBUG_MESSAGE(TRUE, "Called from %p", ((u32 *) esp)[7]);
+        DEBUG_MESSAGE(TRUE, "Called from %p", ((uint32_t *) esp)[7]);
     }
 #endif
 

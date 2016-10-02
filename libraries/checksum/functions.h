@@ -24,7 +24,7 @@
 
 #include <system/system.h>
 
-extern u32 checksum_crc32 (u8 *block, unsigned int length);
+extern uint32_t checksum_crc32 (uint8_t *block, unsigned int length);
 
 void checksum_md5
   (void *input, unsigned int length, checksum_md5_digest_type *digest);

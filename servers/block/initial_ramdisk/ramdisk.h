@@ -6,4 +6,4 @@
 
 #pragma once
 
-extern const u8 ramdisk[];
+extern const uint8_t ramdisk[];

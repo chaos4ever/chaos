@@ -33,16 +33,16 @@
 // Globals.
 static slab_heap_type *global_slab_heap;
 avl_header_type *global_avl_header;
-u32 global_memory_left;
+uint32_t global_memory_left;
 
 // Locals.
-static return_type memory_global_deallocate_page(u32 page_number) __attribute__ ((unused));
-static u32 memory_global_allocate_page(u32 length);
+static return_type memory_global_deallocate_page(uint32_t page_number) __attribute__ ((unused));
+static uint32_t memory_global_allocate_page(uint32_t length);
 
 // Initialise the global memory heap.
 void memory_global_init(void)
 {
-    u32 physical_page;
+    uint32_t physical_page;
 
     // All memory is free initially.
     global_memory_left = SIZE_GLOBAL_HEAP;
@@ -75,7 +75,7 @@ void memory_global_init(void)
     global_avl_header->number_of_nodes = 1;
 
     // Clear the bitmap, marking all slots as free.
-    memory_set_u8((u8 *) global_avl_header->bitmap, 0, SIZE_PAGE - sizeof (avl_header_type));
+    memory_set_uint8_t((uint8_t *) global_avl_header->bitmap, 0, SIZE_PAGE - sizeof (avl_header_type));
 
     // Initialise the tree, starting with an empty entry.
     avl_node_reset(global_avl_header->root, GET_PAGE_NUMBER(BASE_GLOBAL_HEAP),
@@ -95,7 +95,7 @@ void memory_global_init(void)
 }
 
 // Allocates a page region in the global memory area.
-static u32 memory_global_allocate_page(u32 length)
+static uint32_t memory_global_allocate_page(uint32_t length)
 {
     avl_node_type *node;
     avl_node_type *insert_node;
@@ -168,7 +168,7 @@ static u32 memory_global_allocate_page(u32 length)
 }
 
 // Deallocate the given range, starting at page_number.
-static return_type memory_global_deallocate_page(u32 page_number)
+static return_type memory_global_deallocate_page(uint32_t page_number)
 {
     avl_node_type *node;
     avl_node_type *adjacent_node;
@@ -257,11 +257,11 @@ static return_type memory_global_deallocate_page(u32 page_number)
 }
 
 // Get the number of pages allocated for the given data block
-static u32 memory_global_get_size(void *data)
+static uint32_t memory_global_get_size(void *data)
 {
     avl_node_type *node;
     bool finished = FALSE;
-    u32 page_number = GET_PAGE_NUMBER((u32) data);
+    uint32_t page_number = GET_PAGE_NUMBER((uint32_t) data);
 
 #ifdef CHECK
     avl_debug_tree_check(global_avl_header, global_avl_header->root);
@@ -288,7 +288,7 @@ static u32 memory_global_get_size(void *data)
     {
         DEBUG_MESSAGE(DEBUG, "Area not allocated!");
 
-        return MAX_U32;
+        return UINT32_MAX;
     }
 
     return node->busy_length;
@@ -327,8 +327,8 @@ void *memory_global_allocate(unsigned int length)
     // the closest upper page boundary.
     if (index == -1)
     {
-        u32 virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
-        u32 physical_page;
+        uint32_t virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
+        uint32_t physical_page;
 
         // FIXME: Check return value.
         memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
@@ -362,8 +362,8 @@ void *memory_global_allocate(unsigned int length)
         // No, we were out of luck.
         if (superblock == NULL)
         {
-            u32 virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
-            u32 physical_page;
+            uint32_t virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
+            uint32_t physical_page;
 
             // FIXME: Check return value.
             memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
@@ -409,7 +409,7 @@ void *memory_global_allocate(unsigned int length)
 // Deallocate memory from the global heap.
 return_type memory_global_deallocate(void *data)
 {
-    slab_superblock_type *superblock = (slab_superblock_type *) ((u32) data & 0xFFFFF000);
+    slab_superblock_type *superblock = (slab_superblock_type *) ((uint32_t) data & 0xFFFFF000);
     slab_block_type *block = (slab_block_type *) data;
     int index = slab_heap_index(superblock->header.buffer_size);
 
@@ -422,9 +422,9 @@ return_type memory_global_deallocate(void *data)
     // If the data address is page aligned, it is not a slab block, so handle it specially.
     if (data == superblock)
     {
-        u32 pages = memory_global_get_size(data);
+        uint32_t pages = memory_global_get_size(data);
 
-        if (pages == MAX_U32)
+        if (pages == UINT32_MAX)
         {
             DEBUG_MESSAGE(DEBUG, "Leaving through path 0");
 
@@ -432,12 +432,12 @@ return_type memory_global_deallocate(void *data)
         }
 
 #ifdef DEALLOCATE
-        memory_global_deallocate_page(GET_PAGE_NUMBER((u32) data));
+        memory_global_deallocate_page(GET_PAGE_NUMBER((uint32_t) data));
 
         // Find the physical adress for this virtual address.
         page_table_entry *page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES +
-                                                             ((u32) data) / (4 * MB));
-        u32 physical_page = page_table[GET_PAGE_NUMBER((u32) data) % 1024].page_base;
+                                                             ((uint32_t) data) / (4 * MB));
+        uint32_t physical_page = page_table[GET_PAGE_NUMBER((uint32_t) data) % 1024].page_base;
 
         memory_physical_deallocate(physical_page);
 #endif

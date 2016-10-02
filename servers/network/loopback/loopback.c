@@ -24,8 +24,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     ipc_structure_type ipc_structure;
     bool done = FALSE;
     unsigned int data_size = 1024;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
 
     memory_allocate((void **) data_pointer, data_size);
 
@@ -54,7 +54,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 #if FALSE
                 // FIXME: Check if the protocol is already registered */
                 device->target[device->number_of_targets].mailbox_id = ipc_structure.output_mailbox_id;
-                device->target[device->number_of_targets].protocol_type = system_byte_swap_u16(data[0]);
+                device->target[device->number_of_targets].protocol_type = system_byte_swap_uint16_t(data[0]);
                 device->number_of_targets++;
 #endif
                 break;

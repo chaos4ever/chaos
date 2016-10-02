@@ -86,7 +86,7 @@ static bool vfs_init(ipc_structure_type *ipc_structure)
 
     log_init(&log_structure, PACKAGE_NAME, &empty_tag);
 
-    memory_set_u8((u8 *) assign_point, 0, sizeof(assign_point));
+    memory_set_uint8_t((uint8_t *) assign_point, 0, sizeof(assign_point));
 
     if (ipc_service_create("virtual_file_system", ipc_structure, &empty_tag) != IPC_RETURN_SUCCESS)
     {
@@ -166,7 +166,7 @@ static bool vfs_directory_entry_read(file_directory_entry_read_type *directory_e
         message_parameter_type message_parameter;
         char path_name[MAX_PATH_NAME_LENGTH];
 
-        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_uint8_t((uint8_t *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         for (index = 1; index < elements; index++)
         {
@@ -249,7 +249,7 @@ static void vfs_file_get_info(file_verbose_directory_entry_type *directory_entry
         message_parameter_type message_parameter;
         char path_name[MAX_PATH_NAME_LENGTH];
 
-        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_uint8_t((uint8_t *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         for (index = 1; index < elements; index++)
         {
@@ -356,7 +356,7 @@ static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
         char path_name[MAX_PATH_NAME_LENGTH];
         ipc_file_open_type ipc_file_open;
 
-        memory_set_u8((u8 *) path_name, 0, MAX_PATH_NAME_LENGTH);
+        memory_set_uint8_t((uint8_t *) path_name, 0, MAX_PATH_NAME_LENGTH);
 
         // FIXME: Copy away the path name before splitting it to avoid having to unsplit it...
         for (index = 1; index < elements; index++)
@@ -469,7 +469,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
-    u8 *data;
+    uint8_t *data;
     unsigned int data_size = 16384;
 
     memory_allocate((void **) &data, data_size);
@@ -553,7 +553,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
             case IPC_FILE_READ:
             {
                 file_read_type *read = (file_read_type *) data;
-                u8 *buffer;
+                uint8_t *buffer;
 
                 memory_allocate((void **) &buffer, read->bytes);
 

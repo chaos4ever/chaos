@@ -11,7 +11,7 @@
 // External variables.
 extern time_type time;
 extern volatile time_type uptime;
-extern u32 hz;
+extern uint32_t hz;
 
 // Function prototypes.
 extern void time_init (void);

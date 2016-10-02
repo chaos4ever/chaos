@@ -39,14 +39,14 @@
 /* The default base port of the sound card. Can be overridden by a
    command parameter to the server (well, in the future...) */
 
-u8 *dma_buffer;
+uint8_t *dma_buffer;
 
 double_buffer_type double_buffer[2];
 unsigned int current_buffer = 0;
 
 /* Change these to fit your needs. */
 
-u16 base_port = 0x220;
+uint16_t base_port = 0x220;
 unsigned int irq = 5;
 unsigned int dma_channel = 1;
 
@@ -61,7 +61,7 @@ unsigned int dma_channel = 1;
    SoundBlaster 16 SCSI-2     4.11  (4.11)
    SoundBlaster AWE32         4.12+ (4.12) */
 
-u8 major_version, minor_version;
+uint8_t major_version, minor_version;
 
 log_structure_type log_structure;
 
@@ -76,28 +76,28 @@ static tag_type empty_tag =
   0, 0, ""
 };
 
-static void dsp_write (u8 data)
+static void dsp_write (uint8_t data)
 {
-  while ((system_port_in_u8 (DSP_DATA_WRITE) & 0x80) != 0);
-  system_port_out_u8 (DSP_DATA_WRITE, (data));
+  while ((system_port_in_uint8_t (DSP_DATA_WRITE) & 0x80) != 0);
+  system_port_out_uint8_t (DSP_DATA_WRITE, (data));
 }
 
-static u8 dsp_read (void)
+static uint8_t dsp_read (void)
 {
-  while ((system_port_in_u8 (DSP_DATA_AVAILABLE) & 0x80) == 0);
-  return system_port_in_u8 (DSP_DATA_READ);
+  while ((system_port_in_uint8_t (DSP_DATA_AVAILABLE) & 0x80) == 0);
+  return system_port_in_uint8_t (DSP_DATA_READ);
 }
 
-static u8 dsp_mixer_read (u8 which_register)
+static uint8_t dsp_mixer_read (uint8_t which_register)
 {
-  system_port_out_u8 (DSP_MIXER_REGISTER, which_register);
-  return system_port_in_u8 (DSP_MIXER_DATA);
+  system_port_out_uint8_t (DSP_MIXER_REGISTER, which_register);
+  return system_port_in_uint8_t (DSP_MIXER_DATA);
 }
 
-static void dsp_mixer_write (u8 which_register, u8 data)
+static void dsp_mixer_write (uint8_t which_register, uint8_t data)
 {
-  system_port_out_u8 (DSP_MIXER_REGISTER, which_register);
-  system_port_out_u8 (DSP_MIXER_DATA, data);
+  system_port_out_uint8_t (DSP_MIXER_REGISTER, which_register);
+  system_port_out_uint8_t (DSP_MIXER_DATA, data);
 }
 
 /* Detect if there is some kind of sound blaster card in this
@@ -111,17 +111,17 @@ static bool detect_sb (void)
 
   /* Reset the DSP. */
   
-  system_port_out_u8 (DSP_RESET, 0x01);
+  system_port_out_uint8_t (DSP_RESET, 0x01);
   system_sleep (4);
-  system_port_out_u8 (DSP_RESET, 0x00);
+  system_port_out_uint8_t (DSP_RESET, 0x00);
   
   /* FIXME: Should only wait for a maximum of 100 us. */
   
-  while ((system_port_in_u8 (DSP_DATA_AVAILABLE) & (1 << 7)) == 0);
+  while ((system_port_in_uint8_t (DSP_DATA_AVAILABLE) & (1 << 7)) == 0);
 
   /* Check if the DSP was reset successfully. */
 
-  if (system_port_in_u8 (DSP_DATA_READ) == 0xAA)
+  if (system_port_in_uint8_t (DSP_DATA_READ) == 0xAA)
   {
     /* Let's check which kind of SB this is. */
 
@@ -309,7 +309,7 @@ void irq_handler (mailbox_id_type reply_mailbox_id,
 
     /* Clear the SB interrupt. */
     
-    system_port_in_u8 (DSP_DATA_AVAILABLE);
+    system_port_in_uint8_t (DSP_DATA_AVAILABLE);
     
     /* Send a acknowledge message to the client program. */
 
@@ -346,7 +346,7 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
   bool done = FALSE;
   message_parameter_type message_parameter;
   ipc_structure_type ipc_structure;
-  u8 *data;
+  uint8_t *data;
  
   memory_allocate ((void **) &data, sizeof(sound_message_type) +
                    MAX_SINGLE_SAMPLE_SIZE);
@@ -402,8 +402,8 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
 
       case IPC_SOUND_PLAY_SAMPLE:
       {
-        u16 time_constant;
-        u16 length;
+        uint16_t time_constant;
+        uint16_t length;
         sound_message_type *sound_message = (sound_message_type *) data;
         
         /* If parameters aren't checked, nobody wants to play the
@@ -440,15 +440,15 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
 
          time_constant = 65536 - (256000000 / sound_message->frequency);
          dsp_write (DSP_SET_TIME_CONSTANT);
-         dsp_write ((u8)(time_constant >> 8));
+         dsp_write ((uint8_t)(time_constant >> 8));
          
          /* Program Sound Blaster buffer length (triggers an interrupt
             after 'length' bytes transferred) */
 
          length = sound_message->length-1;
          dsp_write (DSP_MODE_DMA_8BIT_DAC);
-         dsp_write ((u8) length);
-         dsp_write ((u8) (length >> 8));
+         dsp_write ((uint8_t) length);
+         dsp_write ((uint8_t) (length >> 8));
  
          /* Sample is hopefully being played now...so set some
           * variables. */
@@ -461,8 +461,8 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
  
        case IPC_SOUND_PLAY_STREAM:
        {
-         u16 time_constant;
-         u16 length;
+         uint16_t time_constant;
+         uint16_t length;
          sound_message_type *sound_message = (sound_message_type *) data;
 
          /* If parameters aren't checked, nobody wants to play the
@@ -517,15 +517,15 @@ void handle_connection (mailbox_id_type reply_mailbox_id)
 
              time_constant = 65536 - (256000000 / sound_message->frequency);
              dsp_write (DSP_SET_TIME_CONSTANT);
-             dsp_write ((u8) (time_constant >> 8));
+             dsp_write ((uint8_t) (time_constant >> 8));
  
              /* Program Sound Blaster buffer length (triggers an
                 interrupt after 'length' bytes transferred). */
 
              length = sound_message->length - 1;
              dsp_write (DSP_SET_DMA_BLOCK_SIZE);
-             dsp_write ((u8) length);
-             dsp_write ((u8) (length >> 8));
+             dsp_write ((uint8_t) length);
+             dsp_write ((uint8_t) (length >> 8));
  
              /* FIXME: What is this? Use constants instead. */
 

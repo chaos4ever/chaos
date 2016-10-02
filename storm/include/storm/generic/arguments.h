@@ -9,7 +9,7 @@
 
 C_EXTERN_BEGIN
 
-extern u32 arguments_parse (char *source, char *destination, u32 delta);
+extern uint32_t arguments_parse (char *source, char *destination, uint32_t delta);
 extern char arguments_kernel[];
 
 C_EXTERN_END

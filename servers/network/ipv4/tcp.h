@@ -10,48 +10,48 @@
 typedef struct
 {
     // The source port number.
-    u16 source_port;
+    uint16_t source_port;
 
     // The destination port number.
-    u16 destination_port;
+    uint16_t destination_port;
 
     // The sequence number of the first data octet.
-    u32 sequence_number;
+    uint32_t sequence_number;
 
     // If ack is set, contains the value of the next sequence number.
-    u32 acknowledgement_number;
-    u16 reserved : 4;
+    uint32_t acknowledgement_number;
+    uint16_t reserved : 4;
 
     // The number of 32 bit words in the TCP header.
-    u16 data_offset : 4;
+    uint16_t data_offset : 4;
 
     // No more data from sender.
-    u16 finish : 1;
+    uint16_t finish : 1;
 
     // Synchronise sequence numbers.
-    u16 synchronise : 1;
+    uint16_t synchronise : 1;
 
     // Reset the connection.
-    u16 reset : 1;
+    uint16_t reset : 1;
 
     // Push function.
-    u16 push : 1;
+    uint16_t push : 1;
 
     // Acknowledgement field significant.
-    u16 acknowledge : 1;
+    uint16_t acknowledge : 1;
 
     // Urgent pointer field signicant.
-    u16 urgent : 1;
-    u16 reserved2 : 2;
+    uint16_t urgent : 1;
+    uint16_t reserved2 : 2;
 
     // The number of data octets the sender is willing to accept.
-    u16 window;
+    uint16_t window;
 
     // Checksum of header, data and the 'pseudo header (see RFC for more information).
-    u16 checksum;
+    uint16_t checksum;
 
     // Points to the sequence number of the octet following the urgent data.
-    u16 urgent_pointer;
+    uint16_t urgent_pointer;
 
     // End of header; start of options.
 } __attribute__((packed)) tcp_header_type;
@@ -59,13 +59,13 @@ typedef struct
 // Pseudo header used for calculating checksums.
 typedef struct
 {
-    u32 source_address;
-    u32 destination_address;
-    u8 protocol_type;
+    uint32_t source_address;
+    uint32_t destination_address;
+    uint8_t protocol_type;
 
     // Must be zero!
-    u8 zero;
-    u16 tcp_length;
+    uint8_t zero;
+    uint16_t tcp_length;
 } __attribute__((packed)) tcp_pseudo_header_type;
 
 // Function prototypes.

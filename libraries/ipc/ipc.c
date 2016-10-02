@@ -181,7 +181,7 @@ return_type ipc_service_connection_wait(ipc_structure_type *ipc_structure)
 return_type ipc_service_connection_request(ipc_structure_type *ipc_structure)
 {
     message_parameter_type message_parameter;
-    u8 data[100];
+    uint8_t data[100];
 
     // FIXME: Make it possible to specify the size of the mailbox. For now, we just set it to one meg and hope it's enough.
     if (system_call_mailbox_create(&ipc_structure->input_mailbox_id, 1 * MB, PROCESS_ID_NONE, 

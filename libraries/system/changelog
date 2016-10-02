@@ -30,9 +30,9 @@
 
 2000-08-05  Per Lundberg  <plundis@chaosdev.org>
 
-	* port.h (system_port_out_u8_pause): New function, inspired by
+	* port.h (system_port_out_uint8_t_pause): New function, inspired by
 	Linux.
-	(system_port_out_u16_pause): Likewise.
+	(system_port_out_uint16_t_pause): Likewise.
 	(system_port_out_u32_pause): Likewise.
 
 2000-07-24  Per Lundberg  <plundis@chaosdev.org>

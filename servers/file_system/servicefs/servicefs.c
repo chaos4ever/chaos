@@ -77,7 +77,7 @@ static void handle_connection (ipc_structure_type *ipc_structure)
 {
   message_parameter_type message_parameter;
   bool done = FALSE;
-  u8 *data;
+  uint8_t *data;
   unsigned int data_size = 16384;
   file_mount_type mount = { "servicefs" };
 

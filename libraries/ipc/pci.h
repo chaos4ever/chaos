@@ -101,8 +101,8 @@ enum
 
 typedef struct
 {
-  u16 vendor_id;
-  u16 device_id;
+  uint16_t vendor_id;
+  uint16_t device_id;
 } pci_device_probe_type;
 
 /* Resources are tree-like, allowing nesting etc.. */

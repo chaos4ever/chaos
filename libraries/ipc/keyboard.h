@@ -111,7 +111,7 @@ typedef struct
   /* If has_special_key is TRUE, this field contains the key code for
      this key. */
 
-  u32 special_key;
+  uint32_t special_key;
 
   /* Eight bytes for the character code, encoded with
      UTF-8. */

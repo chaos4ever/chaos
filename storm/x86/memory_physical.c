@@ -34,10 +34,10 @@
 #include <storm/generic/thread.h>
 #include <storm/generic/types.h>
 
-u32 page_avl_base;
+uint32_t page_avl_base;
 avl_header_type *page_avl_header;
-u32 pages_left, physical_pages;
-u32 page_avl_pages;
+uint32_t pages_left, physical_pages;
+uint32_t page_avl_pages;
 
 // Initialise the page allocation system.
 void memory_physical_init(void)
@@ -75,7 +75,7 @@ void memory_physical_init(void)
     page_avl_header->pages_allocated_array = page_avl_array_pages;
 
     // Clear the bitmap, marking all slots as free.
-    memory_set_u8((u8 *) page_avl_header->bitmap, 0, physical_pages / 8);
+    memory_set_uint8_t((uint8_t *) page_avl_header->bitmap, 0, physical_pages / 8);
 
     // Initialise the tree. All memory is free.
     avl_node_reset(page_avl_header->root, 0, 0, physical_pages, NULL, "Unallocated physical memory");
@@ -90,7 +90,7 @@ void memory_physical_init(void)
     memory_physical_reserve(GET_PAGE_NUMBER(BASE_MODULE_NAME), SIZE_IN_PAGES(SIZE_MODULE_NAME), "Module names");
 
     // Reserve the memory for the kernel.
-    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL), SIZE_IN_PAGES((u32) &_end - BASE_KERNEL), "Kernel code and data");
+    memory_physical_reserve(GET_PAGE_NUMBER(BASE_KERNEL), SIZE_IN_PAGES((uint32_t) &_end - BASE_KERNEL), "Kernel code and data");
 
     // If we have more than 16 megs of RAM, we need to allocate DMA buffers to avoid lots of trouble later.
     // FIXME: Should be configurable via command line switch too.
@@ -178,7 +178,7 @@ return_type memory_physical_reserve(unsigned int start, unsigned int length, con
 }
 
 // Allocate some pages.
-return_type memory_physical_allocate(u32 *page, unsigned int length, const char *description)
+return_type memory_physical_allocate(uint32_t *page, unsigned int length, const char *description)
 {
     avl_node_type *node = page_avl_header->root;
     avl_node_type *insert_node;
@@ -371,19 +371,19 @@ return_type memory_physical_deallocate(unsigned int start)
 }
 
 // Get the number of total physical pages.
-u32 memory_physical_get_number_of_pages(void)
+uint32_t memory_physical_get_number_of_pages(void)
 {
     return physical_pages;
 }
 
 // Get the number of free physical pages.
-u32 memory_physical_get_free(void)
+uint32_t memory_physical_get_free(void)
 {
     return pages_left;
 }
 
 // Get the number of used physical pages.
-u32 memory_physical_get_used(void)
+uint32_t memory_physical_get_used(void)
 {
     return (physical_pages - pages_left);
 }

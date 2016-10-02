@@ -54,7 +54,7 @@
 // Function prototypes. */
 extern void keyboard_clear_input(void);
 extern const char *keyboard_set_repeat_rate(void);
-extern void keyboard_handle_event(u8 scancode);
+extern void keyboard_handle_event(uint8_t scancode);
 extern const char *keyboard_init(void);
 extern void keyboard_update_leds(void);
 extern void keyboard_irq_handler(void *argument);

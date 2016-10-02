@@ -13,7 +13,7 @@
 // FIXME: Doesn't seem to work 100%...
 static inline void *memory_copy(void *to, const void *from, int n)
 {
-    u32 ebx, ecx, edi, esi;
+    uint32_t ebx, ecx, edi, esi;
 
     asm volatile
     (
@@ -38,7 +38,7 @@ static inline void *memory_copy(void *to, const void *from, int n)
 }
 
 #if FALSE
-static inline void memory_set_u8(u8 *address, u8 c, unsigned int length)
+static inline void memory_set_uint8_t(uint8_t *address, uint8_t c, unsigned int length)
 {
     int ebx, ecx, edi;
 
@@ -88,7 +88,7 @@ static inline void *memory_copy(void *to, const void *from, int n)
 
 #endif
 
-static inline void memory_set_u8(u8 *address, u8 c, unsigned int size)
+static inline void memory_set_uint8_t(uint8_t *address, uint8_t c, unsigned int size)
 {
     int ecx, edi;
 
@@ -101,7 +101,7 @@ static inline void memory_set_u8(u8 *address, u8 c, unsigned int size)
      : "memory");
 }
 
-static inline void memory_set_u16(u16 *addr, u16 c, unsigned int size)
+static inline void memory_set_uint16_t(uint16_t *addr, uint16_t c, unsigned int size)
 {
     int d0, d1;
     asm volatile

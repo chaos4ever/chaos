@@ -18,13 +18,13 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     dhcp_packet_type dhcp_packet;
     dhcp_option_message_type dhcp_option_message;
     dhcp_option_requested_ip_type dhcp_option_requested_ip;
-    u8 *dhcp_options;
+    uint8_t *dhcp_options;
     dhcp_packet_type *dhcp_reply;
     message_parameter_type message_parameter;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     unsigned int data_size = 4096;
-    u32 transaction_id;
+    uint32_t transaction_id;
     unsigned int index = 0;
 
     // Get a random value to use as transaction ID.
@@ -37,7 +37,7 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     dhcp_reply = (dhcp_packet_type *) data;
 
     // Zap the DHCP packet over to the enemy.
-    memory_set_u8((u8 *) &dhcp_packet, 0, sizeof(dhcp_packet_type));
+    memory_set_uint8_t((uint8_t *) &dhcp_packet, 0, sizeof(dhcp_packet_type));
 
     // Request IP settings from a DHCP server.
     ipv4_ethernet_header_create(ethernet_broadcast,
@@ -45,7 +45,7 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
                                 IPV4_ETHERNET_PROTOCOL_IPV4,
                                 &dhcp_packet.ethernet_header);
 
-    ipv4_header_create(MAX_U32, 0, IP_PROTOCOL_UDP, sizeof(udp_header_type) +
+    ipv4_header_create(UINT32_MAX, 0, IP_PROTOCOL_UDP, sizeof(udp_header_type) +
                        sizeof(dhcp_message_type) +
                        sizeof(dhcp_option_message_type),
                        &dhcp_packet.ipv4_header);
@@ -76,20 +76,20 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     memory_copy(&dhcp_packet.dhcp_message.client_hardware_address, &ipv4_interface->hardware_address, 6);
 
     // Send this packet to the ethernet server.
-    memory_set_u8((u8 *) data, 0, data_size);
+    memory_set_uint8_t((uint8_t *) data, 0, data_size);
     message_parameter.protocol = IPC_PROTOCOL_ETHERNET;
     message_parameter.message_class = IPC_ETHERNET_PACKET_SEND;
     message_parameter.length = (sizeof(dhcp_packet) + sizeof(dhcp_option_message_type));
     message_parameter.data = data;
     message_parameter.block = TRUE;
 
-    memory_copy((u8 *) data, &dhcp_packet, sizeof(dhcp_packet_type));
-    memory_copy((u8 *) data + sizeof(dhcp_packet_type), &dhcp_option_message, sizeof(dhcp_option_message_type));
+    memory_copy((uint8_t *) data, &dhcp_packet, sizeof(dhcp_packet_type));
+    memory_copy((uint8_t *) data + sizeof(dhcp_packet_type), &dhcp_option_message, sizeof(dhcp_option_message_type));
 
     ipc_send(ethernet_structure->output_mailbox_id, &message_parameter);
 
     // Wait for a reply.
-    memory_set_u8((u8 *) data, 0, data_size);
+    memory_set_uint8_t((uint8_t *) data, 0, data_size);
 
     do
     {
@@ -99,14 +99,14 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
                     &data_size);
     }
     while (!(message_parameter.message_class == IPC_ETHERNET_PACKET_RECEIVED &&
-             dhcp_reply->ethernet_header.protocol_type == system_byte_swap_u16(IPV4_ETHERNET_PROTOCOL_IPV4) &&
+             dhcp_reply->ethernet_header.protocol_type == system_byte_swap_uint16_t(IPV4_ETHERNET_PROTOCOL_IPV4) &&
              dhcp_reply->ipv4_header.protocol == IP_PROTOCOL_UDP &&
-             dhcp_reply->udp_header.destination_port == system_byte_swap_u16(UDP_DHCP_REPLY) &&
+             dhcp_reply->udp_header.destination_port == system_byte_swap_uint16_t(UDP_DHCP_REPLY) &&
              dhcp_reply->dhcp_message.transaction_id == transaction_id));
 
     // Tell the DHCP server we want this IP address. But first, save information about the IP, netmask, and gateway addresses.
     // Parse the DHCP options.
-    dhcp_options = (u8 *) &((dhcp_packet_type *) data)->dhcp_message.dhcp_options;
+    dhcp_options = (uint8_t *) &((dhcp_packet_type *) data)->dhcp_message.dhcp_options;
 
     // End of options.
     while (dhcp_options[index] != 255)
@@ -123,14 +123,14 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
             // Netmask.
             case 1:
             {
-                ipv4_interface->netmask = *((u32 *)(&dhcp_options[index + 2]));
+                ipv4_interface->netmask = *((uint32_t *)(&dhcp_options[index + 2]));
                 break;
             }
 
             // Gateway.
             case 3:
             {
-                ipv4_interface->gateway = *((u32 *)(&dhcp_options[index + 2]));
+                ipv4_interface->gateway = *((uint32_t *)(&dhcp_options[index + 2]));
                 break;
             }
         }
@@ -140,7 +140,7 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     }
 
     // Tell the server we want this address.
-    ipv4_header_create(MAX_U32, 0, IP_PROTOCOL_UDP, sizeof(udp_header_type) +
+    ipv4_header_create(UINT32_MAX, 0, IP_PROTOCOL_UDP, sizeof(udp_header_type) +
                        sizeof(dhcp_message_type) +
                        sizeof(dhcp_option_message_type) +
                        sizeof(dhcp_option_requested_ip),
@@ -167,12 +167,12 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
                                 sizeof(dhcp_option_message_type) +
                                 sizeof(dhcp_option_requested_ip_type));
 
-    memory_copy((u8 *) data, &dhcp_packet, sizeof(dhcp_packet_type));
+    memory_copy((uint8_t *) data, &dhcp_packet, sizeof(dhcp_packet_type));
 
-    memory_copy(((u8 *) data) + sizeof(dhcp_packet_type),
+    memory_copy(((uint8_t *) data) + sizeof(dhcp_packet_type),
                 &dhcp_option_message, sizeof(dhcp_option_message_type));
 
-    memory_copy(((u8 *) data) + sizeof(dhcp_packet_type) +
+    memory_copy(((uint8_t *) data) + sizeof(dhcp_packet_type) +
                 sizeof(dhcp_option_message_type),
                 &dhcp_option_requested_ip,
                 sizeof(dhcp_option_requested_ip_type));
@@ -180,7 +180,7 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     ipc_send(ethernet_structure->output_mailbox_id, &message_parameter);
 
     // ...and wait for an answer
-    memory_set_u8((u8 *) data, 0, 1024);
+    memory_set_uint8_t((uint8_t *) data, 0, 1024);
 
     message_parameter.message_class = IPC_CLASS_NONE;
 
@@ -191,16 +191,16 @@ void dhcp_assign(ipv4_interface_type *ipv4_interface, ipc_structure_type *ethern
     }
     while (!((message_parameter.message_class == IPC_ETHERNET_PACKET_RECEIVED &&
               dhcp_reply->ethernet_header.protocol_type ==
-              system_byte_swap_u16(IPV4_ETHERNET_PROTOCOL_IPV4) &&
+              system_byte_swap_uint16_t(IPV4_ETHERNET_PROTOCOL_IPV4) &&
               dhcp_reply->ipv4_header.protocol == IP_PROTOCOL_UDP &&
-              dhcp_reply->udp_header.destination_port == system_byte_swap_u16(UDP_DHCP_REPLY) &&
+              dhcp_reply->udp_header.destination_port == system_byte_swap_uint16_t(UDP_DHCP_REPLY) &&
               dhcp_reply->dhcp_message.transaction_id == transaction_id)));
 
     ipv4_interface->ip_address = dhcp_option_requested_ip.ip;
 
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "DHCP response:");
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
-                        "IP address: %lu.%lu.%lu.%lu, netmask: %lu.%lu.%lu.%lu, gateway: %lu.%lu.%lu.%lu",
+                        "IP address: %u.%u.%u.%u, netmask: %u.%u.%u.%u, gateway: %u.%u.%u.%u",
                         ipv4_interface->ip_address & 0xFF,
                         (ipv4_interface->ip_address >> 8) & 0xFF,
                         (ipv4_interface->ip_address >> 16) & 0xFF,

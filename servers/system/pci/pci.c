@@ -33,40 +33,40 @@ tag_type empty_tag =
     (device->device_function << 8) | \
     (where & ~3))
 
-static u8 pci_type1_read_config_u8(pci_device_type *device, int where)
+static uint8_t pci_type1_read_config_uint8_t(pci_device_type *device, int where)
 {
     system_port_out_u32(PCI_BASE, CONFIG_COMMAND(device, where));
-    return system_port_in_u8(PCI_DATA + (where & 3));
+    return system_port_in_uint8_t(PCI_DATA + (where & 3));
 }
 
-static u16 pci_type1_read_config_u16(pci_device_type *device, int where)
+static uint16_t pci_type1_read_config_uint16_t(pci_device_type *device, int where)
 {
-    system_port_out_u16(PCI_BASE, CONFIG_COMMAND(device, where));
-    return system_port_in_u16(PCI_DATA + (where & 2));
+    system_port_out_uint16_t(PCI_BASE, CONFIG_COMMAND(device, where));
+    return system_port_in_uint16_t(PCI_DATA + (where & 2));
 }
 
-static u32 pci_type1_read_config_u32(pci_device_type *device, int where)
+static uint32_t pci_type1_read_config_u32(pci_device_type *device, int where)
 {
     system_port_out_u32(PCI_BASE, CONFIG_COMMAND(device, where));
     return system_port_in_u32(PCI_DATA);
 }
 
-static void pci_type1_write_config_u8(pci_device_type *device, int where,
-                                      u8 value)
+static void pci_type1_write_config_uint8_t(pci_device_type *device, int where,
+                                      uint8_t value)
 {
     system_port_out_u32(PCI_BASE, CONFIG_COMMAND(device, where));
-    system_port_out_u8(PCI_DATA + (where & 3), value);
+    system_port_out_uint8_t(PCI_DATA + (where & 3), value);
 }
 
-static void pci_type1_write_config_u16(pci_device_type *device, int where,
-                                       u16 value)
+static void pci_type1_write_config_uint16_t(pci_device_type *device, int where,
+                                       uint16_t value)
 {
     system_port_out_u32(PCI_BASE, CONFIG_COMMAND(device, where));
-    system_port_out_u16(PCI_DATA + (where & 2), value);
+    system_port_out_uint16_t(PCI_DATA + (where & 2), value);
 }
 
 static void pci_type1_write_config_u32(pci_device_type *device, int where,
-                                       u32 value)
+                                       uint32_t value)
 {
     system_port_out_u32(PCI_BASE, CONFIG_COMMAND(device, where));
     system_port_out_u32(PCI_DATA, value);
@@ -74,11 +74,11 @@ static void pci_type1_write_config_u32(pci_device_type *device, int where,
 
 static pci_operation_type pci_type1_operation =
 {
-    pci_type1_read_config_u8,
-    pci_type1_read_config_u16,
+    pci_type1_read_config_uint8_t,
+    pci_type1_read_config_uint16_t,
     pci_type1_read_config_u32,
-    pci_type1_write_config_u8,
-    pci_type1_write_config_u16,
+    pci_type1_write_config_uint8_t,
+    pci_type1_write_config_uint16_t,
     pci_type1_write_config_u32
 };
 
@@ -88,67 +88,67 @@ static pci_operation_type pci_type1_operation =
 #define FUNC(device_function) (((device_function & 7) << 1) | 0xF0)
 
 #define SET(device) \
-    system_port_out_u8 (PCI_BASE, FUNC (device->device_function)); \
-    system_port_out_u8 (PCI_BASE + 2, device->bus->number);
+    system_port_out_uint8_t (PCI_BASE, FUNC (device->device_function)); \
+    system_port_out_uint8_t (PCI_BASE + 2, device->bus->number);
 
-static u8 pci_type2_read_config_u8(pci_device_type *device, int where)
+static uint8_t pci_type2_read_config_uint8_t(pci_device_type *device, int where)
 {
-    u8 return_value;
+    uint8_t return_value;
 
     SET(device);
-    return_value = system_port_in_u8(IOADDR(device->device_function, where));
-    system_port_out_u8(PCI_BASE, 0);
+    return_value = system_port_in_uint8_t(IOADDR(device->device_function, where));
+    system_port_out_uint8_t(PCI_BASE, 0);
     return return_value;
 }
 
-static u16 pci_type2_read_config_u16(pci_device_type *device, int where)
+static uint16_t pci_type2_read_config_uint16_t(pci_device_type *device, int where)
 {
-    u16 return_value;
+    uint16_t return_value;
 
     SET(device);
-    return_value = system_port_in_u16(IOADDR(device->device_function, where));
-    system_port_out_u8(PCI_BASE, 0);
+    return_value = system_port_in_uint16_t(IOADDR(device->device_function, where));
+    system_port_out_uint8_t(PCI_BASE, 0);
     return return_value;
 }
 
-static u32 pci_type2_read_config_u32(pci_device_type *device, int where)
+static uint32_t pci_type2_read_config_u32(pci_device_type *device, int where)
 {
-    u16 return_value;
+    uint16_t return_value;
 
     SET(device);
-    return_value = system_port_in_u16(IOADDR(device->device_function, where));
-    system_port_out_u8(PCI_BASE, 0);
+    return_value = system_port_in_uint16_t(IOADDR(device->device_function, where));
+    system_port_out_uint8_t(PCI_BASE, 0);
     return return_value;
 }
 
-static void pci_type2_write_config_u8(pci_device_type *device, int where, u8 value)
+static void pci_type2_write_config_uint8_t(pci_device_type *device, int where, uint8_t value)
 {
     SET(device);
-    system_port_out_u16(IOADDR(device->device_function, where), value);
-    system_port_out_u8(PCI_BASE, 0);
+    system_port_out_uint16_t(IOADDR(device->device_function, where), value);
+    system_port_out_uint8_t(PCI_BASE, 0);
 }
 
-static void pci_type2_write_config_u16(pci_device_type *device, int where, u16 value)
+static void pci_type2_write_config_uint16_t(pci_device_type *device, int where, uint16_t value)
 {
     SET(device);
-    system_port_out_u16(IOADDR(device->device_function, where), value);
-    system_port_out_u8(PCI_BASE, 0);
+    system_port_out_uint16_t(IOADDR(device->device_function, where), value);
+    system_port_out_uint8_t(PCI_BASE, 0);
 }
 
-static void pci_type2_write_config_u32(pci_device_type *device, int where, u32 value)
+static void pci_type2_write_config_u32(pci_device_type *device, int where, uint32_t value)
 {
     SET(device);
     system_port_out_u32(IOADDR(device->device_function, where), value);
-    system_port_out_u8(PCI_BASE, 0);
+    system_port_out_uint8_t(PCI_BASE, 0);
 }
 
 static pci_operation_type pci_type2_operation =
 {
-    pci_type2_read_config_u8,
-    pci_type2_read_config_u16,
+    pci_type2_read_config_uint8_t,
+    pci_type2_read_config_uint16_t,
     pci_type2_read_config_u32,
-    pci_type2_write_config_u8,
-    pci_type2_write_config_u16,
+    pci_type2_write_config_uint8_t,
+    pci_type2_write_config_uint16_t,
     pci_type2_write_config_u32
 };
 
@@ -159,24 +159,24 @@ extern pci_vendor_id_type pci_vendor_id[];
 static pci_operation_type *pci_operation = NULL;
 
 // Meta-functions for reading and writing PCI data.
-static u32 pci_read_config_u32(pci_device_type *device, int where)
+static uint32_t pci_read_config_uint32_t(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u32(device, where);
+    return ((pci_operation_type *) device->bus->operation)->read_uint32_t(device, where);
 }
 
-static u16 pci_read_config_u16(pci_device_type *device, int where)
+static uint16_t pci_read_config_uint16_t(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u16(device, where);
+    return ((pci_operation_type *) device->bus->operation)->read_uint16_t(device, where);
 }
 
-static u8 pci_read_config_u8(pci_device_type *device, int where)
+static uint8_t pci_read_config_uint8_t(pci_device_type *device, int where)
 {
-    return ((pci_operation_type *) device->bus->operation)->read_u8(device, where);
+    return ((pci_operation_type *) device->bus->operation)->read_uint8_t(device, where);
 }
 
-static void pci_write_config_u32(pci_device_type *device, int where, u32 data)
+static void pci_write_config_uint32_t(pci_device_type *device, int where, uint32_t data)
 {
-    ((pci_operation_type *) device->bus->operation)->write_u32(device, where, data);
+    ((pci_operation_type *) device->bus->operation)->write_uint32_t(device, where, data);
 }
 
 // Handle an IPC connection request.
@@ -187,8 +187,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     unsigned int data_size = 1024;
 
     memory_allocate((void **) data_pointer, data_size);
@@ -269,16 +269,16 @@ static pci_operation_type *pci_detect(void)
 {
     pci_operation_type *operation = NULL;
 
-    system_port_out_u8(PCI_BASE, 0);
-    system_port_out_u8(PCI_BASE + 2, 0);
+    system_port_out_uint8_t(PCI_BASE, 0);
+    system_port_out_uint8_t(PCI_BASE + 2, 0);
 
-    if ((system_port_in_u8(PCI_BASE) == 0) && (system_port_in_u8(PCI_BASE + 2) == 0))
+    if ((system_port_in_uint8_t(PCI_BASE) == 0) && (system_port_in_uint8_t(PCI_BASE + 2) == 0))
     {
         operation = &pci_type2_operation;
     }
     else
     {
-        u32 tmp = system_port_in_u32(PCI_BASE);
+        uint32_t tmp = system_port_in_u32(PCI_BASE);
         system_port_out_u32(PCI_BASE, 0x80000000);
 
         if (system_port_in_u32(PCI_BASE) == 0x80000000)
@@ -297,11 +297,11 @@ static void pci_read_irq(pci_device_type *device)
 {
     unsigned int irq;
 
-    irq = pci_read_config_u8(device, PCI_INTERRUPT_PIN);
+    irq = pci_read_config_uint8_t(device, PCI_INTERRUPT_PIN);
 
     if (irq != 0)
     {
-        irq = pci_read_config_u8(device, PCI_INTERRUPT_LINE);
+        irq = pci_read_config_uint8_t(device, PCI_INTERRUPT_LINE);
     }
 
     device->irq = irq;
@@ -329,7 +329,7 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom
     unsigned int position, register_number, next;
 
     // FIXME: Find a better name for the 'l' variable.
-    u32 l, size;
+    uint32_t l, size;
     pci_resource_type *resource;
 
     for (position = 0; position < amount; position = next)
@@ -339,10 +339,10 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom
         resource->name = device->name;
         register_number = PCI_BASE_ADDRESS_0 + (position << 2);
 
-        l = pci_read_config_u32(device, register_number);
-        pci_write_config_u32(device, register_number, MAX_U32);
-        size = pci_read_config_u32(device, register_number);
-        pci_write_config_u32(device, register_number, l);
+        l = pci_read_config_uint32_t(device, register_number);
+        pci_write_config_uint32_t(device, register_number, UINT32_MAX);
+        size = pci_read_config_uint32_t(device, register_number);
+        pci_write_config_uint32_t(device, register_number, l);
 
         if (size == 0 || size == 0xFFFFFFFF)
         {
@@ -371,7 +371,7 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom
         if ((l & (PCI_BASE_ADDRESS_SPACE | PCI_BASE_ADDRESS_MEM_TYPE_MASK)) ==
                 (PCI_BASE_ADDRESS_SPACE_MEMORY | PCI_BASE_ADDRESS_MEM_TYPE_64))
         {
-            l = pci_read_config_u32(device, register_number + 4);
+            l = pci_read_config_uint32_t(device, register_number + 4);
             next++;
 
             if (l != 0)
@@ -390,10 +390,10 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom
     {
         device->rom_base_reg = rom;
         resource = &device->resource[PCI_ROM_RESOURCE];
-        l = pci_read_config_u32(device, rom);
-        pci_write_config_u32(device, rom, ~PCI_ROM_ADDRESS_ENABLE);
-        size = pci_read_config_u32(device, rom);
-        pci_write_config_u32(device, rom, l);
+        l = pci_read_config_uint32_t(device, rom);
+        pci_write_config_uint32_t(device, rom, ~PCI_ROM_ADDRESS_ENABLE);
+        size = pci_read_config_uint32_t(device, rom);
+        pci_write_config_uint32_t(device, rom, l);
 
         if (l == 0xFFFFFFFF)
         {
@@ -417,7 +417,7 @@ static void pci_read_bases(pci_device_type *device, unsigned int amount, int rom
 // Fill in class and map information of a device.
 static bool pci_setup_device(pci_device_type *device)
 {
-    u32 class;
+    uint32_t class;
 
     // Set the name.
     string_print(device->slot_name, "%02x:%02x.%d", device->bus->number,
@@ -427,7 +427,7 @@ static bool pci_setup_device(pci_device_type *device)
                  device->vendor_id, device->device_id);
 
     // Read the 3-byte class. (?)
-    class = pci_read_config_u32(device, PCI_CLASS_REVISION);
+    class = pci_read_config_uint32_t(device, PCI_CLASS_REVISION);
     class >>= 8;
     device->class = class;
     class >>= 8;
@@ -436,8 +436,9 @@ static bool pci_setup_device(pci_device_type *device)
     if ((device->header_type == PCI_HEADER_TYPE_BRIDGE && class != PCI_CLASS_BRIDGE_PCI) ||
             (device->header_type == PCI_HEADER_TYPE_CARDBUS && class != PCI_CLASS_BRIDGE_CARDBUS))
     {
-        log_print_formatted(&log_structure, LOG_URGENCY_WARNING, "%s: class %lx doesn't match header type %02x. Ignoring class.",
-            device->slot_name, class, device->header_type);
+        log_print_formatted(&log_structure, LOG_URGENCY_WARNING,
+                            "%s: class %x doesn't match header type %02x. Ignoring class.",
+                            device->slot_name, class, device->header_type);
         device->class = PCI_CLASS_NOT_DEFINED;
         return TRUE;
     }
@@ -449,8 +450,8 @@ static bool pci_setup_device(pci_device_type *device)
         {
             pci_read_irq(device);
             pci_read_bases(device, 6, PCI_ROM_ADDRESS);
-            device->subsystem_vendor_id = pci_read_config_u16(device, PCI_SUBSYSTEM_VENDOR_ID);
-            device->subsystem_device_id = pci_read_config_u16(device, PCI_SUBSYSTEM_ID);
+            device->subsystem_vendor_id = pci_read_config_uint16_t(device, PCI_SUBSYSTEM_VENDOR_ID);
+            device->subsystem_device_id = pci_read_config_uint16_t(device, PCI_SUBSYSTEM_ID);
             break;
         }
 
@@ -466,8 +467,8 @@ static bool pci_setup_device(pci_device_type *device)
         {
             pci_read_irq(device);
             pci_read_bases(device, 1, 0);
-            device->subsystem_vendor_id = pci_read_config_u16(device, PCI_CARDBUS_SUBSYSTEM_VENDOR_ID);
-            device->subsystem_device_id = pci_read_config_u16(device, PCI_CARDBUS_SUBSYSTEM_ID);
+            device->subsystem_vendor_id = pci_read_config_uint16_t(device, PCI_CARDBUS_SUBSYSTEM_VENDOR_ID);
+            device->subsystem_device_id = pci_read_config_uint16_t(device, PCI_CARDBUS_SUBSYSTEM_ID);
             break;
         }
 
@@ -489,9 +490,9 @@ static pci_device_type *pci_scan_device(pci_device_type *input_device)
 {
     pci_device_type *device;
     pci_device_type **device_pointer = &device;
-    u32 vendor_id;
+    uint32_t vendor_id;
 
-    vendor_id = pci_read_config_u32(input_device, PCI_VENDOR_ID);
+    vendor_id = pci_read_config_uint32_t(input_device, PCI_VENDOR_ID);
 
     // Some broken boards return 0 or ~0 if a slot is empty.
     if (vendor_id == 0xFFFFFFFF || vendor_id == 0x00000000 || vendor_id == 0x0000FFFF || vendor_id == 0xFFFF0000)
@@ -527,7 +528,7 @@ static pci_device_type *pci_scan_slot(pci_device_type *input_device)
     pci_device_type *first_device = NULL;
     int function = 0;
     bool is_multi = FALSE;
-    u8 header_type;
+    uint8_t header_type;
 
     for (function = 0; function < 8; function++, input_device->device_function++)
     {
@@ -536,7 +537,7 @@ static pci_device_type *pci_scan_slot(pci_device_type *input_device)
             continue;
         }
 
-        header_type = pci_read_config_u8(input_device, PCI_HEADER_TYPE);
+        header_type = pci_read_config_uint8_t(input_device, PCI_HEADER_TYPE);
         input_device->header_type = header_type & 0x7F;
         device = pci_scan_device(input_device);
 

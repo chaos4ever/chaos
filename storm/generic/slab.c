@@ -93,15 +93,15 @@ bool slab_superblock_init(slab_superblock_type *superblock, slab_heap_type *heap
     slab_block = (slab_block_type *) &superblock->buffer;
     slab_block->previous = NULL;
     slab_block->next = (slab_block_type *)
-                       ((u32) & superblock->buffer + slab_block_size[index]);
+                       ((uint32_t) & superblock->buffer + slab_block_size[index]);
     slab_block = slab_block->next;
 
     for (counter = 0; counter < superblock->header.total_blocks - 2; counter++)
     {
         slab_block->previous = (slab_block_type *)
-                               ((u32) slab_block - slab_block_size[index]);
+                               ((uint32_t) slab_block - slab_block_size[index]);
         slab_block->next = (slab_block_type *)
-                           ((u32) slab_block + slab_block_size[index]);
+                           ((uint32_t) slab_block + slab_block_size[index]);
 
         slab_block = slab_block->next;
     }
@@ -109,7 +109,7 @@ bool slab_superblock_init(slab_superblock_type *superblock, slab_heap_type *heap
     // Also, handle the last block specially, since it has no 'next' pointer.
 
     slab_block->previous = (slab_block_type *)
-                           ((u32) slab_block - slab_block_size[index]);
+                           ((uint32_t) slab_block - slab_block_size[index]);
     slab_block->next = NULL;
 
     superblock->header.free_list = (slab_block_type *) &superblock->buffer;

@@ -13,11 +13,11 @@ char arguments_kernel[MAX_KERNEL_PARAMETER_LENGTH];
 static int find_number_of_arguments (char *source);
 
 // Split the command line parameters in words (separated by one or more spaces).
-u32 arguments_parse(char *source, char *destination, u32 delta)
+uint32_t arguments_parse(char *source, char *destination, uint32_t delta)
 {
     int number_of_arguments = find_number_of_arguments(source);
 
-    *((u32 *) destination) = number_of_arguments;
+    *((uint32_t *) destination) = number_of_arguments;
 
     // Now, go through the string again and copy the parameters into the data area and set the pointers correctly.
     // FIXME: Avoid pointer arithmetic. We should have a pure structure for this. I'm not sure if it is possible to write this

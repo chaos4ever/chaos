@@ -62,8 +62,8 @@ page_table_entry *shared_page_tables;
 /* The following variabled is for the allocation of physical pages for the
    global heap. */
 
-u32 largest_address;
-u32 mapped_pages;
+uint32_t largest_address;
+uint32_t mapped_pages;
 
 avl_header_type *process_avl_header =
   (avl_header_type *) BASE_PROCESS_AVL_TREE;
@@ -72,8 +72,8 @@ avl_header_type *process_avl_header =
 
 void memory_virtual_init (void)
 {
-  u32 counter;
-  u32 physical_page;
+  uint32_t counter;
+  uint32_t physical_page;
 
   /* Reserve memory for shared page tables which is mapped into all
      processes' linear memory at address BASE_GLOBAL (defined in
@@ -87,7 +87,7 @@ void memory_virtual_init (void)
 
   shared_page_tables = (page_table_entry *) (physical_page * SIZE_PAGE);
 
-  memory_set_u8 ((u8 *) shared_page_tables, 0, SIZE_GLOBAL / 1024);
+  memory_set_uint8_t ((uint8_t *) shared_page_tables, 0, SIZE_GLOBAL / 1024);
 
   /* Allocate a page directory for the kernel and wipe it out. */
 
@@ -97,7 +97,7 @@ void memory_virtual_init (void)
 
   kernel_page_directory = (page_directory_entry_page_table *)
     (physical_page * SIZE_PAGE);
-  memory_set_u8 ((u8 *) kernel_page_directory, 0, SIZE_PAGE);
+  memory_set_uint8_t ((uint8_t *) kernel_page_directory, 0, SIZE_PAGE);
 
   /* Map some important stuff. The same page_directory is used for
      exceptionhandlers also, so map what is needed for them. */
@@ -112,7 +112,7 @@ void memory_virtual_init (void)
 
   memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_PROCESS_PAGE_DIRECTORY),
-     GET_PAGE_NUMBER ((u32) kernel_page_directory),
+     GET_PAGE_NUMBER ((uint32_t) kernel_page_directory),
      1, PAGE_KERNEL);
 
   /* Kernel stack. */
@@ -147,14 +147,14 @@ void memory_virtual_init (void)
 
   memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_KERNEL),
-     GET_PAGE_NUMBER (BASE_KERNEL), SIZE_IN_PAGES ((u32) &_end - BASE_KERNEL),
+     GET_PAGE_NUMBER (BASE_KERNEL), SIZE_IN_PAGES ((uint32_t) &_end - BASE_KERNEL),
      PAGE_KERNEL);
 
   /* Insert shared page tables into kernel page_directory. */
 
   for (counter = 0; counter < SIZE_IN_PAGES (SIZE_GLOBAL) / 1024; counter++)
   {
-    u32 index = (GET_PAGE_NUMBER (BASE_GLOBAL) / 1024) + counter;
+    uint32_t index = (GET_PAGE_NUMBER (BASE_GLOBAL) / 1024) + counter;
 
     kernel_page_directory[index].present = 1;
     kernel_page_directory[index].flags = PAGE_DIRECTORY_FLAGS;
@@ -197,7 +197,7 @@ void memory_virtual_enable (void)
   //     ((page_avl_header->limit_nodes -
   //       avl_get_number_of_entries (page_avl_header->root)) *
   //      sizeof (avl_node_type)) / KB + 12 +
-  //     ((u32) &_init_end - (u32) &_init_start) / KB);
+  //     ((uint32_t) &_init_end - (uint32_t) &_init_start) / KB);
 
   DEBUG_MESSAGE (DEBUG, "Called");
 
@@ -214,14 +214,14 @@ void memory_virtual_enable (void)
 
   memory_virtual_map_kernel
     (kernel_page_directory, GET_PAGE_NUMBER (BASE_PHYSICAL_MEMORY_TREE),
-     GET_PAGE_NUMBER ((u32) page_avl_header), page_avl_pages,
+     GET_PAGE_NUMBER ((uint32_t) page_avl_header), page_avl_pages,
      PAGE_KERNEL);
 
   /* Update the pointers in lists and trees to point to where they are
      mapped. */
 
   avl_tree_move (page_avl_header, BASE_PHYSICAL_MEMORY_TREE -
-                 (u32) page_avl_header);
+                 (uint32_t) page_avl_header);
 
   page_avl_header = (avl_header_type *) BASE_PHYSICAL_MEMORY_TREE;
 
@@ -235,7 +235,7 @@ void memory_virtual_enable (void)
 
   /* Specify page directory to use for the kernel. */
 
-  cpu_set_cr3 ((u32) kernel_page_directory);
+  cpu_set_cr3 ((uint32_t) kernel_page_directory);
 
   /* Enable paging (virtual memory), protection and set the extension
      type flag. No external datastructures can be accessed after
@@ -266,11 +266,11 @@ void memory_virtual_enable (void)
    address. */
 
 return_type memory_virtual_map_kernel
-  (page_directory_entry_page_table *page_directory, u32 virtual_page,
-   u32 physical_page, u32 pages, u32 flags)
+  (page_directory_entry_page_table *page_directory, uint32_t virtual_page,
+   uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
   page_table_entry *page_table;
-  u32 counter, index;
+  uint32_t counter, index;
 
   for (counter = 0; counter < pages; counter++)
   {
@@ -280,7 +280,7 @@ return_type memory_virtual_map_kernel
 
     if (page_directory[index].present == 0)
     {
-      u32 page_table_page;
+      uint32_t page_table_page;
 
       /* FIXME: Check return value. */
 
@@ -309,13 +309,13 @@ return_type memory_virtual_map_kernel
 
       page_table = (page_table_entry *)
         (page_directory[index].page_table_base * SIZE_PAGE);
-      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE);
+      memory_set_uint8_t ((uint8_t *) page_table, 0, SIZE_PAGE);
 
       /* Map the newly created page table in the page_directory. */
 
       memory_virtual_map_kernel
         (page_directory, GET_PAGE_NUMBER (BASE_PROCESS_PAGE_TABLES) + index,
-         GET_PAGE_NUMBER ((u32) page_table), 1, PAGE_KERNEL);
+         GET_PAGE_NUMBER ((uint32_t) page_table), 1, PAGE_KERNEL);
     }
     else
     {
@@ -345,10 +345,10 @@ return_type memory_virtual_map_kernel
    enabled). */
 
 static return_type memory_virtual_map_real
-  (u32 virtual_page, u32 physical_page, u32 pages, u32 flags)
+  (uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
   page_table_entry *page_table;
-  u32 counter, index;
+  uint32_t counter, index;
 
   DEBUG_MESSAGE (DEBUG, "Called (%x, %x, %x, %x)", virtual_page,
                  physical_page, pages, flags);
@@ -361,7 +361,7 @@ static return_type memory_virtual_map_real
 
     if (process_page_directory[index].present == 0)
     {
-      u32 page_table_page;
+      uint32_t page_table_page;
 
       /* Page Table is not set up yet. Let's set up a new one. */
 
@@ -394,9 +394,9 @@ static return_type memory_virtual_map_real
 
       memory_virtual_map_real
         (GET_PAGE_NUMBER (BASE_PROCESS_PAGE_TABLES) + index,
-         (u32) process_page_directory[index].page_table_base, 1, PAGE_KERNEL);
+         (uint32_t) process_page_directory[index].page_table_base, 1, PAGE_KERNEL);
 
-      memory_set_u8 ((u8 *) (BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE)),
+      memory_set_uint8_t ((uint8_t *) (BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE)),
                      0, SIZE_PAGE);
     }
 
@@ -443,14 +443,14 @@ static return_type memory_virtual_map_real
 /* Map memory for another memory space in a system call. */
 
 static return_type memory_virtual_map_other_real
-  (storm_tss_type *tss, u32 virtual_page, u32 physical_page,
-   u32 pages, u32 flags)
+  (storm_tss_type *tss, uint32_t virtual_page, uint32_t physical_page,
+   uint32_t pages, uint32_t flags)
 {
   page_directory_entry_page_table *page_directory =
     (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
   page_table_entry *page_table = (page_table_entry *)
     (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
-  u32 counter, index;
+  uint32_t counter, index;
   bool global = (flags & PAGE_GLOBAL) != 0;
 
   /* Remove PAGE_GLOBAL from the flags, if set. */
@@ -478,7 +478,7 @@ static return_type memory_virtual_map_other_real
 
     if (page_directory[index].present == 0)
     {
-      u32 page_table_page;
+      uint32_t page_table_page;
 
       DEBUG_MESSAGE (DEBUG, "page_directory[index].present == 0");
 
@@ -506,18 +506,18 @@ static return_type memory_virtual_map_other_real
 
       memory_virtual_map_other_real
         (tss, GET_PAGE_NUMBER (BASE_PROCESS_PAGE_TABLES) + index,
-         (u32) page_directory[index].page_table_base, 1, PAGE_KERNEL);
+         (uint32_t) page_directory[index].page_table_base, 1, PAGE_KERNEL);
 
       /* Map the page table. */
 
       memory_virtual_map_real
         (GET_PAGE_NUMBER (page_table),
-         (u32) page_directory[index].page_table_base, 1, PAGE_KERNEL);
-      memory_set_u8 ((u8 *) page_table, 0, SIZE_PAGE);
+         (uint32_t) page_directory[index].page_table_base, 1, PAGE_KERNEL);
+      memory_set_uint8_t ((uint8_t *) page_table, 0, SIZE_PAGE);
     }
 
     memory_virtual_map_real
-      (GET_PAGE_NUMBER (page_table), (u32) page_directory[index].page_table_base,
+      (GET_PAGE_NUMBER (page_table), (uint32_t) page_directory[index].page_table_base,
        1, PAGE_KERNEL);
 
     /* Which entry in the page table to modify. */
@@ -551,7 +551,7 @@ static return_type memory_virtual_map_other_real
    the code in plastic mutexes. */
 
 return_type memory_virtual_map
-  (u32 virtual_page, u32 physical_page, u32 pages, u32 flags)
+  (uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
   return_type return_value;
 
@@ -574,8 +574,8 @@ return_type memory_virtual_map
    protect the function with mutexes. */
 
 return_type memory_virtual_map_other
-  (storm_tss_type *tss, u32 virtual_page, u32 physical_page,
-   u32 pages, u32 flags)
+  (storm_tss_type *tss, uint32_t virtual_page, uint32_t physical_page,
+   uint32_t pages, uint32_t flags)
 {
   return_type return_value;
 
@@ -592,10 +592,10 @@ return_type memory_virtual_map_other
 
 /* Unmap a region of pages for the current process. */
 
-void memory_virtual_unmap (u32 virtual_page, u32 pages)
+void memory_virtual_unmap (uint32_t virtual_page, uint32_t pages)
 {
   page_table_entry *page_table;
-  u32 counter, index;
+  uint32_t counter, index;
 
   //  mutex_kernel_wait (&memory_map_mutex);
 
@@ -631,11 +631,11 @@ void memory_virtual_unmap (u32 virtual_page, u32 pages)
    only used when reserving fixed-location memory areas (for example
    video memory). */
 
-return_type map (process_id_type process_id, u32 virtual_page,
-                 u32 physical_page, u32 pages)
+return_type map (process_id_type process_id, uint32_t virtual_page,
+                 uint32_t physical_page, uint32_t pages)
 {
   process_id = virtual_page = physical_page = pages;
-  u32 task = thread_task_get_by_process_id (process_id);
+  uint32_t task = thread_task_get_by_process_id (process_id);
 
   if (task == U32_MAX)
   {
@@ -661,7 +661,7 @@ return_type map (process_id_type process_id, u32 virtual_page,
 
 /* Allocate virtual memory. */
 
-return_type memory_virtual_allocate (u32 *page_number, u32 pages)
+return_type memory_virtual_allocate (uint32_t *page_number, uint32_t pages)
 {
   avl_node_type *node = process_avl_header->root;
   avl_node_type *insert_node;
@@ -767,7 +767,7 @@ return_type memory_virtual_allocate (u32 *page_number, u32 pages)
 
 /* Deallocate virtual memory. */
 
-return_type memory_virtual_deallocate (u32 page_number)
+return_type memory_virtual_deallocate (uint32_t page_number)
 {
   avl_node_type *node = process_avl_header->root;
   avl_node_type *adjacent_node;

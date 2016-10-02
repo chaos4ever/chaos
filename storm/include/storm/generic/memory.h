@@ -10,7 +10,7 @@
 
 extern mutex_kernel_type memory_mutex;
 
-extern return_type memory_allocate(void **address, u32 pages, bool cacheable);
+extern return_type memory_allocate(void **address, uint32_t pages, bool cacheable);
 extern return_type memory_deallocate(void **address);
 
 extern return_type memory_get_physical_address(void *virtual_address, void **physical_address);

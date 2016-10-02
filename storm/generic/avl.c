@@ -45,7 +45,7 @@ avl_node_type *avl_node_allocate(avl_header_type *avl_header)
     // Find a free entry from the bitmap.
     for (index = 0; index < avl_header->limit_nodes / 32; index++)
     {
-        if (avl_header->bitmap[index] != MAX_U32)
+        if (avl_header->bitmap[index] != UINT32_MAX)
         {
             // We have found a free entry! Whee...
             temp = avl_header->bitmap[index];
@@ -614,9 +614,9 @@ void avl_node_delete(avl_header_type *avl_header, avl_node_type *node)
 }
 
 // Move the AVL tree below the given node virtually. Update pointers, but don't move data. This one is recursive.
-static void node_move(avl_node_type *node, u32 delta)
+static void node_move(avl_node_type *node, uint32_t delta)
 {
-    u32 left_offset, right_offset, parent_offset;
+    uint32_t left_offset, right_offset, parent_offset;
 
     // Have we reached end of tree?
     if (node == NULL)
@@ -631,21 +631,21 @@ static void node_move(avl_node_type *node, u32 delta)
     // Update pointers for node.
     if (node->less != NULL)
     {
-        left_offset = (u32) node->less;
+        left_offset = (uint32_t) node->less;
         left_offset += delta;
         node->less = (avl_node_type *) left_offset;
     }
 
     if (node->more != NULL)
     {
-        right_offset = (u32) node->more;
+        right_offset = (uint32_t) node->more;
         right_offset += delta;
         node->more = (avl_node_type *) right_offset;
     }
 
     if (node->parent != NULL)
     {
-        parent_offset = (u32) node->parent;
+        parent_offset = (uint32_t) node->parent;
         parent_offset += delta;
         node->parent = (avl_node_type *) parent_offset;
     }

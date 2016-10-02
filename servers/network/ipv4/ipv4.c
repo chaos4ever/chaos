@@ -22,7 +22,7 @@
 log_structure_type log_structure;
 ipv4_interface_list_type *interface_list = NULL;
 mutex_type interface_list_mutex = MUTEX_UNLOCKED;
-u8 ethernet_broadcast[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+uint8_t ethernet_broadcast[6] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
 
 // Locals.
 static ipv4_protocol_type ipv4_protocol[] =
@@ -135,15 +135,15 @@ static ipv4_interface_type *interface_get_number(unsigned int number)
 }
 
 // Calculate the IP checksum for an IP header.
-u16 ipv4_checksum(u16 *data, unsigned int length)
+uint16_t ipv4_checksum(uint16_t *data, unsigned int length)
 {
-    u32 sum = 0;
+    uint32_t sum = 0;
     unsigned int index;
 
     // If we have an odd length, fill the last byte with a zero.
     if (length % 2 != 0)
     {
-        ((u8 *) data)[length] = 0;
+        ((uint8_t *) data)[length] = 0;
         length++;
     }
 
@@ -163,15 +163,15 @@ u16 ipv4_checksum(u16 *data, unsigned int length)
 
 // Create an ethernet header.
 void ipv4_ethernet_header_create(void *destination_address, void *source_address,
-                                 u16 protocol_type, ipv4_ethernet_header_type *ethernet_header)
+                                 uint16_t protocol_type, ipv4_ethernet_header_type *ethernet_header)
 {
     memory_copy(ethernet_header->destination_address, destination_address, 6);
     memory_copy(ethernet_header->source_address, source_address, 6);
-    ethernet_header->protocol_type = system_byte_swap_u16(protocol_type);
+    ethernet_header->protocol_type = system_byte_swap_uint16_t(protocol_type);
 }
 
 // Create an IPv4 header.
-void ipv4_header_create(u32 destination_address, u32 source_address, u8 protocol_type, unsigned int length,
+void ipv4_header_create(uint32_t destination_address, uint32_t source_address, uint8_t protocol_type, unsigned int length,
                         ipv4_header_type *ipv4_header)
 {
     ipv4_header->destination_address = destination_address;
@@ -180,7 +180,7 @@ void ipv4_header_create(u32 destination_address, u32 source_address, u8 protocol
     ipv4_header->version = 4;
     ipv4_header->time_to_live = 255;
     ipv4_header->header_length = sizeof(ipv4_header_type) / 4;
-    ipv4_header->total_length = system_byte_swap_u16(sizeof(ipv4_header_type) +
+    ipv4_header->total_length = system_byte_swap_uint16_t(sizeof(ipv4_header_type) +
                                 length);
     ipv4_header->type_of_service = 0;
     ipv4_header->id = 0;
@@ -188,7 +188,7 @@ void ipv4_header_create(u32 destination_address, u32 source_address, u8 protocol
     ipv4_header->checksum = 0;
 
     // Calculate the header checksum. */
-    ipv4_header->checksum = ipv4_checksum((u16 *) ipv4_header, sizeof(ipv4_header_type));
+    ipv4_header->checksum = ipv4_checksum((uint16_t *) ipv4_header, sizeof(ipv4_header_type));
 }
 
 // Handle an IPC connection request.
@@ -199,8 +199,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     bool done = FALSE;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     unsigned int data_size = 1024;
 
     memory_allocate((void **) data_pointer, data_size);
@@ -447,8 +447,8 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     ipc_structure_type *ethernet_structure;
     ipc_structure_type **ethernet_structure_pointer = &ethernet_structure;
     message_parameter_type message_parameter;
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     bool done = FALSE;
     ipv4_interface_type *interface;
     ipv4_interface_type **interface_pointer = &interface;
@@ -458,7 +458,7 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     memory_allocate((void **) interface_pointer, sizeof(ipv4_interface_type));
     memory_allocate((void **) ethernet_structure_pointer, sizeof(ipc_structure_type));
 
-    memory_set_u8((u8 *) interface, 0, sizeof(ipv4_interface_type));
+    memory_set_uint8_t((uint8_t *) interface, 0, sizeof(ipv4_interface_type));
 
     // Set name.
     system_thread_name_set("Ethernet packet handler");
@@ -519,7 +519,7 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
             {
                 ipv4_ethernet_header_type *ethernet_header = (ipv4_ethernet_header_type *) data;
 
-                switch (system_byte_swap_u16(ethernet_header->protocol_type))
+                switch (system_byte_swap_uint16_t(ethernet_header->protocol_type))
                 {
                     // ARP packet.
                     case IPV4_ETHERNET_PROTOCOL_ARP:

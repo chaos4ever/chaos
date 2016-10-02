@@ -26,15 +26,15 @@
 
 typedef struct
 {
-  u8 data[SERIAL_BUFFER_SIZE];
-  u16 size;
-  u32 mask;
-  u32 baudrate;
-  u8 data_bits;
+  uint8_t data[SERIAL_BUFFER_SIZE];
+  uint16_t size;
+  uint32_t mask;
+  uint32_t baudrate;
+  uint8_t data_bits;
   bool stop_bits;
-  u8 parity;
-  u8 rx_fifo;
-  u8 tx_fifo;
+  uint8_t parity;
+  uint8_t rx_fifo;
+  uint8_t tx_fifo;
   bool dtr;
   bool rts;
   bool dsr;

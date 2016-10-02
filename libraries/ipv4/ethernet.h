@@ -29,8 +29,8 @@
 // This is an ethernet frame header.
 typedef struct
 {
-    u8 destination_address[IPV4_ETHERNET_ADDRESS_LENGTH];
-    u8 source_address[IPV4_ETHERNET_ADDRESS_LENGTH];
-    u16 protocol_type;
-    u8 data[0];
+    uint8_t destination_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    uint8_t source_address[IPV4_ETHERNET_ADDRESS_LENGTH];
+    uint16_t protocol_type;
+    uint8_t data[0];
 } __attribute__((packed)) ipv4_ethernet_header_type;

@@ -17,7 +17,7 @@ bool fat_file_open(fat_info_type *fat_info, ipc_file_open_type *open)
     char *path[MAX_PATH_ELEMENTS];
     fat_entry_type *fat_entry;
     bool done = FALSE;
-    u32 cluster_number;
+    uint32_t cluster_number;
     unsigned int entry = 0;
     unsigned int lfn_entries_in_row = 0;
     char long_file_name[MAX_FILE_NAME_LENGTH];

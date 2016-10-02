@@ -177,7 +177,7 @@ FORMAT="LINESPECIFIC"
     </PARA><PROGRAMLISTING
 FORMAT="LINESPECIFIC"
 >      extern inline return_type system_call_thread_control
-        (process_id_type process_id, u32 class, u32 parameter)
+        (process_id_type process_id, uint32_t class, uint32_t parameter)
     </PROGRAMLISTING></CHAPTER><CHAPTER
 ><TITLE
 >Comments</TITLE><PARA

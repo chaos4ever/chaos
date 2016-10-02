@@ -10,7 +10,7 @@
 #include <storm/generic/types.h>
 #include <storm/x86/descriptor.h>
 
-void idt_setup_interrupt_gate(u8 number, u16 selector, void *address, u8 pl) INIT_CODE;
-void idt_setup_task_gate(u8 number, u16 selector, u8 pl) INIT_CODE;
+void idt_setup_interrupt_gate(uint8_t number, uint16_t selector, void *address, uint8_t pl) INIT_CODE;
+void idt_setup_task_gate(uint8_t number, uint16_t selector, uint8_t pl) INIT_CODE;
 
 extern descriptor_type *idt;

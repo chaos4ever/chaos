@@ -8,37 +8,37 @@
 
 typedef struct
 {
-  u8 uart_type;
+  uint8_t uart_type;
   volatile bool lock_rx;
   volatile bool lock_tx;
-  u16 port;
-  u16 open;
-  u8 irq;
+  uint16_t port;
+  uint16_t open;
+  uint8_t irq;
   bool use_fifo;
-  u8 rx_buffer[BUFFER_SIZE];
-  u8 tx_buffer[BUFFER_SIZE];
-  u16 rx_current;
-  u16 rx_end;
-  u16 rx_pending;
-  u16 tx_current;
-  u16 tx_end;
-  u16 errors;
-  u32 baudrate;
-  u8 data_bits;
+  uint8_t rx_buffer[BUFFER_SIZE];
+  uint8_t tx_buffer[BUFFER_SIZE];
+  uint16_t rx_current;
+  uint16_t rx_end;
+  uint16_t rx_pending;
+  uint16_t tx_current;
+  uint16_t tx_end;
+  uint16_t errors;
+  uint32_t baudrate;
+  uint8_t data_bits;
   bool stop_bits;
-  u8 parity;
-  u8 rx_fifo;
-  u8 tx_fifo;
+  uint8_t parity;
+  uint8_t rx_fifo;
+  uint8_t tx_fifo;
   bool dtr;
   bool rts;
   bool dsr;
   bool cts;
   bool dcd;
   bool ri;
-  u16 line_error;
-  u16 overrun_error;
-  u16 parity_error;
-  u16 framing_error;
+  uint16_t line_error;
+  uint16_t overrun_error;
+  uint16_t parity_error;
+  uint16_t framing_error;
 
   mailbox_id_type target_mailbox_id;
 } port_data_type;

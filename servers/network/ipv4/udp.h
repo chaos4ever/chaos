@@ -32,21 +32,21 @@ enum
 // An UDP header.
 typedef struct
 {
-    u16 source_port;
-    u16 destination_port;
-    u16 length;
+    uint16_t source_port;
+    uint16_t destination_port;
+    uint16_t length;
 
     // The checksum is for all of the packet.
-    u16 check;
+    uint16_t check;
 
     // Data starts here.
-    u8 data[0];
+    uint8_t data[0];
 } __attribute__((packed)) udp_header_type;
 
 // Function prototypes.
-extern void udp_header_create(u16 destination_port, u16 source_port, u16 length, udp_header_type *udp_header);
+extern void udp_header_create(uint16_t destination_port, uint16_t source_port, uint16_t length, udp_header_type *udp_header);
 extern void udp_packet_receive(ipv4_interface_type *interface, ipv4_ethernet_header_type *ethernet_header,
                                int length __attribute__((unused)), mailbox_id_type output_mailbox_id);
-return_type udp_connect(u32 destination, unsigned int destination_port, unsigned int *socket_id);
+return_type udp_connect(uint32_t destination, unsigned int destination_port, unsigned int *socket_id);
 extern void udp_init(void);
 extern return_type udp_send(void *data, unsigned int length, socket_type *socket);

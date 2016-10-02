@@ -16,7 +16,7 @@ typedef struct
 
 typedef struct
 {
-    u32 magic_number;
+    uint32_t magic_number;
     unsigned int buffer_size;
     void *previous_superblock;
     void *next_superblock;
@@ -34,7 +34,7 @@ typedef struct
 typedef struct
 {
     slab_superblock_header_type header;
-    u8 buffer[0];
+    uint8_t buffer[0];
 } slab_superblock_type;
 
 extern const int slab_block_size[];

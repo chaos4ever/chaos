@@ -301,7 +301,7 @@ static void string_input(unsigned int max_length, bool do_syntax_check, bool com
     // Allocate memory for scratchpad.
     memory_allocate((void **) &string, max_length);
 
-    memory_set_u8((u8 *) &keyboard_packet, 0, sizeof(keyboard_packet_type));
+    memory_set_uint8_t((uint8_t *) &keyboard_packet, 0, sizeof(keyboard_packet_type));
 
     while (!(keyboard_packet.key_pressed &&
              keyboard_packet.has_special_key &&
@@ -621,7 +621,7 @@ void prompt_print(char *input)
         return;
     }
 
-    memory_set_u8(output, 0, 512);
+    memory_set_uint8_t(output, 0, 512);
     while (input[input_position] != '\0' && output_position < 512)
     {
         if (input[input_position] == '\\')
@@ -690,7 +690,7 @@ void run(char *command_string)
     unsigned int words;
 
     // Split the string into words.
-    memory_set_u8(parsed_command.arguments, 0, 512);
+    memory_set_uint8_t(parsed_command.arguments, 0, 512);
     words = arguments_parse(command_string, &parsed_command);
 
     if (words > 0)

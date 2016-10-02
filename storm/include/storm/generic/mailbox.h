@@ -24,7 +24,7 @@ typedef struct
 
     unsigned int length;
 
-    u8 data[0];
+    uint8_t data[0];
 } message_type;
 
 // The format of a mailbox.

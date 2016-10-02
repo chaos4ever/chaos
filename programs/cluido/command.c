@@ -6,6 +6,8 @@
 // © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development
 
+#include <inttypes.h>
+
 #include "config.h"
 #include "cluido.h"
 
@@ -58,8 +60,8 @@ void command_unset(int number_of_arguments, char **argument);
 void command_uptime(int number_of_arguments, char **argument);
 void command_version(int number_of_arguments, char **argument);
 
-static u32 get_total_number_of_timeslices(void);
-static void get_time_display_value(char *str, u32 timeslices, u32 total_timeslices);
+static uint32_t get_total_number_of_timeslices(void);
+static void get_time_display_value(char *str, uint32_t timeslices, uint32_t total_timeslices);
 
 // Structure for holding a list of all the commands, and which functions they correspond to.
 command_type command[] =
@@ -198,7 +200,7 @@ void command_cpu(int number_of_arguments UNUSED, char **argument UNUSED)
 // Cause an illegal pagefault.
 void command_crash(int number_of_arguments UNUSED, char **argument UNUSED)
 {
-    *(u32 *) NULL = 0x42424242;
+    *(uint32_t *) NULL = 0x42424242;
 }
 
 // Change current working directory.
@@ -283,7 +285,7 @@ void command_directory_list(int number_of_arguments UNUSED, char *argument[] UNU
         return;
     }
 
-    u8 *buffer;
+    uint8_t *buffer;
     file_directory_entry_read_type *directory_entry;
     unsigned int index;
 
@@ -346,7 +348,7 @@ void command_execute(int number_of_arguments, char **argument)
         return;
     }
 
-    u8 *buffer;
+    uint8_t *buffer;
     file_handle_type handle;
     file_verbose_directory_entry_type directory_entry;
     process_id_type process_id;
@@ -428,7 +430,7 @@ void command_font_set(int number_of_arguments, char **argument)
         return;
     }
 
-    u8 *buffer;
+    uint8_t *buffer;
     message_parameter_type message_parameter;
     mailbox_id_type mailbox_id[10];
     ipc_structure_type ipc_structure;
@@ -844,7 +846,7 @@ void command_ports(int number_of_arguments, char *argument[] UNUSED)
 void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
-    u32 processes = KERNELFS_CLASS_PROCESS_AMOUNT;
+    uint32_t processes = KERNELFS_CLASS_PROCESS_AMOUNT;
 
     system_call_kernelfs_entry_read(&processes);
     console_print(&console_structure, "PROCESS_ID THREADS NAME\n");
@@ -878,7 +880,7 @@ void command_run(int number_of_arguments, char *argument[])
     }
 
     file_handle_type handle;
-    u8 *buffer;
+    uint8_t *buffer;
     file_verbose_directory_entry_type directory_entry;
     unsigned int where;
 
@@ -1004,9 +1006,9 @@ void command_show_file(int number_of_arguments, char *argument[])
     }
 
     file_handle_type handle;
-    u8 *buffer;
+    uint8_t *buffer;
     file_verbose_directory_entry_type directory_entry;
-    u32 read_bytes = 0;
+    uint32_t read_bytes = 0;
 
     if (number_of_arguments != 2)
     {
@@ -1105,11 +1107,11 @@ void command_test(int number_of_arguments UNUSED, char *argument[] UNUSED)
     ipv4_send_type *send;
     ipv4_connect_type connect;
     ipv4_reconnect_type reconnect;
-    u8 tftp_request[] = "\x00\x01/mnt/chaos/config/grub/menu\x00octet";
-    u8 *buffer;
+    uint8_t tftp_request[] = "\x00\x01/mnt/chaos/config/grub/menu\x00octet";
+    uint8_t *buffer;
     unsigned int length;
     bool done = FALSE;
-    u8 *file_buffer;
+    uint8_t *file_buffer;
     unsigned int location = 0;
 
     memory_allocate((void **) &file_buffer, 4096);
@@ -1139,10 +1141,10 @@ void command_test(int number_of_arguments UNUSED, char *argument[] UNUSED)
 
     if (length - 4 != 512)
     {
-        u16 ack[2];
+        uint16_t ack[2];
 
-        ack[0] = system_native_to_big_endian_u16(4);
-        ack[1] = ((u16 *) buffer)[1];
+        ack[0] = system_native_to_big_endian_uint16_t(4);
+        ack[1] = ((uint16_t *) buffer)[1];
         send->length = 4;
         memory_copy(send->data, ack, 4);
         ipv4_send(&ipv4_structure, send);
@@ -1153,10 +1155,10 @@ void command_test(int number_of_arguments UNUSED, char *argument[] UNUSED)
 
         while (!done)
         {
-            u16 ack[2];
+            uint16_t ack[2];
 
-            ack[0] = system_native_to_big_endian_u16(4);
-            ack[1] = ((u16 *) buffer)[1];
+            ack[0] = system_native_to_big_endian_uint16_t(4);
+            ack[1] = ((uint16_t *) buffer)[1];
             send->length = 4;
             memory_copy(send->data, ack, 4);
             ipv4_send(&ipv4_structure, send);
@@ -1184,7 +1186,7 @@ void command_threads(int number_of_arguments UNUSED, char **argument UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
     kernelfs_thread_info_type kernelfs_thread_info;
-    u32 processes = KERNELFS_CLASS_PROCESS_AMOUNT;
+    uint32_t processes = KERNELFS_CLASS_PROCESS_AMOUNT;
 
     system_call_kernelfs_entry_read(&processes);
     console_print(&console_structure, "PROCESS_ID THREADS NAME\n");
@@ -1238,7 +1240,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
 {
     kernelfs_process_info_type kernelfs_process_info;
     kernelfs_thread_info_verbose_type kernelfs_thread_info;
-    u32 processes = KERNELFS_CLASS_PROCESS_AMOUNT;
+    uint32_t processes = KERNELFS_CLASS_PROCESS_AMOUNT;
 
     system_call_kernelfs_entry_read(&processes);
     console_print_formatted(&console_structure,
@@ -1248,7 +1250,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO_VERBOSE;
 
-    u32 total_number_of_timeslices = get_total_number_of_timeslices();
+    uint32_t total_number_of_timeslices = get_total_number_of_timeslices();
 
     for (kernelfs_process_info.process_number = 0;
          kernelfs_process_info.process_number < processes;
@@ -1281,19 +1283,19 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
     }
 }
 
-static u32 get_total_number_of_timeslices(void)
+static uint32_t get_total_number_of_timeslices(void)
 {
-    u32 number_of_timeslices = KERNELFS_CLASS_NUMBER_OF_TIMESLICES;
+    uint32_t number_of_timeslices = KERNELFS_CLASS_NUMBER_OF_TIMESLICES;
     system_call_kernelfs_entry_read(&number_of_timeslices);
     return number_of_timeslices;
 }
 
-static void get_time_display_value(char *str, u32 timeslices, u32 total_timeslices)
+static void get_time_display_value(char *str, uint32_t timeslices, uint32_t total_timeslices)
 {
     // Easy way to get around the fact that we do not have FPU support at the moment... do it using integer calculation instead. :)
-    u32 time_integer_part = (u32) (((u64) timeslices * 100) / total_timeslices);
-    u32 time_fraction_part = (u32) (((u64) timeslices * 100 * 100) / total_timeslices) - time_integer_part * 100;
-    string_print(str, "%lu.%lu", time_integer_part, time_fraction_part);
+    uint32_t time_integer_part = (uint32_t) (((uint64_t) timeslices * 100) / total_timeslices);
+    uint32_t time_fraction_part = (uint32_t) (((uint64_t) timeslices * 100 * 100) / total_timeslices) - time_integer_part * 100;
+    string_print(str, PRIu32 "." PRIu32, time_integer_part, time_fraction_part);
 }
 
 // Unset an environment variable.
@@ -1343,8 +1345,8 @@ void command_unset(int number_of_arguments, char *argument[])
 // Show the current uptime.
 void command_uptime(int number_of_arguments UNUSED, char **argument UNUSED)
 {
-    u32 uptime = KERNELFS_CLASS_UPTIME_INFO;
-    u32 days, hours, minutes, seconds;
+    uint32_t uptime = KERNELFS_CLASS_UPTIME_INFO;
+    uint32_t days, hours, minutes, seconds;
 
     system_call_kernelfs_entry_read(&uptime);
 

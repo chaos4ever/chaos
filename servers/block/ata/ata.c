@@ -32,24 +32,24 @@ tag_type empty_tag =
   0, 0, ""
 };
 
-static inline u8 lba_to_sector_number (device_type *device, u32 linear_sector)
+static inline uint8_t lba_to_sector_number (device_type *device, uint32_t linear_sector)
 {
   return (linear_sector % device->sectors_per_track) + 1;
 }
 
-static inline u8 lba_to_cylinder_low (device_type *device, u32 linear_sector)
+static inline uint8_t lba_to_cylinder_low (device_type *device, uint32_t linear_sector)
 {
   return (linear_sector / (device->number_of_heads *
            device->sectors_per_track)) & 0xFF;
 }
 
-static inline u8 lba_to_cylinder_high (device_type *device, u32 linear_sector)
+static inline uint8_t lba_to_cylinder_high (device_type *device, uint32_t linear_sector)
 {
   return ((linear_sector / (device->number_of_heads *
             device->sectors_per_track)) >> 8) & 0xFF;
 }
 
-static inline u8 lba_to_head (device_type *device, u32 linear_sector)
+static inline uint8_t lba_to_head (device_type *device, uint32_t linear_sector)
 {
   return ((linear_sector / device->sectors_per_track) %
           device->number_of_heads);
@@ -63,14 +63,14 @@ static bool select_device (interface_type *interface, unsigned int device)
 
   /* Wait for BSY to clear for up to one second. */
 
-  while ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
+  while ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) &
           BIT_BSY) != 0 && timeout < 10)
   {
     timeout++;
     system_sleep (100);
   }
 
-  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
+  if ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) &
        BIT_BSY) != 0)
   {
     return FALSE;
@@ -80,14 +80,14 @@ static bool select_device (interface_type *interface, unsigned int device)
   /* FIXME: Optimize this by having an interface->selected_device flag
      to avoid reselecting the same device over and over. */
 
-  system_port_out_u8 (interface->io_base + REGISTER_DEVICE_HEAD,
+  system_port_out_uint8_t (interface->io_base + REGISTER_DEVICE_HEAD,
                       (device == 0) ? DEVICE_MASTER : DEVICE_SLAVE);
 
   /* Wait for controller for up to one second. */
 
   timeout = 0;
 
-  while ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
+  while ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) &
           (BIT_BSY | BIT_DRDY)) != BIT_DRDY &&
          timeout < 10)
   {
@@ -95,7 +95,7 @@ static bool select_device (interface_type *interface, unsigned int device)
     system_sleep (100);
   }
 
-  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) &
+  if ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) &
        (BIT_BSY | BIT_DRDY)) != BIT_DRDY)
   {
     return FALSE;
@@ -136,7 +136,7 @@ static void interrupt_handler (interface_type *interface)
 
 /* Send a command and await an IRQ. */
 
-static void send_command (interface_type *interface, u8 command)
+static void send_command (interface_type *interface, uint8_t command)
 {
   message_parameter_type message_parameter;
 
@@ -144,7 +144,7 @@ static void send_command (interface_type *interface, u8 command)
   message_parameter.block = TRUE;
   message_parameter.data = NULL;
 
-  system_port_out_u8 (interface->io_base + REGISTER_COMMAND, command);
+  system_port_out_uint8_t (interface->io_base + REGISTER_COMMAND, command);
   system_call_mailbox_receive (interface->mailbox_id, &message_parameter);
 }
 
@@ -152,10 +152,10 @@ static void send_command (interface_type *interface, u8 command)
 /* FIXME: Do rangechecking in all neccessary ways. */
 
 bool ata_read_sectors (interface_type *interface, unsigned int device,
-                       u32 sector_number, unsigned int number_of_sectors,
+                       uint32_t sector_number, unsigned int number_of_sectors,
                        void *buffer)
 {
-  u8 status, error;
+  uint8_t status, error;
 
   /* Check if the device exists. */
 
@@ -191,11 +191,11 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 
   /* No features. */
 
-  system_port_out_u8 (interface->io_base + REGISTER_FEATURE, 0);
+  system_port_out_uint8_t (interface->io_base + REGISTER_FEATURE, 0);
 
   /* How many sectors to read? */
 
-  system_port_out_u8 (interface->io_base + REGISTER_SECTOR_COUNT,
+  system_port_out_uint8_t (interface->io_base + REGISTER_SECTOR_COUNT,
                       number_of_sectors);
 
   if (interface->device[device]->lba)
@@ -204,13 +204,13 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 
     log_print (&log_structure, LOG_URGENCY_DEBUG, "LBA");
 
-    system_port_out_u8 (interface->io_base + REGISTER_SECTOR_NUMBER,
+    system_port_out_uint8_t (interface->io_base + REGISTER_SECTOR_NUMBER,
                         sector_number & 0xFF);
-    system_port_out_u8 (interface->io_base + REGISTER_CYLINDER_LOW,
+    system_port_out_uint8_t (interface->io_base + REGISTER_CYLINDER_LOW,
                         (sector_number >> 8) & 0xFF);
-    system_port_out_u8 (interface->io_base + REGISTER_CYLINDER_HIGH,
+    system_port_out_uint8_t (interface->io_base + REGISTER_CYLINDER_HIGH,
                         (sector_number >> 16) & 0xFF);
-    system_port_out_u8 (interface->io_base + REGISTER_DEVICE_HEAD,
+    system_port_out_uint8_t (interface->io_base + REGISTER_DEVICE_HEAD,
                         ((sector_number >> 24) & 0x0F) | BIT_LBA |
                         ((device == 0) ? DEVICE_MASTER : DEVICE_SLAVE));
   }
@@ -220,16 +220,16 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 
     log_print (&log_structure, LOG_URGENCY_DEBUG, "CHS");
 
-    system_port_out_u8 (interface->io_base + REGISTER_SECTOR_NUMBER,
+    system_port_out_uint8_t (interface->io_base + REGISTER_SECTOR_NUMBER,
                         lba_to_sector_number (interface->device[device],
                                               sector_number));
-    system_port_out_u8 (interface->io_base + REGISTER_CYLINDER_LOW,
+    system_port_out_uint8_t (interface->io_base + REGISTER_CYLINDER_LOW,
                         lba_to_cylinder_low (interface->device[device],
                                              sector_number));
-    system_port_out_u8 (interface->io_base + REGISTER_CYLINDER_HIGH,
+    system_port_out_uint8_t (interface->io_base + REGISTER_CYLINDER_HIGH,
                         lba_to_cylinder_high (interface->device[device],
                                               sector_number));
-    system_port_out_u8 (interface->io_base + REGISTER_DEVICE_HEAD,
+    system_port_out_uint8_t (interface->io_base + REGISTER_DEVICE_HEAD,
                         lba_to_head (interface->device[device],
                                      sector_number) |
                         ((device == 0) ? DEVICE_MASTER : DEVICE_SLAVE));
@@ -241,8 +241,8 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 
   /* Read status and ACK controller. */
 
-  error = system_port_in_u8 (interface->io_base + REGISTER_ERROR);
-  status = system_port_in_u8 (interface->io_base + REGISTER_STATUS);
+  error = system_port_in_uint8_t (interface->io_base + REGISTER_ERROR);
+  status = system_port_in_uint8_t (interface->io_base + REGISTER_STATUS);
 
   if ((status & BIT_ERR) == 0)
   {
@@ -252,8 +252,8 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
                          "Status OK, reading %d bytes from device...",
                          512 * number_of_sectors);
 
-    system_port_in_u16_string (interface->io_base + REGISTER_DATA,
-                               (u16 *) buffer, 256 * number_of_sectors);
+    system_port_in_uint16_t_string (interface->io_base + REGISTER_DATA,
+                               (uint16_t *) buffer, 256 * number_of_sectors);
     return TRUE;
   }
   else
@@ -269,9 +269,9 @@ bool ata_read_sectors (interface_type *interface, unsigned int device,
 /* "Check the Internet!" ('Bone Collector') */
 
 static bool check_extended (interface_type *interface, unsigned int device,
-                            u32 extended_start_sector, u32 offset)
+                            uint32_t extended_start_sector, uint32_t offset)
 {
-  u8 *sector_buffer;
+  uint8_t *sector_buffer;
   partition_entry_type *partition;
   int index;
   service_type *service;
@@ -353,9 +353,9 @@ static bool check_extended (interface_type *interface, unsigned int device,
    partitions on a disk. */
 
 static bool check_primary (interface_type *interface, unsigned int device,
-                           u32 sector_number)
+                           uint32_t sector_number)
 {
-  u8 *sector_buffer;
+  uint8_t *sector_buffer;
   partition_entry_type *partition;
   int index;
   service_type *service;
@@ -464,7 +464,7 @@ static void init_device (interface_type *interface, unsigned int device)
 
 bool ata_init_interface (interface_type *interface)
 {
-  u8 status;
+  uint8_t status;
   unsigned int device;
   int index;
   unsigned int timeout = 0;
@@ -516,23 +516,23 @@ bool ata_init_interface (interface_type *interface)
   log_print (&log_structure, LOG_URGENCY_DEBUG,
              "Software resetting interface...");
 
-  system_port_out_u8 (interface->io_base + REGISTER_DEVICE_CONTROL,
+  system_port_out_uint8_t (interface->io_base + REGISTER_DEVICE_CONTROL,
                       BIT_SRST | REGISTER_DEVICE_CONTROL_DEFAULT);
   system_sleep_microseconds (1);
-  system_port_out_u8 (interface->io_base + REGISTER_DEVICE_CONTROL,
+  system_port_out_uint8_t (interface->io_base + REGISTER_DEVICE_CONTROL,
                       REGISTER_DEVICE_CONTROL_DEFAULT);
   system_sleep_microseconds (1);
 
   /* Wait for up to 5 seconds (Should be 31) or until BSY is cleared. */
 
   while (timeout < 50 &&
-         (system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_BSY) != 0)
+         (system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_BSY) != 0)
   {
     timeout++;
     system_sleep (100);
   }
 
-  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_BSY) == 0)
+  if ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_BSY) == 0)
   {
     /* The device did not time out. */
 
@@ -551,13 +551,13 @@ bool ata_init_interface (interface_type *interface)
   timeout = 0;
 
   while (timeout < 50 &&
-         (system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_DRDY) == 0)
+         (system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_DRDY) == 0)
   {
     timeout++;
     system_sleep (100);
   }
 
-  if ((system_port_in_u8 (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_DRDY) != 0)
+  if ((system_port_in_uint8_t (interface->io_base + REGISTER_ALTERNATE_STATUS) & BIT_DRDY) != 0)
   {
     /* The device did not time out. */
 
@@ -582,10 +582,10 @@ bool ata_init_interface (interface_type *interface)
   for (device = 0; device < 2; device++)
   {
     unsigned int type = ATA_DEVICE_NONE;
-    u8 sector_count = system_port_in_u8 (interface->io_base + REGISTER_SECTOR_COUNT),
-      sector_number = system_port_in_u8 (interface->io_base + REGISTER_SECTOR_NUMBER),
-      cylinder_low = system_port_in_u8 (interface->io_base + REGISTER_CYLINDER_LOW),
-      cylinder_high = system_port_in_u8 (interface->io_base + REGISTER_CYLINDER_HIGH);
+    uint8_t sector_count = system_port_in_uint8_t (interface->io_base + REGISTER_SECTOR_COUNT),
+      sector_number = system_port_in_uint8_t (interface->io_base + REGISTER_SECTOR_NUMBER),
+      cylinder_low = system_port_in_uint8_t (interface->io_base + REGISTER_CYLINDER_LOW),
+      cylinder_high = system_port_in_uint8_t (interface->io_base + REGISTER_CYLINDER_HIGH);
 
     if (select_device (interface, device))
     {
@@ -618,7 +618,7 @@ bool ata_init_interface (interface_type *interface)
 
       memory_allocate ((void **) &interface->device[device],
                        sizeof (device_type));
-      memory_set_u8 ((u8 *) interface->device[device], 0,
+      memory_set_uint8_t ((uint8_t *) interface->device[device], 0,
                      sizeof (device_type));
 
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
@@ -627,14 +627,14 @@ bool ata_init_interface (interface_type *interface)
 
       /* Read the status register and ACK the controller at the same time. */
 
-      status = system_port_in_u8 (interface->io_base + REGISTER_STATUS);
+      status = system_port_in_uint8_t (interface->io_base + REGISTER_STATUS);
       log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
                            "Command status was 0x%X. Reading data...", status);
 
       /* Read the identification data from the device. */
 
-      system_port_in_u16_string (interface->io_base + REGISTER_DATA,
-                                 (u16 *) interface->device[device]->id,
+      system_port_in_uint16_t_string (interface->io_base + REGISTER_DATA,
+                                 (uint16_t *) interface->device[device]->id,
                                  ATA_SECTOR_WORDS);
 
       /* Copy out some strings, byteswap them and NULL-terminate them. */

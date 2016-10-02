@@ -13,7 +13,7 @@
 #include "console_output.h"
 
 static void connection_client(message_parameter_type *message_parameter, console_type **our_console,
-    console_application_type **our_application, u32 *data, ipc_structure_type *ipc_structure)
+    console_application_type **our_application, uint32_t *data, ipc_structure_type *ipc_structure)
 {
     switch (message_parameter->message_class)
     {
@@ -344,8 +344,8 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
 {
     system_thread_name_set("Handling connection");
 
-    u32 *data;
-    u32 **data_pointer = &data;
+    uint32_t *data;
+    uint32_t **data_pointer = &data;
     message_parameter_type message_parameter;
     ipc_structure_type ipc_structure;
     unsigned int connection_class = IPC_CONSOLE_CONNECTION_CLASS_NONE;
