@@ -1,53 +1,23 @@
 # frozen_string_literal: true
-def objects # rubocop:disable MethodLength
+def objects
   %w(
-    cluster.o
-    cpuid.o
-    debug.o
-    dispatch.o
-    dma.o
-    elf.o
-    gdt.o
-    idt.o
     init.o
-    irq.o
-    irq_handlers.o
-    limits.o
-    main.o
-    memory.o
-    memory_global.o
-    memory_physical.o
-    memory_virtual.o
-    multiboot.o
-    mutex.o
-    port.o
-    process.o
-    string.o
-    system_calls-auto.o
-    system_calls.o
-    thread.o
-    time.o
-    timer.o
-    trap.o
-    wrapper.o
-    compiler_rt/udivdi3.o
-    compiler_rt/umoddi3.o
   )
 end
 
-OUTPUT = 'libstorm_x86.a'.freeze
+OUTPUT = 'libstorm_raspberrypi.a'.freeze
 
 # TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
 GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 
 KERNEL_OUTPUT = 'storm'.freeze
-LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'.freeze
+LDFLAGS = '-nostartfiles'.freeze
 
 task default: [:banner, :prepare, :storm] + objects
 
 task :banner do
   print 'Compiling '.bold
-  print 'storm/x86'.cyan.bold
+  print 'storm/raspberrypi'.cyan.bold
   puts '...'
 
   print '    '
@@ -58,20 +28,7 @@ task :install do
   puts "    Installed #{KERNEL_OUTPUT} in #{INSTALL_ROOT}".gray
 end
 
-task prepare: ['wrapper.c', 'system_calls-auto.c']
-
-# TODO: I guess the header files should be listed here also.
-file 'wrapper.c' => 'system_calls.rb' do |t|
-  script = t.prerequisites.first
-  print((script + ' ').cyan)
-  sh './' + script
-end
-
-file 'system_calls-auto.c' => 'system_calls.rb' do |t|
-  script = t.prerequisites.first
-  print((script + ' ').cyan)
-  sh './' + script
-end
+task :prepare
 
 file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
   begin

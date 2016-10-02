@@ -1,9 +1,21 @@
-env: CC=gcc
+sudo: required
+dist: trusty
 before_script:
  - sudo apt-get update
- - sudo apt-get install dosfstools gcc-multilib genisoimage grub mtools nasm
+ - sudo apt-get install
+     dosfstools
+     gcc-arm-none-eabi
+     gcc-multilib
+     genisoimage
+     grub
+     mtools
+     nasm
  - ./install_cmocka.sh
 script:
  - bundle exec rubocop
- - rake
- - rake tests
+ - ARCH=raspberrypi rake
+     default
+     clean
+ # Tests are disabled for now since cmocka don't work on Trusty Tahr.
+ - ARCH=x86 CC=gcc rake
+     default

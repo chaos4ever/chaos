@@ -8,11 +8,11 @@ COMMON_CFLAGS =
   "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
   -Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
   -Wmissing-noreturn -pipe -O3 -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
-  -g -m32 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
+  -g -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
 
 CFLAGS = COMMON_CFLAGS +
   "--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \
-  -Wstrict-prototypes"
+  -Wstrict-prototypes " + ARCH_CFLAGS
 
 INCLUDES = %w(
   -I../include
@@ -20,14 +20,14 @@ INCLUDES = %w(
   -I.
 ).freeze
 
-file OUTPUT => OBJECTS do |t|
+file OUTPUT => objects do |t|
   puts
   puts '    Creating archive...'.blue.bold
-  sh "#{AR} r --target=elf32-i386 #{t.name} #{t.prerequisites.join ' '}"
+  sh "#{AR} r #{AR_TARGET} #{t.name} #{t.prerequisites.join ' '}"
 end
 
 # TODO: Check if we can get Rake's automatic 'clean' support working, so we don't have to do this manually.
 task :clean do
-  rm_f OBJECTS
+  rm_f objects
   rm_f OUTPUT
 end

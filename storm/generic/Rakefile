@@ -1,26 +1,38 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  arguments.o
-  avl.o
-  avl_debug.o
-  avl_rotate.o
-  avl_update.o
-  avl_delete.o
-  debug.o
-  idle.o
-  init.o
-  kernelfs.o
-  log.o
-  mailbox.o
-  memory.o
-  service.o
-  slab.o
-  system_call.o
-  tag.o
-  time.o
-).freeze
+# rubocop:disable GuardClause
 
-# TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
+def objects # rubocop:disable MethodLength
+  if TARGET_ARCH == 'x86'
+    %w(
+      arguments.o
+      avl.o
+      avl_debug.o
+      avl_rotate.o
+      avl_update.o
+      avl_delete.o
+      debug.o
+      idle.o
+      init.o
+      kernelfs.o
+      log.o
+      mailbox.o
+      memory.o
+      service.o
+      slab.o
+      system_call.o
+      tag.o
+      time.o
+    )
+  elsif TARGET_ARCH == 'raspberrypi'
+    %w(
+      dummy.o
+    )
+  else
+    raise "Unsupported architecture #{CURRENT_ARCH}"
+  end
+end
+
+# TODO: Would like to use STORM_GENERIC_LIB, but it gets set after this line has been evaluated.
 OUTPUT = 'libstorm_generic.a'.freeze
 
 task default: [:banner, OUTPUT] do
@@ -35,4 +47,4 @@ task :banner do
   print '    '
 end
 
-load '../storm.rake'
+Rake.add_rakelib '../rakelib'

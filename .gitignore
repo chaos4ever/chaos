@@ -6,10 +6,11 @@ chaos.iso
 *.a
 *.orig
 
-storm/current-arch
-storm/x86/storm
-storm/include/storm/current-arch
 storm_tests/x86/x86_tests
+storm/current-arch
+storm/include/storm/current-arch
+storm/raspberrypi/storm
+storm/x86/storm
 
 # These are painful but what do we do...
 programs/cluido/cluido
