@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# rubocop:disable GuardClause
+
 verbose false
 
 UNAME = `uname`.strip

@@ -6,7 +6,7 @@ Style/AsciiComments:
   Enabled: false
 Style/ElseAlignment:
   Enabled: false
-Style/EndAlignment:
+Lint/EndAlignment:
   Enabled: false
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
