@@ -2,6 +2,8 @@
 def objects
   %w(
     init.o
+    debug.o
+    gpio.o
   )
 end
 
