@@ -16,6 +16,9 @@ void serial_write(uint8_t byte)
     }
     
     uart0_memory[UART0_DR] = byte;
+
+    // FIXME: This delay is arbitrary to not flood the UART
+    for (int i = 0; i < 5000; i++);
 }
 
 void serial_write_string(const char *string)
