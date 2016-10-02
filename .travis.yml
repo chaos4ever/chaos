@@ -13,6 +13,10 @@ before_script:
  - ./install_cmocka.sh
 script:
  - bundle exec rubocop
- - ARCH=raspberrypi rake default clean
+ - ARCH=raspberrypi rake
+     default
+     clean
  - ARCH=x86 CC=gcc rake
- - rake tests
+     default
+     tests
+ 
