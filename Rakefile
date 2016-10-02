@@ -78,7 +78,7 @@ task libraries: [:storm] do |folder|
 end
 
 task :programs do |folder|
-  system "cd #{folder} && rake"
+  sh "cd #{folder} && rake"
 end
 
 task :servers do |folder|
