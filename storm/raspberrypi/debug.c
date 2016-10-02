@@ -1,0 +1,37 @@
+#include <stdint.h>
+
+#include <debug.h>
+
+static volatile uint32_t *uart0_memory;
+
+void serial_init(void)
+{
+    uart0_memory = (uint32_t *) 0x20201000;
+}
+
+void serial_write(uint8_t byte)
+{
+    while ((uart0_memory[UART0_FR] & (1 << 5)))
+    {
+    }
+    
+    uart0_memory[UART0_DR] = byte;
+}
+
+void serial_write_string(const char *string)
+{
+    for (int i = 0; string[i] != '\0'; i++)
+    {
+        serial_write((uint8_t) string[i]);
+    }
+}
+
+void debug_print_simple(const char *string)
+{
+    serial_write_string(string);
+}
+
+void debug_init(void)
+{
+    serial_init();
+}
