@@ -1,7 +1,14 @@
 env: CC=gcc
 before_script:
  - sudo apt-get update
- - sudo apt-get install dosfstools gcc-multilib genisoimage grub mtools nasm
+ - sudo apt-get install
+     dosfstools
+     gcc-arm-none-eabi
+     gcc-multilib
+     genisoimage
+     grub
+     mtools
+     nasm
  - ./install_cmocka.sh
 script:
  - bundle exec rubocop

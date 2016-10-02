@@ -43,7 +43,7 @@ GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 KERNEL_OUTPUT = 'storm'.freeze
 LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'.freeze
 
-task default: [:banner, :prepare, :storm] + OBJECTS
+task default: [:banner, :prepare, :storm] + objects
 
 task :banner do
   print 'Compiling '.bold
