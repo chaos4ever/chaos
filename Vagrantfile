@@ -32,7 +32,7 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-arm-none-eabi
 
-    # Disabled for now since we don't have any Rust dependencies, and
+    # Disabled for now since we don't have any Rust dependencies, and it slows things down when setting the VM up.
     ## We need the beta channel for the #![feature] functionality.
     #curl -sSf https://static.rust-lang.org/rustup.sh > /tmp/rustup.sh && \
     #  sh /tmp/rustup.sh --yes --channel=nightly --date=2016-01-13
