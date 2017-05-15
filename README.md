@@ -10,10 +10,12 @@ An operating system for x86, written mostly in C with minor parts in assembly la
 
 **Note**: If you just want to try things out, go straight to the [Releases](https://github.com/chaos4ever/chaos/releases) page and download an `.iso` file that you can run in whichever VM software you like (VirtualBox, Parallels, VMware, etc).
 
-    $ vagrant up
-    $ vagrant ssh
-    $ rake
-    $ rake install
+```shell
+$ vagrant up
+$ vagrant ssh
+$ rake
+$ rake install
+```
 
 If all goes well, this should give you an `.iso` file as output. For more details, consult [our web site](http://chaosdev.io).
 
@@ -35,7 +37,7 @@ We encourage code that is written for chaos (servers, programs, libraries) to us
 
 ### chaos License (3-clause BSD)
 
-Copyright © 1999-2000, 2006-2007, 2013, 2015-2016 chaos development.<br/>
+Copyright © 1999-2000, 2006-2007, 2013, 2015-2017 chaos development.<br/>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
