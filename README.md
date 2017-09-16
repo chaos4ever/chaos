@@ -10,7 +10,10 @@ An operating system for x86, written mostly in C with minor parts in assembly la
 
 **Note**: If you just want to try things out, go straight to the [Releases](https://github.com/chaos4ever/chaos/releases) page and download an `.iso` file that you can run in whichever VM software you like (VirtualBox, Parallels, VMware, etc).
 
+To build the system from source, use the following approach. (Requires Vagrant and VirtualBox to be pre-installed.)
+
 ```shell
+$ git clone ... && cd chaos
 $ vagrant up
 $ vagrant ssh
 $ rake
