@@ -30,7 +30,7 @@
 #define SPECIAL         32
 
 // Use 'ABCDEF' instead of 'abcdef'.
-#define LARGE           64
+#define UPPER_HEX       64
 
 // Converts a string to a number.
 return_type string_to_number(const char *string, int *number,
@@ -181,8 +181,8 @@ static char *number_to_string(char *string, unsigned long number, int base,
     int tmp_index = 0;
     int real_index = 0;
 
-    // Sometimes we prefer to print things with large hexadecimals. */
-    if ((flags & LARGE) != 0)
+    // Sometimes we prefer to print hexadecimal letters in uppercase.
+    if ((flags & UPPER_HEX) != 0)
     {
         digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     }
@@ -537,7 +537,7 @@ return_type string_print_va(char *output, const char *format_string,
                     case 'p':
                     case 'X':
                     {
-                        flags |= LARGE;
+                        flags |= UPPER_HEX;
                     }
 
                     case 'x':
