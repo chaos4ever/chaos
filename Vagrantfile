@@ -42,6 +42,7 @@ Vagrant.configure(2) do |config|
 
     echo 'drive u: file="/vagrant/servers/block/initial_ramdisk/ramdisk.image"' > /etc/mtools.conf
     echo 'cd /vagrant' >> /home/vagrant/.bashrc
+    echo 'export ARCH=x86' >> /home/vagrant/.bashrc
     echo '-U' > /home/vagrant/.astylerc
     echo '-H' >> /home/vagrant/.astylerc
     echo '-S' >> /home/vagrant/.astylerc
