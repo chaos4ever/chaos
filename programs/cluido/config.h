@@ -13,7 +13,6 @@
 #include <file/file.h>
 #include <ipc/ipc.h>
 #include <log/log.h>
-#include <math/math.h>
 #include <memory/memory.h>
 #include <ipv4/ipv4.h>
 #include <pci/pci.h>
