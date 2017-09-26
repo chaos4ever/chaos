@@ -538,6 +538,10 @@ return_type string_print_va(char *output, const char *format_string,
                     case 'X':
                     {
                         flags |= UPPER_HEX;
+
+                        // Falls through by design. (Can't use __attribute__ ((fallthrough)), since it breaks on gcc < 7.)
+                        //
+                        /* @fallthrough@ */
                     }
 
                     case 'x':
