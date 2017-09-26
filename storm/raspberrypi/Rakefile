@@ -13,7 +13,7 @@ OUTPUT = 'libstorm_raspberrypi.a'.freeze
 GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 
 KERNEL_OUTPUT = 'storm'.freeze
-LDFLAGS = '-nostartfiles'.freeze
+LDFLAGS = '-nostdlib'.freeze
 
 task default: [:banner, :prepare, :storm] + objects
 

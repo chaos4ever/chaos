@@ -1,21 +1,80 @@
 sudo: required
 dist: trusty
+
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-4.9
+            - gcc-4.9-multilib
+      env:
+         - MATRIX_EVAL="CC=gcc-4.9 && ARCH=x86"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-5
+            - gcc-5-multilib
+      env:
+         - MATRIX_EVAL="CC=gcc-5 && ARCH=x86"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-6
+            - gcc-6-multilib
+      env:
+        - MATRIX_EVAL="CC=gcc-6 && ARCH=x86"
+
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-7
+            - gcc-7-multilib
+      env:
+        - MATRIX_EVAL="CC=gcc-7 && ARCH=x86"
+
+    - os: linux
+      addons:
+        apt:
+          packages:
+            - gcc-arm-none-eabi
+      env:
+        - MATRIX_EVAL="ARCH=raspberrypi"
+
+addons:
+  apt:
+    packages:
+
+before_install:
+ - eval "${MATRIX_EVAL}"
+ - export CC
+ - export ARCH
+
 before_script:
  - sudo apt-get update
  - sudo apt-get install
      dosfstools
-     gcc-arm-none-eabi
-     gcc-multilib
      genisoimage
      grub
      mtools
      nasm
  - ./install_cmocka.sh
+
+# Tests are disabled for now since cmocka don't work on Trusty Tahr.
 script:
  - bundle exec rubocop
- - ARCH=raspberrypi rake
-     default
-     clean
- # Tests are disabled for now since cmocka don't work on Trusty Tahr.
- - ARCH=x86 CC=gcc rake
-     default
+ - rake default
