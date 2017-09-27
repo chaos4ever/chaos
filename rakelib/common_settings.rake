@@ -28,7 +28,10 @@ else
     AR = ENV['AR'] || 'ar'
     AR_TARGET = '--target=elf32-i386'.freeze
     NASM = 'nasm'.freeze
-    ARCH_CFLAGS = '-m32'.freeze
+
+    extra_cflags = '-m32'
+    extra_cflags += ' -Wimplicit-fallthrough=4' if CC =~ /gcc-7/
+    ARCH_CFLAGS = extra_cflags.freeze
   elsif TARGET_ARCH == 'raspberrypi'
     CC = ENV['CC'] || 'arm-none-eabi-gcc'
     AR = ENV['AR'] || 'arm-none-eabi-ar'
