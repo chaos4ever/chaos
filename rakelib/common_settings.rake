@@ -24,7 +24,7 @@ else
   TARGET_ARCH ||= ENV['ARCH']
 
   if TARGET_ARCH == 'x86'
-    CC = ENV['CC'] || 'gcc-5'
+    CC = ENV['CC'] || 'gcc'
     AR = ENV['AR'] || 'ar'
     AR_TARGET = '--target=elf32-i386'.freeze
     NASM = 'nasm'.freeze
