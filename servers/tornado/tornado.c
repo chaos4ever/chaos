@@ -397,7 +397,7 @@ static void tornado_draw_mouse_cursor (int x_position,
 
 int main (void)
 {
-  char tmpstr[] = "chaos 0.0.4-beta installation";
+  char tmpstr[] = "chaos 0.1.0 installation";
   int mouse_x = WIDTH / 2, mouse_y = HEIGHT / 2;
 
   /* Set our name. */
