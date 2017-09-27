@@ -20,20 +20,20 @@
 #define DMA_CHANNEL_CASCADE          4
 
 // Controller registers.
-static const unsigned int dma_controller[NUMBER_OF_CONTROLLERS] =
-{
-    0x08, 0xD0
-};
+// static const unsigned int dma_controller[NUMBER_OF_CONTROLLERS] =
+// {
+//     0x08, 0xD0
+// };
 
-static const unsigned int dma_master_reset[NUMBER_OF_CONTROLLERS] =
-{
-    0x0D, 0xDA
-};
+// static const unsigned int dma_master_reset[NUMBER_OF_CONTROLLERS] =
+// {
+//     0x0D, 0xDA
+// };
 
-static const unsigned int dma_master_mask[NUMBER_OF_CONTROLLERS] =
-{
-    0x0F, 0xDE
-};
+// static const unsigned int dma_master_mask[NUMBER_OF_CONTROLLERS] =
+// {
+//     0x0F, 0xDE
+// };
 
 static const unsigned int dma_mask[NUMBER_OF_CONTROLLERS] =
 {
