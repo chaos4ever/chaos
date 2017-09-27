@@ -30,7 +30,7 @@ else
     NASM = 'nasm'.freeze
 
     extra_cflags = '-m32'
-    extra_cflags += ' -Wimplicit-fallthrough=3' if CC =~ /gcc-7/
+    extra_cflags += ' -Werror=implicit-fallthrough=3' if CC =~ /gcc-7/
     ARCH_CFLAGS = extra_cflags.freeze
   elsif TARGET_ARCH == 'raspberrypi'
     CC = ENV['CC'] || 'arm-none-eabi-gcc'
