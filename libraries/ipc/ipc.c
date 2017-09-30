@@ -1,17 +1,14 @@
 // Abstract: IPC library.
 // Author: Per Lundberg <per@chaosdev.io>
-
-// © Copyright 2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2015-2016 chaos development
+//
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013-2017 chaos development
 
 #include <console/console.h>
 #include <ipc/ipc.h>
 #include <memory/memory.h>
 #include <string/string.h>
 #include <system/system.h>
-
-#include "config.h"
 
 // FIXME: Use more defines.
 // Create a service.
@@ -36,8 +33,8 @@ return_type ipc_service_create(const char *service_name, ipc_structure_type *ipc
     }
 }
 
-/* Resolve the given service and put a maximum of 'number_of_mailbox_ids' mailbox ID:s into mailbox_id. */
-/* FIXME: number_of_mailbox_ids should be a pointer to an int, where we store the number of available service handlers. */
+// Resolve the given service and put a maximum of 'number_of_mailbox_ids' mailbox ID:s into mailbox_id.
+// FIXME: number_of_mailbox_ids should be a pointer to an int, where we store the number of available service handlers.
 return_type ipc_service_resolve(const char *service_name, mailbox_id_type *mailbox_id, unsigned int *number_of_mailbox_ids,
     time_type timeout, tag_type *tag)
 {
@@ -91,8 +88,7 @@ return_type ipc_service_connection_wait(ipc_structure_type *ipc_structure)
 
     memory_allocate(&buffer, buffer_size);
 
-    /* Check the input parameter. */
-
+    // Check the input parameter.
     if (ipc_structure == NULL)
     {
         return IPC_RETURN_INVALID_ARGUMENT;
@@ -143,10 +139,7 @@ return_type ipc_service_connection_wait(ipc_structure_type *ipc_structure)
                     case IPC_GENERAL_IDENTIFY_REQUEST:
                     {
                         message_parameter.message_class = IPC_GENERAL_IDENTIFY_REPLY;
-
-                        /* FIXME: Fill in better stuff here! */
-                        string_copy((char *) message_parameter.data,
-                                    (char *) PACKAGE_NAME " " PACKAGE_VERSION);
+                        string_copy((char *) message_parameter.data, "ipc 0.1.0");
 
                         message_parameter.length = string_length((char *) message_parameter.data);
 
@@ -184,7 +177,7 @@ return_type ipc_service_connection_request(ipc_structure_type *ipc_structure)
     uint8_t data[100];
 
     // FIXME: Make it possible to specify the size of the mailbox. For now, we just set it to one meg and hope it's enough.
-    if (system_call_mailbox_create(&ipc_structure->input_mailbox_id, 1 * MB, PROCESS_ID_NONE, 
+    if (system_call_mailbox_create(&ipc_structure->input_mailbox_id, 1 * MB, PROCESS_ID_NONE,
             CLUSTER_ID_NONE, THREAD_ID_NONE) != STORM_RETURN_SUCCESS)
     {
         // FIXME: Handle the possible causes of this.
@@ -377,13 +370,6 @@ return_type ipc_receive(mailbox_id_type mailbox_id, message_parameter_type *mess
         }
     }
 }
-
-#if 0
-ipc_protocol_get(ipc_structure_type * ipc_structure)
-{
-}
-
-#endif
 
 // Close a connection.
 return_type ipc_connection_close(ipc_structure_type *ipc_structure, bool notify)
