@@ -196,18 +196,6 @@ static void trap_page_fault(void)
         // If this pagefault is caused by a growing stack, just map more memory.
         if (address >= BASE_PROCESS_STACK)
         {
-            // FIXME: This code should not really be here, but right now, it's good for debugging...
-
-            debug_crash_screen("Stack overflow", current_tss);
-            current_tss->state = STATE_ZOMBIE;
-            //      if (current_task == TASK_ID_KERNEL)
-            //      {
-            //        cpu_halt ();
-            //      }
-            dispatch_next();
-
-            // FIXME: End of temporary code. */
-
             DEBUG_MESSAGE(DEBUG, "Stack is growing (was %u pages)", current_tss->stack_pages);
             if (memory_mutex == MUTEX_LOCKED)
             {
