@@ -4,16 +4,17 @@ timeout 5
 title chaos 0.1.0
 kernel /storm
 
-# Cluido + dependencies
+# Please note that order here is important. A server should normally be started before the servers that depend on it.
+
+# Log server + dependencies
 module /servers/console.gz
 module /servers/keyboard.gz
 module /servers/vga.gz
-module /programs/cluido.gz
+module /servers/log.gz
 
 # Everything else
 module /servers/fat.gz
 module /servers/initial_ramdisk.gz
-module /servers/log.gz
 module /servers/loopback.gz
 module /servers/ipv4.gz
 module /servers/pci.gz
@@ -21,3 +22,6 @@ module /servers/virtual_file_system.gz
 
 # Boot server last, since it kind of expects everything else to be up and running.
 module /servers/boot.gz
+
+# Cluido temporarily here, until we have resolved https://github.com/chaos4ever/chaos/issues/45
+module /programs/cluido.gz
