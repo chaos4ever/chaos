@@ -50,7 +50,7 @@ end
 desc 'Builds a bootable ISO image with the kernel, servers and programs.'
 task :iso_image do
   FileUtils.mkdir_p "#{INSTALL_ROOT}/boot/grub"
-  FileUtils.cp 'menu.lst', "#{INSTALL_ROOT}/boot/grub"
+  system "cp menu.lst #{INSTALL_ROOT}/boot/grub"
 
   FileUtils.cp '/usr/lib/grub/i386-pc/stage2_eltorito', "#{INSTALL_ROOT}/boot/grub"
 
