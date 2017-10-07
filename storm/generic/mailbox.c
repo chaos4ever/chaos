@@ -4,8 +4,7 @@
 //          Per Lundberg <per@chaosdev.io>
 
 // © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 2013-2017 chaos development
 
 // Define this as TRUE if you are debugging this module.
 #define DEBUG           TRUE
@@ -485,8 +484,8 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
     }
     else
     {
-        // Need more space.
-        DEBUG_MESSAGE(DEBUG, "%x < %x", message_parameter->length, mailbox->first_message->length);
+        DEBUG_MESSAGE(DEBUG, "Message was too large (max %u bytes, message size was %u bytes)",
+                      message_parameter->length, mailbox->first_message->length);
 
         message_parameter->length = mailbox->first_message->length;
         mutex_kernel_signal(&tss_tree_mutex);
