@@ -64,8 +64,15 @@ return_type file_get_info(ipc_structure_type *vfs_structure, file_verbose_direct
     message_parameter.block = TRUE;
     message_parameter.length = sizeof(file_verbose_directory_entry_type);
 
-    system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter);
-    system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter);
+    if (system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
+
+    if (system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
 
     if (directory_entry->success)
     {
@@ -92,12 +99,19 @@ return_type file_open(ipc_structure_type *vfs_structure, char *file_name, file_m
     message_parameter.block = TRUE;
     message_parameter.length = sizeof(file_open_type);
 
-    system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter);
+    if (system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
 
     message_parameter.data = handle;
     message_parameter.length = sizeof(file_handle_type);
 
-    system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter);
+    if (system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
+
     return FILE_RETURN_SUCCESS;
 }
 
@@ -116,12 +130,18 @@ return_type file_read(ipc_structure_type *vfs_structure, file_handle_type file_h
     message_parameter.block = TRUE;
     message_parameter.length = sizeof(file_read_type);
 
-    system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter);
+    if (system_call_mailbox_send(vfs_structure->output_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
 
     message_parameter.data = buffer;
     message_parameter.length = read.bytes;
 
-    system_call_mailbox_receive(vfs_structure->input_mailbox_id,
-                                &message_parameter);
+    if (system_call_mailbox_receive(vfs_structure->input_mailbox_id, &message_parameter) != STORM_RETURN_SUCCESS)
+    {
+        return FILE_RETURN_IPC_FAILED;
+    }
+
     return FILE_RETURN_SUCCESS;
 }

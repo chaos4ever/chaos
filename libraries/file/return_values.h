@@ -1,9 +1,8 @@
 // Abstract: Return values for the file library.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999-2000 chaos development
+// © Copyright 2013-2017 chaos development
 
 #pragma once
 
@@ -17,4 +16,7 @@ enum
 
     // The requested service was not available.
     FILE_RETURN_SERVICE_UNAVAILABLE,
+
+    // Sending or receiving to or from a mailbox failed.
+    FILE_RETURN_IPC_FAILED
 };
