@@ -340,12 +340,19 @@ static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
 
     if (volume == mounted_volumes || volume == (unsigned int) -1)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "vfs_file_open failed: No mounted volume found for path '%s'.",
+                            open->file_name);
+
         return FALSE;
     }
 
     // If this path only consists of one element, it is wrong, since we have no files in the root.
     if (elements == 1)
     {
+        log_print(&log_structure, LOG_URGENCY_DEBUG,
+                  "vfs_file_open failed: Attempting to open a file in the // root, but this folder only contains directories, " \
+                  "no files.");
+
         return FALSE;
     }
 
@@ -373,13 +380,25 @@ static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
         message_parameter.length = sizeof(ipc_file_open_type);
         message_parameter.data = &ipc_file_open;
         message_parameter.block = TRUE;
-        ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
+
+        if (ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+        {
+            log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                                "vfs_file_open failed: sending to mailbox %u failed",
+                                mount_point[volume].ipc_structure.output_mailbox_id);
+
+            return FALSE;
+        }
 
         // FIXME: This should be something else.
         message_parameter.length = 16384;
 
         if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
         {
+            log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                                "vfs_file_open failed: reading from mailbox %u failed",
+                                mount_point[volume].ipc_structure.input_mailbox_id);
+
             return FALSE;
         }
     }
@@ -409,15 +428,19 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
 
     if (read->file_handle + 1 > number_of_file_handles)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                            "vfs_file_read failed: file handle %u is not valid.",
+                            read->file_handle);
         return FALSE;
     }
-
-    /* Is this a file system handled by the VFS server itself? */
 
     volume = file_handle[read->file_handle];
 
     if (mount_point[volume].ipc_structure.output_mailbox_id == MAILBOX_ID_NONE)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                            "vfs_file_read failed: file handle %u is not handled by the VFS server",
+                            read->file_handle);
         return FALSE;
     }
 
@@ -427,13 +450,24 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
     message_parameter.message_class = IPC_FILE_READ;
     message_parameter.block = TRUE;
 
-    ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter);
+    if (ipc_send(mount_point[volume].ipc_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                            "vfs_file_read failed: sending to mailbox %u failed",
+                            mount_point[volume].ipc_structure.output_mailbox_id);
 
-    // Get the data.
+        return FALSE;
+    }
+
     message_parameter.length = read->bytes;
     message_parameter.data = buffer;
+
     if (ipc_receive(mount_point[volume].ipc_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
     {
+        log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
+                           "vfs_file_read failed: reading from mailbox %u failed",
+                            mount_point[volume].ipc_structure.input_mailbox_id);
+
         return FALSE;
     }
     else
@@ -450,7 +484,8 @@ static bool vfs_mount(file_mount_type *mount, ipc_structure_type *ipc_structure)
     string_copy_max(mount_point[mounted_volumes].location, mount->location, MAX_PATH_NAME_LENGTH);
     mounted_volumes++;
 
-    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE, "Mounting %u at //%s.",
+    log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
+                        "Mounting mailbox %u at //%s.",
                         ipc_structure->output_mailbox_id, mount->location);
     return TRUE;
 }
