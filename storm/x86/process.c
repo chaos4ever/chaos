@@ -118,6 +118,7 @@ static process_id_type process_get_free_id(void)
 }
 
 // Create a new process.
+// FIXME: #115: Cleanup this method by taking some first, easy steps.
 // FIXME: More error checking (especially memory related stuff).
 // FIXME: Split this function into several, if possible. It's far too long right now.
 // FIXME: Reimplement the parameter passing (in process_data->parameter_string)
@@ -173,6 +174,12 @@ return_type process_create(process_create_type *process_data)
     // This must be done before we set up the page directory, so we can set the CR3. (used by
     // memory_virtual_map_other)
     DEBUG_MESSAGE(DEBUG, "Allocating memory for the process TSS.");
+
+    // We are a bit sloppy here and grab the mutex early, for simplicity. It gets released in all return paths.
+    if (initialised)
+    {
+        mutex_kernel_wait(&memory_mutex);
+    }
 
     process_tss = (storm_tss_type *) memory_global_allocate(sizeof (storm_tss_type));
     memory_set_uint8_t((uint8_t *) process_tss, 0, sizeof (storm_tss_type));
@@ -521,6 +528,7 @@ return_type process_create(process_create_type *process_data)
             // We are being called from userland. Block.
             current_tss->state = STATE_BLOCKED_PARENT;
             mutex_kernel_signal(&tss_tree_mutex);
+            mutex_kernel_signal(&memory_mutex);
             dispatch_next();
 
             return STORM_RETURN_SUCCESS;
@@ -562,6 +570,12 @@ return_type process_create(process_create_type *process_data)
             }
         }
     }
+
+    if (initialised)
+    {
+        mutex_kernel_signal(&memory_mutex);
+    }
+
     mutex_kernel_signal(&tss_tree_mutex);
 
     return STORM_RETURN_SUCCESS;

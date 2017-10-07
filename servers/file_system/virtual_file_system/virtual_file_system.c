@@ -477,16 +477,49 @@ static bool vfs_file_read(file_read_type *read, void *buffer)
 }
 
 // Mount the given service at the given location.
-static bool vfs_mount(file_mount_type *mount, ipc_structure_type *ipc_structure)
+static bool vfs_mount(file_mount_type *mount)
 {
-    memory_copy(&mount_point[mounted_volumes].ipc_structure, ipc_structure, sizeof(ipc_structure_type));
+    // FIXME: We only support one file_system implementation for now. A proper implementation would gather a more comprehensive
+    // list of file system services, attempt to mount the volume with them all and see which one is successful.
+    mailbox_id_type mailbox_id[1];
+    unsigned int services = 1;
+
+    if (ipc_service_resolve("file_system", mailbox_id, &services, 5, &empty_tag) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(&log_structure, LOG_URGENCY_ERROR, "vfs_mount: Failed to resolve file_system service");
+        return FALSE;
+    }
+
+    mount_point[mounted_volumes].ipc_structure.output_mailbox_id = mailbox_id[0];
+    if (ipc_service_connection_request(&mount_point[mounted_volumes].ipc_structure) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(&log_structure, LOG_URGENCY_ERROR,
+                            "vfs_mount: Failed to establish connection with file system service with mailbox ID %u",
+                            mailbox_id[0]);
+        return FALSE;
+    }
+
+    message_parameter_type message_parameter;
+    message_parameter.protocol = IPC_PROTOCOL_FILE;
+    message_parameter.message_class = IPC_FILE_MOUNT_VOLUME;
+    message_parameter.length = sizeof(mailbox_id_type);
+    message_parameter.data = &mount->mailbox_id;
+
+    if (ipc_send(mount_point[mounted_volumes].ipc_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(&log_structure, LOG_URGENCY_ERROR,
+                            "vfs_mount: Failed to send IPC message to mailbox ID %u",
+                            mailbox_id[0]);
+        return FALSE;
+    }
+
     mount_point[mounted_volumes].handled_by_vfs = FALSE;
     string_copy_max(mount_point[mounted_volumes].location, mount->location, MAX_PATH_NAME_LENGTH);
     mounted_volumes++;
 
     log_print_formatted(&log_structure, LOG_URGENCY_INFORMATIVE,
                         "Mounting mailbox %u at //%s.",
-                        ipc_structure->output_mailbox_id, mount->location);
+                        mount->mailbox_id, mount->location);
     return TRUE;
 }
 
@@ -552,7 +585,17 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
             {
                 file_verbose_directory_entry_type *directory_entry = (file_verbose_directory_entry_type *) data;
 
-                vfs_file_get_info(directory_entry);
+                if (directory_entry->path_name[0] == '\0')
+                {
+                    log_print(&log_structure, LOG_URGENCY_ERROR,
+                              "IPC_FILE_GET_INFO: Attempted to get info for a file with an empty path");
+                    directory_entry->success = FALSE;
+                }
+                else
+                {
+                    vfs_file_get_info(directory_entry);
+                }
+
                 ipc_send(ipc_structure.output_mailbox_id, &message_parameter);
                 break;
             }
@@ -561,7 +604,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
             {
                 file_mount_type *mount = (file_mount_type *) data;
 
-                vfs_mount(mount, &ipc_structure);
+                vfs_mount(mount);
                 break;
             }
 

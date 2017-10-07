@@ -190,6 +190,11 @@ void dispatch_next(void)
     }
 #endif
 
+    if (!initialised)
+    {
+        DEBUG_HALT("dispatch_next should never be called before the kernel initialization is complete.");
+    }
+
     // Make sure we don't get aborted. mutex_kernel_wait can not be used.
     // FIXME: This won't always work...
     tss_tree_mutex = MUTEX_LOCKED;
