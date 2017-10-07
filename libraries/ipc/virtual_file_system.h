@@ -61,16 +61,6 @@ enum
     IPC_RETURN_VIRTUAL_FILE_SYSTEM_FUNCTION_UNSUPPORTED,
 };
 
-// Type definitions.
-typedef struct
-{
-    // The location where we want this volume to be mounted.
-    char location[MAX_PATH_NAME_LENGTH];
-
-    // The mailbox ID of the mailbox for talking to the block device server.
-    mailbox_id_type mailbox_id;
-} virtual_file_system_mount_type;
-
 typedef struct
 {
     char meta_location[MAX_PATH_NAME_LENGTH];

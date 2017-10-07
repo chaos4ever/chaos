@@ -20,8 +20,9 @@ module /servers/ipv4.gz
 module /servers/pci.gz
 module /servers/virtual_file_system.gz
 
+# Cluido temporarily here, until we have resolved https://github.com/chaos4ever/chaos/issues/45
+module /programs/cluido.gz
+
 # Boot server last, since it kind of expects everything else to be up and running.
 module /servers/boot.gz
 
-# Cluido temporarily here, until we have resolved https://github.com/chaos4ever/chaos/issues/45
-module /programs/cluido.gz

@@ -19,10 +19,10 @@ COMMON_CFLAGS = %w(
   -Wmissing-declarations
   -Wmissing-noreturn
   -pipe
-  -O3
+  -O0
   -fno-builtin
   -funsigned-char
-  -g
+  -ggdb3
   -m32
   -fomit-frame-pointer
   -ffreestanding

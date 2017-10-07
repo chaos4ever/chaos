@@ -11,6 +11,7 @@
 static uint8_t global_fat[16384];
 
 // Detects wether there is a FAT file system on the given mailbox ID.
+// TODO: Should be able to return error conditions also, not only TRUE or FALSE.
 bool detect_fat(fat_info_type *fat_info)
 {
     message_parameter_type message_parameter;
@@ -28,11 +29,30 @@ bool detect_fat(fat_info_type *fat_info)
 
     ipc_block_read.start_block_number = 0;
     ipc_block_read.number_of_blocks = 1;
-    ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter);
+    if (ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(
+            &log_structure, LOG_URGENCY_ERROR,
+            "ipc_send to mailbox %u failed (from %s:%u)",
+            fat_info->block_structure.output_mailbox_id,
+            __FILE__, __LINE__
+        );
+        return FALSE;
+    }
 
     message_parameter.length = 1024;
     message_parameter.data = sector;
-    ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL);
+    if (ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
+    {
+        log_print_formatted(
+            &log_structure,
+            LOG_URGENCY_ERROR,
+            "ipc_receive from mailbox %u failed (from %s:%u)",
+            fat_info->block_structure.input_mailbox_id,
+            __FILE__, __LINE__
+        );
+        return FALSE;
+    }
 
     // Make sure this is a valid FAT filesystem.
     if (sector[510] == 0x55 &&
@@ -101,12 +121,33 @@ bool detect_fat(fat_info_type *fat_info)
         ipc_block_read.start_block_number = 1;
         ipc_block_read.number_of_blocks = bios_parameter_block->fat_size_16;
 
-        ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter);
+        if (ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+        {
+            log_print_formatted(
+                &log_structure,
+                LOG_URGENCY_ERROR,
+                "ipc_send to mailbox %u failed (from %s:%u)",
+                fat_info->block_structure.output_mailbox_id,
+                __FILE__, __LINE__
+            );
+            return FALSE;
+        }
 
-        memory_set_uint8_t((uint8_t *) &global_fat, 0, 16384);
+        memory_set_uint32_t((uint32_t *) &global_fat, 0xDEADBEEF, 16384 / sizeof(uint32_t));
         message_parameter.length = 16384;
         message_parameter.data = &global_fat;
-        ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL);
+        if (ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
+        {
+            log_print_formatted(
+                &log_structure,
+                LOG_URGENCY_ERROR,
+                "ipc_receive from mailbox %u failed (from %s:%u)",
+                fat_info->block_structure.input_mailbox_id,
+                __FILE__, __LINE__
+            );
+            return FALSE;
+        }
+
         fat_info->fat = &global_fat;
 
         // Also, read the root directory.
@@ -121,16 +162,41 @@ bool detect_fat(fat_info_type *fat_info)
         message_parameter.data = &ipc_block_read;
         message_parameter.block = TRUE;
 
-        //    log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
-        //                         "Reading %u sectors",
-        //                         fat_info->root_directory_sectors);
+#ifdef DEBUG
+        log_print_formatted(
+            &log_structure, LOG_URGENCY_DEBUG,
+            "Reading %u sectors",
+            fat_info->root_directory_sectors
+        );
+#endif
 
         ipc_block_read.start_block_number = block_number;
         ipc_block_read.number_of_blocks = fat_info->root_directory_sectors;
-        ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter);
+        if (ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
+        {
+            log_print_formatted(
+                &log_structure,
+                LOG_URGENCY_ERROR,
+                "ipc_send to mailbox %u failed (from %s:%u)",
+                fat_info->block_structure.output_mailbox_id,
+                __FILE__, __LINE__
+            );
+            return FALSE;
+        }
+
         message_parameter.length = (fat_info->root_directory_sectors * fat_info->bytes_per_sector);
         message_parameter.data = &global_root;
-        ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL);
+        if (ipc_receive(fat_info->block_structure.input_mailbox_id, &message_parameter, NULL) != IPC_RETURN_SUCCESS)
+        {
+            log_print_formatted(
+                &log_structure,
+                LOG_URGENCY_ERROR,
+                "ipc_receive from mailbox %u failed (from %s:%u)",
+                fat_info->block_structure.input_mailbox_id,
+                __FILE__, __LINE__
+            );
+            return FALSE;
+        }
         fat_info->root = &global_root;
 
         return TRUE;

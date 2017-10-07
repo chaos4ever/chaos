@@ -42,7 +42,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
     ipc_structure_type ipc_structure;
     bool done = FALSE;
     uint32_t *data;
-    unsigned int data_size = 1024;
+    unsigned int data_size = 2048;
 
     memory_allocate((void **) &data, data_size);
 

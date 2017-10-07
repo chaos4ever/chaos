@@ -6,6 +6,8 @@
 
 #include "fat.h"
 
+#define DEBUG
+
 // Get the next cluster number in the chain for the given cluster.
 uint32_t get_next_cluster(uint32_t cluster_number, void *fat, int bits)
 {
@@ -17,7 +19,7 @@ uint32_t get_next_cluster(uint32_t cluster_number, void *fat, int bits)
             uint32_t new_cluster_number = FAT12_READ_ENTRY(fat12, cluster_number);
 
             if (new_cluster_number == FAT12_BAD_CLUSTER ||
-                    new_cluster_number >= FAT12_END_OF_CLUSTER_CHAIN)
+                new_cluster_number >= FAT12_END_OF_CLUSTER_CHAIN)
             {
                 return UINT32_MAX;
             }
@@ -83,12 +85,23 @@ uint32_t read_clusters(fat_info_type *fat_info, void *output, uint32_t start_clu
         }
         else
         {
-            //      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG,
-            //                           "Reading cluster number %lu", cluster_number);
-            read_single_cluster(fat_info, cluster_number, (void *)
-                                ((uint32_t) output + (clusters_read *
-                                                 fat_info->bytes_per_sector *
-                                                 fat_info->sectors_per_cluster)));
+#ifdef DEBUG
+            log_print_formatted (
+                &log_structure,
+                LOG_URGENCY_DEBUG,
+                "Reading cluster number %u",
+                cluster_number
+            );
+#endif
+            void *data_buffer = (void *) (
+                (uint32_t) output + (
+                    clusters_read *
+                    fat_info->bytes_per_sector *
+                    fat_info->sectors_per_cluster
+                )
+            );
+
+            read_single_cluster(fat_info, cluster_number, data_buffer);
             clusters_read++;
         }
         cluster_number = get_next_cluster(cluster_number, fat_info->fat, fat_info->bits);
