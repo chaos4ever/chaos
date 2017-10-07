@@ -359,8 +359,7 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
     return STORM_RETURN_SUCCESS;
 }
 
-/* Receive a message from the mailbox. */
-
+// Receive a message from the mailbox.
 return_type mailbox_receive(mailbox_id_type mailbox_id,
                             message_parameter_type *message_parameter)
 {
@@ -484,8 +483,8 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
     }
     else
     {
-        DEBUG_MESSAGE(DEBUG, "Message was too large (max %u bytes, message size was %u bytes)",
-                      message_parameter->length, mailbox->first_message->length);
+        DEBUG_MESSAGE(DEBUG, "Message in mailbox %u was too large (max %u bytes, message size was %u bytes)",
+                      mailbox_id, message_parameter->length, mailbox->first_message->length);
 
         message_parameter->length = mailbox->first_message->length;
         mutex_kernel_signal(&tss_tree_mutex);
