@@ -26,6 +26,7 @@ Vagrant.configure(2) do |config|
       grub-legacy \
       mtools \
       nasm \
+      psmisc \
       qemu \
       rake
 
