@@ -11,7 +11,7 @@ OBJECTS = %w(
   udp.o
 ).freeze
 
-EXTRA_LDFLAGS = '-lgcc'.freeze
+EXTRA_LIBS = '-lgcc'.freeze
 LIBRARIES = %w(
   ipc
   ipv4

@@ -38,14 +38,16 @@ CFLAGS = (COMMON_CFLAGS + %w(
   -Wstrict-prototypes
 )).join(' ')
 
-EXTRA_LDFLAGS ||= ''.freeze
+EXTRA_LDFLAGS_PRE ||= ''.freeze
+EXTRA_LIBS ||= ''.freeze
 LDFLAGS = %W(
+  #{EXTRA_LDFLAGS_PRE}
   #{LIBRARIES_DIR}/startup.o
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32
   -L#{LIBRARIES_DIR}
-  #{EXTRA_LDFLAGS}
+  #{EXTRA_LIBS}
 ).freeze
 
 LIBRARY_FILES = LIBRARIES.map { |l| "#{LIBRARIES_DIR}/lib#{l}.a" }

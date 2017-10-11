@@ -10,10 +10,13 @@ OUTPUT_ARCH(i386)
 ENTRY(startup)
 SEARCH_DIR(/mnt/chaos/programming/libraries/static);
 
+DEFAULT_PROCESS_VM_BASE = 0x40000000;
+PROCESS_VM_BASE = DEFINED(PROCESS_VM_BASE) ? PROCESS_VM_BASE : DEFAULT_PROCESS_VM_BASE;
+
 SECTIONS
 {
   /* Read-only sections, merged into text segment: */
-  . = 0x40000000 + SIZEOF_HEADERS;
+  . = PROCESS_VM_BASE + SIZEOF_HEADERS;
   .interp     : { *(.interp) 	}
   .hash          : { *(.hash)		}
   .dynsym        : { *(.dynsym)		}

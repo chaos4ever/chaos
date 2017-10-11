@@ -22,5 +22,6 @@ LIBRARIES = %w(
 ).freeze
 
 OUTPUT = 'fat'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x50000000'
 
 load '../../servers.rake'
