@@ -2,6 +2,9 @@
 Vagrant.configure(2) do |config|
   config.vm.box = 'remram/debian-9-i386'
 
+  # Sometimes, the default seems to be too little for this one.
+  config.vm.boot_timeout = 600
+
   config.vm.provision 'shell', inline: <<-SHELL
     set -e
 
