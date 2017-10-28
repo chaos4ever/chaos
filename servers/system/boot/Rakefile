@@ -14,5 +14,6 @@ LIBRARIES = %w(
 ).freeze
 
 OUTPUT = 'boot'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x49000000'
 
 load '../../servers.rake'

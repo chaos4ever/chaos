@@ -182,6 +182,8 @@ typedef struct
     uint8_t reserved : 2;
 
     // Reserved for Windows NT. Set to zero when creating, and never rely upon.
+    // FIXME: This is the case flag. We should support it, to properly handle lowercase file names on FAT volumes.
+    // See https://github.com/chaos4ever/chaos/issues/107
     uint8_t nt_reserved;
 
     // Time stamp the file was created.

@@ -1,6 +1,6 @@
-// Abstract: Provides functions for managing the virtual memory (MMU) mechanisms of the IA32 architecture.
-// Authors: Per Lundberg <per@chaosdev.io>
-//          Henrik Hallin <hal@chaosdev.org>
+// Abstract: Provides functions for managing the virtual memory (MMU) mechanisms of the x86 architecture.
+// Authors: Henrik Hallin <hal@chaosdev.org>
+//          Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999 chaos development.
 
@@ -310,7 +310,7 @@ return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_dire
 static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
     page_table_entry *page_table;
-    uint32_t counter, index;
+    uint32_t counter;
 
     DEBUG_MESSAGE(
         DEBUG,
@@ -320,34 +320,34 @@ static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physi
 
     for (counter = 0; counter < pages; counter++)
     {
-        index = (virtual_page + counter) / 1024;
+        uint32_t page_directory_index = (virtual_page + counter) / 1024;
 
-        DEBUG_MESSAGE(DEBUG, "index = %u, counter = %u", index, counter);
+        DEBUG_MESSAGE(DEBUG, "index = %u, counter = %u", page_directory_index, counter);
 
-        if (process_page_directory[index].present == 0)
+        if (process_page_directory[page_directory_index].present == 0)
         {
             uint32_t page_table_page;
 
             // Page Table is not set up yet. Let's set up a new one.
-            process_page_directory[index].present = 1;
-            process_page_directory[index].flags = PAGE_DIRECTORY_FLAGS;
-            process_page_directory[index].accessed = 0;
-            process_page_directory[index].zero = 0;
-            process_page_directory[index].page_size = 0;
-            process_page_directory[index].global = 0;
-            process_page_directory[index].available = 0;
+            process_page_directory[page_directory_index].present = 1;
+            process_page_directory[page_directory_index].flags = PAGE_DIRECTORY_FLAGS;
+            process_page_directory[page_directory_index].accessed = 0;
+            process_page_directory[page_directory_index].zero = 0;
+            process_page_directory[page_directory_index].page_size = 0;
+            process_page_directory[page_directory_index].global = 0;
+            process_page_directory[page_directory_index].available = 0;
 
             // FIXME: Check return value.
             DEBUG_MESSAGE(DEBUG, "Allocating memory for a new page table.");
             memory_physical_allocate(&page_table_page, 1, "Process page table.");
 
-            process_page_directory[index].page_table_base = page_table_page;
+            process_page_directory[page_directory_index].page_table_base = page_table_page;
 
             //      memory_virtual_cache_invalidate
             //        ((void *) (process_page_directory[index].page_table_base * SIZE_PAGE));
 
             // Make sure we could allocate memory.
-            if (process_page_directory[index].page_table_base == 0)
+            if (process_page_directory[page_directory_index].page_table_base == 0)
             {
                 return RETURN_OUT_OF_MEMORY;
             }
@@ -355,33 +355,33 @@ static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physi
             DEBUG_MESSAGE(DEBUG, "Recursing.");
 
             memory_virtual_map_real(
-                GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + index,
-                (uint32_t) process_page_directory[index].page_table_base,
+                GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + page_directory_index,
+                (uint32_t) process_page_directory[page_directory_index].page_table_base,
                 1,
                 PAGE_KERNEL
             );
 
-            memory_set_uint8_t((uint8_t *)(BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE)), 0, SIZE_PAGE);
+            memory_set_uint8_t((uint8_t *)(BASE_PROCESS_PAGE_TABLES + (page_directory_index * SIZE_PAGE)), 0, SIZE_PAGE);
         }
 
         // The page table is in the page_directory.
-        page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES + (index * SIZE_PAGE));
+        page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES + (page_directory_index * SIZE_PAGE));
 
         // Which entry in the page table to modify.
-        index = (virtual_page + counter) % 1024;
+        uint32_t page_table_index = (virtual_page + counter) % 1024;
 
         // Set up a new page table entry.
         // FIXME: fix the flags to use defines. Both here and in the other functions.
 
         DEBUG_MESSAGE(DEBUG, "slem! %x", page_table);
 
-        page_table[index].present = 1;
-        page_table[index].flags = flags;
-        page_table[index].accessed = 0;
-        page_table[index].dirty = 0;
-        page_table[index].zero = 0;
-        page_table[index].available = 0;
-        page_table[index].page_base = physical_page + counter;
+        page_table[page_table_index].present = 1;
+        page_table[page_table_index].flags = flags;
+        page_table[page_table_index].accessed = 0;
+        page_table[page_table_index].dirty = 0;
+        page_table[page_table_index].zero = 0;
+        page_table[page_table_index].available = 0;
+        page_table[page_table_index].page_base = physical_page + counter;
 
         // FIXME: Only invalidate if present was 0. But there is maybe no performance loss in invalidating unconditionally?
         DEBUG_MESSAGE(DEBUG, "Invalidating cache");
@@ -513,7 +513,7 @@ return_type memory_virtual_map(uint32_t virtual_page, uint32_t physical_page, ui
     return return_value;
 }
 
-// This is the wrapper for memory_virtual_map_other. All it does is protect the function with mutexes.
+// This is the wrapper for memory_virtual_map_other_real. All it does is protect the function with mutexes.
 return_type memory_virtual_map_other(storm_tss_type *tss, uint32_t virtual_page, uint32_t physical_page,
                                      uint32_t pages, uint32_t flags)
 {

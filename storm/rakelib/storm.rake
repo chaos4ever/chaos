@@ -7,8 +7,8 @@ DEFINES = (ENV['DEFINES'] || '') +
 COMMON_CFLAGS =
   "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
   -Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
-  -Wmissing-noreturn -pipe -O3 -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
-  -g -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
+  -Wmissing-noreturn -pipe -O0  -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
+  -ggdb3 -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
 
 CFLAGS = COMMON_CFLAGS +
   "--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \

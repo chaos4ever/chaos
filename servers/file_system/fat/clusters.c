@@ -6,7 +6,7 @@
 
 #include "fat.h"
 
-#define DEBUG
+#undef DEBUG
 
 // Get the next cluster number in the chain for the given cluster.
 uint32_t get_next_cluster(uint32_t cluster_number, void *fat, int bits)

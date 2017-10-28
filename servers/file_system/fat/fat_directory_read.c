@@ -46,21 +46,25 @@ bool fat_directory_read(fat_info_type *fat_info, char *path[], int elements, fat
             entry = get_entry_by_name(directory, path[element]);
             if (entry == NULL)
             {
+#ifdef DEBUG
                 log_print_formatted(
                     &log_structure,
                     LOG_URGENCY_DEBUG,
                     "get_entry_by_name for '%s' returned NULL",
                     path[element]
                 );
+#endif
                 break;
             }
 
+#ifdef DEBUG
             log_print_formatted(
                 &log_structure,
                 LOG_URGENCY_DEBUG,
                 "entry->name: %s",
                 entry->name
             );
+#endif
 
             read_clusters(
                 fat_info,
@@ -73,12 +77,14 @@ bool fat_directory_read(fat_info_type *fat_info, char *path[], int elements, fat
         }
 
         *fat_entry = (fat_entry_type *) &directory_buffer;
+#ifdef DEBUG
         log_print_formatted(
             &log_structure,
             LOG_URGENCY_DEBUG,
             "fat_entry->name: %s",
             (*fat_entry)->name
         );
+#endif
 
         return TRUE;
     }

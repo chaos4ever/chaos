@@ -8,6 +8,7 @@
 // The maximum number of programs to load from the startup file.
 #define MAX_PROGRAMS 16
 
+// FIXME: Workaround for https://github.com/chaos4ever/chaos/issues/107
 #define STARTUP_FILE "//ramdisk/CONFIG/SERVERS/BOOT/STARTUP"
 
 static log_structure_type log_structure;
@@ -64,7 +65,7 @@ int main(void)
 
     system_call_process_parent_unblock();
 
-    log_print(&log_structure, LOG_URGENCY_DEBUG, "end of boot");
+    log_print(&log_structure, LOG_URGENCY_DEBUG, "Boot server completed.");
 
     return 0;
 }
@@ -143,7 +144,11 @@ static bool read_program_list(unsigned int *file_size)
         return FALSE;
     }
 
-    memory_allocate((void **) &program_list_buffer, directory_entry.size);
+    if (memory_allocate((void **) &program_list_buffer, directory_entry.size) != MEMORY_RETURN_SUCCESS)
+    {
+        log_print(&log_structure, LOG_URGENCY_ERROR, "Failed allocating memory for program list.");
+        return FALSE;
+    }
 
     file_handle_type handle;
     if (file_open(&vfs_structure, STARTUP_FILE, FILE_MODE_READ, &handle) != FILE_RETURN_SUCCESS)
@@ -152,9 +157,9 @@ static bool read_program_list(unsigned int *file_size)
         return FALSE;
     }
 
-    if (file_read(&vfs_structure, handle, directory_entry.size, &program_list_buffer) != FILE_RETURN_SUCCESS)
+    if (file_read(&vfs_structure, handle, directory_entry.size, program_list_buffer) != FILE_RETURN_SUCCESS)
     {
-        log_print(&log_structure, LOG_URGENCY_ERROR, "Failed reading form " STARTUP_FILE);
+        log_print(&log_structure, LOG_URGENCY_ERROR, "Failed reading from " STARTUP_FILE);
         return FALSE;
     }
 

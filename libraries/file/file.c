@@ -113,7 +113,7 @@ return_type file_open(ipc_structure_type *vfs_structure, char *file_name, file_m
 }
 
 // Read from a file.
-return_type file_read(ipc_structure_type *vfs_structure, file_handle_type file_handle, unsigned int length, void *buffer)
+return_type file_read(ipc_structure_type *vfs_structure, file_handle_type file_handle, unsigned int length, uint8_t *buffer)
 {
     message_parameter_type message_parameter;
     file_read_type read;

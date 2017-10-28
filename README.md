@@ -40,7 +40,7 @@ We encourage code that is written for chaos (servers, programs, libraries) to us
 
 ### chaos License (3-clause BSD)
 
-Copyright © 1999-2000, 2006-2007, 2013, 2015-2017 chaos development.<br/>
+Copyright © 1999-2017 chaos development.<br/>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:

@@ -196,7 +196,7 @@ return_type process_create(process_create_type *process_data)
     process_tss->allocated_pages = 1;
     process_tss->cr3 = page_directory_page * SIZE_PAGE;
 
-    // Map it for ourselves so that we can clear it out.
+    // Map it for ourselves so that we can clear it out and create the page tables mapping
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_page, 1, PAGE_KERNEL);
     memory_set_uint8_t((uint8_t *) BASE_PROCESS_TEMPORARY, 0, SIZE_PAGE);
 
@@ -462,7 +462,7 @@ return_type process_create(process_create_type *process_data)
     // Set up the rest of the data in the TSS.
     process_tss->eip = process_data->initial_eip;
 
-    // We put a 'magic cookie' in the general purpose registers to easify debugging. Also, it makes it possible for programs to
+    // We put a 'magic cookie' in the general purpose registers to simplify debugging. Also, it makes it possible for programs to
     // detect if they're running under storm very easily. ;-)
     process_tss->eax = process_tss->ebx = process_tss->ecx = process_tss->edx = 0xC0CAC01A;
 

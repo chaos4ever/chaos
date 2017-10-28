@@ -14,7 +14,9 @@ bool fat_file_get_info(fat_info_type *fat_info, file_verbose_directory_entry_typ
     fat_entry_type *fat_entry;
     fat_entry_type *our_file;
 
+#ifdef DEBUG
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "fat_file_get_info opening '%s'.", file_info->path_name);
+#endif
 
     // Read the directory where this file is located. If it is a subdirectory, we need to read every parent directory. First, we
     // split the directory name into its logical components.
