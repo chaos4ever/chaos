@@ -105,7 +105,7 @@ uint32_t read_clusters(fat_info_type *fat_info, void *output, uint32_t start_clu
             clusters_read++;
         }
         cluster_number = get_next_cluster(cluster_number, fat_info->fat, fat_info->bits);
-    } while (cluster_number != MAX_uint32_t && clusters_read < number_of_clusters);
+    } while (cluster_number != UINT32_MAX && clusters_read < number_of_clusters);
 
     return cluster_number;
 }

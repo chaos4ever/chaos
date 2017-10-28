@@ -118,7 +118,7 @@ bool detect_fat(fat_info_type *fat_info)
         message_parameter.data = &ipc_block_read;
         message_parameter.length = sizeof(ipc_block_read_type);
 
-        ipc_block_read.start_block_number = 1;
+        ipc_block_read.start_block_number = bios_parameter_block->reserved_sectors;
         ipc_block_read.number_of_blocks = bios_parameter_block->fat_size_16;
 
         if (ipc_send(fat_info->block_structure.output_mailbox_id, &message_parameter) != IPC_RETURN_SUCCESS)
