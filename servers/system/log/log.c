@@ -59,7 +59,10 @@ bool urgency_accept[] =
     [LOG_URGENCY_ERROR] = TRUE,
     [LOG_URGENCY_WARNING] = TRUE,
     [LOG_URGENCY_INFORMATIVE] = TRUE,
-    [LOG_URGENCY_DEBUG] = TRUE,
+
+    // Enable at will, if you want loads of debug output.
+    [LOG_URGENCY_DEBUG] = FALSE,
+
     [LOG_URGENCY_KERNEL] = TRUE
 };
 
