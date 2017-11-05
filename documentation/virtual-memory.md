@@ -7,7 +7,7 @@ Start                       | Length        | Description
 `0x00002000`                | `0x00001000`  | Exception TSS:es.
 `0x00008000`                | `0x00002000`  | Temporary mapped data.
 `0x0000A000`                | `0x00001000`  | Kernel TSS.
-`0x0000B000`                | `0x10001000`  | GDT/IDT.
+`0x0000B000`                | `0x00001000`  | GDT/IDT.
 `0x00100000`                | Varying       | Kernel code and data.
 `0x00300000`                | `0x00100000`  | Process code and data. Used by `process_create`.
 `0x00400000`                | `0x01C00000`  | Process' low-level memory allocation structures.
