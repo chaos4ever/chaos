@@ -309,6 +309,9 @@ return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_dire
 // This function is for mapping memory in syscalls (when paging is enabled).
 static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
+    //if (virtual_page > BASE_PROCESS_PAGE_TABLES / 1024
+
+
     page_table_entry *page_table;
     uint32_t counter;
 
@@ -343,24 +346,28 @@ static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physi
 
             process_page_directory[page_directory_index].page_table_base = page_table_page;
 
-            //      memory_virtual_cache_invalidate
-            //        ((void *) (process_page_directory[index].page_table_base * SIZE_PAGE));
-
             // Make sure we could allocate memory.
             if (process_page_directory[page_directory_index].page_table_base == 0)
             {
                 return RETURN_OUT_OF_MEMORY;
             }
 
-            DEBUG_MESSAGE(DEBUG, "Recursing.");
+            // DEBUG_MESSAGE(DEBUG, "Recursing.");
 
-            memory_virtual_map_real(
+            /*return_type rv =*/ memory_virtual_map_real(
                 GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + page_directory_index,
                 (uint32_t) process_page_directory[page_directory_index].page_table_base,
                 1,
                 PAGE_KERNEL
             );
 
+            // if (rv != RETURN_SUCCESS)
+            // {
+            //     return rv;
+            // }
+
+            // Because of the magic page directory entry set up in process.c, the page table is accessible right away without any
+            // further mapping.
             memory_set_uint8_t((uint8_t *)(BASE_PROCESS_PAGE_TABLES + (page_directory_index * SIZE_PAGE)), 0, SIZE_PAGE);
         }
 
@@ -814,4 +821,19 @@ return_type memory_virtual_reserve(unsigned int start_page, unsigned int pages)
     // We didn't find a match. This will normally never happen.
     DEBUG_HALT("Couldn't find a match");
     return RETURN_PAGE_NOT_FOUND;
+}
+
+void memory_virtual_create_page_tables_mapping(page_directory_entry_page_table *other_process_page_directory, uint32_t page_directory_page)
+{
+    // The page tables page table is necessary for the kernel to be able to add page tables to this process at runtime. By abusing
+    // the page directory as a page table, this clever hack should allow us to access all the page tables very easily.
+    int page_tables_page_directory_index = BASE_PROCESS_PAGE_TABLES / SIZE_PAGE / 1024;
+    other_process_page_directory[page_tables_page_directory_index].present = 1;
+    other_process_page_directory[page_tables_page_directory_index].flags = PAGE_DIRECTORY_FLAGS;
+    other_process_page_directory[page_tables_page_directory_index].accessed = 0;
+    other_process_page_directory[page_tables_page_directory_index].zero = 0;
+    other_process_page_directory[page_tables_page_directory_index].page_size = 0;
+    other_process_page_directory[page_tables_page_directory_index].global = 0;
+    other_process_page_directory[page_tables_page_directory_index].available = 0;
+    other_process_page_directory[page_tables_page_directory_index].page_table_base = page_directory_page;
 }

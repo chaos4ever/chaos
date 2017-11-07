@@ -455,6 +455,9 @@ return_type process_create(process_create_type *process_data)
                                  1, PAGE_KERNEL);
     }
 
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_page, 1, PAGE_KERNEL);
+    memory_virtual_create_page_tables_mapping((page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY, page_directory_page);
+
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY),
                        GET_PAGE_NUMBER(shared_page_tables),
                        1, PAGE_KERNEL);
