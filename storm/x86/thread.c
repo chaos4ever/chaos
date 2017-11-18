@@ -217,32 +217,28 @@ thread_id_type thread_get_free_id(void)
 // a cluster. Discuss how this is best done! Right now, we lock everything, which is sub-optimal.
 return_type thread_create(void *(*start_routine) (void *), void *argument)
 {
+
     storm_tss_type *new_tss;
     page_directory_entry_page_table *new_page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
-    page_table_entry *new_page_table = (page_table_entry *) (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
-    uint32_t stack_physical_page, page_directory_physical_page, page_table_physical_page;
+    //page_table_entry *new_page_table = (page_table_entry *) (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
+    uint32_t stack_physical_page, page_directory_physical_page;//, page_table_physical_page;
     int index;
     process_info_type *process_info;
 
-    // FIXME: We shouldn't have to do like this.
-    DEBUG_MESSAGE(DEBUG, "Disabling interrupts");
     cpu_interrupts_disable();
-
-    // Add the new task to the task list, so we can map for the new thread.
     mutex_kernel_wait(&memory_mutex);
+    mutex_kernel_wait(&tss_tree_mutex);
 
     // FIXME: Check return value.
     memory_physical_allocate(&page_directory_physical_page, 1, "Thread page directory.");
-    memory_physical_allocate(&page_table_physical_page, 1, "Thread page table.");
+    //memory_physical_allocate(&page_table_physical_page, 1, "Thread page table.");
 
     // Map the page directory and the lowest page table.
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_physical_page, 1, PAGE_KERNEL);
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY) + 1, page_table_physical_page, 1, PAGE_KERNEL);
+    //memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY) + 1, page_table_physical_page, 1, PAGE_KERNEL);
 
     // Allocate memory for a TSS.
     new_tss = ((storm_tss_type *) memory_global_allocate(sizeof (storm_tss_type) + current_tss->iomap_size));
-
-    mutex_kernel_signal(&memory_mutex);
 
     // Clone the TSS.
     memory_copy((uint8_t *) new_tss, (uint8_t *) current_tss, sizeof (storm_tss_type) + current_tss->iomap_size);
@@ -250,9 +246,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     // FIXME: tss_tree_mutex should be changed to a 'dispatcher_mutex', or something... This looks a little weird if
     // you don't know why it's written this way.
 
-    mutex_kernel_wait(&tss_tree_mutex);
     new_tss->thread_id = thread_get_free_id();
-    mutex_kernel_signal(&tss_tree_mutex);
 
     // What has changed in the TSS is the ESP/ESP0 and the EIP. We must update those fields.
     new_tss->eip = (uint32_t) start_routine;
@@ -260,10 +254,9 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
 
     //  debug_print ("thread: %u\n", new_tss->thread_id);
 
-    /* Clone the page directory and the lowest page table. */
-
+    // Clone the page directory and the lowest page table.
     memory_copy((uint8_t *) new_page_directory, (uint8_t *) BASE_PROCESS_PAGE_DIRECTORY, SIZE_PAGE);
-    memory_copy((uint8_t *) new_page_table, (uint8_t *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
+    //memory_copy((uint8_t *) new_page_table, (uint8_t *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
 
     // Set the stack as non-present.
     // FIXME: defines.
@@ -272,32 +265,7 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
         new_page_directory[index].present = 0;
     }
 
-    // Map the thread's page directory and update the mapping for the first pagetable.
-
-#if FALSE
-    new_page_directory[0].page_table_base = page_table_physical_page;
-    memory_virtual_map_other(new_tss,
-                             GET_PAGE_NUMBER(BASE_PROCESS_PAGE_DIRECTORY),
-                             page_directory_physical_page, 1, PAGE_KERNEL);
-
-    // The 4 MB region where the pagetables are mapped also need to be unique.
-
-    memory_physical_allocate(&page_table_physical_page, 1);
-
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY) + 1,
-                       page_table_physical_page, 1, PAGE_KERNEL);
-
-    memory_copy((uint8_t *) new_page_table, (uint8_t *) BASE_PROCESS_PAGE_TABLES, SIZE_PAGE);
-
-    new_page_directory[8].page_table_base = page_table_physical_page;
-    memory_virtual_map_other(new_tss,
-                             GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES),
-                             page_table_physical_page, 1, PAGE_KERNEL);
-#endif
-
     // FIXME: Map into all sister threads address spaces when creating a new page table for a thread.
-
-    mutex_kernel_wait(&memory_mutex);
 
     // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
     // FIXME: Check return value.
@@ -333,23 +301,20 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
     memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page, current_tss->stack_pages,
                              PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
 
-    mutex_kernel_signal(&memory_mutex);
-
     new_tss->ss = new_tss->ss0;
     new_tss->cs = SELECTOR_KERNEL_CODE;
     new_tss->eflags = THREAD_NEW_EFLAGS;
     new_tss->timeslices = 0;
     string_copy(new_tss->thread_name, "unnamed");
 
-    mutex_kernel_wait(&tss_tree_mutex);
     process_info = (process_info_type *) new_tss->process_info;
     thread_link_list(&process_info->thread_list, new_tss);
     thread_link(new_tss);
     number_of_tasks++;
     process_info->number_of_threads++;
-    mutex_kernel_signal(&tss_tree_mutex);
 
-    DEBUG_MESSAGE(DEBUG, "Enabling interrupts");
+    mutex_kernel_signal(&tss_tree_mutex);
+    mutex_kernel_signal(&memory_mutex);
     cpu_interrupts_enable();
 
     return STORM_RETURN_SUCCESS;

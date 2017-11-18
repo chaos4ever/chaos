@@ -446,13 +446,6 @@ return_type process_create(process_create_type *process_data)
 
         page_directory[index].available = 0;
         page_directory[index].page_table_base = (GET_PAGE_NUMBER(shared_page_tables) + counter);
-
-        // Map the shared page tables.
-        memory_virtual_map_other(process_tss,
-                                 GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) +
-                                 index,
-                                 GET_PAGE_NUMBER(shared_page_tables) + counter,
-                                 1, PAGE_KERNEL);
     }
 
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_page, 1, PAGE_KERNEL);

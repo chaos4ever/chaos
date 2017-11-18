@@ -16,8 +16,9 @@
 extern void memory_virtual_init(void) INIT_CODE;
 extern void memory_virtual_enable(void) INIT_CODE;
 
-extern return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_directory, uint32_t virtual_page,
-                                             uint32_t physical_page, uint32_t pages, uint32_t flags) INIT_CODE;
+extern return_type memory_virtual_map_paging_disabled(page_directory_entry_page_table *page_directory,
+                                                      uint32_t virtual_page, uint32_t physical_page, uint32_t pages,
+                                                      uint32_t flags) INIT_CODE;
 extern return_type memory_virtual_map_other(storm_tss_type *tss, uint32_t virtual_page, uint32_t physical_page,
                                             uint32_t pages, uint32_t flags);
 extern return_type memory_virtual_map(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags) WEAK;

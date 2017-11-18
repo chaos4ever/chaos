@@ -84,7 +84,7 @@ void memory_virtual_init(void)
     // Map some important stuff. The same page_directory is used for exception handlers also, so map what is needed for them.
 
     // GDT and IDT.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_GDT),
         GET_PAGE_NUMBER(BASE_GDT),
@@ -92,7 +92,7 @@ void memory_virtual_init(void)
     );
 
     // Page directory.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_PROCESS_PAGE_DIRECTORY),
         GET_PAGE_NUMBER((uint32_t) kernel_page_directory),
@@ -101,7 +101,7 @@ void memory_virtual_init(void)
     );
 
     // Kernel stack.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_KERNEL_STACK),
         GET_PAGE_NUMBER(BASE_KERNEL_STACK),
@@ -110,7 +110,7 @@ void memory_virtual_init(void)
     );
 
     // Text-mode screen.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_SCREEN),
         GET_PAGE_NUMBER(BASE_SCREEN),
@@ -120,7 +120,7 @@ void memory_virtual_init(void)
 
     // Multiboot module names.
     // FIXME: this is not very snyggt.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_MODULE_NAME),
         GET_PAGE_NUMBER(BASE_MODULE_NAME),
@@ -129,12 +129,18 @@ void memory_virtual_init(void)
     );
 
     // Kernel code and data.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_KERNEL),
         GET_PAGE_NUMBER(BASE_KERNEL),
         SIZE_IN_PAGES((uint32_t) &_end - BASE_KERNEL),
         PAGE_KERNEL
+    );
+
+    // Create self-referential page directory entry, so we can easily access all page tables.
+    memory_virtual_create_page_tables_mapping(
+        kernel_page_directory,
+        GET_PAGE_NUMBER((uint32_t) kernel_page_directory)
     );
 
     // Insert shared page tables into kernel page_directory.
@@ -162,7 +168,7 @@ void memory_virtual_init(void)
         kernel_page_directory[index].page_table_base = (GET_PAGE_NUMBER(shared_page_tables) + counter);
 
         // Map the shared page tables.
-        memory_virtual_map_kernel(
+        memory_virtual_map_paging_disabled(
             kernel_page_directory,
             GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + index,
             GET_PAGE_NUMBER(shared_page_tables) + counter,
@@ -175,17 +181,10 @@ void memory_virtual_init(void)
 // This function is called at the end of the kernel init. It enables paging and updates some data.
 void memory_virtual_enable(void)
 {
-    //  debug_print
-    //    ("Would save %u K of memory.\n",
-    //     ((page_avl_header->limit_nodes -
-    //       avl_get_number_of_entries (page_avl_header->root)) *
-    //      sizeof (avl_node_type)) / KB + 12 +
-    //     ((uint32_t) &_init_end - (uint32_t) &_init_start) / KB);
-
     DEBUG_MESSAGE(DEBUG, "Called");
 
     // Map the kernel TSS.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_VIRTUAL_KERNEL_TSS),
         GET_PAGE_NUMBER(BASE_KERNEL_TSS),
@@ -197,7 +196,7 @@ void memory_virtual_enable(void)
     // the kernel.
 
     // FIXME: need to find out how many pages are in use.
-    memory_virtual_map_kernel(
+    memory_virtual_map_paging_disabled(
         kernel_page_directory,
         GET_PAGE_NUMBER(BASE_PHYSICAL_MEMORY_TREE),
         GET_PAGE_NUMBER((uint32_t) page_avl_header),
@@ -238,8 +237,9 @@ void memory_virtual_enable(void)
 
 // Map pages when paging is still disabled. The difference is that we access the page_directories and page tables at their physical
 // address.
-return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_directory, uint32_t virtual_page,
-                                      uint32_t physical_page, uint32_t pages, uint32_t flags)
+return_type memory_virtual_map_paging_disabled(page_directory_entry_page_table *page_directory,
+                                               uint32_t virtual_page, uint32_t physical_page, uint32_t pages,
+                                               uint32_t flags)
 {
     page_table_entry *page_table;
     uint32_t counter, index;
@@ -277,7 +277,7 @@ return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_dire
             memory_set_uint8_t((uint8_t *) page_table, 0, SIZE_PAGE);
 
             // Map the newly created page table in the page_directory.
-            memory_virtual_map_kernel(
+            memory_virtual_map_paging_disabled(
                 page_directory,
                 GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + index,
                 GET_PAGE_NUMBER((uint32_t) page_table),
@@ -309,9 +309,6 @@ return_type memory_virtual_map_kernel(page_directory_entry_page_table *page_dire
 // This function is for mapping memory in syscalls (when paging is enabled).
 static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physical_page, uint32_t pages, uint32_t flags)
 {
-    //if (virtual_page > BASE_PROCESS_PAGE_TABLES / 1024
-
-
     page_table_entry *page_table;
     uint32_t counter;
 
@@ -324,6 +321,15 @@ static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physi
     for (counter = 0; counter < pages; counter++)
     {
         uint32_t page_directory_index = (virtual_page + counter) / 1024;
+
+        if (page_directory_index == PROCESS_PAGE_TABLES_PAGE_DIRECTORY_INDEX)
+        {
+            DEBUG_HALT("Attempted to overwrite page table mapping. To map address %x, page directory index %u " \
+                       "would have to be updated. This page directory index is reserved for page table mappings " \
+                       "which cannot be set up using this method; they are handled by " \
+                       "memory_virtual_create_page_tables_mapping", (virtual_page + counter) * SIZE_PAGE,
+                       page_directory_index);
+        }
 
         DEBUG_MESSAGE(DEBUG, "index = %u, counter = %u", page_directory_index, counter);
 
@@ -352,21 +358,7 @@ static return_type memory_virtual_map_real(uint32_t virtual_page, uint32_t physi
                 return RETURN_OUT_OF_MEMORY;
             }
 
-            // DEBUG_MESSAGE(DEBUG, "Recursing.");
-
-            /*return_type rv =*/ memory_virtual_map_real(
-                GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + page_directory_index,
-                (uint32_t) process_page_directory[page_directory_index].page_table_base,
-                1,
-                PAGE_KERNEL
-            );
-
-            // if (rv != RETURN_SUCCESS)
-            // {
-            //     return rv;
-            // }
-
-            // Because of the magic page directory entry set up in process.c, the page table is accessible right away without any
+            // Because of the magic page directory entry set up in memory_virtual_create_page_tables_mapping, the page table is accessible right away without any
             // further mapping.
             memory_set_uint8_t((uint8_t *)(BASE_PROCESS_PAGE_TABLES + (page_directory_index * SIZE_PAGE)), 0, SIZE_PAGE);
         }
@@ -408,7 +400,7 @@ static return_type memory_virtual_map_other_real(storm_tss_type *tss, uint32_t v
 {
     page_directory_entry_page_table *page_directory = (page_directory_entry_page_table *) BASE_PROCESS_TEMPORARY;
     page_table_entry *page_table = (page_table_entry *) (BASE_PROCESS_TEMPORARY + SIZE_PAGE);
-    uint32_t counter, index;
+    uint32_t counter;
     bool global = (flags & PAGE_GLOBAL) != 0;
 
     // Remove PAGE_GLOBAL from the flags, if set.
@@ -427,12 +419,21 @@ static return_type memory_virtual_map_other_real(storm_tss_type *tss, uint32_t v
     // Start the mapping.
     for (counter = 0; counter < pages; counter++)
     {
-        index = (virtual_page + counter) / 1024;
+        int page_directory_index = (virtual_page + counter) / 1024;
 
-        DEBUG_MESSAGE(DEBUG, "Changing page directory entry %x", index);
+        if (page_directory_index == PROCESS_PAGE_TABLES_PAGE_DIRECTORY_INDEX)
+        {
+            DEBUG_HALT("Attempted to overwrite page table mapping. To map address %x, page directory index %u " \
+                       "would have to be updated. This page directory index is reserved for page table mappings " \
+                       "which cannot be set up using this method; they are handled by " \
+                       "memory_virtual_create_page_tables_mapping", (virtual_page + counter) * SIZE_PAGE,
+                       page_directory_index);
+        }
+
+        DEBUG_MESSAGE(DEBUG, "Changing page directory entry %x", page_directory_index);
 
         // Page Table is not yet set up.
-        if (page_directory[index].present == 0)
+        if (page_directory[page_directory_index].present == 0)
         {
             uint32_t page_table_page;
 
@@ -442,27 +443,19 @@ static return_type memory_virtual_map_other_real(storm_tss_type *tss, uint32_t v
             memory_physical_allocate(&page_table_page, 1, "Page table.");
 
             // Let's set up a new page table.
-            page_directory[index].present = 1;
-            page_directory[index].flags = PAGE_DIRECTORY_FLAGS;
-            page_directory[index].accessed = 0;
-            page_directory[index].zero = 0;
-            page_directory[index].page_size = 0;
-            page_directory[index].global = 0;
-            page_directory[index].available = 0;
-            page_directory[index].page_table_base = page_table_page;
+            page_directory[page_directory_index].present = 1;
+            page_directory[page_directory_index].flags = PAGE_DIRECTORY_FLAGS;
+            page_directory[page_directory_index].accessed = 0;
+            page_directory[page_directory_index].zero = 0;
+            page_directory[page_directory_index].page_size = 0;
+            page_directory[page_directory_index].global = 0;
+            page_directory[page_directory_index].available = 0;
+            page_directory[page_directory_index].page_table_base = page_table_page;
 
-            memory_virtual_map_other_real(
-                tss,
-                GET_PAGE_NUMBER(BASE_PROCESS_PAGE_TABLES) + index,
-                (uint32_t) page_directory[index].page_table_base,
-                1,
-                PAGE_KERNEL
-            );
-
-            // Map the page table.
+            // Map the page table int our current addressing space so we can zero it out.
             memory_virtual_map_real(
                 GET_PAGE_NUMBER(page_table),
-                (uint32_t) page_directory[index].page_table_base,
+                (uint32_t) page_directory[page_directory_index].page_table_base,
                 1,
                 PAGE_KERNEL
             );
@@ -471,28 +464,31 @@ static return_type memory_virtual_map_other_real(storm_tss_type *tss, uint32_t v
 
         memory_virtual_map_real(
             GET_PAGE_NUMBER(page_table),
-            (uint32_t) page_directory[index].page_table_base,
+            (uint32_t) page_directory[page_directory_index].page_table_base,
             1,
             PAGE_KERNEL
         );
 
         // Which entry in the page table to modify.
-        index = (virtual_page + counter) % 1024;
+        int page_table_index = (virtual_page + counter) % 1024;
 
-        DEBUG_MESSAGE(DEBUG, "Changing entry %u in the page table", index);
+        DEBUG_MESSAGE(DEBUG, "Changing entry %u in the page table", page_table_index);
+
+        // TODO: Could detect a mapping being overwritten here, which is usually an indication of a kernel bug.
+        // If present == 1, the mapping is likely to be an error (or the page directory being corrupted etc.)
 
         // Set up a new page table entry.
-        page_table[index].present = 1;
-        page_table[index].flags = flags;
-        page_table[index].accessed = 0;
-        page_table[index].dirty = 0;
-        page_table[index].zero = 0;
-        page_table[index].available = 0;
-        page_table[index].page_base = physical_page + counter;
+        page_table[page_table_index].present = 1;
+        page_table[page_table_index].flags = flags;
+        page_table[page_table_index].accessed = 0;
+        page_table[page_table_index].dirty = 0;
+        page_table[page_table_index].zero = 0;
+        page_table[page_table_index].available = 0;
+        page_table[page_table_index].page_base = physical_page + counter;
 
         if (global)
         {
-            page_table[index].global = 1;
+            page_table[page_table_index].global = 1;
         }
     }
 
@@ -827,9 +823,9 @@ void memory_virtual_create_page_tables_mapping(page_directory_entry_page_table *
 {
     // The page tables page table is necessary for the kernel to be able to add page tables to this process at runtime. By abusing
     // the page directory as a page table, this clever hack should allow us to access all the page tables very easily.
-    int page_tables_page_directory_index = BASE_PROCESS_PAGE_TABLES / SIZE_PAGE / 1024;
+    int page_tables_page_directory_index = PROCESS_PAGE_TABLES_PAGE_DIRECTORY_INDEX;
     other_process_page_directory[page_tables_page_directory_index].present = 1;
-    other_process_page_directory[page_tables_page_directory_index].flags = PAGE_DIRECTORY_FLAGS;
+    other_process_page_directory[page_tables_page_directory_index].flags = PAGE_DIRECTORY_FLAGS - PAGE_NON_PRIVILEGED;
     other_process_page_directory[page_tables_page_directory_index].accessed = 0;
     other_process_page_directory[page_tables_page_directory_index].zero = 0;
     other_process_page_directory[page_tables_page_directory_index].page_size = 0;
