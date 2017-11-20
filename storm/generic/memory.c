@@ -1,8 +1,8 @@
 // Abstract: Functions for memory operations.
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
-
-// Copyright 1999-2000, 2013 chaos development.
+//
+// © Copyright 1999 chaos development.
 
 #include <storm/generic/debug.h>
 #include <storm/generic/memory.h>
@@ -57,14 +57,14 @@ return_type memory_allocate (void **address, uint32_t pages,
 
       /* FIXME: Check return value. */
 
-      memory_physical_allocate (&physical_page, pages, 
+      memory_physical_allocate (&physical_page, pages,
                                 "User-level allocation");
 
       memory_virtual_map (page_number, physical_page, pages,
                           flags);
       *address = (void *) ((uint32_t) page_number * SIZE_PAGE);
       mutex_kernel_signal (&memory_mutex);
-      
+
       /* Make sure this memory is clean. Otherwise, we might have a
          security risk on our hand. */
 
@@ -107,10 +107,10 @@ return_type memory_deallocate (void **address)
       page_table_entry *page_table = (page_table_entry *)
         (BASE_PROCESS_PAGE_TABLES + (page_number / (1 * MB)) * SIZE_PAGE);
       uint32_t physical_page = page_table[page_number % 1024].page_base;
-      
+
       /* FIXME: Check the return value from this call. But what do we
          do should it fail? */
-      
+
       memory_physical_deallocate (physical_page);
 
       mutex_kernel_signal (&memory_mutex);

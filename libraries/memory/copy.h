@@ -1,7 +1,7 @@
 // Abstract: Functions for copying memory.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000, 2007, 2013 chaos development.
+// © Copyright 1999 chaos development.
 
 #pragma once
 

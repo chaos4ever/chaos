@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1998-2000 chaos development.
+// © Copyright 1998 chaos development.
 // © Copyright 2013 chaos development.
 // © Copyright 2015-2016 chaos development.
 

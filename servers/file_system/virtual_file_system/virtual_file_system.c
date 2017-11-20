@@ -3,8 +3,7 @@
 // by the specific file system servers).
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #include <console/console.h>
 #include <log/log.h>
@@ -372,6 +371,7 @@ static bool vfs_file_open(file_open_type *open, file_handle_type *handle)
         }
 
         string_copy(ipc_file_open.file_name, path_name);
+
         ipc_file_open.mode = open->mode;
         ipc_file_open.file_handle = *handle;
 

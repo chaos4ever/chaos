@@ -1,11 +1,10 @@
 // Abstract: Slab memory allocator.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000, 2013 chaos development.
+// © Copyright 2000 chaos development.
 
 #include <memory/memory.h>
 
-#include "config.h"
 #include "slab.h"
 
 const int slab_block_size[] =
@@ -37,7 +36,6 @@ bool slab_heap_init(slab_heap_type *heap)
 }
 
 // This function takes for granted that buffer_size is less than or equal to 1024.
-
 bool slab_superblock_init(slab_superblock_type *superblock, slab_heap_type *heap, int index)
 {
     unsigned int counter;

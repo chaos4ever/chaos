@@ -1,9 +1,7 @@
 // Abstract: File library types.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #pragma once
 
@@ -63,8 +61,7 @@ typedef struct
     char path_name[MAX_PATH_NAME_LENGTH];
 
     // Output parameters.
-    // Did the command succed?
-
+    // Did the command succeed?
     bool success;
 
     // The type of entity.

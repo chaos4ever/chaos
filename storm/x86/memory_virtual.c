@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1999-2017 chaos development.
+// © Copyright 1999 chaos development.
 
 // Define as true to get debug information.
 #define DEBUG FALSE

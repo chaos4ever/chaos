@@ -1,6 +1,6 @@
 // Abstract: Header file for the keyboard server. Inspired by the Linux kernel.
 //
-// © Copyright 1998-2000 chaos development
+// © Copyright 1998 chaos development
 // © Copyright 2007 chaos development
 // © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development

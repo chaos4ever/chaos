@@ -1,7 +1,7 @@
 // Abstract: A swedish keyboard translation map for chaos.
 // Author: Andreas Zetterlund <metal_leif@mailcity.com>
 //
-// © Copyright 1998-2000 chaos development
+// © Copyright 1998 chaos development
 // © Copyright 2007 chaos development
 // © Copyright 2013 chaos development
 // © Copyright 2015-2016 chaos development

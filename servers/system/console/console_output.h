@@ -1,7 +1,7 @@
 // Abstract: Console outputting functions.
 // Author: Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 2000, 2013 chaos development.
+// © Copyright 1999 chaos development.
 
 #pragma once
 
