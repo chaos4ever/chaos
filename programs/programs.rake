@@ -92,5 +92,12 @@ task install: OUTPUT do
   target_path = 'u:/programs'
 
   sh "mcopy -o #{OUTPUT} #{target_path}"
+
+  # TODO: remove me
+  target_path = INSTALL_ROOT + '/programs'
+  sh "#{INSTALL_COMMAND} #{OUTPUT} #{target_path}/#{OUTPUT}"
+  sh "gzip -9f #{target_path}/#{OUTPUT}"
+  # TODO: until here.
+
   puts "    Installed #{OUTPUT} in #{target_path}".gray
 end
