@@ -18,8 +18,13 @@ task :clean do
 end
 
 task install: :default do
-  # Disabled for now, since the code that generates the folder structure isn't here yet.
-  # sh 'mcopy -o startup u:/config/servers/boot'
+  # The volume is always recreated on 'rake install', so the folder structure must be created from scratch.
+  sh 'mmd u:/config'
+  sh 'mmd u:/config/servers'
+  sh 'mmd u:/config/servers/boot'
+  sh 'mcopy -o startup u:/config/servers/boot'
+
+  sh 'mmd u:/programs'
 
   SUBFOLDERS.each do |folder|
     sh "cd #{folder} && #{RAKE_COMMAND} install"
