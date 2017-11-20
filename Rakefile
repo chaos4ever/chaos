@@ -37,7 +37,7 @@ task :create_ramdisk_image do
 end
 
 desc 'Compiles and installs chaos'
-task install: [:install_folders, :iso_image]
+task install: [:create_ramdisk_image, :install_folders, :iso_image]
 
 task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT
