@@ -21,7 +21,7 @@ static tag_type empty_tag =
     0, 0, ""
 };
 
-// Split a path name to its components.
+// Split a path name to its components. Note that this method will modify the input string.
 void path_split(char *path_name, char **output, unsigned int *elements)
 {
     unsigned int index;

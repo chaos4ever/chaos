@@ -27,7 +27,7 @@ typedef struct
     // applications will stop working. ;-)
     uint8_t sectors_per_cluster;
 
-    // Number of reserved sectors in the reserved region of the volume starting at the first sector of the volume. Must be 1 for
+    // Number of reserved sectors in the reserved region of the volume starting at the first sector of the volume. Typically, but not always, 1 for
     // FAT12/16. Usually 32 for FAT32.
     uint16_t reserved_sectors;
 
@@ -182,6 +182,8 @@ typedef struct
     uint8_t reserved : 2;
 
     // Reserved for Windows NT. Set to zero when creating, and never rely upon.
+    // FIXME: This is the case flag. We should support it, to properly handle lowercase file names on FAT volumes.
+    // See https://github.com/chaos4ever/chaos/issues/107
     uint8_t nt_reserved;
 
     // Time stamp the file was created.
