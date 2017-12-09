@@ -2,9 +2,7 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2013-2015 chaos development
+// © Copyright 1999 chaos development
 
 // FIXME: Most of this should be put into the generic subdirectory.
 
@@ -200,7 +198,6 @@ return_type process_create(process_create_type *process_data)
 
     // Map it for ourselves so that we can clear it out.
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_TEMPORARY), page_directory_page, 1, PAGE_KERNEL);
-
     memory_set_uint8_t((uint8_t *) BASE_PROCESS_TEMPORARY, 0, SIZE_PAGE);
 
     // Map it for the new task.

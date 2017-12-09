@@ -2,7 +2,7 @@
 // Author: Per Lundberg <per@chaosdev.io>
 //         Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1997-2000, 2007, 2013 chaos development.
+// © Copyright 1997 chaos development
 
 #include <storm/generic/arguments.h>
 #include <storm/generic/idle.h>

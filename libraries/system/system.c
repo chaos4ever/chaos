@@ -1,10 +1,7 @@
 // Abstract: Library for system related stuff.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #include <system/system.h>
 

@@ -1,7 +1,7 @@
 // Abstract: Function prototypes and structures used by the virtual memory routines.
 // Author: Per Lundberg <per@chaosdev.io>
-
-// © Copyright 1999-2000, 2013 chaos development.
+//
+// © Copyright 1999 chaos development.
 
 #pragma once
 

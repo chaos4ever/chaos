@@ -1,7 +1,7 @@
 // Abstract: Debug functions.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 2000 chaos development
 
 #pragma once
 

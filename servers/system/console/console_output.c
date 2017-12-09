@@ -1,7 +1,7 @@
 // Abstract: Functions for writing to the console.
 // Author: Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 2000, 2013 chaos development.
+// © Copyright 1999 chaos development.
 
 #include <memory/memory.h>
 #include <unicode/unicode.h>

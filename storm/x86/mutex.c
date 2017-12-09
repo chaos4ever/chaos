@@ -2,11 +2,8 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Ohrt <doa@chaosdev.org>
-
-// © Copyright 1999-2000 chaos development.
-// © Copyright 2007 chaos development.
-// © Copyright 2013 chaos development.
-// © Copyright 2015-2016 chaos development.
+//
+// © Copyright 1999 chaos development.
 
 // Define this as TRUE if you want lots of debug information.
 #define DEBUG FALSE

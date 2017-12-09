@@ -1,10 +1,8 @@
 // Abstract: Return values.
-
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+//
+// © Copyright 1999 chaos development
 
 #pragma once
 #include <storm/return_values.h>

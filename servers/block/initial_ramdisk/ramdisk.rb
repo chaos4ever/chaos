@@ -4,8 +4,7 @@
 # Abstract: Get the block size of the given file and print it as a C header.
 # Author: Per Lundberg <per@chaosdev.io>
 #
-# © Copyright 1999-2000 chaos development
-# © Copyright 2015-2016 chaos development
+# © Copyright 1999 chaos development
 
 file = ARGV[0] or raise 'You need to provide the name of the file to inspect'
 
