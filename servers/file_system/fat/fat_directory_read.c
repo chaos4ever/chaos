@@ -46,20 +46,45 @@ bool fat_directory_read(fat_info_type *fat_info, char *path[], int elements, fat
             entry = get_entry_by_name(directory, path[element]);
             if (entry == NULL)
             {
+#ifdef DEBUG
+                log_print_formatted(
+                    &log_structure,
+                    LOG_URGENCY_DEBUG,
+                    "get_entry_by_name for '%s' returned NULL",
+                    path[element]
+                );
+#endif
                 break;
             }
 
-            //      log_print_formatted (&log_structure, LOG_URGENCY_DEBUG, "apa: %s",
-            //                           entry->name);
+#ifdef DEBUG
+            log_print_formatted(
+                &log_structure,
+                LOG_URGENCY_DEBUG,
+                "entry->name: %s",
+                entry->name
+            );
+#endif
 
-            read_clusters(fat_info, &directory_buffer,
-                          (entry->first_cluster_number_high << 16) +
-                          entry->first_cluster_number_low,
-                          0, UINT32_MAX);
+            read_clusters(
+                fat_info,
+                &directory_buffer,
+                (entry->first_cluster_number_high << 16) +
+                    entry->first_cluster_number_low,
+                0,
+                UINT32_MAX
+            );
         }
 
         *fat_entry = (fat_entry_type *) &directory_buffer;
-        //    log_print (&log_structure, LOG_URGENCY_DEBUG, (*fat_entry)->name);
+#ifdef DEBUG
+        log_print_formatted(
+            &log_structure,
+            LOG_URGENCY_DEBUG,
+            "fat_entry->name: %s",
+            (*fat_entry)->name
+        );
+#endif
 
         return TRUE;
     }
