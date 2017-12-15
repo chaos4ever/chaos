@@ -54,6 +54,9 @@
 #define BASE_PROCESS_PARAMETERS         (36 * MB)
 #define BASE_PROCESS_STACK              ((4 * GB) - SIZE_PROCESS_STACK)
 
+#define PROCESS_PAGE_TABLES_PAGE_DIRECTORY_INDEX \
+                                        (BASE_PROCESS_PAGE_TABLES / SIZE_PAGE / 1024)
+
 // Kernel virtual addresses. Only used during bootup.
 #define BASE_MODULE                     (2 * GB)
 

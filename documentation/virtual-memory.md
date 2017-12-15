@@ -11,7 +11,7 @@ Start                       | Length        | Description
 `0x00100000`                | Varying       | Kernel code and data.
 `0x00300000`                | `0x00100000`  | Process code and data. Used by `process_create`.
 `0x00400000`                | `0x01C00000`  | Process' low-level memory allocation structures.
-`0x02000000`                | `0x00400000`  | Process' page tables.
+`0x02000000`                | `0x00400000`  | Process' page tables. Mapped using a [self-referencing page directory entry](http://wiki.osdev.org/Page_Tables#Recursive_mapping).
 `0x02400000`                | `0x00400000`  | Process data. Parameters and other info.
 `0x02800000`                | `SIZE_GLOBAL` | Global data area. Hifi-Eslöf, ports, etc...
 `0x02800000 + SIZE_GLOBAL`  | Varying       | Freely disposable by process (process data and code, process heap etc.)
