@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 2000, 2007, 2013 chaos development.
+// © Copyright 1999 chaos development
 
 #include <storm/current-arch/timer.h>
 #include <storm/generic/avl_debug.h>
@@ -614,7 +614,7 @@ void debug_crash_screen(const char *message, volatile storm_tss_type *dump_tss)
 
     debug_print("  Process: %s (PROCESS ID %u).\n", ((process_info_type *) dump_tss->process_info)->name, dump_tss->process_id);
     debug_print("  Thread: %s (THREAD ID %u).\n", dump_tss->thread_name, dump_tss->thread_id);
-    debug_print("  Process was dispatched %u times.\n", dump_tss->timeslices);
+    debug_print("  Thread was dispatched %u times.\n", dump_tss->timeslices);
     debug_print("  Exception occured at address %x:%x\n", dump_tss->cs, dump_tss->eip);
 
     debug_print("Registers:\n");
