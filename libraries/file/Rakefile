@@ -1,12 +1,13 @@
 # frozen_string_literal: true
-INCLUDES = %w(
+
+INCLUDES = %w[
   -I../../storm/include
   -I..
-).freeze
+].freeze
 
-OBJECTS = %w(
+OBJECTS = %w[
   file.o
-).freeze
+].freeze
 
 OUTPUT = 'libfile.a'.freeze
 

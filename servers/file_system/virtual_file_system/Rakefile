@@ -1,15 +1,16 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  virtual_file_system.o
-).freeze
 
-LIBRARIES = %w(
+OBJECTS = %w[
+  virtual_file_system.o
+].freeze
+
+LIBRARIES = %w[
   ipc
   memory
   log
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'virtual_file_system'.freeze
 

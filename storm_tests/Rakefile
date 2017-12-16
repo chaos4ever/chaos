@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
-subfolders = %w(
+subfolders = %w[
   x86
-)
+]
 
 task default: subfolders do |t|
   t.prerequisites.each do |folder|

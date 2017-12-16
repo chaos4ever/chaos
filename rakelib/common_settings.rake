@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable GuardClause
 
 verbose false
 
@@ -9,7 +8,7 @@ case UNAME
 when 'Darwin' then
   abort 'Error: OS X is not supported as a build host.'
 else
-  SUPPORTED_ARCHITECTURES = %w(x86 raspberrypi).freeze
+  SUPPORTED_ARCHITECTURES = %w[x86 raspberrypi].freeze
 
   unless ENV['ARCH']
     raise 'You must set the ARCH environment variable to one of the supported architectures ' \

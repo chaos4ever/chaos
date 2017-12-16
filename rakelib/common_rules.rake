@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 rule '.o' => ['.c'] do |t|
   begin
     print((t.source + ' ').cyan)
     command = "#{CC} -o #{t.name} #{cflags} #{INCLUDES.join(' ')} -c #{t.source}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error compiling #{t.source}. Full command line was: #{command}"
     raise
   end
@@ -15,7 +16,7 @@ rule '.o' => ['.rs'] do |t|
     print((t.source + ' ').cyan)
     command = "#{RUSTC} #{RUSTCFLAGS} --crate-type lib -o #{t.name} --emit obj #{t.source}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error compiling #{t.source}. Full command line was: #{command}"
     raise
   end
@@ -26,7 +27,7 @@ rule '.o' => ['.S'] do |t|
     print((t.source + ' ').cyan)
     command = "#{CC} -o #{t.name} #{cflags} #{INCLUDES.join(' ')} -c #{t.source}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error compiling #{t.source}. Full command line was: #{command}"
     raise
   end
@@ -37,7 +38,7 @@ rule '.o' => ['.asm'] do |t|
     print((t.source + ' ').cyan)
     command = "#{NASM} -o #{t.name} -f elf #{t.source}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error compiling #{t.source}. Full command line was: #{command}"
     raise
   end

@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
+
 #
 # Abstract: Get the block size of the given file and print it as a C header.
 # Author: Per Lundberg <per@chaosdev.io>

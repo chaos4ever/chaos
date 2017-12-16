@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 def objects
-  %w(
+  %w[
     init.o
     debug.o
     gpio.o
-  )
+  ]
 end
 
 OUTPUT = 'libstorm_raspberrypi.a'.freeze
@@ -15,7 +16,7 @@ GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 KERNEL_OUTPUT = 'storm'.freeze
 LDFLAGS = '-nostdlib'.freeze
 
-task default: [:banner, :prepare, :storm] + objects
+task default: %i[banner prepare storm] + objects
 
 task :banner do
   print 'Compiling '.bold
@@ -40,7 +41,7 @@ file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
     # the generic lib has references to ia32... We could try to get rid of that eventually.)
     command = "#{CC} -o #{t.name} #{OUTPUT} #{GENERIC_OUTPUT} #{OUTPUT} #{LDFLAGS}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error linking kernel. Full command line was: #{command}"
     raise
   end

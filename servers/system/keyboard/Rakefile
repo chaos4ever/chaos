@@ -1,20 +1,21 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   common.o
   controller.o
   init.o
   keyboard.o
   mouse.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   console
   ipc
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'keyboard'.freeze
 

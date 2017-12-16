@@ -1,13 +1,14 @@
 # frozen_string_literal: true
+
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
-subfolders = %w(
+subfolders = %w[
   block
   file_system
   network
   system
   video
-)
+]
 
 # These haven't been upgraded to work w/ Rake yet.
 # system

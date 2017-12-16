@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   clusters.o
   detect_fat.o
   fat.o
@@ -11,15 +12,15 @@ OBJECTS = %w(
   get_entry_by_name.o
   handle_connection.o
   read_long_file_name.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   ipc
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'fat'.freeze
 EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x48000000'.freeze

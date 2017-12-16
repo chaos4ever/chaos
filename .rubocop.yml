@@ -1,16 +1,27 @@
+inherit_from: .rubocop_todo.yml
+
+Layout/ElseAlignment:
+  Enabled: false
+Layout/EmptyLinesAroundArguments:
+  Enabled: false
+Layout/IndentationWidth:
+  Enabled: false
+Layout/MultilineOperationIndentation:
+  EnforcedStyle: indented
+Lint/EndAlignment:
+  Enabled: false
 Metrics/LineLength:
   Max: 132
 Style/AndOr:
   Enabled: false
 Style/AsciiComments:
   Enabled: false
-Style/ElseAlignment:
+
+# Gives false positives on inline assembly (%eax, %ebx etc)
+Style/FormatStringToken:
   Enabled: false
-Lint/EndAlignment:
-  Enabled: false
+
 Style/FrozenStringLiteralComment:
   EnforcedStyle: always
-Style/IndentationWidth:
-  Enabled: false
-Style/MultilineOperationIndentation:
-  EnforcedStyle: indented
+# Style/GuardClause:
+#   Enabled: false

@@ -1,11 +1,12 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   cluido.o
   command.o
   init.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   console
   execute_elf
   file
@@ -18,7 +19,7 @@ LIBRARIES = %w(
   system
   time
   unicode
-).freeze
+].freeze
 
 OUTPUT = 'cluido'.freeze
 

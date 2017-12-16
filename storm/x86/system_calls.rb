@@ -1,10 +1,12 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Abstract: Generate files with system call stuff. Since they are a bunch, updating them all manually was a little
-# uncomfortable. Ideally, the architecture independant parts of this file should be in a generic directory.
+#
+# Abstract: Generate system call wrapper file. Since there are a significant number of system calls, maintaining this file
+# manually turned out to be cumbersome and error-prone.
 #
 # Author: Per Lundberg <per@chaosdev.io>
+#
 
 # The lowest entry in the GDT we may use.
 @gdt_start = 48
@@ -31,7 +33,6 @@ system_calls = Hash[
   'dma_transfer_cancel',          1,
   'dma_register',                 2,
   'dma_unregister',               1,
-
   'irq_register',                 2,
   'irq_unregister',               1,
   'irq_wait',                     1,
@@ -41,7 +42,6 @@ system_calls = Hash[
   'memory_deallocate',            1,
   'memory_reserve',               3,
   'memory_get_physical_address',  2,
-
   'port_range_register',          3,
   'port_range_unregister',        1,
 
@@ -59,7 +59,7 @@ system_calls = Hash[
   'dispatch_next',                0,
 ]
 
-def create_wrapper_c(system_calls) # rubocop:disable MethodLength
+def create_wrapper_c(system_calls)
   File.open('wrapper.c', 'wb') do |file|
     file.puts("// Generated automatically by system_calls.rb. Do not modify!
 
@@ -81,8 +81,7 @@ void wrapper_#{system_call}(void)
 
       (0..num_parameters - 1).each do
         file.puts("\
-      \"pushl 32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n"
-                 )
+      \"pushl 32 + 4 + #{num_parameters} * 4(%esp)\\n\"\n")
       end
 
       file.puts %(\
@@ -118,7 +117,7 @@ void wrapper_#{system_call}(void)
   end
 end
 
-def create_include_storm_system_calls_h(system_calls) # rubocop:disable AbcSize
+def create_include_storm_system_calls_h(system_calls)
   File.open('../include/storm/system_calls.h', 'wb') do |file|
     file.puts("// Generated automatically by system_calls.rb. Do not modify!
 
@@ -165,7 +164,7 @@ def create_include_storm_ia32_wrapper_h(system_calls)
 
 "
 
-    system_calls.keys.each { |system_call| file.puts "void wrapper_#{system_call}(void);\n" }
+    system_calls.each_key { |system_call| file.puts "void wrapper_#{system_call}(void);\n" }
   end
 end
 
