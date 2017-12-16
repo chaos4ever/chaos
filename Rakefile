@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+
 # Top-level Rakefile which is responsible for running all the other Rakefiles.
 
 TARGET_ARCH = ENV['ARCH']
 
 FOLDERS = if TARGET_ARCH == 'x86'
-  [:storm, :libraries, :programs, :servers].freeze
+  %i[storm libraries programs servers].freeze
 elsif TARGET_ARCH == 'raspberrypi'
   # Nothing else has been ported to this arch yet.
   [:storm].freeze
@@ -37,7 +38,7 @@ task :create_ramdisk_image do
 end
 
 desc 'Compiles and installs chaos'
-task install: [:create_ramdisk_image, :install_folders, :iso_image]
+task install: %i[create_ramdisk_image install_folders iso_image]
 
 task :install_folders do
   FileUtils.rm_rf INSTALL_ROOT

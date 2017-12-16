@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 task default: ['current-arch', 'include/storm/current-arch'] do

@@ -1,16 +1,17 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  log.o
-).freeze
 
-LIBRARIES = %w(
+OBJECTS = %w[
+  log.o
+].freeze
+
+LIBRARIES = %w[
   console
   ipc
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'log'.freeze
 

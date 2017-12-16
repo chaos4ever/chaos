@@ -1,6 +1,7 @@
 #!/usr/bin/ruby
 # frozen_string_literal: true
-# rubocop:disable Semicolon
+
+# rubocop:disable Style/Semicolon
 
 require 'English'
 
@@ -31,6 +32,8 @@ while gets
 end
 
 # No lines received = something went wrong with the test running.
-exit 1 if line_count == 0
+exit 1 if line_count.zero?
 
 exit @return_value
+
+# rubocop:enable Style/Semicolon

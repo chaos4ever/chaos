@@ -1,9 +1,10 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  boot.o
-).freeze
 
-LIBRARIES = %w(
+OBJECTS = %w[
+  boot.o
+].freeze
+
+LIBRARIES = %w[
   execute_elf
   file
   ipc
@@ -11,7 +12,7 @@ LIBRARIES = %w(
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'boot'.freeze
 

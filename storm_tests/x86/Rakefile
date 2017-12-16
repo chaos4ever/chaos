@@ -1,27 +1,28 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   x86_tests_main.o
   memory_global_test.o
   string_tests.o
-).freeze
+].freeze
 
 OUTPUT = :x86_tests
 
-LDFLAGS = %w(
+LDFLAGS = %w[
   -m32
   -L/usr/local/lib
   -L../../storm/generic
   -L../../storm/x86
-).freeze
+].freeze
 
 # Need to provide the same name twice for linking to succeed. (circular dependency?)
-LIBRARIES = %w(
+LIBRARIES = %w[
   cmocka
 
   storm_x86
   storm_generic
   storm_x86
-).freeze
+].freeze
 
 task default: [:banner, OUTPUT]
 
@@ -44,7 +45,7 @@ file OUTPUT => OBJECTS do |t|
       #{CC} -o #{t.name} #{inputs} \
       #{LDFLAGS.join(' ')} -l#{LIBRARIES.join(' -l')}"
     sh command
-  rescue
+  rescue StandardError
     puts "Error linking kernel. Full command line was: #{command}"
     raise
   end

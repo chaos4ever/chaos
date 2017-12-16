@@ -1,17 +1,18 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   pci.o
   pci-id.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   ipc
   list
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'pci'.freeze
 

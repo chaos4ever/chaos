@@ -1,9 +1,8 @@
 # frozen_string_literal: true
-# rubocop:disable GuardClause
 
-def objects # rubocop:disable MethodLength
+def objects
   if TARGET_ARCH == 'x86'
-    %w(
+    %w[
       arguments.o
       avl.o
       avl_debug.o
@@ -22,11 +21,11 @@ def objects # rubocop:disable MethodLength
       system_call.o
       tag.o
       time.o
-    )
+    ]
   elsif TARGET_ARCH == 'raspberrypi'
-    %w(
+    %w[
       dummy.o
-    )
+    ]
   else
     raise "Unsupported architecture #{CURRENT_ARCH}"
   end

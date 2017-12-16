@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 DEFINES = (ENV['DEFINES'] || '') + ' -DPACKAGE=\\"storm\\" -DVERSION=\\"git\\"'
 
 COMMON_CFLAGS =

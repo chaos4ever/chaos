@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   arp.o
   dhcp.o
   forward.o
@@ -9,10 +10,10 @@ OBJECTS = %w(
   socket.o
   tcp.o
   udp.o
-).freeze
+].freeze
 
 EXTRA_LIBS = '-lgcc'.freeze
-LIBRARIES = %w(
+LIBRARIES = %w[
   ipc
   ipv4
   list
@@ -22,7 +23,7 @@ LIBRARIES = %w(
   string
   system
   time
-).freeze
+].freeze
 
 OUTPUT = 'ipv4'.freeze
 

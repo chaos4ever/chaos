@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+
+#
+# Extensions to the standard Ruby String class.
+#
 class String
   def colorize(color_code)
     "\e[#{color_code}m#{self}\e[0m"

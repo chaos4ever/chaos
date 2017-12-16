@@ -14,11 +14,11 @@ CFLAGS = COMMON_CFLAGS +
   "--std=gnu99 -Wbad-function-cast -Wmissing-prototypes -Wnested-externs \
   -Wstrict-prototypes " + ARCH_CFLAGS
 
-INCLUDES = %w(
+INCLUDES = %w[
   -I../include
   -I..
   -I.
-).freeze
+].freeze
 
 file OUTPUT => objects do |t|
   puts

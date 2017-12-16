@@ -77,4 +77,4 @@ before_script:
 # Tests are disabled for now since cmocka don't work on Trusty Tahr.
 script:
  - bundle exec rubocop
- - rake default
+ - bundle exec rake

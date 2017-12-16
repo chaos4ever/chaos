@@ -1,15 +1,16 @@
 # frozen_string_literal: true
-OBJECTS = %w(
-  loopback.o
-).freeze
 
-LIBRARIES = %w(
+OBJECTS = %w[
+  loopback.o
+].freeze
+
+LIBRARIES = %w[
   ipc
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'loopback'.freeze
 

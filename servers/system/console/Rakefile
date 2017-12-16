@@ -1,18 +1,19 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   connection.o
   console.o
   console_output.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   ipc
   memory
   string
   system
   unicode
   video
-).freeze
+].freeze
 
 OUTPUT = 'console'.freeze
 

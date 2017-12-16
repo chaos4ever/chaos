@@ -1,12 +1,13 @@
 # frozen_string_literal: true
-INCLUDES = %w(
+
+INCLUDES = %w[
   -I../../storm/include
   -I..
-).freeze
+].freeze
 
-OBJECTS = %w(
+OBJECTS = %w[
   random.o
-).freeze
+].freeze
 
 OUTPUT = 'librandom.a'.freeze
 

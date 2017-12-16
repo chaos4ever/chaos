@@ -1,7 +1,8 @@
 # frozen_string_literal: true
+
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
-libraries = %w(
+libraries = %w[
   console
   execute_elf
   file
@@ -17,7 +18,7 @@ libraries = %w(
   time
   unicode
   video
-)
+]
 
 # These haven't been upgraded to work w/ Rake yet.
 #  serial
@@ -28,10 +29,10 @@ libraries = %w(
 
 load 'constants.rake'
 
-INCLUDES = %w(
+INCLUDES = %w[
   -I.
   -I../storm/include
-).freeze
+].freeze
 
 task default: libraries + [:startup] do
   libraries.each do |folder|

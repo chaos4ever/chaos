@@ -1,16 +1,17 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   initial_ramdisk.o
   ramdisk.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   ipc
   log
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'initial_ramdisk'.freeze
 RAMDISK_IMAGE = 'ramdisk.image'.freeze

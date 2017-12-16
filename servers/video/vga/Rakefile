@@ -1,16 +1,17 @@
 # frozen_string_literal: true
-OBJECTS = %w(
+
+OBJECTS = %w[
   vga.o
   vgalib.o
-).freeze
+].freeze
 
-LIBRARIES = %w(
+LIBRARIES = %w[
   console
   ipc
   memory
   string
   system
-).freeze
+].freeze
 
 OUTPUT = 'vga'.freeze
 
