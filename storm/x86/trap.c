@@ -343,12 +343,14 @@ void trap_init(void)
     trap_stack = (void *) (physical_page * SIZE_PAGE);
 
     // Map this.
-    memory_virtual_map_kernel
-        (kernel_page_directory, GET_PAGE_NUMBER(BASE_PROCESS_TRAP_TSS),
-        GET_PAGE_NUMBER(trap_tss), 1, PAGE_KERNEL);
-    memory_virtual_map_kernel
-        (kernel_page_directory, GET_PAGE_NUMBER(BASE_TRAP_STACK),
-        GET_PAGE_NUMBER(trap_stack), 1, PAGE_KERNEL);
+    memory_virtual_map_paging_disabled(
+        kernel_page_directory, GET_PAGE_NUMBER(BASE_PROCESS_TRAP_TSS),
+        GET_PAGE_NUMBER(trap_tss), 1, PAGE_KERNEL
+    );
+    memory_virtual_map_paging_disabled(
+        kernel_page_directory, GET_PAGE_NUMBER(BASE_TRAP_STACK),
+        GET_PAGE_NUMBER(trap_stack), 1, PAGE_KERNEL
+    );
 
     // Wipe the TSS.
     memory_set_uint8_t((uint8_t *) trap_tss, 0, SIZE_PAGE);

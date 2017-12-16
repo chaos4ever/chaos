@@ -181,9 +181,12 @@ return_type memory_physical_allocate(uint32_t *page, unsigned int length, const 
     avl_node_type *node = page_avl_header->root;
     avl_node_type *insert_node;
 
-    if (tss_tree_mutex != MUTEX_LOCKED && memory_mutex != MUTEX_LOCKED && initialised)
+    if (initialised)
     {
-        DEBUG_HALT("Code is not properly mutexed.");
+        if (tss_tree_mutex != MUTEX_LOCKED && memory_mutex != MUTEX_LOCKED)
+        {
+            DEBUG_HALT("tss_tree_mutex or memory_mutex is expected to be locked when this method is called, but both of these mutexes were unlocked.");
+        }
     }
 
     //debug_print ("Called for: %s\n", description);
