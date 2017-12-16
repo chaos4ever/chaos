@@ -6,7 +6,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1998-2000, 2007, 2013, 2015 chaos development.
+// © Copyright 1998 chaos development.
 
 // Define this as TRUE if you are debugging this part of the kernel.
 #define DEBUG FALSE
