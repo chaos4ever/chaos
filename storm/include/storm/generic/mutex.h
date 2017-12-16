@@ -17,8 +17,8 @@ enum
 
 enum
 {
+    MUTEX_UNLOCKED = 0,
     MUTEX_LOCKED,
-    MUTEX_UNLOCKED
 };
 
 extern return_type mutex_kernel_wait(mutex_kernel_type *mutex);
