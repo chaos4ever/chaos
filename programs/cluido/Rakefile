@@ -22,5 +22,6 @@ LIBRARIES = %w[
 ].freeze
 
 OUTPUT = 'cluido'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x58000000'.freeze
 
 load '../programs.rake'

@@ -41,7 +41,9 @@ CFLAGS = (COMMON_CFLAGS + %w[
   -Wstrict-prototypes
 ]).join(' ')
 
+EXTRA_LDFLAGS_PRE ||= ''.freeze
 LDFLAGS = %W[
+  #{EXTRA_LDFLAGS_PRE}
   #{LIBRARIES_DIR}/startup.o
   -lgcc
   -nostdlib
