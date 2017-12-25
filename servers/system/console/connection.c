@@ -125,25 +125,22 @@ static void connection_client(message_parameter_type *message_parameter, console
                 (*our_application)->ipc_structure.input_mailbox_id = ipc_structure->input_mailbox_id;
                 (*our_application)->ipc_structure.output_mailbox_id = ipc_structure->output_mailbox_id;
 
-                // Is this the first console? If so, activate it.
-                if (current_console == NULL)
+                // Always active a new console being created, so we handle cluido being launched by the boot server.
+                current_console = *our_console;
+                (*our_console)->output = screen;
+
+                if (has_video)
                 {
-                    current_console = *our_console;
-                    (*our_console)->output = screen;
+                    // Try to set the requested video mode.
+                    // FIXME: Error handling and return values!
+                    video_mode.width = console_attribute->width;
+                    video_mode.height = console_attribute->height;
+                    video_mode.depth = console_attribute->depth;
+                    video_mode.mode_type = console_attribute->mode_type;
 
-                    if (has_video)
+                    if (video_mode_set(&video_structure, &video_mode) != VIDEO_RETURN_SUCCESS)
                     {
-                        // Try to set the requested video mode.
-                        // FIXME: Error handling and return values!
-                        video_mode.width = console_attribute->width;
-                        video_mode.height = console_attribute->height;
-                        video_mode.depth = console_attribute->depth;
-                        video_mode.mode_type = console_attribute->mode_type;
-
-                        if (video_mode_set(&video_structure, &video_mode) != VIDEO_RETURN_SUCCESS)
-                        {
-                            // FIXME: Fail and return here.
-                        }
+                        // FIXME: Fail and return here.
                     }
                 }
 
