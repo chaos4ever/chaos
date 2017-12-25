@@ -4,10 +4,13 @@ DEFINES = (ENV['DEFINES'] || '') +
   ' -DPACKAGE_NAME=\\"storm\\" -DPACKAGE_VERSION=\\"0.5.1+\\" -DREVISION=\\"`git rev-list HEAD --max-count 1 --abbrev-commit`\\" \
   -DCREATOR=\\"`whoami`@`hostname -s`\\"'
 
+# For a saner gdb experience, you typically want to compile without optimizations unless specifically making a release.
+OPTIMIZATION_FLAG = ENV['RELEASE'] ? '-O3' : '-O0'
+
 COMMON_CFLAGS =
   "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
   -Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
-  -Wmissing-noreturn -pipe -O3 -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
+  -Wmissing-noreturn -pipe #{OPTIMIZATION_FLAG} -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
   -g -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
 
 CFLAGS = COMMON_CFLAGS +

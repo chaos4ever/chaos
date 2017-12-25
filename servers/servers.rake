@@ -6,7 +6,10 @@ Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if R
 
 LIBRARIES_DIR = "#{File.dirname(__FILE__)}/../libraries".freeze
 
-COMMON_CFLAGS = %w[
+# For a saner gdb experience, you typically want to compile without optimizations unless specifically making a release.
+OPTIMIZATION_FLAG = ENV['RELEASE'] ? '-O3' : '-O0'
+
+COMMON_CFLAGS = %W[
   -Wall
   -Wextra
   -Wshadow
@@ -16,14 +19,15 @@ COMMON_CFLAGS = %w[
   -Winline
   -Werror
   -Wcast-align
+  -Wno-pointer-sign
   -Wsign-compare
   -Wmissing-declarations
   -Wmissing-noreturn
   -pipe
-  -O3
+  #{OPTIMIZATION_FLAG}
   -fno-builtin
   -funsigned-char
-  -g
+  -ggdb3
   -m32
   -fomit-frame-pointer
   -ffreestanding

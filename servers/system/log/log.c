@@ -2,7 +2,7 @@
 // from the kernel.
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
-
+//
 // © Copyright 1999 chaos development
 
 #include "config.h"
