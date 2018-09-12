@@ -19,6 +19,7 @@ COMMON_CFLAGS = %W[
   -Winline
   -Werror
   -Wcast-align
+  -Wno-cast-function-type
   -Wno-pointer-sign
   -Wsign-compare
   -Wmissing-declarations

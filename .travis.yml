@@ -3,19 +3,7 @@ dist: xenial
 
 matrix:
   include:
-    # Default version in Debian stable (stretch)
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-6
-            - gcc-6-multilib
-      env:
-        - MATRIX_EVAL="CC=gcc-6 && ARCH=x86"
-
-    # Available, but not default, in Debian testing (buster)
+    # Old version available in Debian buster
     - os: linux
       addons:
         apt:
@@ -26,6 +14,18 @@ matrix:
             - gcc-7-multilib
       env:
         - MATRIX_EVAL="CC=gcc-7 && ARCH=x86"
+
+    # Default in Debian buster
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - ubuntu-toolchain-r-test
+          packages:
+            - gcc-8
+            - gcc-8-multilib
+      env:
+        - MATRIX_EVAL="CC=gcc-8 && ARCH=x86"
 
     # Highly experimental Raspberry Pi port
     - os: linux
