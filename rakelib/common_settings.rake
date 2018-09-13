@@ -23,11 +23,11 @@ else
   TARGET_ARCH ||= ENV['ARCH']
 
   if TARGET_ARCH == 'x86'
-    CC = ENV['CC'] || 'gcc-5'
+    CC = ENV['CC'] || 'gcc'
     AR = ENV['AR'] || 'ar'
     AR_TARGET = '--target=elf32-i386'.freeze
     NASM = 'nasm'.freeze
-    ARCH_CFLAGS = '-m32'.freeze
+    ARCH_CFLAGS = '-m32 -fno-pic'.freeze
   elsif TARGET_ARCH == 'raspberrypi'
     CC = ENV['CC'] || 'arm-none-eabi-gcc'
     AR = ENV['AR'] || 'arm-none-eabi-ar'

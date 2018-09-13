@@ -46,6 +46,7 @@ LDFLAGS = %W[
   #{EXTRA_LDFLAGS_PRE}
   #{LIBRARIES_DIR}/startup.o
   -lgcc
+  -static
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32
