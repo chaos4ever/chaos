@@ -48,6 +48,7 @@ EXTRA_LIBS ||= ''.freeze
 LDFLAGS = %W[
   #{EXTRA_LDFLAGS_PRE}
   #{LIBRARIES_DIR}/startup.o
+  -static
   -nostdlib
   -Wl,-T,#{LIBRARIES_DIR}/chaos.ld
   -m32

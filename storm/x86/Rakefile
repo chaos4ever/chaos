@@ -42,7 +42,7 @@ OUTPUT = 'libstorm_x86.a'.freeze
 GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
 
 KERNEL_OUTPUT = 'storm'.freeze
-LDFLAGS = '-nostdlib -Wl,-T,kernel.ld -m32'.freeze
+LDFLAGS = '-static -nostdlib -Wl,-T,kernel.ld -m32'.freeze
 
 task default: %i[banner prepare storm] + objects
 
