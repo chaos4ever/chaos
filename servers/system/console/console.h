@@ -123,6 +123,6 @@ extern volatile unsigned int number_of_consoles;
 extern console_type *console_list;
 extern volatile console_type *console_shortcut[];
 
-extern void handle_connection(mailbox_id_type *reply_mailbox_id) NORETURN;
+extern void handle_connection(mailbox_id_type reply_mailbox_id) NORETURN;
 extern void console_link(console_type *console);
 extern void console_flip(console_type *console);

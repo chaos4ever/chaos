@@ -2,9 +2,7 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #pragma once
 

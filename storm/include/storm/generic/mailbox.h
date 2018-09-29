@@ -55,8 +55,12 @@ typedef struct
     // Number of messages in the mailbox.
     unsigned int number_of_messages;
 
-    // Is the owner of this mailbox blocked on reading?
+    // Is a thread blocked on reading from this mailbox?
     bool reader_blocked;
+
+    // The thread ID of the blocked reader, or THREAD_NONE if no thread
+    // blocked on this mailbox.
+    thread_id_type reader_thread_id;
 
     // Start of the first message in the mailbox.
     message_type *first_message;

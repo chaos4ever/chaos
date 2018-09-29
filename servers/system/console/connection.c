@@ -125,7 +125,7 @@ static void connection_client(message_parameter_type *message_parameter, console
                 (*our_application)->ipc_structure.input_mailbox_id = ipc_structure->input_mailbox_id;
                 (*our_application)->ipc_structure.output_mailbox_id = ipc_structure->output_mailbox_id;
 
-                // Always active a new console being created, so we handle cluido being launched by the boot server.
+                // Always activate a new console being created, so we handle cluido being launched by the boot server.
                 current_console = *our_console;
                 (*our_console)->output = screen;
 
@@ -334,7 +334,7 @@ static void connection_provider_mouse(message_parameter_type *message_parameter)
 }
 
 // Handle an IPC connection request.
-void handle_connection(mailbox_id_type *reply_mailbox_id)
+void handle_connection(mailbox_id_type reply_mailbox_id)
 {
     system_thread_name_set("Handling connection");
 
@@ -352,7 +352,7 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
     memory_allocate((void **) our_application_pointer, sizeof(console_application_type));
 
     // Accept the connection.
-    ipc_structure.output_mailbox_id = *reply_mailbox_id;
+    ipc_structure.output_mailbox_id = reply_mailbox_id;
     ipc_connection_establish(&ipc_structure);
 
     message_parameter.data = data;
@@ -391,6 +391,8 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
 
             case IPC_CONSOLE_CONNECTION_CLASS_CLIENT:
             {
+                // TODO: Continue here. WHY, oh WHY do we sometimes... end up with a
+                // corrupted ipc_structure when this method is entered?
                 connection_client(&message_parameter, &our_console, &our_application, data, &ipc_structure);
                 break;
             }
@@ -423,4 +425,3 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
         }
     }
 }
-

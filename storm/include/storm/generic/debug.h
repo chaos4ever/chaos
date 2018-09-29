@@ -108,10 +108,10 @@ extern void debug_run(void);
     debug_run(); \
     while (TRUE) ;
 
-#define assert(condition, message) \
+#define assert(condition, message, ...) \
     if (!(condition)) \
     { \
-        DEBUG_HALT(message); \
+        DEBUG_HALT(message, ## __VA_ARGS__); \
     }
 
 #else // OPTION_RELEASE

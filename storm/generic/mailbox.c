@@ -265,7 +265,7 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
     if (mailbox == NULL)
     {
         mutex_kernel_signal(&tss_tree_mutex);
-        DEBUG_SDB(DEBUG, "mailbox == NULL.");
+        DEBUG_SDB(DEBUG, "mailbox %u could not be found", mailbox_id);
 
         return STORM_RETURN_MAILBOX_UNAVAILABLE;
     }
@@ -387,10 +387,13 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
         return STORM_RETURN_MAILBOX_UNAVAILABLE;
     }
 
+    // We would *like* to add current_thread_id == mailbox->owner_thread_id)
+    // to the check below, but the IPC library currently passes the reply
+    // mailbox ID from the service client to the process that is
+    // listening for connections on the service, making that check
+    // impossible for now.
     if (!(current_process_id == mailbox->owner_process_id &&
-          current_cluster_id == mailbox->owner_cluster_id /* &&
-                                                             current_thread_id == mailbox->owner_thread_id*/
-          ))
+          current_cluster_id == mailbox->owner_cluster_id))
     {
         // We don't have read-access to this mailbox, since we are not the owner.
         DEBUG_MESSAGE(DEBUG, "Access denied for process/thread %u/%u (should have been %u/%u) mailbox ID %u",
@@ -409,26 +412,37 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
     {
         if (message_parameter->block)
         {
+            // This _should_ never happen, but we've seen it in cases where multiple threads are (incorrectly) reading from
+            // the same mailbox => chaos ensues.
+            assert(!mailbox->reader_blocked, "Attempting to block on mailbox_receive for mailbox ID %d, but mailbox is already blocked by thread %d", mailbox_id, mailbox->reader_thread_id);
+
             // Block ourselves until the mailbox gets populated.
             mailbox->reader_blocked = TRUE;
+            mailbox->reader_thread_id = current_tss->thread_id;
 
             DEBUG_MESSAGE(VERBOSE_DEBUG, "Blocking ourselves.");
 
-            mutex_kernel_signal(&tss_tree_mutex);
-
             // Modify this task's entry in the TSS structure.
-            mutex_kernel_wait(&tss_tree_mutex);
             current_tss->state = STATE_MAILBOX_RECEIVE;
             current_tss->mailbox_id = mailbox_id;
             current_tss->mutex_time = timeslice;
             mutex_kernel_signal(&tss_tree_mutex);
 
+            // Pass on control to the task switcher, since we are now
+            // blocked on MAILBOX_RECEIVE.
             dispatch_next();
 
             mutex_kernel_wait(&tss_tree_mutex);
             mailbox->reader_blocked = FALSE;
+            mailbox->reader_thread_id = PROCESS_ID_NONE;
 
-            // A message has arrived. We open the mailbox again, so that we can read out the message.
+            assert(mailbox->number_of_messages != 0,
+                   "Was unblocked but number_of_messages == 0 in mailbox %d", mailbox_id)
+            assert(mailbox->first_message != NULL,
+                   "Was unblocked but first_message == NULL in mailbox %d", mailbox_id)
+
+            // A message has arrived. We open the mailbox again, so that
+            // we can read out the message.
             DEBUG_MESSAGE(VERBOSE_DEBUG,
                           "mailbox_id = %u, mailbox->messages = %u, mailbox->first_message = %x",
                           mailbox_id, mailbox->number_of_messages,
