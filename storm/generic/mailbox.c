@@ -414,21 +414,26 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
 
             DEBUG_MESSAGE(VERBOSE_DEBUG, "Blocking ourselves.");
 
-            mutex_kernel_signal(&tss_tree_mutex);
-
             // Modify this task's entry in the TSS structure.
-            mutex_kernel_wait(&tss_tree_mutex);
             current_tss->state = STATE_MAILBOX_RECEIVE;
             current_tss->mailbox_id = mailbox_id;
             current_tss->mutex_time = timeslice;
             mutex_kernel_signal(&tss_tree_mutex);
 
+            // Pass on control to the task switcher, since we are now
+            // blocked on MAILBOX_RECEIVE.
             dispatch_next();
 
             mutex_kernel_wait(&tss_tree_mutex);
             mailbox->reader_blocked = FALSE;
 
-            // A message has arrived. We open the mailbox again, so that we can read out the message.
+            assert(mailbox->number_of_messages != 0,
+                   "Was unblocked but number_of_messages == 0 in mailbox %d", mailbox_id)
+            assert(mailbox->first_message != NULL,
+                   "Was unblocked but first_message == NULL in mailbox %d", mailbox_id)
+
+            // A message has arrived. We open the mailbox again, so that
+            // we can read out the message.
             DEBUG_MESSAGE(VERBOSE_DEBUG,
                           "mailbox_id = %u, mailbox->messages = %u, mailbox->first_message = %x",
                           mailbox_id, mailbox->number_of_messages,

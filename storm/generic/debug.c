@@ -276,7 +276,7 @@ static int print_simple(const char *string)
     // Handle the NULL string.
     if (string == NULL)
     {
-        debug_print_simple("(null)");
+        print_simple("(null)");
 
         return 0;
     }
