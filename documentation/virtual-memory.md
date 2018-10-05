@@ -15,7 +15,8 @@ Start                       | Length        | Description
 `0x02400000`                | `0x00400000`  | Process data. Parameters and other info.
 `0x02800000`                | `SIZE_GLOBAL` | Global data area. Hifi-Eslöf, ports, etc...
 `0x02800000 + SIZE_GLOBAL`  | Varying       | Freely disposable by process (process data and code, process heap etc.)
-`0xFC000000`                | `0x04000000`  | Stack (lowest page is PL0, used for kernel-mode calls.)
+`0xFC000000`                | `0x00001000`  | Stack (PL0, used for kernel-mode calls.). **Each thread gets its own stack.**
+`0xFC001000`                | `0x03FFF000`  | Stack (PL3, growing downwards with the first page starting at `0xFFFFF000`) **Each thread gets its own stack.**
 
 ## Format of the global memory space
 
