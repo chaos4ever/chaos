@@ -223,6 +223,7 @@ static inline return_type system_call_thread_create(thread_entry_point_type *thr
 
     asm volatile("pushl %1\n"
                  "pushl %2\n"
+                 "pushl %%esp\n" // Need to be last (i.e. first) because %1 and %2 will be %esp-relative references.
                  "lcall %3, $0"
                  : "=a" (return_value)
                  : "ri" (argument),

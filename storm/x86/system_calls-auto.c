@@ -34,7 +34,7 @@ const system_call_type system_call[] =
   { SYSTEM_CALL_PROCESS_CREATE, wrapper_process_create, 1 },
   { SYSTEM_CALL_PROCESS_NAME_SET, wrapper_process_name_set, 1 },
   { SYSTEM_CALL_PROCESS_PARENT_UNBLOCK, wrapper_process_parent_unblock, 0 },
-  { SYSTEM_CALL_THREAD_CREATE, wrapper_thread_create, 2 },
+  { SYSTEM_CALL_THREAD_CREATE, wrapper_thread_create, 3 },
   { SYSTEM_CALL_THREAD_CONTROL, wrapper_thread_control, 3 },
   { SYSTEM_CALL_THREAD_NAME_SET, wrapper_thread_name_set, 1 },
   { SYSTEM_CALL_TIMER_READ, wrapper_timer_read, 1 },

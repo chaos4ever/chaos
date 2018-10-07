@@ -210,12 +210,12 @@ thread_id_type thread_get_free_id(void)
     return thread_id;
 }
 
-// Create a thread under the current cluster. Returns STORM_RETURN_THREAD_ORIGINAL for calling thread and
+// Create a thread under the current cluster. Returns STORM_RETURN_THREAD_ORIGINAL for the calling thread and
 // STORM_RETURN_THREAD_NEW for new thread.
 
 // FIXME: Some regions used by the kernel for temporary mappings need to be unique (or mutexed) to each thread under
 // a cluster. Discuss how this is best done! Right now, we lock everything, which is sub-optimal.
-return_type thread_create(void *(*start_routine) (void *), void *argument)
+return_type thread_create(uint32_t current_thread_esp, void *(*start_routine) (void *), void *argument)
 {
 
     storm_tss_type *new_tss;
@@ -271,45 +271,66 @@ return_type thread_create(void *(*start_routine) (void *), void *argument)
                              GET_PAGE_NUMBER(BASE_PROCESS_PAGE_DIRECTORY),
                              page_directory_physical_page, 1, PAGE_KERNEL);
 
-    // The "magical" mapping previously created by memory_virtual_create_page_tables_mapping also needs to be adjusted.
-    // Otherwise we will update the wrong thread's addressing space when mapping memory for the new thread.
+    // The "magical" mapping previously created by memory_virtual_create_page_tables_mapping also
+    // needs to be adjusted. Otherwise we will update the wrong thread's addressing space when
+    // mapping memory for the new thread.
     memory_virtual_create_page_tables_mapping(new_page_directory, page_directory_physical_page);
 
     // FIXME: Map into all sister threads address spaces when creating a new page table for a thread.
 
-    // Start by creating a PL0 stack. Remember that the lowest page of the stack area is the PL0 stack.
-    // FIXME: Check return value.
+    // Start by creating a PL0 stack, and map it into our current context so we can clear it.
+    // FIXME: Check return values; all of these can fail.
     memory_physical_allocate(&stack_physical_page, 1, "Thread PL0 stack.");
     memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, 1, PAGE_KERNEL);
-    memory_copy((uint8_t *) BASE_PROCESS_CREATE, (uint8_t *) BASE_PROCESS_STACK, SIZE_PAGE * 1);
-    memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1, PAGE_KERNEL);
+    memory_set_uint8_t((uint8_t *) BASE_PROCESS_CREATE, 0, SIZE_PAGE);
 
-    new_tss->esp = cpu_get_esp();
+    // Make the PL0 stack accessible in the new thread's context. Its virtual memory address range
+    // is 0xFC000000-0xFC000FF.
+    memory_virtual_map_other(new_tss, GET_PAGE_NUMBER(BASE_PROCESS_STACK), stack_physical_page, 1,
+                             PAGE_KERNEL);
 
-    // This stuff needs to run while the PL0 stack is being mapped, since ESP will (because of technical reasons ;)
-    // currently point into the PL0 stack. This happens because we are currently running kernel code, so it's not really that
-    // weird after all.
-    uint32_t new_stack_in_current_address_space = BASE_PROCESS_CREATE + (new_tss->esp - BASE_PROCESS_STACK);
+    // PL0 stack is now set up. We now need to set up the PL3 stack also, which is slightly more complicated.
+    // All the content of the current thread's stack gets copied to the stack for the new thread, so that stack
+    // variables set in the mother thread will have expected values in the child thread also.
+
+    // FIXME: Check return values.
+    memory_physical_allocate(&stack_physical_page, current_tss->stack_pages, "Thread PL3 stack.");
+    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, current_tss->stack_pages,
+                       PAGE_KERNEL);
+    memory_copy((uint8_t *) BASE_PROCESS_CREATE,
+                (uint8_t *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
+                current_tss->stack_pages * SIZE_PAGE);
+    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page,
+                             current_tss->stack_pages, PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
+
+    new_tss->esp = current_thread_esp;
+
+    // 0xFFF = 4095, so we get the offset of the stack pointer within its current page.
+    int offset = (new_tss->esp & 0xFFF);
+
+    if (offset < 8)
+    {
+        // FIXME: This algorithm has a serious flaw. If the current_thread_esp has LESS than 8 bytes left until
+        // it reaches the next page boundary, the stack operations below will fail. It is indeed an edge case,
+        // but clearly something that's very likely to happen at some point. We need to special case it here,
+        // or re-think the algorithm in some other way.
+        DEBUG_HALT("Kernel bug encountered. %d is less than 8.", offset);
+    }
+
+    // Place the thread's optional parameter into its stack. We utilize the fact here that the last stack page
+    // will always be mapped at BASE_PROCESS_CREATE, since x86 stacks grow downwards => "the last shall be
+    // first."
+    uint32_t new_stack_in_current_address_space = BASE_PROCESS_CREATE + offset;
     new_tss->esp -= 4;
     new_stack_in_current_address_space -= 4;
     *(void **)new_stack_in_current_address_space = argument;
 
-    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now, returning from a
-    // thread will trigger a page fault.
+    // FIXME: Make the return address here be to a thread_exit() method or similar. As it is now,
+    // returning from a thread will trigger a page fault. It's not great, but it's a lot better
+    // than leaving it as a wild pointer into an undefined location in memory.
     new_tss->esp -= 4;
     new_stack_in_current_address_space -= 4;
     *(void **)new_stack_in_current_address_space = NULL;
-
-    // Phew... Finished setting up a PL0 stack. Lets take a deep breath and do the same for the PL3 stack, which is
-    // slightly more complicated.
-
-    // FIXME: Check return value.
-    memory_physical_allocate(&stack_physical_page, current_tss->stack_pages, "Thread PL3 stack.");
-    memory_virtual_map(GET_PAGE_NUMBER(BASE_PROCESS_CREATE), stack_physical_page, current_tss->stack_pages, PAGE_KERNEL);
-    memory_copy((uint8_t *) BASE_PROCESS_CREATE, (uint8_t *) ((MAX_PAGES - current_tss->stack_pages) * SIZE_PAGE),
-                current_tss->stack_pages * SIZE_PAGE);
-    memory_virtual_map_other(new_tss, MAX_PAGES - current_tss->stack_pages, stack_physical_page, current_tss->stack_pages,
-                             PAGE_WRITABLE | PAGE_NON_PRIVILEGED);
 
     new_tss->ss = new_tss->ss0;
     new_tss->cs = SELECTOR_KERNEL_CODE;
