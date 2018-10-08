@@ -48,6 +48,7 @@ extern return_type system_call_service_get(const char *protocol_name, service_pa
 extern return_type system_call_service_protocol_get_amount(unsigned int *number_of_protocols);
 extern return_type system_call_service_protocol_get(unsigned int *maximum_protocols, service_protocol_type *protocol_info);
 extern return_type system_call_thread_control(thread_id_type thread_id, unsigned int class, unsigned int parameter);
-extern return_type system_call_thread_create(void *(*start_routine) (void *), void *argument);
+extern return_type system_call_thread_create(uint32_t current_thread_esp, void *(*start_routine) (void *),
+    void *argument);
 extern return_type system_call_thread_name_set(char *name);
 extern return_type system_call_timer_read(time_type *timer);

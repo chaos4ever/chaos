@@ -24,7 +24,7 @@ extern tss_list_type *idle_tss_node;
 extern void thread_init(void);
 extern thread_id_type thread_get_free_id(void);
 extern return_type thread_control(thread_id_type thread_id, unsigned int class, unsigned int parameter);
-extern return_type thread_create(void *(*start_routine)(void *), void *argument);
+extern return_type thread_create(uint32_t current_thread_esp, void *(*start_routine)(void *), void *argument);
 extern storm_tss_type *thread_get_tss(thread_id_type thread_id);
 extern tss_list_type *thread_link(storm_tss_type *tss);
 extern void thread_unlink(thread_id_type thread_id);

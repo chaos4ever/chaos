@@ -49,7 +49,7 @@ system_calls = Hash[
   'process_name_set',             1,
   'process_parent_unblock',       0,
 
-  'thread_create',                2,
+  'thread_create',                3, # 2 ordinary arguments and one "extra" argument for old PL3 ESP value.
   'thread_control',               3,
   'thread_name_set',              1,
 
@@ -93,7 +93,7 @@ void wrapper_#{system_call}(void)
         file.puts %(
       // Restore the stack after the function call
       "addl   \$4 * #{num_parameters}, %esp\\n"\
-      )
+)
       end
 
       file.puts %[
