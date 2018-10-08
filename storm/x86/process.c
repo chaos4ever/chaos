@@ -80,8 +80,9 @@ void process_link(process_info_type *process_info)
 // Initialise process support.
 void process_init(void)
 {
-    // Set up the kernel tss.
+    // Set up the kernel tss and ensure we start from a clean slate.
     kernel_tss = (storm_tss_type *) BASE_VIRTUAL_KERNEL_TSS;
+    memory_set_uint8_t((uint8_t *)kernel_tss, 0, sizeof(storm_tss_type));
 
     // Insert the kernel TSS into the structures. It is used for the idle thread.
     kernel_tss->state = STATE_IDLE;
