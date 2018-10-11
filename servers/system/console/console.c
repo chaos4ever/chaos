@@ -14,6 +14,7 @@ volatile unsigned int number_of_consoles = 0;
 character_type *screen = (character_type *) NULL;
 volatile console_type *current_console = NULL;
 console_type *console_list = NULL;
+volatile bool console_open_lock = FALSE;
 ipc_structure_type video_structure;
 volatile bool has_video = FALSE;
 volatile unsigned int console_id = 0;

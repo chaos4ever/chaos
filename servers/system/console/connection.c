@@ -73,6 +73,17 @@ static void connection_client(message_parameter_type *message_parameter, console
         // Open a new console with the requested attributes.
         case IPC_CONSOLE_OPEN:
         {
+            // FIXME: Use library_semaphore. The code below is not
+            // reentrant because of its usage of video_mode_set, which will
+            // block on the video_structure input mailbox => multiple
+            // threads cannot block on the same mailbox simultaneously.
+            while (console_open_lock == TRUE)
+            {
+                system_call_dispatch_next();
+            }
+
+            console_open_lock = TRUE;
+
             ipc_console_attribute_type *console_attribute = (ipc_console_attribute_type *) data;
             video_mode_type video_mode;
 
@@ -148,6 +159,8 @@ static void connection_client(message_parameter_type *message_parameter, console
 
                 // We have added a new console.
                 number_of_consoles++;
+
+                console_open_lock = FALSE;
             }
 
             break;
@@ -347,6 +360,7 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
     console_application_type *our_application = NULL;
     console_application_type **our_application_pointer = &our_application;
     unsigned int data_size = 4096;
+    bool done = FALSE;
 
     memory_allocate((void **) data_pointer, data_size);
     memory_allocate((void **) our_application_pointer, sizeof(console_application_type));
@@ -357,7 +371,7 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
 
     message_parameter.data = data;
 
-    while (TRUE)
+    while (!done)
     {
         message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
         message_parameter.message_class = IPC_CLASS_NONE;
@@ -379,10 +393,11 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
 
                     if (connection_class == IPC_CONSOLE_CONNECTION_CLASS_PROVIDER_VIDEO)
                     {
-                        has_video = TRUE;
-
                         video_structure.output_mailbox_id = ipc_structure.output_mailbox_id;
                         video_structure.input_mailbox_id = ipc_structure.input_mailbox_id;
+
+                        has_video = TRUE;
+                        done = TRUE;
                     }
                 }
 
@@ -422,5 +437,7 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
             break;
         }
     }
+
+    system_exit();
 }
 
