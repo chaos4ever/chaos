@@ -362,7 +362,7 @@ static return_type thread_delete(storm_tss_type *tss)
     // Free IRQs we might have allocated.
     irq_free_all(tss->thread_id);
 
-    // Free port ranges possibl7 allocated.
+    // Free port ranges possibly allocated.
     // FIXME: This doesn't seem to really work...
     // port_range_free_all (thread_id);
 
@@ -376,7 +376,11 @@ static return_type thread_delete(storm_tss_type *tss)
         process_parent_unblock();
     }
 
-    // FIXME: Add this thread to a list of threads that the idle thread should delete, and implement this in the idle thread.
+    // FIXME: Add this thread to a list of threads that the idle thread
+    // should delete, and implement this in the idle thread. For now,
+    // all resources used by the thread is leaked and nothing handles the
+    // case where all threads are terminated and the whole process should
+    // be removed from the system.
     return RETURN_SUCCESS;
 }
 

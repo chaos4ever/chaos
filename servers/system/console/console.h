@@ -122,6 +122,7 @@ extern volatile console_type *current_console;
 extern volatile unsigned int number_of_consoles;
 extern console_type *console_list;
 extern volatile console_type *console_shortcut[];
+extern volatile bool console_open_lock;
 
 extern void handle_connection(mailbox_id_type *reply_mailbox_id) NORETURN;
 extern void console_link(console_type *console);
