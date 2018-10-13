@@ -57,11 +57,11 @@ LDFLAGS = %W[
 
 LIBRARY_FILES = LIBRARIES.map { |l| "#{LIBRARIES_DIR}/lib#{l}.a" }
 
-servers_dir = File.dirname(__FILE__)
+programs_dir = File.dirname(__FILE__)
 
 INCLUDES = %W[
-  -I#{servers_dir}/../storm/include
-  -I#{servers_dir}/../libraries
+  -I#{programs_dir}/../storm/include
+  -I#{programs_dir}/../libraries
 ].freeze
 
 task default: [:banner, OUTPUT] do
