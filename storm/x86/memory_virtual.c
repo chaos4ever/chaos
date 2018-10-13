@@ -47,6 +47,11 @@ page_directory_entry_page_table *kernel_page_directory;
 page_directory_entry_page_table *process_page_directory = (page_directory_entry_page_table *) BASE_PROCESS_PAGE_DIRECTORY;
 page_table_entry *shared_page_tables;
 
+// Convenience variable which can be used to access the paging structures from a process' own
+// virtual memory context. Not currently used by the kernel, but could be utilized if we want
+// to simplify after-thread-creation mapping of memory etc.
+page_table_entry *process_page_tables_flat = (page_table_entry *) BASE_PROCESS_PAGE_TABLES;
+
 // FIXME: We should have one mutex per cluster/thread/process, or whatever seems best.
 
 //mutex_kernel_type memory_map_mutex = MUTEX_UNLOCKED;

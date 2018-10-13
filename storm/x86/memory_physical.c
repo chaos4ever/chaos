@@ -274,7 +274,7 @@ return_type memory_physical_allocate(uint32_t *page, unsigned int length, const 
         else
         {
             debug_print("%u/%u pages allocated.\n", physical_pages - pages_left, physical_pages);
-            DEBUG_HALT("Failed to allocate a page.");
+            DEBUG_HALT("Failed to allocate %d pages - couldn't find a node with enough free pages left.", length);
         }
     }
 
