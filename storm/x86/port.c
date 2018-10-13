@@ -25,6 +25,8 @@
 #include <storm/x86/gdt.h>
 #include <storm/x86/tss.h>
 
+#define DELAY_PORT 0x80
+
 // Linked list over allocated I/O regions.
 port_range_type *port_list = NULL;
 
@@ -133,7 +135,7 @@ return_type port_range_register(unsigned int start, unsigned int ports, char *de
     }
 
     // If the TSS is too small, expand it.
-    if (current_tss->iomap_size < BIT_IN_BYTES(start + ports - 1))
+    if (current_tss->iomap_size < BIT_IN_BYTES(MAX_OF_TWO(start + ports - 1, DELAY_PORT)))
     {
         int old_iomap_size = current_tss->iomap_size;
         storm_tss_type *old_tss = current_tss;
@@ -151,7 +153,7 @@ return_type port_range_register(unsigned int start, unsigned int ports, char *de
         current_tss->iomap_size = BIT_IN_BYTES(start + ports);
         memory_set_uint8_t(current_tss->iomap + old_iomap_size, 0xFF, current_tss->iomap_size - old_iomap_size);
         DEBUG_MESSAGE(DEBUG, "Clearing %u bytes", current_tss->iomap_size - old_iomap_size)
-        
+
         thread_unlink(old_tss->thread_id);
         current_tss_node = thread_link(current_tss);
 
@@ -187,6 +189,10 @@ return_type port_range_register(unsigned int start, unsigned int ports, char *de
         DEBUG_MESSAGE(DEBUG, "Clearing bit %u in the I/O map", port);
         BIT_CLEAR(current_tss->iomap[port / 8], port % 8);
     }
+
+    // Also make sure all processes working with I/O can use the delay port, since it's sometimes needed when dealing
+    // with ISA hardware.
+    BIT_CLEAR(current_tss->iomap[DELAY_PORT / 8], DELAY_PORT % 8);
 
     // Since this thread has got a new TSS, we have to check if it is an IRQ handler. If so, we must update the TSS pointer.
     for (index = 0; index < IRQ_LEVELS; index++)
@@ -265,7 +271,7 @@ void port_range_free_all(thread_id_type thread_id)
     // FIXME: This algorithm feels a little sub-optimal... or is it just me?
     // FIXME: Don't repeat a lot of the code from port_range_unregister, but rather use a common helper method that
     // both of these methods can call to perform the actual work.
-    
+
     // Loop until we find no more matches.
     while (TRUE)
     {

@@ -1,13 +1,10 @@
 ; Abstract: x86 assembly-level VGA helper functions
 ; Author: Johan Thim (Thank you for your great help!)
 ;
-; © Copyright 1999-2000 chaos development
-; © Copyright 2013 chaos development
-; © Copyright 2015-2016 chaos development
+; © Copyright 1999 chaos development
 
 ; FIXME: Rewrite this in C!
 
-extern          font_8x8
 extern          graphic_video_memory
 global          vga_set_mode
 
@@ -41,23 +38,6 @@ mode_table:     dd      mode_320x200x256
                 dd      mode_640x480x16
                 dd      mode_640x400x256
 
-mode_t_table:   db      0
-                db      1
-                db      0
-                db      0
-mode_t_len      equ     $ - mode_t_table
-
-font_ptr        dd      0
-font_bytes      db      0
-vga_buff        dd      miff
-
-; FIXME: for some reason, the VGA server won't start if this is put into the
-; BSS section.
-
-;section                .bss
-
-miff            times 300 db 0
-
 section         .text
 
 vga_set_mode:   push    ebp
@@ -68,17 +48,9 @@ vga_set_mode:   push    ebp
                 mov     esi, [mode_table + eax * 4]
                 push    eax
                 call    setmode
+                add     esp,4
 
-                pop     eax
-                cmp     byte [mode_t_table + eax], 1
-                jne     .no_font
-
-                mov     dword [font_ptr], font_8x8
-                mov     byte [font_bytes], 8
-
-                call    loadfont
-
-.no_font:       popa
+                popa
                 pop     ebp
                 ret
 
@@ -146,96 +118,3 @@ setmode:        mov     dx,3c2h                 ; misc addr
                 out     dx,al
 
                 ret
-
-loadfont:       cld
-                mov     edi, [vga_buff]
-
-                mov     dx,3ceh                 ; graphics
-                mov     al,5                    ; write mode reg
-                out     dx,al
-                inc     dx
-                in      al,dx
-                stosb
-                and     al,0fch
-                xchg    al,ah
-                mov     al,5
-                dec     dx
-                out     dx,ax
-
-                mov     al,6                    ; misc reg
-                out     dx,al
-                inc     dx
-                in      al,dx
-                stosb
-                and     al,0f1h
-                or      al,4
-                xchg    al,ah
-                mov     al,6
-                dec     dx
-                out     dx,ax
-
-                mov     dx,3c4h                 ; sequencer port
-                mov     al,2                    ; map mask reg
-                out     dx,al
-                inc     dx
-                in      al,dx
-                stosb
-
-                dec     dx
-                mov     ax,402h
-                out     dx,ax
-
-                mov     al,4                    ; memory selector reg
-                out     dx,al
-                inc     dx
-                in      al,dx
-                stosb
-                or      al,4
-                xchg    al,ah
-                mov     al,4
-                dec     dx
-                out     dx,ax
-
-                mov     esi, [font_ptr]
-                mov     edi, [graphic_video_memory]
-
-                xor     ecx,ecx
-                mov     ebx,ecx
-
-.1:             mov     cl,[font_bytes]
-                rep     movsb
-
-                mov     cl,32
-                sub     cl,[font_bytes]
-                xor     eax,eax
-                rep     stosb
-
-                dec     bl                      ; 256 chars
-                jnz     .1
-
-                mov     esi,[vga_buff]
-
-                mov     dx,3ceh
-                lodsb
-                xchg    al,ah
-                mov     al,5
-                out     dx,ax
-
-                lodsb
-                xchg    al,ah
-                mov     al,6
-                out     dx,ax
-
-                mov     dx,3c4h
-                lodsb
-                xchg    al,ah
-                mov     al,2
-                out     dx,ax
-
-                lodsb
-                xchg    al,ah
-                mov     al,4
-                out     dx,ax
-
-                ret
-
