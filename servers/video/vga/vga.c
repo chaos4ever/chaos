@@ -163,7 +163,13 @@ static void vga_font_set(uint8_t *font_data, unsigned int length)
     system_port_out_uint8_t_pause(VGA_GRAPHIC_REGISTER, 0x06);
     system_port_out_uint8_t_pause(VGA_GRAPHIC_DATA, 0x00);
 
-    memory_copy(graphic_video_memory, font_data, length);
+    // The VGA hardware always reserves 32 bytes for each font, so we can't just copy the data to video memory as-is;
+    // we need to skip n bytes per character unless we use an 8x32 font.
+    int bytes_per_character = length / 256;
+    for (int i = 0; i < 256; i++)
+    {
+        memory_copy(graphic_video_memory + (i * 32), &font_data[i * bytes_per_character], bytes_per_character);
+    }
 
     // First, the sequencer.
     // Synchronous reset.
@@ -286,6 +292,8 @@ static void handle_connection(ipc_structure_type *ipc_structure)
                             {
                                 vga_palette_set_entry(index, &text_palette[index]);
                             }
+
+                            vga_font_set(font_8x8, sizeof(font_8x8));
                         }
                         else if (video_mode->mode_type == VIDEO_MODE_TYPE_GRAPHIC &&
                                  video_mode->depth == 8)
