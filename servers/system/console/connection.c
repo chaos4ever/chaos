@@ -136,9 +136,15 @@ static void connection_client(message_parameter_type *message_parameter, console
                 (*our_application)->ipc_structure.input_mailbox_id = ipc_structure->input_mailbox_id;
                 (*our_application)->ipc_structure.output_mailbox_id = ipc_structure->output_mailbox_id;
 
-                // Always active a new console being created, so we handle cluido being launched by the boot server.
-                current_console = *our_console;
-                (*our_console)->output = screen;
+                if (current_console == NULL)
+                {
+                    current_console = *our_console;
+                    (*our_console)->output = screen;
+
+                    // 0x0700 = grey on black background, filled with NUL characters. We cannot fill with 0x0 since
+                    // that will render the text cursor invisible.
+                    memory_set_uint16_t((uint16_t *) screen, 0x0700, current_console->width * current_console->height);
+                }
 
                 if (has_video)
                 {
