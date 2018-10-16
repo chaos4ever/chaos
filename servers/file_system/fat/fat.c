@@ -6,7 +6,8 @@
 
 #include "fat.h"
 
-// FIXME: Put those in a structure and allocate for each thread so that we can support multiple FAT volumes.
+// FIXME: Put those in a structure and allocate for each thread so that we can support multiple FAT
+// volumes.
 bios_parameter_block_type *bios_parameter_block = (bios_parameter_block_type *) &buffer;
 bios_parameter_block_32_type *bios_parameter_block_32;
 uint32_t buffer[256];

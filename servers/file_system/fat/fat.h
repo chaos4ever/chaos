@@ -20,30 +20,33 @@ typedef struct
     // Creator system of the fat-drive. Usually looks like "MSWIN4.x". We write "chaos" here.
     uint8_t oem_name[8];
 
-    // Can be 512, 1024, 2048 or 4096. Should be 512 if you don't want any trouble. At least, that's what Microsoft says.
+    // Can be 512, 1024, 2048 or 4096. Should be 512 if you don't want any trouble. At least, that's
+    // what Microsoft says.
     uint16_t bytes_per_sector;
 
-    // Must be a power of two. The result of bytes_per_sector * sectors_per_cluster may not greater than 32K. If it is, many
-    // applications will stop working. ;-)
+    // Must be a power of two. The result of bytes_per_sector * sectors_per_cluster may not greater
+    // than 32K. If it is, many applications will stop working. ;-)
     uint8_t sectors_per_cluster;
 
-    // Number of reserved sectors in the reserved region of the volume starting at the first sector of the volume. Typically, but not always, 1 for
-    // FAT12/16. Usually 32 for FAT32.
+    // Number of reserved sectors in the reserved region of the volume starting at the first sector of
+    // the volume. Typically, but not always, 1 for FAT12/16. Usually 32 for FAT32.
     uint16_t reserved_sectors;
 
     // Number of FAT structures. This value should always be 2.
     uint8_t number_of_fats;
 
-    // For FAT12 and FAT16, this field contains the number of 32-byte directory entries in the root directory. It must also
-    // result in an even multiple of bytes_per_sector when multiplied by 32. For FAT32, this field must be set to zero.
+    // For FAT12 and FAT16, this field contains the number of 32-byte directory entries in the root
+    // directory. It must also result in an even multiple of bytes_per_sector when multiplied by 32.
+    // For FAT32, this field must be set to zero.
     uint16_t number_of_root_entries;
 
-    // This is the total number of sectors on the volume. If zero, the real value can be found in total_sectors_32.
+    // This is the total number of sectors on the volume. If zero, the real value can be found in
+    // total_sectors_32.
     uint16_t total_sectors_16;
 
-    // 0xF8 is the standard value for fixed media. For removable media, 0xF0 is normally used. Legal values are 0xF0 and
-    // 0xF8-0xFF. Whatever is put here must also be put into the low byte of the FAT[0] entry. Other than that, it's only here
-    // for compataibility. (It was used in DOS 1.x)
+    // 0xF8 is the standard value for fixed media. For removable media, 0xF0 is normally used. Legal
+    // values are 0xF0 and 0xF8-0xFF. Whatever is put here must also be put into the low byte of the
+    // FAT[0] entry. Other than that, it's only here for compataibility. (It was used in DOS 1.x)
     uint8_t media;
 
     // The size of one FAT in 16-bit mode. In FAT32 this must be zero.
@@ -58,7 +61,8 @@ typedef struct
     // Number of hidden sectors. This field isn't used by chaos.
     uint32_t hidden_sectors;
 
-    // Number of total sectors. If zero, the value in total_sectors_16 is used. For FAT32 volumes, this must be specified.
+    // Number of total sectors. If zero, the value in total_sectors_16 is used. For FAT32 volumes,
+    // this must be specified.
     uint32_t total_sectors_32;
 
     // Here follows FAT12/16 or FAT32 specific data.
@@ -83,8 +87,8 @@ typedef struct
     // Volume label. This field must be updated when the volume label in the root directory is updated.
     uint8_t volume_label[11];
 
-    // One of the strings "FAT12 ", "FAT16 " or "FAT ". This can not be used to determine the type of the FAT, but it should be
-    // updated when creating file systems.
+    // One of the strings "FAT12 ", "FAT16 " or "FAT ". This can not be used to determine the type
+    // of the FAT, but it should be updated when creating file systems.
     uint8_t filesystem_type[8];
 } __attribute__((packed)) bios_parameter_block_16_type;
 
@@ -97,8 +101,8 @@ typedef struct
     // Extended FAT32 flags follow.
     uint16_t reserved : 8;
 
-    // If this bit is clear, the FAT is mirrored at runtime into all FATs. If it set, only the one specified in the following
-    // field is active.
+    // If this bit is clear, the FAT is mirrored at runtime into all FATs. If it set, only the one
+    // specified in the following field is active.
     uint16_t mirroring : 1;
     uint16_t reserved2 : 3;
 
@@ -108,14 +112,15 @@ typedef struct
     // This specifies the file system version. High byte is major number, low byte is minor. The current version is 0.0.
     uint16_t filesystem_version;
 
-    // This is set to the cluster number of the first cluster of the root directory. Usually 2, but not required.
+    // This is set to the cluster number of the first cluster of the root directory. Usually 2, but
+    // not required.
     uint32_t root_cluster;
 
     // This specifies the sector number of the 'FSINFO' structure in the reserved area.
     uint16_t filesystem_info;
 
-    // If zero, this specifies where the backup of the boot record can be found. Usually 6. No value other than 6 is recommended
-    // by Microsoft.
+    // If zero, this specifies where the backup of the boot record can be found. Usually 6. No
+    // value other than 6 is recommended by Microsoft.
     uint16_t backup_boot_record;
 
     // The following area should always be set to zero when the volume is initialised.
@@ -133,11 +138,12 @@ typedef struct
     // Volume serial number. Should be fairly randomized.
     uint32_t volume_id;
 
-    // Volume label. This field must be updated when the volume label in the root direcotry is updated.
+    // Volume label. This field must be updated when the volume label in the root direcotry
+    // is updated.
     uint8_t volume_label[11];
 
-    // One of the strings "FAT12 ", "FAT16 " or "FAT ". This can not be used to determine the type of the FAT, but it should be
-    // updated when creating file systems.
+    // One of the strings "FAT12 ", "FAT16 " or "FAT ". This can not be used to determine the type
+    // of the FAT, but it should be updated when creating file systems.
     uint8_t filesystem_type[8];
 } __attribute__((packed)) bios_parameter_block_32_type;
 
@@ -167,8 +173,9 @@ typedef struct
 // A FAT directory entry.
 typedef struct
 {
-    // The file name. If name[0] == 0xE5, this entry is free. If name[0] == 0x00, the rest of this directory is free. If
-    // name[0] == 0x05, the real value for this byte is 0xE5. This is because 0xE5 is used in the KANJI character set...
+    // The file name. If name[0] == 0xE5, this entry is free. If name[0] == 0x00, the rest of this
+    // directory is free. If name[0] == 0x05, the real value for this byte is 0xE5. This is because
+    // 0xE5 is used in the KANJI character set...
     char name[8];
     char extension[3];
 
@@ -292,8 +299,10 @@ extern unsigned int number_of_open_files;
 
 // Function prototypes
 extern bool detect_fat(fat_info_type *fat_info);
-extern bool fat_directory_entry_read(file_directory_entry_read_type *directory_entry_read, fat_info_type *fat_info);
-extern bool fat_directory_read(fat_info_type *fat_info, char *path[], int elements, fat_entry_type **fat_entry);
+extern bool fat_directory_entry_read(file_directory_entry_read_type *directory_entry_read,
+    fat_info_type *fat_info);
+extern bool fat_directory_read(fat_info_type *fat_info, char *path[], int elements,
+    fat_entry_type **fat_entry);
 extern bool fat_file_get_info(fat_info_type *fat_info, file_verbose_directory_entry_type *file_info);
 extern bool fat_file_read(fat_info_type *fat_info, file_handle_type file_handle, void *read_buffer, uint32_t bytes);
 extern bool fat_file_open(fat_info_type *fat_info, ipc_file_open_type *open);
@@ -301,9 +310,12 @@ extern fat_entry_type *get_entry_by_name(fat_entry_type *fat_entry, const char *
 extern uint32_t get_next_cluster(uint32_t cluster_number, void *fat, int bits);
 extern void handle_connection(mailbox_id_type *reply_mailbox_id);
 extern void path_split(char *path_name, char **output, unsigned int *elements);
-extern uint32_t read_clusters(fat_info_type *fat_info, void *output, uint32_t start_cluster, uint32_t skip, uint32_t number_of_clusters);
-extern void read_long_file_name(fat_entry_type *fat_entry, int short_file_name_entry, int lfn_entries, char *long_file_name);
-extern bool read_single_cluster(fat_info_type *fat_info, uint32_t cluster_number, void *data_buffer);
+extern uint32_t read_clusters(fat_info_type *fat_info, void *output, uint32_t start_cluster,
+    uint32_t skip, uint32_t number_of_clusters);
+extern void read_long_file_name(fat_entry_type *fat_entry, int short_file_name_entry,
+    int lfn_entries, char *long_file_name);
+extern bool read_single_cluster(fat_info_type *fat_info, uint32_t cluster_number,
+    void *data_buffer);
 
 // Get the maximum of the two input variables.
 static unsigned int min_of_two(unsigned int a, unsigned int b) UNUSED;
