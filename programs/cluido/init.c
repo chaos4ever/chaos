@@ -57,15 +57,14 @@ int main(void)
     console_print(&console_structure, "\
 \n\
 NOTE! This is an unstable prerelease of chaos. Do expect system crashes and\n\
-strange behaviour. There is no need for you, as a user, to fix minor bugs and\n\
-send us patches, since the bug probably already have been fixed when the patch\n\
-arrives to us. If you find a serious bug though, please report to\n\
-chaos-devel@lists.chaosdev.org and hopefully we can work something out. Thank\n\
-you for your time and interest in the project.\n");
+strange behaviour. If you find bugs, please submit an issue or if you are\n\
+brave - a pull request - using our GitHub project page. You can find the link\n\
+from http://www.chaosdev.io. Thank you for your time and interest in the\n\
+project.\n");
 
     console_print(&console_structure, "\
 \n\
-\e[1mcluido version 0.1.0, Copyright (c) 1998-2000, 2013-2017 chaos development.\n\
+\e[1mcluido version 0.1.0, Copyright (c) 1999 chaos development.\n\
 cluido and the rest of chaos comes with ABSOLUTELY NO WARRANTY.\n\
 chaos is free software, and you are welcome to redistribute it under\n\
 certain conditions; see the README.md file for details.\e[0;44m\n");
