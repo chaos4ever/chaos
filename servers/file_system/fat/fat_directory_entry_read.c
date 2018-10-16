@@ -84,6 +84,20 @@ bool fat_directory_entry_read(file_directory_entry_read_type *directory_entry_re
         // Make sure the string is zero terminated.
         filename[8] = 0;
 
+        if (fat_entry[entry].case_flag & 0x08)
+        {
+            // Case flag bits include 0x08 => the file name should be lowercased.
+            for (int i = 0; filename[i] != '\0'; i++)
+            {
+                // Extremely simplistic, inline conversion of ASCII only for now. I _think_
+                // we get quite far with it though.
+                if (filename[i] >= 'A' && filename[i] <= 'Z')
+                {
+                    filename[i] = filename[i] - 'A' + 'a';
+                }
+            }
+        }
+
         // If we have a file extension, add it too.
         if (fat_entry[entry].extension[0] != 0)
         {
@@ -92,6 +106,20 @@ bool fat_directory_entry_read(file_directory_entry_read_type *directory_entry_re
             string_copy_max(&filename[string_length(filename)],
                             fat_entry[entry].extension, 3);
             filename[length + string_length(fat_entry[entry].extension)] = '\0';
+
+            if (fat_entry[entry].case_flag & 0x10)
+            {
+                // Case flag bits include 0x10 => the extension should be lowercased.
+                for (int i = length + 1; filename[i] != '\0'; i++)
+                {
+                    // Extremely simplistic, inline conversion of ASCII only for now. I _think_
+                    // we get quite far with it though.
+                    if (filename[i] >= 'A' && filename[i] <= 'Z')
+                    {
+                        filename[i] = filename[i] - 'A' + 'a';
+                    }
+                }
+            }
         }
 
         // Get the long filename of the file (if any).

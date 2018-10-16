@@ -188,10 +188,10 @@ typedef struct
     uint8_t archive : 1;
     uint8_t reserved : 2;
 
-    // Reserved for Windows NT. Set to zero when creating, and never rely upon.
-    // FIXME: This is the case flag. We should support it, to properly handle lowercase file names on FAT volumes.
-    // See https://github.com/chaos4ever/chaos/issues/107
-    uint8_t nt_reserved;
+    // Bit flag which was previously "reserved for Windows NT".
+    // 0x08: file name should be lowercased.
+    // 0x10: file extension should be uppercased.
+    uint8_t case_flag;
 
     // Time stamp the file was created.
     uint8_t creation_hundreds;
