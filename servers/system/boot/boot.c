@@ -8,8 +8,7 @@
 // The maximum number of programs to load from the startup file.
 #define MAX_PROGRAMS 16
 
-// FIXME: Workaround for https://github.com/chaos4ever/chaos/issues/107
-#define STARTUP_FILE "//ramdisk/CONFIG/SERVERS/BOOT/STARTUP"
+#define STARTUP_FILE "//ramdisk/config/servers/boot/startup"
 
 static log_structure_type log_structure;
 static ipc_structure_type vfs_structure;
