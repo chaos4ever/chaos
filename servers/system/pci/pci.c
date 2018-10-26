@@ -417,6 +417,16 @@ static bool pci_setup_device(pci_device_type *device)
 {
     uint32_t class;
 
+    // SMBus: Intel Corporation Sunrise Point-LP SMBus
+    // Our (borrowed-from-Linux-ca-1999) PCI probing code causes the machine to reboot on this
+    // device. This is a stupid workaround for now; since we don't support SMBus this is not
+    // a big deal but it's still rather silly... Issue about fixing this permanently:
+    // https://github.com/chaos4ever/chaos/issues/134
+    if (device->vendor_id == 0x8086 && device->device_id == 0x9d23)
+    {
+        return FALSE;
+    }
+
     // Set the name.
     string_print(device->slot_name, "%02x:%02x.%d", device->bus->number,
                  PCI_SLOT(device->device_function),
