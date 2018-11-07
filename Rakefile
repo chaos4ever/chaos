@@ -85,3 +85,8 @@ end
 task :servers do |folder|
   sh "cd #{folder} && rake"
 end
+
+desc 'Builds a Docker image for running chaos'
+task :docker_build do
+  sh 'docker build -t chaos .'
+end
