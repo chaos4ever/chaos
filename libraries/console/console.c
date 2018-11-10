@@ -49,23 +49,13 @@ return_type console_init(console_structure_type *console_structure, tag_type *ta
 }
 
 // Allocate and open a new console with the specified attributes.
-
-// FIXME: If input parameters are all zero (except for mode_type), a default mode with the requested
-// type should be set and the attributes of that mode should be returned.
-return_type console_open(console_structure_type *console_structure, unsigned int width,
-                         unsigned int height, unsigned int depth, int mode_type, bool activate)
+return_type console_open(console_structure_type *console_structure,
+                         ipc_console_attribute_type console_attribute)
 {
     if (!console_structure->initialised)
     {
         return CONSOLE_RETURN_SERVICE_UNAVAILABLE;
     }
-
-    ipc_console_attribute_type console_attribute;
-    console_attribute.width = width;
-    console_attribute.height = height;
-    console_attribute.depth = depth;
-    console_attribute.mode_type = mode_type;
-    console_attribute.activate = activate;
 
     message_parameter_type message_parameter;
     message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
@@ -76,7 +66,6 @@ return_type console_open(console_structure_type *console_structure, unsigned int
 
     system_call_mailbox_send(console_structure->ipc_structure.output_mailbox_id, &message_parameter);
 
-    // FIXME: Wait for return value to ensure that the operation was successful.
     return CONSOLE_RETURN_SUCCESS;
 }
 

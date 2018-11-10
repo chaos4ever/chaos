@@ -30,8 +30,15 @@ int main(void)
         return -1;
     }
 
-    if (console_open(&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT, TRUE) !=
-            CONSOLE_RETURN_SUCCESS)
+    ipc_console_attribute_type console_attribute = {
+        width: 80,
+        height: 50,
+        depth: 4,
+        mode_type: VIDEO_MODE_TYPE_TEXT,
+        activate: TRUE
+    };
+
+    if (console_open(&console_structure, console_attribute) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
