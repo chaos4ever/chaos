@@ -144,6 +144,7 @@ int main(void)
         ipc_service_connection_wait(&ipc_structure);
         mailbox_id_type reply_mailbox_id = ipc_structure.output_mailbox_id;
 
+        // TODO: Handle errors when creating threads.
         system_thread_create((thread_entry_point_type *) handle_connection, &reply_mailbox_id);
     }
 }

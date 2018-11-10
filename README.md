@@ -31,6 +31,7 @@ If all goes well, this should give you an `.iso` file as output. For more detail
 The code in the following directories/files are to be treated as licensed under the [GNU GPL](http://www.gnu.org/licenses/old-licenses/gpl-2.0.html) since they are derivates of code from the Linux kernel:
 
 * [libraries/string/inlines.h](libraries/string/inlines.h) (should be fixed).
+* servers/sound/soundblaster
 * servers/system/pci
 * [storm/x86/cpuid.c](storm/x86/cpuid.c) (should be rewritten so the whole kernel can be used under the BSD license).
 

@@ -18,7 +18,14 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
    USA. */
 
-#include "config.h"
+#include <console/console.h>
+#include <ipc/ipc.h>
+#include <log/log.h>
+#include <memory/memory.h>
+#include <sound/sound.h>
+#include <string/string.h>
+#include <system/system.h>
+
 #include "modfile.h"
 
 #define BUFFER_SIZE 2000
@@ -107,15 +114,25 @@ int main (void)
 //  unsigned int i;
 //  note_type *note;
   sound_message_type *sound_message;
+  const char *program_name = "modplay";
 
-  log_init (&log_structure, PACKAGE_NAME, &empty_tag);
+  log_init (&log_structure, program_name, &empty_tag);
 
-  system_call_process_name_set (PACKAGE_NAME);
+  system_call_process_name_set (program_name);
   system_call_thread_name_set ("Playing module...");
 
-  console_init (&console_structure, &empty_tag, 
+  console_init (&console_structure, &empty_tag,
                 IPC_CONSOLE_CONNECTION_CLASS_CLIENT);
-  console_open (&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT);
+
+  ipc_console_attribute_type ipc_console_attribute = {
+      mode_type: VIDEO_MODE_TYPE_TEXT,
+      width: 80,
+      height: 50,
+      depth: 4,
+      activate: TRUE
+  };
+
+  console_open (&console_structure, ipc_console_attribute);
   console_use_keyboard (&console_structure, TRUE, CONSOLE_KEYBOARD_NORMAL);
   console_clear (&console_structure);
   console_print (&console_structure,
@@ -418,7 +435,7 @@ void do_note (note_type *work_note, channel_type *work_channel)
       console_cursor_move (&console_structure, 0, 24);
       console_print_formatted (&console_structure, "Effect C: Parameter = %x  ",
                                work_note->effect_parameter);
-      
+
       work_channel->volume = work_note->effect_parameter;
       if (work_channel->volume > 0x40)
       {

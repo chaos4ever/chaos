@@ -10,5 +10,5 @@
 typedef struct
 {
     ipc_structure_type ipc_structure;
-    char *log_class;
+    const char *log_class;
 } log_structure_type;

@@ -17,4 +17,4 @@ extern return_type log_print
      const char *message);
 
 extern return_type log_init
-    (log_structure_type *log_structure, char *class, tag_type *tag);
+    (log_structure_type *log_structure, const char *class, tag_type *tag);
