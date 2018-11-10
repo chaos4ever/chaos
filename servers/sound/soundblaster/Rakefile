@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+OBJECTS = %w[
+  soundblaster.o
+].freeze
+
+LIBRARIES = %w[
+  ipc
+  log
+  memory
+  string
+  system
+].freeze
+
+OUTPUT = 'soundblaster'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x4A000000'.freeze
+
+load '../../servers.rake'
