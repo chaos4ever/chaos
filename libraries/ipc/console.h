@@ -66,6 +66,6 @@ typedef struct
     unsigned int mode_type;
 
     // Indicates that the console should be activated upon creation. Can only be done once; if
-    // there is already an active console, this flag will be ignored by the console server.
+    // a console is already active, this flag will be ignored by the console server.
     bool activate;
 } ipc_console_attribute_type;
