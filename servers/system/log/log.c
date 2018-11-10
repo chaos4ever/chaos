@@ -1,5 +1,5 @@
-// Abstract: Log server for chaos. This server's purpose is to collect debug and/or warning messages from servers and
-// from the kernel.
+// Abstract: Log server for chaos. This server's purpose is to collect debug and/or warning messages
+// from servers and from the kernel.
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
@@ -156,8 +156,15 @@ static return_type handle_server_logging(void)
         return -1;
     }
 
-    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-            CONSOLE_RETURN_SUCCESS)
+    ipc_console_attribute_type console_attribute = {
+        width: 80,
+        height: 50,
+        depth: 4,
+        mode_type: VIDEO_MODE_TYPE_TEXT,
+        activate: FALSE
+    };
+
+    if (console_open(&console_structure_server, console_attribute) != CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
@@ -165,12 +172,14 @@ static return_type handle_server_logging(void)
     console_clear(&console_structure_server);
 
     // Print the titlebar.
-    console_attribute_set(&console_structure_server, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
-    console_print(&console_structure_server, " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.\e[K\n");
+    console_attribute_set(&console_structure_server, TITLE_FOREGROUND, TITLE_BACKGROUND,
+                          TITLE_ATTRIBUTE);
+    console_print(&console_structure_server,
+                  " " PACKAGE_NAME " version " PACKAGE_VERSION " server console.\e[K\n");
 
-    // Main loop.
     system_thread_name_set("Service handler");
 
+    // Main loop.
     while (TRUE)
     {
         mailbox_id_type reply_mailbox_id;
@@ -207,8 +216,15 @@ static void handle_kernel_logging(void *argument UNUSED)
         return;
     }
 
-    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
-            CONSOLE_RETURN_SUCCESS)
+    ipc_console_attribute_type console_attribute = {
+        width: 80,
+        height: 50,
+        depth: 4,
+        mode_type: VIDEO_MODE_TYPE_TEXT,
+        activate: FALSE
+    };
+
+    if (console_open(&console_structure_kernel, console_attribute) != CONSOLE_RETURN_SUCCESS)
     {
         return;
     }
@@ -216,8 +232,10 @@ static void handle_kernel_logging(void *argument UNUSED)
     console_clear(&console_structure_kernel);
 
     // Print the titlebar.
-    console_attribute_set(&console_structure_kernel, TITLE_FOREGROUND, TITLE_BACKGROUND, TITLE_ATTRIBUTE);
-    console_print(&console_structure_kernel, " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.\e[K\n");
+    console_attribute_set(&console_structure_kernel, TITLE_FOREGROUND, TITLE_BACKGROUND,
+                          TITLE_ATTRIBUTE);
+    console_print(&console_structure_kernel,
+                  " " PACKAGE_NAME " version " PACKAGE_VERSION " kernel console.\e[K\n");
 
     while (TRUE)
     {
@@ -230,14 +248,11 @@ static void handle_kernel_logging(void *argument UNUSED)
 
 return_type main(void)
 {
-    // Initialise the memory library.
     memory_init();
-
-    // Set our name.
     system_process_name_set(PACKAGE_NAME);
 
-    // Unblock any servers that may be waiting after us. FIXME: This should be done later than this to eliminate
-    // unecessary waiting.
+    // Unblock any servers that may be waiting after us.
+    // FIXME: This should be done later than this to eliminate unecessary waiting.
     system_call_process_parent_unblock();
 
     system_thread_create(handle_kernel_logging, NULL);

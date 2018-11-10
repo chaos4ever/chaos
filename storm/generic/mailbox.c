@@ -283,10 +283,10 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
         return STORM_RETURN_MAILBOX_MESSAGE_TOO_LARGE;
     }
 
-    // Block or return, depending on how we was called.
     if (message_parameter->length + sizeof (message_parameter_type) >
         mailbox->free_size)
     {
+        // Block or return, depending on how we was called.
         if (message_parameter->block)
         {
             // Block until receiver reads messages so that there is room for us.
@@ -306,8 +306,7 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
         }
     }
 
-    // When we come here, we are guaranteed to send to the mailbox.
-
+    // When we come here, the mailbox is guaranteed to have room for our message.
     DEBUG_MESSAGE(VERBOSE_DEBUG, "Delivering...");
 
     message = memory_global_allocate(sizeof (message_type) + message_parameter->length);
