@@ -24,12 +24,14 @@ int main(void)
     system_thread_name_set("Initialising");
 
     // First of all, initiate a connection to the console service.
-    if (console_init(&console_structure, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) != CONSOLE_RETURN_SUCCESS)
+    if (console_init(&console_structure, &empty_tag, IPC_CONSOLE_CONNECTION_CLASS_CLIENT) !=
+            CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }
 
-    if (console_open(&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) != CONSOLE_RETURN_SUCCESS)
+    if (console_open(&console_structure, 80, 50, 4, VIDEO_MODE_TYPE_TEXT, TRUE) !=
+            CONSOLE_RETURN_SUCCESS)
     {
         return -1;
     }

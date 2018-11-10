@@ -136,7 +136,11 @@ static void connection_client(message_parameter_type *message_parameter, console
                 (*our_application)->ipc_structure.input_mailbox_id = ipc_structure->input_mailbox_id;
                 (*our_application)->ipc_structure.output_mailbox_id = ipc_structure->output_mailbox_id;
 
-                if (current_console == NULL)
+                // The client opening a console can set the activate flag, to enable switching to
+                // the newly created console - but only if there isn't already an active console.
+                // This is used by cluido, to take precedence over all other servers and programs
+                // opening consoles.
+                if (console_attribute->activate && current_console == NULL)
                 {
                     current_console = *our_console;
                     (*our_console)->output = screen;

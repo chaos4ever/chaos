@@ -1,9 +1,7 @@
 // Abstract: Console library.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 // See The chaos Programming Reference Manual for more information about the functions in this library.
 
@@ -52,10 +50,10 @@ return_type console_init(console_structure_type *console_structure, tag_type *ta
 
 // Allocate and open a new console with the specified attributes.
 
-// FIXME: If input parameters are all zero (except for mode_type), a default mode with the requested type should be set and the
-// attributes of that mode should be returned.
-return_type console_open(console_structure_type *console_structure, unsigned int width, unsigned int height, unsigned int depth,
-                         int mode_type)
+// FIXME: If input parameters are all zero (except for mode_type), a default mode with the requested
+// type should be set and the attributes of that mode should be returned.
+return_type console_open(console_structure_type *console_structure, unsigned int width,
+                         unsigned int height, unsigned int depth, int mode_type, bool activate)
 {
     if (!console_structure->initialised)
     {
@@ -67,6 +65,7 @@ return_type console_open(console_structure_type *console_structure, unsigned int
     console_attribute.height = height;
     console_attribute.depth = depth;
     console_attribute.mode_type = mode_type;
+    console_attribute.activate = activate;
 
     message_parameter_type message_parameter;
     message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
@@ -82,8 +81,8 @@ return_type console_open(console_structure_type *console_structure, unsigned int
 }
 
 // Change the attributes of the current console.
-return_type console_mode_set(console_structure_type *console_structure, unsigned int width, unsigned int height,
-                             unsigned int depth, int mode_type)
+return_type console_mode_set(console_structure_type *console_structure, unsigned int width,
+                             unsigned int height, unsigned int depth, int mode_type)
 {
     if (!console_structure->initialised)
     {
@@ -109,7 +108,8 @@ return_type console_mode_set(console_structure_type *console_structure, unsigned
 }
 
 // Change the size (text rows and columns, not mode!) of the current console.
-return_type console_resize(console_structure_type *console_structure, unsigned int width, unsigned int height)
+return_type console_resize(console_structure_type *console_structure, unsigned int width,
+                           unsigned int height)
 {
     if (!console_structure->initialised)
     {

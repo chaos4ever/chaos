@@ -156,7 +156,7 @@ static return_type handle_server_logging(void)
         return -1;
     }
 
-    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
+    if (console_open(&console_structure_server, 80, 50, 4, VIDEO_MODE_TYPE_TEXT, FALSE) !=
             CONSOLE_RETURN_SUCCESS)
     {
         return -1;
@@ -207,7 +207,7 @@ static void handle_kernel_logging(void *argument UNUSED)
         return;
     }
 
-    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT) !=
+    if (console_open(&console_structure_kernel, 80, 50, 4, VIDEO_MODE_TYPE_TEXT, FALSE) !=
             CONSOLE_RETURN_SUCCESS)
     {
         return;
