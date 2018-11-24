@@ -20,12 +20,11 @@ libraries = %w[
   video
 ]
 
-# These haven't been upgraded to work w/ Rake yet.
-#  serial
-#  math
-#  checksum
-#  mutex
-#  sound
+# These haven't been upgraded to work w/ Rake yet:
+#
+#   mutex
+#   serial
+#   sound
 
 load 'constants.rake'
 

@@ -5,14 +5,11 @@
 // © Copyright 1999 chaos development.
 
 #include <memory/memory.h>
-#include <mutex/mutex.h>
 #include <system/system.h>
 
 // The memory_structure must be defined by the process if it wants to link to this library. This is done by our default
 // stub. (startup.c)
 extern memory_structure_type memory_structure;
-
-extern mutex_type memory_mutex;
 
 // FIXME: This is a little ugly... Any better ideas? Having an extra parameter to memory_allocate() would be totally gross.
 bool initialised = FALSE;

@@ -7,7 +7,6 @@
 #define PACKAGE_NAME "cluido"
 #define PACKAGE_VERSION "0.1.0"
 
-#include <checksum/checksum.h>
 #include <console/console.h>
 #include <execute_elf/execute_elf.h>
 #include <file/file.h>
