@@ -1,9 +1,9 @@
 // Abstract: IRQ management.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000, 2013 chaos development.
+// © Copyright 2000 chaos development.
 
-// One interrupt handler for each interrupt, thank you verymuch.
+// One interrupt handler for each IRQ, thank you verymuch.
 .globl irq1_handler
 .globl irq3_handler
 .globl irq4_handler

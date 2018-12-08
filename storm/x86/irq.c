@@ -315,7 +315,8 @@ return_type irq_acknowledge(unsigned int irq_number)
 
     }
 
-    // If this is a low interrupt, ACK:ing the low PIC is enough; otherwise, we'll have to do the other one too.
+    // If this is a low interrupt, ACK:ing the master PIC is enough; otherwise, we'll have to ACK
+    // the slave PIC as well.
     if (irq_number < 8)
     {
         port_out_uint8_t (0x20, 0x20);
