@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+OBJECTS = %w[
+  modfile.o
+  modplay.o
+].freeze
+
+LIBRARIES = %w[
+  console
+  ipc
+  log
+  memory
+  sound
+  string
+  system
+].freeze
+
+OUTPUT = 'modplay'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x46000000'.freeze
+
+load '../programs.rake'

@@ -14,6 +14,7 @@ storm/x86/storm
 
 # These are painful but what do we do...
 programs/cluido/cluido
+programs/modplay/modplay
 servers/block/initial_ramdisk/initial_ramdisk
 servers/block/initial_ramdisk/ramdisk-auto.h
 servers/block/initial_ramdisk/ramdisk.image
