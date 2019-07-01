@@ -28,7 +28,7 @@ static return_type log(log_structure_type *log_structure, ipc_log_print_type *ip
 }
 
 // Internal function for initialising a connection between the application and the log service.
-return_type log_init(log_structure_type *log_structure, char *class, tag_type *tag)
+return_type log_init(log_structure_type *log_structure, const char *class, tag_type *tag)
 {
     mailbox_id_type mailbox_id[10];
     unsigned int services = 10;

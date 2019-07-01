@@ -4,7 +4,15 @@ Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.opt
 
 SUBFOLDERS = %w[
   cluido
+  modplay
 ].freeze
+
+# Not yet converted to rake:
+#
+#   sampleplay
+#   serialtest
+#   streamplay
+#   tetris
 
 task default: SUBFOLDERS do |t|
   t.prerequisites.each do |folder|
