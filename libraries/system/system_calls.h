@@ -467,7 +467,7 @@ static inline return_type system_call_dma_register(unsigned int channel, void **
                  "pushl %3\n"
                  "lcall %4, $0"
                  : "=a" (return_value),
-                   "=ri" (*dma_buffer)
+                   "=m" (*dma_buffer)
                  : "ri" (dma_buffer),
                    "ri" (channel),
                    "n" (SYSTEM_CALL_DMA_REGISTER << 3));
