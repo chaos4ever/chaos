@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+INCLUDES = %w[
+  -I../../storm/include
+  -I..
+].freeze
+
+OBJECTS = %w[
+  sound.o
+].freeze
+
+OUTPUT = 'libsound.a'.freeze
+
+load '../libraries.rake'
