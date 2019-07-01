@@ -3,17 +3,7 @@ dist: trusty
 
 matrix:
   include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - ubuntu-toolchain-r-test
-          packages:
-            - gcc-5
-            - gcc-5-multilib
-      env:
-         - MATRIX_EVAL="CC=gcc-5 && ARCH=x86"
-
+    # Default version in Debian stable (stretch)
     - os: linux
       addons:
         apt:
@@ -25,6 +15,7 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-6 && ARCH=x86"
 
+    # Available, but not default, in Debian testing (buster)
     - os: linux
       addons:
         apt:
@@ -36,6 +27,7 @@ matrix:
       env:
         - MATRIX_EVAL="CC=gcc-7 && ARCH=x86"
 
+    # Highly experimental Raspberry Pi port
     - os: linux
       addons:
         apt:
