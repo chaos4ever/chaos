@@ -479,7 +479,9 @@ void handle_connection(mailbox_id_type reply_mailbox_id)
                 }
                 else
                 {
-                    log_print(&log_structure, LOG_URGENCY_WARNING,
+                    // This tends to happen all the time, but the music is playing without audible
+                    // problems anyway => decrease the severity.
+                    log_print(&log_structure, LOG_URGENCY_DEBUG,
                               "Received stream event but already playing");
                 }
                 break;

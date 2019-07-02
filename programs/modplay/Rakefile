@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 OBJECTS = %w[
+  hxcmod.o
   modfile.o
   modplay.o
 ].freeze
@@ -17,5 +18,15 @@ LIBRARIES = %w[
 
 OUTPUT = 'modplay'.freeze
 EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x46000000'.freeze
+
+# hxcmod generates some gcc warnings that we need to silence here. We  must also set the proper
+# defines to generate data compatible with what the soundblaster server expects.
+EXTRA_CFLAGS_POST = %w[
+  -Wno-error=unused-parameter
+  -Wno-error=shadow
+  -D HXCMOD_MONO_OUTPUT
+  -D HXCMOD_8BITS_OUTPUT
+  -D HXCMOD_UNSIGNED_OUTPUT
+].join(' ')
 
 load '../programs.rake'

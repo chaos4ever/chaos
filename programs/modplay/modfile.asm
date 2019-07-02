@@ -1,7 +1,6 @@
-global 		modfile, modfile_end
+global 		modfile, modfile_size
 section .data
 
-modfile:
-        incbin      "AXELF.MOD"
+modfile:            incbin      "AXELF.MOD"
 
-modfile_end:
+modfile_size:       dd $-modfile

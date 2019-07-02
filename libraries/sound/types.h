@@ -27,6 +27,7 @@ typedef struct
 {
   unsigned int frequency;
   unsigned int bits;
+
   /* This is the size of the next sample played, or the size of the
      buffers used when streaming data */
   unsigned int length;
