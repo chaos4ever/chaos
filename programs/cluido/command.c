@@ -783,9 +783,9 @@ void command_memory(int number_of_arguments UNUSED, char **argument UNUSED)
                             memory_info.total_memory / 1024,  memory_info.free_memory / 1024,
                             (memory_info.total_memory - memory_info.free_memory) / 1024);
     console_print_formatted(&console_structure,
-                            "Global memory: %lu total, %lu free, %lu used\n",
-                            memory_info.total_global_memory, memory_info.free_global_memory,
-                            memory_info.total_global_memory - memory_info.free_global_memory);
+                            "Global memory: %luK total, %luK free, %luK used\n",
+                            memory_info.total_global_memory / 1024, memory_info.free_global_memory / 1024,
+                            (memory_info.total_global_memory - memory_info.free_global_memory) / 1024);
 }
 
 // Get information about installed PCI devices.
