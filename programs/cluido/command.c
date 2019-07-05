@@ -75,6 +75,7 @@ command_type command[] =
     { "list", "", "List the contents of the current directory.", command_directory_list },
     { "execute", "FILE", "Executes the given file.", command_execute },
     { "font_set", "FILE", "Set the font to the one in FILE", command_font_set },
+    { "free",  "", "Alias for memory", command_memory },
     { "help", "[COMMAND]", "Display help about available commands.", command_help },
     { "ip", "(--dhcp interface | --set interface address netmask [gateway] | --forward { on | off })", "Configure IPv4 networking.", command_ip },
     { "irq", "", "Display information about the IRQ levels in use.", command_irq },
