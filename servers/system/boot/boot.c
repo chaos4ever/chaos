@@ -33,6 +33,7 @@ static void start_programs(unsigned int number_of_programs);
 int main(void)
 {
     set_process_and_thread_name();
+    system_call_process_parent_unblock();
 
     if (!resolve_log_service())
     {
@@ -60,10 +61,8 @@ int main(void)
 
     unsigned int number_of_programs = parse_program_list(file_size);
     log_print_formatted(&log_structure, LOG_URGENCY_DEBUG, "Starting %u programs.", number_of_programs);
+
     start_programs(number_of_programs);
-
-    system_call_process_parent_unblock();
-
     log_print(&log_structure, LOG_URGENCY_DEBUG, "Boot server completed.");
 
     return 0;
@@ -213,7 +212,11 @@ static void start_programs(unsigned int number_of_programs)
 
         // Open the file.
         file_handle_type handle;
-        file_open(&vfs_structure, programs[i], FILE_MODE_READ, &handle);
+        if (file_open(&vfs_structure, programs[i], FILE_MODE_READ, &handle) != FILE_RETURN_SUCCESS)
+        {
+            log_print_formatted(&log_structure, LOG_URGENCY_ERROR, "Failed to open '%s'", programs[i]);
+            continue;
+        }
 
         log_print_formatted(&log_structure, LOG_URGENCY_DEBUG,
                             "Allocating %u bytes for %s.",
