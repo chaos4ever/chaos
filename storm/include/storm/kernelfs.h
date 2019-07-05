@@ -145,6 +145,19 @@ typedef struct
 
     uint32_t total_global_memory;
     uint32_t free_global_memory;
+
+    // Mostly interested for debugging. If the gap between the number
+    // of allocations and deallocations is constantly growing, it can be
+    // an indication of some process or kernel subsystem leaking memory.
+    uint32_t memory_allocations;
+    uint32_t memory_deallocations;
+
+    uint32_t global_memory_allocations;
+    uint32_t global_memory_deallocations;
+
+    // The number of CPU cycles (=RDTSC) for the last memory allocations.
+    uint32_t memory_allocation_cycles;
+    uint32_t global_memory_allocation_cycles;
 } kernelfs_memory_info_type;
 
 typedef struct

@@ -2,9 +2,7 @@
 // Authors: Henrik Hallin <hal@chaosdev.org>
 //          Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 // If DEBUG is TRUE, lots of debug information will be printed.
 #define DEBUG FALSE
@@ -38,6 +36,10 @@ uint32_t global_memory_left;
 // Locals.
 static return_type memory_global_deallocate_page(uint32_t page_number) __attribute__ ((unused));
 static uint32_t memory_global_allocate_page(uint32_t length);
+static uint32_t num_allocations = 0;
+static uint32_t num_deallocations = 0;
+static uint64_t allocation_start = 0;
+static uint32_t allocation_cycles = 0;
 
 // Initialise the global memory heap.
 void memory_global_init(void)
@@ -319,6 +321,10 @@ void *memory_global_allocate(unsigned int length)
                "both of these mutexes are unlocked.");
     }
 
+    num_allocations++;
+
+    allocation_start = rdtsc_wrapper();
+
     //  mutex_kernel_wait (&memory_mutex);
 
     DEBUG_MESSAGE(DEBUG, "Called (length = %u)", length);
@@ -338,6 +344,9 @@ void *memory_global_allocate(unsigned int length)
 
         DEBUG_MESSAGE(DEBUG, "Leaving through path 1");
         global_memory_left -= PAGE_ALIGN(length);
+
+        uint64_t allocation_end = rdtsc_wrapper();
+        allocation_cycles = allocation_end - allocation_start;
 
         //    mutex_kernel_signal (&memory_mutex);
         return (void *) (virtual_page * SIZE_PAGE);
@@ -401,6 +410,9 @@ void *memory_global_allocate(unsigned int length)
 
         global_memory_left -= slab_block_size[index];
 
+        uint64_t allocation_end = rdtsc_wrapper();
+        allocation_cycles = allocation_end - allocation_start;
+
         //    mutex_kernel_signal (&memory_mutex);
         return block;
     }
@@ -414,6 +426,8 @@ return_type memory_global_deallocate(void *data)
     int index = slab_heap_index(superblock->header.buffer_size);
 
     // FIXME: Make sure that all code that uses this function has locked the tss_tree_mutex.
+
+    num_deallocations++;
 
     //  mutex_kernel_wait (&memory_mutex);
 
@@ -515,4 +529,19 @@ return_type memory_global_deallocate(void *data)
 
         return RETURN_SUCCESS;
     }
+}
+
+uint32_t memory_global_num_allocations(void)
+{
+    return num_allocations;
+}
+
+uint32_t memory_global_num_deallocations(void)
+{
+    return num_deallocations;
+}
+
+uint32_t memory_global_allocation_cycles(void)
+{
+    return allocation_cycles;
 }

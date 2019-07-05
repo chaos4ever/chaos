@@ -13,14 +13,19 @@
 #include <storm/generic/return_values.h>
 
 /* Define as TRUE if you want lots of debug information. */
-
 #define DEBUG FALSE
 
 /* Define this if you want to try the memory deallocation. */
-
 #undef DEALLOCATE
 
+// Globals
 mutex_kernel_type memory_mutex = MUTEX_UNLOCKED;
+
+// Locals
+static uint32_t num_allocations = 0;
+static uint32_t num_deallocations = 0;
+static uint64_t allocation_start = 0;
+static uint32_t allocation_cycles = 0;
 
 /* Allocate a memory block 'pages' pages in size, and put the
    resulting address in *address. */
@@ -34,6 +39,8 @@ return_type memory_allocate (void **address, uint32_t pages,
   {
     return STORM_RETURN_ACCESS_DENIED;
   }
+
+  allocation_start = rdtsc_wrapper();
 
   mutex_kernel_wait (&memory_mutex);
 
@@ -71,6 +78,12 @@ return_type memory_allocate (void **address, uint32_t pages,
       memory_set_uint8_t (*address, 0, pages * SIZE_PAGE);
 
       DEBUG_MESSAGE (DEBUG, "address = %p", *address);
+
+      num_allocations++;
+
+      uint64_t allocation_end = rdtsc_wrapper();
+      allocation_cycles = allocation_end - allocation_start;
+
       return STORM_RETURN_SUCCESS;
     }
 
@@ -95,6 +108,7 @@ return_type memory_deallocate (void **address)
   }
 
 #ifndef DEALLOCATE
+  num_deallocations++;
   return STORM_RETURN_SUCCESS;
 #endif
 
@@ -115,6 +129,9 @@ return_type memory_deallocate (void **address)
 
       mutex_kernel_signal (&memory_mutex);
       *address = NULL;
+
+      num_deallocations++;
+
       return STORM_RETURN_SUCCESS;
     }
 
@@ -129,4 +146,19 @@ return_type memory_deallocate (void **address)
       DEBUG_HALT ("Unknown return code.");
     }
   }
+}
+
+uint32_t memory_num_allocations(void)
+{
+  return num_allocations;
+}
+
+uint32_t memory_num_deallocations(void)
+{
+  return num_deallocations;
+}
+
+uint32_t memory_allocation_cycles(void)
+{
+  return allocation_cycles;
 }

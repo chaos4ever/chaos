@@ -4,10 +4,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 
-// © Copyright 1999-2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2013 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #define DEBUG FALSE
 
@@ -275,6 +272,15 @@ return_type kernelfs_entry_read(kernelfs_generic_type *kernelfs_generic)
             kernelfs_memory_info->free_memory = memory_physical_get_free() * SIZE_PAGE;
             kernelfs_memory_info->total_global_memory = SIZE_GLOBAL_HEAP;
             kernelfs_memory_info->free_global_memory = memory_global_get_free();
+
+            kernelfs_memory_info->memory_allocations = memory_num_allocations();
+            kernelfs_memory_info->memory_deallocations = memory_num_deallocations();
+            kernelfs_memory_info->global_memory_allocations = memory_global_num_allocations();
+            kernelfs_memory_info->global_memory_deallocations = memory_global_num_deallocations();
+
+            kernelfs_memory_info->memory_allocation_cycles = memory_allocation_cycles();
+            kernelfs_memory_info->global_memory_allocation_cycles = memory_global_allocation_cycles();
+
             break;
         }
 
