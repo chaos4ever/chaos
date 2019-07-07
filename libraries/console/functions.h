@@ -21,8 +21,7 @@ extern return_type console_resize(console_structure_type *console_structure, uns
                                   unsigned int height);
 extern return_type console_print(console_structure_type *console_structure, const char *string);
 extern return_type console_print_formatted(console_structure_type *console_structure,
-                                           const char *string, ...);
-// __attribute__ ((format (printf, 1, 2)));
+                                           const char *string, ...) __attribute__ ((format (printf, 2, 3)));
 extern return_type console_clear(console_structure_type *console_structure);
 extern return_type console_cursor_move(console_structure_type *console_structure, unsigned int x,
                                        unsigned int y);

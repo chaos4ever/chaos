@@ -453,6 +453,7 @@ return_type string_print_va(char *output, const char *format_string,
                 }
 
                 // After this, we might get on or more 'l' characters. They can be ignored for now.
+                // Note that this code DOES NOT support uint64_t at the moment.
                 while (format_string[input_index] == 'l')
                 {
                     input_index++;

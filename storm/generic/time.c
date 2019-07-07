@@ -1,7 +1,7 @@
 // Abstract: Time management.
 // Author: Per Lundberg <per@chaosdev.io>
 
-// Copyright 2000‚ 2013 chaos development.
+// © Copyright 1999 chaos development
 
 #include <storm/current-arch/types.h>
 

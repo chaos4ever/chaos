@@ -194,7 +194,7 @@ void command_cpu(int number_of_arguments UNUSED, char **argument UNUSED)
     cpu_info.kernelfs_class = KERNELFS_CLASS_CPU_INFO;
     system_call_kernelfs_entry_read(&cpu_info);
     console_print_formatted(&console_structure,
-                            "CPU 0: Vendor: %s, Model: %s, Speed: %lu Hz.\n",
+                            "CPU 0: Vendor: %s, Model: %s, Speed: %u Hz.\n",
                             cpu_info.vendor, cpu_info.name, cpu_info.hz);
 }
 
@@ -395,7 +395,7 @@ void command_execute(int number_of_arguments, char **argument)
     {
         case EXECUTE_ELF_RETURN_SUCCESS:
         {
-            console_print_formatted(&console_structure, "New process ID %lu.\n", process_id);
+            console_print_formatted(&console_structure, "New process ID %u.\n", process_id);
             break;
         }
 
@@ -573,7 +573,7 @@ void command_ip(int number_of_arguments, char **argument)
                                     ipv4_interface.hardware_address[4],
                                     ipv4_interface.hardware_address[5]);
             console_print_formatted(&console_structure,
-                                    "  IP address: %lu.%lu.%lu.%lu, netmask: %lu.%lu.%lu.%lu, gateway: %lu.%lu.%lu.%lu\n",
+                                    "  IP address: %u.%u.%u.%u, netmask: %u.%u.%u.%u, gateway: %u.%u.%u.%u\n",
                                     ipv4_interface.ip_address & 0xFF,
                                     (ipv4_interface.ip_address >> 8) & 0xFF,
                                     (ipv4_interface.ip_address >> 16) & 0xFF,
@@ -779,11 +779,11 @@ void command_memory(int number_of_arguments UNUSED, char **argument UNUSED)
     memory_info.kernelfs_class = KERNELFS_CLASS_MEMORY_INFO;
     system_call_kernelfs_entry_read(&memory_info);
     console_print_formatted(&console_structure,
-                            "Physical memory: %luK total, %luK free, %luK used\n",
+                            "Physical memory: %uK total, %uK free, %uK used\n",
                             memory_info.total_memory / 1024,  memory_info.free_memory / 1024,
                             (memory_info.total_memory - memory_info.free_memory) / 1024);
     console_print_formatted(&console_structure,
-                            "Global memory: %luK total, %luK free, %luK used\n",
+                            "Global memory: %uK total, %uK free, %uK used\n",
                             memory_info.total_global_memory / 1024, memory_info.free_global_memory / 1024,
                             (memory_info.total_global_memory - memory_info.free_global_memory) / 1024);
 }
@@ -858,7 +858,7 @@ void command_processes(int number_of_arguments UNUSED, char **argument UNUSED)
          kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
-        console_print_formatted(&console_structure, "%-10lu %-7u %s.\n",
+        console_print_formatted(&console_structure, "%-10u %-7u %s.\n",
                                 kernelfs_process_info.process_id,
                                 kernelfs_process_info.number_of_threads,
                                 kernelfs_process_info.name);
@@ -1199,7 +1199,7 @@ void command_threads(int number_of_arguments UNUSED, char **argument UNUSED)
          kernelfs_process_info.process_number++)
     {
         system_call_kernelfs_entry_read(&kernelfs_process_info);
-        console_print_formatted(&console_structure, "%-10lu %-7u %s.\n",
+        console_print_formatted(&console_structure, "%-10u %-7u %s.\n",
                                 kernelfs_process_info.process_id,
                                 kernelfs_process_info.number_of_threads,
                                 kernelfs_process_info.name);
@@ -1212,7 +1212,7 @@ void command_threads(int number_of_arguments UNUSED, char **argument UNUSED)
         {
             system_call_kernelfs_entry_read(&kernelfs_thread_info);
             console_print_formatted(&console_structure,
-                                    "           %-7lu %s (%s)\n",
+                                    "           %-7u %s (%s)\n",
                                     kernelfs_thread_info.thread_id,
                                     kernelfs_thread_info.name,
                                     kernelfs_thread_info.state);
@@ -1246,7 +1246,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
     system_call_kernelfs_entry_read(&processes);
     console_print_formatted(&console_structure,
                             "%-8s %-8s %-8s %-8s %-8s %-15s %-15s\n",
-                            "Process", "Thread", "Time (%)", "Memory", "IP",
+                            "Process", "Thread", "Time (%)", "Memory", "EIP",
                             "Process name", "Thread name");
     kernelfs_process_info.kernelfs_class = KERNELFS_CLASS_PROCESS_INFO;
     kernelfs_thread_info.kernelfs_class = KERNELFS_CLASS_THREAD_INFO_VERBOSE;
@@ -1271,7 +1271,7 @@ void command_top(int number_of_arguments UNUSED, char *argument[] UNUSED)
             char time_display_value[16];
             get_time_display_value(time_display_value, kernelfs_thread_info.timeslices, total_number_of_timeslices);
             console_print_formatted(&console_structure,
-                                    "%-8lu %-8lu %-8s %-8lu %08lX %-15s %-15s\n",
+                                    "%-8u %-8u %-8s %-8u %08X %-15s %-15s\n",
                                     kernelfs_thread_info.process_id,
                                     kernelfs_thread_info.thread_id,
                                     time_display_value,
@@ -1365,15 +1365,15 @@ void command_uptime(int number_of_arguments UNUSED, char **argument UNUSED)
     if (days > 0)
     {
         console_print_formatted(&console_structure,
-                                "System uptime: %lu days, %lu hours,"
-                                " %lu minutes and %lu seconds.\n",
+                                "System uptime: %u days, %u hours,"
+                                " %u minutes and %u seconds.\n",
                                 days, hours, minutes, seconds);
     }
     else
     {
         console_print_formatted(&console_structure,
-                                "System uptime: %lu hours, %lu minutes"
-                                " and %lu seconds.\n",
+                                "System uptime: %u hours, %u minutes"
+                                " and %u seconds.\n",
                                 hours, minutes, seconds);
     }
 }
