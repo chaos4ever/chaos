@@ -1,7 +1,7 @@
 // Abstract: CPU identification. Parts borrowed from the Linux kernel.
 // Author: Per Lundberg <per@chaosdev.io> with some parts borrowed from Linux kernel.
 
-// © Copyright 1999-2000, 2007, 2013, 2016 chaos development.
+// © Copyright 1999 chaos development
 
 // TODO: Get rid of the Linux kernel legacy here so we can relicense the file under the BSD license instead.
 

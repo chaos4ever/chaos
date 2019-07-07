@@ -786,6 +786,18 @@ void command_memory(int number_of_arguments UNUSED, char **argument UNUSED)
                             "Global memory: %uK total, %uK free, %uK used\n",
                             memory_info.total_global_memory / 1024, memory_info.free_global_memory / 1024,
                             (memory_info.total_global_memory - memory_info.free_global_memory) / 1024);
+
+    console_print_formatted(&console_structure,
+                            "Memory alllocations/deallocations: %u/%u, delta %u\n",
+                            memory_info.memory_allocations, memory_info.memory_deallocations,
+                            memory_info.memory_allocations - memory_info.memory_deallocations);
+    console_print_formatted(&console_structure,
+                            "Global memory alllocations/deallocations: %u/%u, delta %u\n",
+                            memory_info.global_memory_allocations, memory_info.global_memory_deallocations,
+                            memory_info.global_memory_allocations - memory_info.global_memory_deallocations);
+    console_print_formatted(&console_structure,
+                            "Last memory allocation took %u clock cycles, global memory allocation took %u cycles\n",
+                            memory_info.global_memory_allocation_cycles, memory_info.memory_allocation_cycles);
 }
 
 // Get information about installed PCI devices.

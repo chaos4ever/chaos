@@ -2,7 +2,7 @@
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
-// © Copyright 1999, 2013 chaos development.
+// © Copyright 1999 chaos development
 
 #pragma once
 
@@ -84,6 +84,17 @@ extern parsed_cpu_type parsed_cpu;
 extern unsigned int cpus;
 
 extern void cpuid_init(void) INIT_CODE;
+
+static inline uint64_t rdtsc_wrapper(void)
+{
+    uint32_t low, high;
+
+    asm volatile
+    ("rdtsc"
+     : "=a" (low), "=d" (high));
+
+   return ((uint64_t)high << 32) + low;
+}
 
 #define VENDOR_AMD_STRING    "AuthenticAMD"
 #define VENDOR_INTEL_STRING  "GenuineIntel"
