@@ -796,8 +796,8 @@ void command_memory(int number_of_arguments UNUSED, char **argument UNUSED)
                             memory_info.global_memory_allocations, memory_info.global_memory_deallocations,
                             memory_info.global_memory_allocations - memory_info.global_memory_deallocations);
     console_print_formatted(&console_structure,
-                            "Last memory allocation took %u clock cycles, global memory allocation took %u cycles\n",
-                            memory_info.global_memory_allocation_cycles, memory_info.memory_allocation_cycles);
+                            "Last memory allocation: %u clock cycles (global allocation %u cycles)\n",
+                            memory_info.memory_allocation_cycles, memory_info.global_memory_allocation_cycles);
 }
 
 // Get information about installed PCI devices.
