@@ -20,3 +20,7 @@ extern uint32_t memory_global_num_deallocations(void);
 extern uint32_t memory_global_allocation_cycles(void);
 
 extern avl_header_type *global_avl_header;
+
+// Internal functions, only used by liballoc
+extern uint32_t memory_global_allocate_page(uint32_t length);
+extern return_type memory_global_deallocate_page(uint32_t page_number);

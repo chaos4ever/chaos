@@ -1,0 +1,32 @@
+# frozen_string_literal: true
+
+def objects
+  %w[
+    liballoc.o
+    storm.o
+  ]
+end
+
+# TODO: Would like to use STORM_GENERIC_LIB, but it gets set after this line has been evaluated.
+OUTPUT = 'liballoc.a'.freeze
+
+task default: [:banner, OUTPUT] do
+  puts
+end
+
+task :banner do
+  print 'Compiling '.bold
+  print 'storm/liballoc'.cyan.bold
+  puts '...'
+
+  print '    '
+end
+
+# liballoc generates a few warnings that we want to ignore since it's 3rd-party code.
+EXTRA_CFLAGS_POST = %w[
+  -Wno-strict-prototypes
+  -Wno-sign-compare
+  -Wno-unused-parameter
+].join(' ')
+
+Rake.add_rakelib '../rakelib'

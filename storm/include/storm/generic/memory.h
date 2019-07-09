@@ -17,3 +17,13 @@ extern uint32_t memory_num_deallocations(void);
 extern uint32_t memory_allocation_cycles(void);
 
 extern return_type memory_get_physical_address(void *virtual_address, void **physical_address);
+
+// 3rd-party malloc implementation, defined in liballoc.c
+
+#ifndef _HAVE_SIZE_T
+#define _HAVE_SIZE_T
+typedef	unsigned int	size_t;
+#endif
+
+extern void *malloc(size_t);
+extern void free(void *);

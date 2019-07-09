@@ -34,8 +34,6 @@ avl_header_type *global_avl_header;
 uint32_t global_memory_left;
 
 // Locals.
-static return_type memory_global_deallocate_page(uint32_t page_number) __attribute__ ((unused));
-static uint32_t memory_global_allocate_page(uint32_t length);
 static uint32_t num_allocations = 0;
 static uint32_t num_deallocations = 0;
 static uint64_t allocation_start = 0;
@@ -97,7 +95,7 @@ void memory_global_init(void)
 }
 
 // Allocates a page region in the global memory area.
-static uint32_t memory_global_allocate_page(uint32_t length)
+uint32_t memory_global_allocate_page(uint32_t length)
 {
     avl_node_type *node;
     avl_node_type *insert_node;
@@ -170,7 +168,7 @@ static uint32_t memory_global_allocate_page(uint32_t length)
 }
 
 // Deallocate the given range, starting at page_number.
-static return_type memory_global_deallocate_page(uint32_t page_number)
+return_type memory_global_deallocate_page(uint32_t page_number)
 {
     avl_node_type *node;
     avl_node_type *adjacent_node;
@@ -258,44 +256,6 @@ static return_type memory_global_deallocate_page(uint32_t page_number)
     return RETURN_SUCCESS;
 }
 
-// Get the number of pages allocated for the given data block
-static uint32_t memory_global_get_size(void *data)
-{
-    avl_node_type *node;
-    bool finished = FALSE;
-    uint32_t page_number = GET_PAGE_NUMBER((uint32_t) data);
-
-#ifdef CHECK
-    avl_debug_tree_check(global_avl_header, global_avl_header->root);
-#endif
-    node = global_avl_header->root;
-
-    while (!finished && node != NULL)
-    {
-        if (page_number > node->start)
-        {
-            node = node->more;
-        }
-        else if (page_number < node->start)
-        {
-            node = node->less;
-        }
-        else
-        {
-            finished = TRUE;
-        }
-    }
-
-    if (node == NULL)
-    {
-        DEBUG_MESSAGE(DEBUG, "Area not allocated!");
-
-        return UINT32_MAX;
-    }
-
-    return node->busy_length;
-}
-
 // Get the amount of global memory currently in use.
 unsigned int memory_global_get_used(void)
 {
@@ -311,9 +271,6 @@ unsigned int memory_global_get_free(void)
 // Allocate memory from the global heap.
 void *memory_global_allocate(unsigned int length)
 {
-    int index = slab_heap_index(length);
-    slab_block_type *block;
-
     if (initialised)
     {
         assert(tss_tree_mutex == MUTEX_LOCKED || memory_mutex == MUTEX_LOCKED,
@@ -325,210 +282,31 @@ void *memory_global_allocate(unsigned int length)
 
     allocation_start = rdtsc_wrapper();
 
+    void *result = malloc(length);
+
+    uint64_t allocation_end = rdtsc_wrapper();
+    allocation_cycles = allocation_end - allocation_start;
+
+    return result;
+
     //  mutex_kernel_wait (&memory_mutex);
-
-    DEBUG_MESSAGE(DEBUG, "Called (length = %u)", length);
-
-    // If index now is -1, it means we tried to allocate more than 1024 bytes, and in this system, that gets rounded to
-    // the closest upper page boundary.
-    if (index == -1)
-    {
-        uint32_t virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
-        uint32_t physical_page;
-
-        // FIXME: Check return value.
-        memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
-
-        // So, map this memory, and return a pointer to it.
-        memory_virtual_map(virtual_page, physical_page, SIZE_IN_PAGES(length), PAGE_KERNEL);
-
-        DEBUG_MESSAGE(DEBUG, "Leaving through path 1");
-        global_memory_left -= PAGE_ALIGN(length);
-
-        uint64_t allocation_end = rdtsc_wrapper();
-        allocation_cycles = allocation_end - allocation_start;
-
-        //    mutex_kernel_signal (&memory_mutex);
-        return (void *) (virtual_page * SIZE_PAGE);
-    }
-    else
-    {
-        slab_superblock_type *superblock;
-        slab_block_type *next;
-
-        // Now, we know which entry in the slab heap to use. Check if there is already a slab superblock we can use.
-        // Otherwise, we will have to create one.
-        superblock = global_slab_heap->block[index];
-
-        // Walk the list of slab superblocks with free blocks.
-        while (superblock != NULL &&
-               superblock->header.free_blocks == 0)
-        {
-            DEBUG_MESSAGE(DEBUG, "superblock = %p", superblock);
-            superblock = superblock->header.next_superblock;
-        }
-
-        // No, we were out of luck.
-        if (superblock == NULL)
-        {
-            uint32_t virtual_page = memory_global_allocate_page(SIZE_IN_PAGES(length));
-            uint32_t physical_page;
-
-            // FIXME: Check return value.
-            memory_physical_allocate(&physical_page, SIZE_IN_PAGES(length), "Global memory data structure");
-
-            superblock = (slab_superblock_type *) (virtual_page * SIZE_PAGE);
-            memory_virtual_map(virtual_page, physical_page, 1, PAGE_KERNEL);
-
-            // Initialise this newly created slab superblock.
-            slab_superblock_init(superblock, global_slab_heap, index);
-            global_slab_heap->block[index] = superblock;
-        }
-
-        // Now, we have our superblock. Get the block we want, and update the structures.
-        block = superblock->header.free_list;
-
-        if (block == NULL)
-        {
-            DEBUG_HALT("The list of free blocks of size %u (real size %u) was NULL.",
-                       slab_block_size[index], length);
-        }
-
-        next = block->next;
-
-        if (next != NULL)
-        {
-            next->previous = NULL;
-        }
-
-        superblock->header.free_list = next;
-        superblock->header.free_blocks--;
-
-        DEBUG_MESSAGE(DEBUG, "Leaving through path 2. Block allocated: %x", block);
-
-        //    debug_print ("%p %u ", block, slab_block_size[index]);
-
-        global_memory_left -= slab_block_size[index];
-
-        uint64_t allocation_end = rdtsc_wrapper();
-        allocation_cycles = allocation_end - allocation_start;
-
-        //    mutex_kernel_signal (&memory_mutex);
-        return block;
-    }
 }
 
 // Deallocate memory from the global heap.
 return_type memory_global_deallocate(void *data)
 {
-    slab_superblock_type *superblock = (slab_superblock_type *) ((uint32_t) data & 0xFFFFF000);
-    slab_block_type *block = (slab_block_type *) data;
-    int index = slab_heap_index(superblock->header.buffer_size);
-
-    // FIXME: Make sure that all code that uses this function has locked the tss_tree_mutex.
+    if (initialised)
+    {
+        assert(tss_tree_mutex == MUTEX_LOCKED || memory_mutex == MUTEX_LOCKED,
+               "Both tss_tree_mutex and memory_mutex were unlocked. memory_global_deallocate() cannot be called when " \
+               "both of these mutexes are unlocked.");
+    }
 
     num_deallocations++;
 
-    //  mutex_kernel_wait (&memory_mutex);
+    free(data);
 
-    DEBUG_MESSAGE(DEBUG, "Called (data = %p)", data);
-
-    // If the data address is page aligned, it is not a slab block, so handle it specially.
-    if (data == superblock)
-    {
-        uint32_t pages = memory_global_get_size(data);
-
-        if (pages == UINT32_MAX)
-        {
-            DEBUG_MESSAGE(DEBUG, "Leaving through path 0");
-
-            return RETURN_MEMORY_NOT_ALLOCATED;
-        }
-
-#ifdef DEALLOCATE
-        memory_global_deallocate_page(GET_PAGE_NUMBER((uint32_t) data));
-
-        // Find the physical adress for this virtual address.
-        page_table_entry *page_table = (page_table_entry *) (BASE_PROCESS_PAGE_TABLES +
-                                                             ((uint32_t) data) / (4 * MB));
-        uint32_t physical_page = page_table[GET_PAGE_NUMBER((uint32_t) data) % 1024].page_base;
-
-        memory_physical_deallocate(physical_page);
-#endif
-
-        // FIXME: Unmap this memory, too. Fairly trivial, but we must take care of regions spanning several
-        // page tables...
-
-        //    mutex_kernel_signal (&memory_mutex);
-
-        DEBUG_MESSAGE(DEBUG, "Leaving through path 1");
-
-        return RETURN_SUCCESS;
-    }
-    else
-    {
-        slab_block_type *free_list;
-
-        // Add this block to the free list.
-        free_list = superblock->header.free_list;
-        block->previous = NULL;
-        block->next = free_list;
-
-        if (free_list != NULL)
-        {
-            free_list->previous = block;
-        }
-
-        superblock->header.free_list = block;
-        superblock->header.free_blocks++;
-
-        if (superblock->header.free_blocks == 1)
-        {
-            // This superblock was all-allocated, so add it into the heap. We put it last, since that's probably the most
-            // optimised thing to do.
-            slab_superblock_type *new_superblock = global_slab_heap->block[index];
-
-            while (new_superblock->header.next_superblock != NULL)
-            {
-                new_superblock = new_superblock->header.next_superblock;
-            }
-
-            new_superblock->header.next_superblock = superblock;
-            superblock->header.previous_superblock = new_superblock;
-
-            superblock->header.next_superblock = NULL;
-        }
-
-        // FIXME: This code will make things a little more optimised, but it is not yet finished.
-
-#if FALSE
-        else if (superblock->header.free_blocks ==
-                 superblock->header.total_blocks)
-        {
-            // Move this superblock from its current location to the end of the heap. We want it in the end, so for
-            // this, we'll have to traverse the list some...
-            slab_superblock_type *new_superblock;
-
-            new_superblock = global_slab_heap->block[index];
-            while (new_superblock->header.next_superblock != NULL)
-            {
-                new_superblock = new_superblock->header.next_superblock;
-            }
-
-            new_superblock->header.next_superblock = superblock;
-            superblock->header.previous_superblock = new_superblock;
-
-            superblock_header.next_superblock = NULL;
-        }
-#endif
-
-        global_memory_left += slab_block_size[index];
-
-        //    mutex_kernel_signal (&memory_mutex);
-        DEBUG_MESSAGE(DEBUG, "Leaving through path 2");
-
-        return RETURN_SUCCESS;
-    }
+    return STORM_RETURN_SUCCESS;
 }
 
 uint32_t memory_global_num_allocations(void)

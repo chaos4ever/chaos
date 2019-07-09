@@ -44,12 +44,14 @@ rule '.o' => ['.asm'] do |t|
   end
 end
 
+EXTRA_CFLAGS_POST ||= ''.freeze
+
 def cflags
   flags = if CFLAGS.respond_to?(:join)
     CFLAGS.join(' ')
   else
-      CFLAGS
+    CFLAGS
   end
 
-  flags + ' ' + ARCH_CFLAGS
+  flags + ' ' + ARCH_CFLAGS + ' ' + EXTRA_CFLAGS_POST
 end

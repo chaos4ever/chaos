@@ -40,6 +40,7 @@ OUTPUT = 'libstorm_x86.a'.freeze
 
 # TODO: Would like to use STORM_GENERIC_LIB, but for whatever reason it is not available in this context.
 GENERIC_OUTPUT = '../generic/libstorm_generic.a'.freeze
+LIBALLOC_OUTPUT = '../liballoc/liballoc.a'.freeze
 
 KERNEL_OUTPUT = 'storm'.freeze
 LDFLAGS = '-static -nostdlib -Wl,-T,kernel.ld -m32'.freeze
@@ -74,13 +75,13 @@ file 'system_calls-auto.c' => 'system_calls.rb' do |t|
   sh './' + script
 end
 
-file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT] do |t|
+file KERNEL_OUTPUT => [OUTPUT, GENERIC_OUTPUT, LIBALLOC_OUTPUT] do |t|
   begin
     puts '    Linking...'.blue.bold
 
     # It's crazy, but we actually have to specify the OUTPUT twice here (since ia32 has references to the generic lib and
     # the generic lib has references to ia32... We could try to get rid of that eventually.)
-    command = "#{CC} -o #{t.name} #{OUTPUT} #{GENERIC_OUTPUT} #{OUTPUT} #{LDFLAGS}"
+    command = "#{CC} -o #{t.name} #{OUTPUT} #{GENERIC_OUTPUT} #{LIBALLOC_OUTPUT} #{OUTPUT} #{LDFLAGS}"
     sh command
   rescue StandardError
     puts "Error linking kernel. Full command line was: #{command}"
