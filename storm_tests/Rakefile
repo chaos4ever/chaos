@@ -25,9 +25,9 @@ task build_tests: :default do
   end
 end
 
-task :tests do
+task :test do
   subfolders.each do |folder|
-    sh "cd #{folder} && #{RAKE_COMMAND} tests"
+    sh "cd #{folder} && #{RAKE_COMMAND} test"
   end
 end
 

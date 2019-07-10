@@ -1,5 +1,5 @@
 sudo: required
-dist: trusty
+dist: xenial
 
 matrix:
   include:
@@ -49,13 +49,13 @@ before_script:
  - sudo apt-get update
  - sudo apt-get install
      dosfstools
+     gcc-multilib
      genisoimage
      grub
      mtools
      nasm
  - ./install_cmocka.sh
 
-# Tests are disabled for now since cmocka don't work on Trusty Tahr.
 script:
  - bundle exec rubocop
- - bundle exec rake
+ - bundle exec rake default test
