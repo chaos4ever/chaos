@@ -176,8 +176,9 @@ return_type ipc_service_connection_request(ipc_structure_type *ipc_structure)
     message_parameter_type message_parameter;
     uint8_t data[100];
 
-    // FIXME: Make it possible to specify the size of the mailbox. For now, we just set it to one meg and hope it's enough.
-    if (system_call_mailbox_create(&ipc_structure->input_mailbox_id, 1 * MB, PROCESS_ID_NONE,
+    // FIXME: Make it possible to specify the size of the mailbox. For now, we just set it to a
+    // fixed size and hope it's enough.
+    if (system_call_mailbox_create(&ipc_structure->input_mailbox_id, 64 * KB, PROCESS_ID_NONE,
             CLUSTER_ID_NONE, THREAD_ID_NONE) != STORM_RETURN_SUCCESS)
     {
         // FIXME: Handle the possible causes of this.

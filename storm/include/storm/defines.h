@@ -3,7 +3,7 @@
 //          Henrik Hallin <hal@chaosdev.org>
 //          Anders Öhrt <doa@chaosdev.org>
 //
-// © Copyright 1998-2017 chaos development
+// © Copyright 1998 chaos development
 
 #pragma once
 
@@ -33,7 +33,7 @@
 #define TASK_ID_MAX             (UINT32_MAX)
 #define MAILBOX_ID_NONE         (UINT32_MAX)
 
-// Some sizes.
+// Some sizes. Note that these are in "real" 2^n sizes, not 10^n.
 #define KB                      ((uint32_t) 1024)
 #define MB                      ((uint32_t) 1024 * KB)
 #define GB                      ((uint32_t) 1024 * MB)

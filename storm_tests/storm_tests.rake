@@ -2,8 +2,11 @@
 
 Rake.application.options.rakelib = ["#{File.dirname(__FILE__)}/../rakelib"] if Rake.application.options.rakelib.first == 'rakelib'
 
+# For a saner gdb experience, you typically want to compile without optimizations unless specifically making a release.
+OPTIMIZATION_FLAG = ENV['RELEASE'] ? '-O3' : '-O0'
+
 # FIXME: Don't repeat all of these in many places.
-COMMON_CFLAGS = %w[
+COMMON_CFLAGS = %W[
   -Wall
   -Wextra
   -Wshadow
@@ -17,8 +20,9 @@ COMMON_CFLAGS = %w[
   -Wmissing-declarations
   -Wmissing-noreturn
   -pipe
-  -O3
+  #{OPTIMIZATION_FLAG}
   -funsigned-char
+  -g
   -m32
   -fomit-frame-pointer
 ].freeze
@@ -33,7 +37,6 @@ CFLAGS = COMMON_CFLAGS + %w[
 ]
 
 INCLUDES = %w[
-  -I..
   -I../../storm/include
 ].freeze
 

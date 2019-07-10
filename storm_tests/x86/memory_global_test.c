@@ -3,9 +3,10 @@
 //
 // © Copyright 2015-2016 chaos development
 
-#include "test_helper.h"
+#include "../test_helper.h"
 
 #include <stdlib.h>
+
 #include <storm/generic/memory_global.h>
 #include <storm/generic/return_values.h>
 
@@ -14,7 +15,7 @@ return_type memory_physical_allocate(uint32_t *page, unsigned int length, char *
     void *p;
     int return_value = posix_memalign(&p, SIZE_PAGE, SIZE_PAGE * length);
     assert_int_equal(return_value, 0);
-    
+
     return RETURN_SUCCESS;
 }
 

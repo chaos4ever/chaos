@@ -5,7 +5,7 @@
 TARGET_ARCH = ENV['ARCH']
 
 FOLDERS = if TARGET_ARCH == 'x86'
-  %i[storm libraries programs servers].freeze
+  %i[storm libraries programs servers storm_tests].freeze
 elsif TARGET_ARCH == 'raspberrypi'
   # Nothing else has been ported to this arch yet.
   [:storm].freeze

@@ -3,6 +3,7 @@
 Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w[
+  generic
   x86
 ]
 
@@ -29,3 +30,6 @@ task :tests do
     sh "cd #{folder} && #{RAKE_COMMAND} tests"
   end
 end
+
+# No-op, just to not interfere with top-level Rakefile
+task :install

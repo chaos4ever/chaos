@@ -7,6 +7,8 @@
 *.orig
 
 storm_tests/x86/x86_tests
+storm_tests/generic/generic_tests
+
 storm/current-arch
 storm/include/storm/current-arch
 storm/raspberrypi/storm
