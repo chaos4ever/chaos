@@ -1,4 +1,4 @@
-// Abstract: Boot server. */
+// Abstract: Boot server.
 // Author: Per Lundberg <per@chaosdev.io>
 //
 // © Copyright 1999 chaos development
