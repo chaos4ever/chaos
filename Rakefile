@@ -69,9 +69,14 @@ task build_storm_tests: :storm do
   sh "cd storm_tests && #{RAKE_COMMAND}"
 end
 
-desc 'Runs the unit tests'
-task tests: [:build_storm_tests] do
-  sh "cd storm_tests && #{RAKE_COMMAND} tests"
+if TARGET_ARCH == 'x86'
+  desc 'Runs the unit tests'
+  task test: [:build_storm_tests] do
+    sh "cd storm_tests && #{RAKE_COMMAND} test"
+  end
+elsif TARGET_ARCH == 'raspberrypi'
+  # No-op since we don't support the tests on this architecture at the moment.
+  task :test
 end
 
 task libraries: [:storm] do |folder|

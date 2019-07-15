@@ -41,5 +41,5 @@ INCLUDES = %w[
 ].freeze
 
 def run_test(test)
-  sh "./#{test} 2>&1 | #{Rake.application.options.rakelib.first}/../tools/colorize.rb"
+  sh "./#{test} 2>&1 | RUBYOPT='' #{Rake.application.options.rakelib.first}/../tools/colorize.rb"
 end
