@@ -9,6 +9,7 @@ def objects
       avl_rotate.o
       avl_update.o
       avl_delete.o
+      circular_queue.o
       debug.o
       idle.o
       init.o

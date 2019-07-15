@@ -3,8 +3,7 @@
 //          Anders Öhrt <doa@chaosdev.org>
 //          Per Lundberg <per@chaosdev.io>
 
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013-2017 chaos development
+// © Copyright 1999 chaos development
 
 // Define this as TRUE if you are debugging this module.
 #define DEBUG           TRUE
@@ -14,6 +13,7 @@
 
 #include <storm/state.h>
 #include <storm/generic/mailbox.h>
+#include <storm/generic/circular_queue.h>
 #include <storm/generic/cpu.h>
 #include <storm/generic/debug.h>
 #include <storm/generic/defines.h>
@@ -25,6 +25,15 @@
 #include <storm/generic/thread.h>
 #include <storm/current-arch/tss.h>
 
+static mailbox_id_type mailbox_initialize(mailbox_type *new_mailbox, int size,
+                                          process_id_type user_process_id, cluster_id_type user_cluster_id,
+                                          thread_id_type user_thread_id);
+
+// The maximum size of an individual message. The size here is optimized for 64 KiB mailboxes,
+// since there is a slight overhead that maxes the maximum message size be slightly lower than
+// the actual mailbox size.
+static int maximum_message_size = 63 * KB;
+
 // static mutex_kernel_type mailbox_mutex = MUTEX_UNLOCKED;
 // static mutex_kernel_type hash_mutex = MUTEX_UNLOCKED;
 // static mutex_kernel_type free_id_mutex = MUTEX_UNLOCKED;
@@ -32,6 +41,11 @@
 // The mailbox hash is an array of pointers.
 static mailbox_type **mailbox_hash_table;
 static mailbox_id_type free_mailbox_id = 1;
+
+// A static, pre-allocated structure used when sending a message. The reason this exists is to avoid
+// heavy dynamic allocation during each mailbox_send() call. This is protected via the
+// `tss_tree_mutex` mutex for now.
+static message_type *message;
 
 // Gets the hash value for the given mailbox ID.
 static int hash(mailbox_id_type mailbox_id)
@@ -41,7 +55,7 @@ static int hash(mailbox_id_type mailbox_id)
 
 void mailbox_init(void)
 {
-    mailbox_hash_table = (mailbox_type **) memory_global_allocate(sizeof (mailbox_type *) * limit_mailbox_hash_entries);
+    mailbox_hash_table = (mailbox_type **) memory_global_allocate(sizeof(mailbox_type *) * limit_mailbox_hash_entries);
 
     DEBUG_MESSAGE(VERBOSE_DEBUG, "mailbox_hash_table = %x, size = %u",
                   mailbox_hash_table, sizeof (mailbox_type *) *
@@ -50,6 +64,8 @@ void mailbox_init(void)
     // Initially set all pointers to NULL. This isn't entirely nice, but doing this as a for loop wouldn't even be
     // close to cool.
     memory_set_uint8_t((uint8_t *) mailbox_hash_table, 0, limit_mailbox_hash_entries * sizeof (mailbox_type *));
+
+    message = (message_type *) memory_global_allocate(sizeof(message_type) + maximum_message_size);
 }
 
 // Looks the given mailbox ID up in the hash table.
@@ -142,29 +158,7 @@ return_type mailbox_create_kernel(mailbox_id_type *mailbox_id, unsigned int size
     DEBUG_MESSAGE(VERBOSE_DEBUG, "Called");
 
     new_mailbox = (mailbox_type *) memory_global_allocate(sizeof (mailbox_type));
-
-    new_mailbox->owner_process_id = current_process_id;
-    new_mailbox->owner_cluster_id = current_cluster_id;
-    new_mailbox->owner_thread_id = current_thread_id;
-
-    new_mailbox->user_process_id = user_process_id;
-    new_mailbox->user_cluster_id = user_cluster_id;
-    new_mailbox->user_thread_id = user_thread_id;
-
-    // FIXME: Check for allowed limits.
-    new_mailbox->total_size = size;
-    new_mailbox->free_size = size;
-    new_mailbox->number_of_messages = 0;
-    new_mailbox->blocked_size = 0;
-
-    new_mailbox->first_message = NULL;
-    new_mailbox->last_message = NULL;
-
-    new_mailbox->reader_blocked = FALSE;
-
-    new_mailbox->next = NULL;
-
-    new_mailbox->id = *mailbox_id = mailbox_get_free_id();
+    *mailbox_id = mailbox_initialize(new_mailbox, size, user_process_id, user_cluster_id, user_thread_id);
 
     mailbox_link(new_mailbox);
 
@@ -240,9 +234,6 @@ return_type mailbox_flush(mailbox_id_type mailbox_id)
 // FIXME: Is the dude allowed to send to OUR mailbox?!
 return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *message_parameter)
 {
-    message_type *message;
-    mailbox_type *mailbox;
-
     // Perform some sanity checking on the input parameters.
     if (message_parameter == NULL || (message_parameter->data == NULL &&
                                       message_parameter->length > 0))
@@ -260,7 +251,7 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
                   message_parameter->protocol, message_parameter->message_class,
                   mailbox_id);
 
-    mailbox = mailbox_find(mailbox_id);
+    mailbox_type *mailbox = mailbox_find(mailbox_id);
 
     if (mailbox == NULL)
     {
@@ -270,49 +261,33 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
         return STORM_RETURN_MAILBOX_UNAVAILABLE;
     }
 
+    int full_length = sizeof(message_type) + message_parameter->length;
+
     // If the message won't ever fit into this mailbox, fail.
-    if (message_parameter->length + sizeof (message_parameter_type) >
-        mailbox->total_size)
+    if (full_length > mailbox->queue->size)
     {
         mutex_kernel_signal(&tss_tree_mutex);
         DEBUG_MESSAGE(DEBUG,
                       "Message was larger than the mailbox! (%u > %u)",
-                      message_parameter->length + sizeof (message_parameter_type),
-                      mailbox->total_size);
+                      full_length, mailbox->queue->size);
 
         return STORM_RETURN_MAILBOX_MESSAGE_TOO_LARGE;
     }
 
-    if (message_parameter->length + sizeof (message_parameter_type) >
-        mailbox->free_size)
+    // FIXME: This check is silly and incomplete. Publishing the message might still fail, since
+    // maximum_message_size is a constant instead of determined from the mailbox size. This will
+    // only affect mailboxes created with a size different than the default (64 KiB), e.g.
+    // service mailboxes.
+    if (full_length > maximum_message_size)
     {
-        // Block or return, depending on how we was called.
-        if (message_parameter->block)
-        {
-            // Block until receiver reads messages so that there is room for us.
-            current_tss->mailbox_id = mailbox_id;
-            current_tss->mutex_time = timeslice;
-            mailbox->blocked_size = (message_parameter->length + sizeof (message_parameter_type));
-            current_tss->state = STATE_MAILBOX_SEND;
-            mutex_kernel_signal(&tss_tree_mutex);
-            dispatch_next();
-        }
-        else
-        {
-            mutex_kernel_signal(&tss_tree_mutex);
-            DEBUG_SDB(DEBUG, "Mailbox was full");
+        mutex_kernel_signal(&tss_tree_mutex);
+        DEBUG_MESSAGE(DEBUG,
+                      "Message was larger than the maximum message size (%u > %u)",
+                      full_length, maximum_message_size);
 
-            return STORM_RETURN_MAILBOX_FULL;
-        }
+        return STORM_RETURN_MAILBOX_MESSAGE_TOO_LARGE;
     }
 
-    // When we come here, the mailbox is guaranteed to have room for our message.
-    DEBUG_MESSAGE(VERBOSE_DEBUG, "Delivering...");
-
-    message = memory_global_allocate(sizeof (message_type) + message_parameter->length);
-
-    DEBUG_MESSAGE(VERBOSE_DEBUG, "Got %p (%u bytes)", message,
-                  sizeof (message_type) + message_parameter->length);
     message->sender_process_id = current_process_id;
     message->sender_cluster_id = current_cluster_id;
     message->sender_thread_id = current_thread_id;
@@ -320,62 +295,64 @@ return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *mes
     message->protocol = message_parameter->protocol;
     message->class = message_parameter->message_class;
 
-    message->next = NULL;
-
     message->length = message_parameter->length;
     memory_copy(message->data, message_parameter->data, message_parameter->length);
 
-    // Add the message to the linked list.
-    if (mailbox->last_message != NULL)
+    while (TRUE)
     {
-        mailbox->last_message->next = (struct message_type *) message;
+        if (circular_queue_enqueue(mailbox->queue, message, sizeof(message_type) + message_parameter->length))
+        {
+            // The message was successfully enqueued. If another thread is blocked on this mailbox,
+            // it should be unblocked now.
+            if (mailbox->reader_blocked)
+            {
+                DEBUG_MESSAGE(VERBOSE_DEBUG, "Unblocking...");
+                thread_unblock_mailbox_receive(mailbox_id);
+                DEBUG_MESSAGE(VERBOSE_DEBUG, "Done.");
+            }
+
+            mutex_kernel_signal(&tss_tree_mutex);
+
+            return STORM_RETURN_SUCCESS;
+        }
+        else
+        {
+            // The mailbox was probably full. Block or return, depending on what the caller
+            // asked for.
+            if (message_parameter->block)
+            {
+                // Block until receiver reads messages so that there is room for us.
+                current_tss->mailbox_id = mailbox_id;
+                current_tss->mutex_time = timeslice;
+                mailbox->blocked_size = message_parameter->length + sizeof(message_parameter_type);
+                current_tss->state = STATE_MAILBOX_SEND;
+                mutex_kernel_signal(&tss_tree_mutex);
+                dispatch_next();
+            }
+            else
+            {
+                mutex_kernel_signal(&tss_tree_mutex);
+                DEBUG_SDB(DEBUG, "Mailbox was full");
+
+                return STORM_RETURN_MAILBOX_FULL;
+            }
+        }
     }
-
-    mailbox->last_message = message;
-
-    if (mailbox->number_of_messages == 0)
-    {
-        mailbox->first_message = message;
-    }
-
-    mailbox->number_of_messages++;
-    mailbox->free_size -= (message_parameter->length + sizeof (message_parameter_type));
-
-    // If someone is blocked on this mailbox, unblock her.
-    if (mailbox->reader_blocked)
-    {
-        DEBUG_MESSAGE(VERBOSE_DEBUG,
-                      "mailbox_id = %u, mailbox->messages = %u, mailbox->first_message = %x",
-                      mailbox_id, mailbox->number_of_messages,
-                      mailbox->first_message);
-        DEBUG_MESSAGE(VERBOSE_DEBUG, "Unblocking...");
-        thread_unblock_mailbox_receive(mailbox_id);
-        DEBUG_MESSAGE(VERBOSE_DEBUG, "Done.");
-    }
-
-    mutex_kernel_signal(&tss_tree_mutex);
-
-    return STORM_RETURN_SUCCESS;
 }
 
 // Receive a message from the mailbox.
-return_type mailbox_receive(mailbox_id_type mailbox_id,
-                            message_parameter_type *message_parameter)
+return_type mailbox_receive(mailbox_id_type mailbox_id, message_parameter_type *message_parameter)
 {
-    mailbox_type *mailbox;
-    message_type *temporary;
-
-    mutex_kernel_wait(&tss_tree_mutex);
-    DEBUG_MESSAGE(VERBOSE_DEBUG, "Called (id %u).", mailbox_id);
-    mailbox = mailbox_find(mailbox_id);
-
     if (message_parameter == NULL)
     {
         DEBUG_SDB(DEBUG, "message_parameter == NULL");
-        mutex_kernel_signal(&tss_tree_mutex);
 
         return STORM_RETURN_INVALID_ARGUMENT;
     }
+
+    mutex_kernel_wait(&tss_tree_mutex);
+    DEBUG_MESSAGE(VERBOSE_DEBUG, "Called (id %u).", mailbox_id);
+    mailbox_type *mailbox = mailbox_find(mailbox_id);
 
     // When we get here, we are allowed to access the mailbox.
     if (mailbox == NULL)
@@ -406,8 +383,10 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
         return STORM_RETURN_ACCESS_DENIED;
     }
 
+    int next_message_size = circular_queue_peek(mailbox->queue);
+
     // If the mailbox is empty, block or return.
-    if (mailbox->number_of_messages == 0)
+    if (next_message_size == -1)
     {
         if (message_parameter->block)
         {
@@ -435,21 +414,12 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
             mailbox->reader_blocked = FALSE;
             mailbox->reader_thread_id = PROCESS_ID_NONE;
 
-            assert(mailbox->number_of_messages != 0,
-                   "Was unblocked but number_of_messages == 0 in mailbox %d", mailbox_id)
-            assert(mailbox->first_message != NULL,
-                   "Was unblocked but first_message == NULL in mailbox %d", mailbox_id)
-
-            // A message has arrived. We open the mailbox again, so that
-            // we can read out the message.
-            DEBUG_MESSAGE(VERBOSE_DEBUG,
-                          "mailbox_id = %u, mailbox->messages = %u, mailbox->first_message = %x",
-                          mailbox_id, mailbox->number_of_messages,
-                          mailbox->first_message);
+            assert(circular_queue_peek(mailbox->queue) >= 0,
+                   "Was unblocked but no messages are available in mailbox %d", mailbox_id)
         }
         else
         {
-            // There was no mail, return.
+            // No messages are available and we were instructed to not block the caller => return.
             mutex_kernel_signal(&tss_tree_mutex);
 
             return STORM_RETURN_MAILBOX_EMPTY;
@@ -457,34 +427,32 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
     }
 
     // Receive the message.
-    // FIXME: Allow conditional reception.
-    if (message_parameter->length >= mailbox->first_message->length)
+    next_message_size = circular_queue_peek(mailbox->queue);
+
+    assert(next_message_size != -1,
+        "circular_queue_peek returned -1 even though a message should be available");
+
+    unsigned int next_message_data_size = next_message_size - sizeof(message_type);
+
+    if (message_parameter->length >= next_message_data_size)
     {
-        // This one fits into our bag.
-        message_parameter->protocol = mailbox->first_message->protocol;
-        message_parameter->message_class = mailbox->first_message->class;
-        message_parameter->length = mailbox->first_message->length;
+        // The message is small enough to fit into the buffer provided by the caller. Dequeue it
+        // from the queue.
+        message_type *message_received = circular_queue_dequeue(mailbox->queue);
 
-        mailbox->free_size += (mailbox->first_message->length +
-                               sizeof (message_parameter_type));
+        assert(message_received != NULL,
+            "circular_queue_peek returned %d but circular_queue_dequeue returned NULL. "
+            "Corrupted data structure or software bug or reentrancy problem...?", mailbox_id)
 
-        memory_copy(message_parameter->data, mailbox->first_message->data, mailbox->first_message->length);
-        temporary = mailbox->first_message;
+        message_parameter->protocol = message_received->protocol;
+        message_parameter->message_class = message_received->class;
+        message_parameter->length = message_received->length;
 
-        mailbox->first_message = (message_type *) mailbox->first_message->next;
+        memory_copy(message_parameter->data, message_received->data, message_received->length);
 
-        if (mailbox->first_message == NULL)
-        {
-            mailbox->last_message = NULL;
-        }
-
-        memory_global_deallocate(temporary);
-
-        mailbox->number_of_messages--;
-
-        // Check if we can unblock our boy.
+        // Is there now room for unblocking the sender waiting on this mailbox?
         if (mailbox->blocked_size != 0 &&
-            mailbox->blocked_size < mailbox->free_size)
+            mailbox->blocked_size < circular_queue_get_maximum_enqueue_size(mailbox->queue))
         {
             thread_unblock_mailbox_send(mailbox_id);
             mailbox->blocked_size = 0;
@@ -494,14 +462,42 @@ return_type mailbox_receive(mailbox_id_type mailbox_id,
 
         return STORM_RETURN_SUCCESS;
     }
-    else
+    else // next_message_data_size > message_parameter->length
     {
         DEBUG_MESSAGE(DEBUG, "Message in mailbox %u was too large (max %u bytes, message size was %u bytes)",
-                      mailbox_id, message_parameter->length, mailbox->first_message->length);
+                      mailbox_id, message_parameter->length, next_message_data_size);
 
-        message_parameter->length = mailbox->first_message->length;
+        message_parameter->length = next_message_data_size;
         mutex_kernel_signal(&tss_tree_mutex);
 
         return STORM_RETURN_MAILBOX_MESSAGE_TOO_LARGE;
     }
+}
+
+// Internal methods, should not be considered part of the public API.
+mailbox_id_type mailbox_initialize(mailbox_type *new_mailbox, int size,
+                                   process_id_type user_process_id, cluster_id_type user_cluster_id,
+                                   thread_id_type user_thread_id)
+{
+    new_mailbox->owner_process_id = current_process_id;
+    new_mailbox->owner_cluster_id = current_cluster_id;
+    new_mailbox->owner_thread_id = current_thread_id;
+
+    new_mailbox->user_process_id = user_process_id;
+    new_mailbox->user_cluster_id = user_cluster_id;
+    new_mailbox->user_thread_id = user_thread_id;
+
+    // FIXME: Check for allowed limits.
+    new_mailbox->blocked_size = 0;
+
+    new_mailbox->reader_blocked = FALSE;
+
+    new_mailbox->queue = memory_global_allocate(size);
+    circular_queue_initialize(new_mailbox->queue, size);
+
+    new_mailbox->next = NULL;
+
+    new_mailbox->id = mailbox_get_free_id();
+
+    return new_mailbox->id;
 }

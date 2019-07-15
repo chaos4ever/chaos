@@ -1,11 +1,12 @@
 // Abstract: Function prototypes for the mailbox IPC system.
 // Author: Per Lundberg <per@chaosdev.io>
-
-// © Copyright 1999-2000, 2013 chaos development.
+//
+// © Copyright 1999 chaos development.
 
 #pragma once
 
 #include <storm/mailbox.h>
+#include <storm/generic/circular_queue.h>
 #include <storm/generic/defines.h>
 #include <storm/generic/mutex.h>
 #include <storm/generic/types.h>
@@ -19,8 +20,6 @@ typedef struct
 
     unsigned int protocol;
     unsigned int class;
-
-    struct message_type *next;
 
     unsigned int length;
 
@@ -43,17 +42,8 @@ typedef struct
     cluster_id_type user_cluster_id;
     thread_id_type user_thread_id;
 
-    // Size of the mailbox.
-    unsigned int total_size;
-
-    // Size of the free part of the mailbox.
-    unsigned int free_size;
-
     // Size of the message the blocked sender is awaiting to deliver.
-    unsigned int blocked_size;
-
-    // Number of messages in the mailbox.
-    unsigned int number_of_messages;
+    int blocked_size;
 
     // Is a thread blocked on reading from this mailbox?
     bool reader_blocked;
@@ -62,20 +52,21 @@ typedef struct
     // blocked on this mailbox.
     thread_id_type reader_thread_id;
 
-    // Start of the first message in the mailbox.
-    message_type *first_message;
-    message_type *last_message;
+    // The circular queue that holds the messages currently in this mailbox.
+    circular_queue_type *queue;
 
-    // Tree nodes.
+    // Linked list for each entry in the mailbox hash table.
     struct mailbox_type *next;
 } PACKED mailbox_type;
 
-extern return_type mailbox_create(mailbox_id_type *mailbox_id, unsigned int size, process_id_type user_process_id,
-                                  cluster_id_type user_cluster_id, thread_id_type user_thread_id);
+extern return_type mailbox_create(mailbox_id_type *mailbox_id, unsigned int size,
+                                  process_id_type user_process_id, cluster_id_type user_cluster_id,
+                                  thread_id_type user_thread_id);
 extern return_type mailbox_destroy(mailbox_id_type mailbox_id);
 extern return_type mailbox_flush(mailbox_id_type mailbox_id);
 extern return_type mailbox_send(mailbox_id_type mailbox_id, message_parameter_type *message_parameter);
 extern return_type mailbox_receive(mailbox_id_type mailbox_id, message_parameter_type *message_parameter);
 extern void mailbox_init(void) INIT_CODE;
-extern return_type mailbox_create_kernel(mailbox_id_type *mailbox_id, unsigned int size, process_id_type user_process_id,
-                                         cluster_id_type user_cluster_id, thread_id_type user_thread_id);
+extern return_type mailbox_create_kernel(mailbox_id_type *mailbox_id, unsigned int size,
+                                         process_id_type user_process_id, cluster_id_type user_cluster_id,
+                                         thread_id_type user_thread_id);
