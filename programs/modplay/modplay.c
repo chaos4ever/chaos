@@ -25,8 +25,30 @@ tag_type empty_tag =
     0, 0, ""
 };
 
+modcontext modctx;
+
+uint8_t *modfiles[] = {
+    modfile_axelf,
+    modfile_breath,
+    modfile_chipmunk,
+    modfile_enigma,
+    modfile_skogen10
+};
+
+int modfile_sizes[5];
+
+static int initialize_mod_player(uint8_t *modfile, int length);
+static void print_mod_name(void);
+
 int main(void)
 {
+    // Can't be statically initialized since these are not compile-time constants.
+    modfile_sizes[0] = modfile_axelf_size;
+    modfile_sizes[1] = modfile_breath_size;
+    modfile_sizes[2] = modfile_chipmunk_size;
+    modfile_sizes[3] = modfile_enigma_size;
+    modfile_sizes[4] = modfile_skogen10_size;
+
     sound_message_type *sound_message;
     const char *program_name = "modplay";
 
@@ -75,24 +97,52 @@ int main(void)
 
     system_call_process_parent_unblock();
 
-    modcontext modctx;
+    uint8_t *modfile = modfiles[0];
+    int modfile_size = modfile_sizes[0];
 
-    if (hxcmod_init(&modctx) == 0)
+    if (!initialize_mod_player(modfile, modfile_size))
     {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "hxcmod initialization failed");
         return -1;
     }
 
-    if (hxcmod_load(&modctx, &modfile[0], modfile_size) == 0)
-    {
-        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "hxcmod module parsing failed");
-        return -1;
-    }
+    print_mod_name();
 
-    console_print_formatted(&console_structure, "Playing %s\n", modctx.song.title);
+    int event_type;
+    keyboard_packet_type keyboard_packet;
 
     while (TRUE)
     {
+        bool block = FALSE;
+        if (console_event_wait(&console_structure, &keyboard_packet, &event_type, block) == CONSOLE_RETURN_SUCCESS &&
+            event_type == CONSOLE_EVENT_KEYBOARD)
+        {
+            if (keyboard_packet.has_character_code)
+            {
+                switch (keyboard_packet.character_code[0])
+                {
+                    case '1':
+                    case '2':
+                    case '3':
+                    case '4':
+                    case '5':
+                    {
+                        int selected_file = keyboard_packet.character_code[0] - '1';
+
+                        modfile = modfiles[selected_file];
+                        modfile_size = modfile_sizes[selected_file];
+
+                        if (!initialize_mod_player(modfile, modfile_size))
+                        {
+                            return -1;
+                        }
+
+                        print_mod_name();
+                        break;
+                    }
+                }
+            }
+        }
+
         // From the hxcmod documentation (note that stereo 16bits is not entirely true, we override
         // it to be 8-bit mono for now)
 
@@ -116,4 +166,27 @@ int main(void)
     }
 
     return 0;
+}
+
+static bool initialize_mod_player(uint8_t *modfile, int length)
+{
+    if (hxcmod_init(&modctx) == 0)
+    {
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "hxcmod initialization failed");
+        return FALSE;
+    }
+
+    if (hxcmod_load(&modctx, modfile, length) == 0)
+    {
+        log_print(&log_structure, LOG_URGENCY_EMERGENCY, "hxcmod module parsing failed");
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+static void print_mod_name(void)
+{
+    console_cursor_move(&console_structure, 0, 3);
+    console_print_formatted(&console_structure, "Playing %-20s\n", modctx.song.title);
 }
