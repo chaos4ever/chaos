@@ -137,10 +137,10 @@ static void connection_client(message_parameter_type *message_parameter, console
                 (*our_application)->ipc_structure.output_mailbox_id = ipc_structure->output_mailbox_id;
 
                 // The client opening a console can set the activate flag, to enable switching to
-                // the newly created console - but only if there isn't already an active console.
-                // This is used by cluido, to take precedence over all other servers and programs
-                // opening consoles.
-                if (console_attribute->activate && current_console == NULL)
+                // the newly created console. This is used by cluido, to take precedence over all
+                // other servers and programs opening consoles. It's also used by modplay and other
+                // interactive programs.
+                if (console_attribute->activate)
                 {
                     current_console = *our_console;
                     (*our_console)->output = screen;
