@@ -9,12 +9,13 @@
 
 #define STORM
 
-// Get the largest value of two.
+// Gets the largest one of two values
 #define MAX_OF_TWO(a, b)                 ((a) > (b) ? (a) : (b))
 
-// Get the largest value of three.
+// Gets the largest one of three values
 #define MAX_OF_THREE(a, b, c)             (MAX_OF_TWO((a), \
                                                       MAX_OF_TWO((b), (c))))
+
 
 // This is a symbol inserted by the linker which tells us where the end of the ELF file is located when it's loaded into memory. We
 // use it to figure out how much space the kernel uses, when mapping memory for newly created processes.
