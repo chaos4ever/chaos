@@ -4,6 +4,7 @@ OBJECTS = %w[
   connection.o
   console.o
   console_output.o
+  console_output_all.o
 ].freeze
 
 LIBRARIES = %w[

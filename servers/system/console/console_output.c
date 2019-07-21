@@ -7,7 +7,6 @@
 #include <unicode/unicode.h>
 
 #include "console_output.h"
-#include "console.h"
 
 // This header file defines a translation map, so we know how to map Unicode characters to valid CP437 (or whatever font we are
 // using) characters.
@@ -334,13 +333,13 @@ void console_output(console_type *console, const char *string)
                         buffer_index = console->cursor_y * console->width + console->cursor_x;
                         console->output[buffer_index].attribute = console->modified_attribute;
 
-                        // The ASCII characters are always the same.
                         if (ucs2 >= 0x80)
                         {
                             console->output[buffer_index].character = translation[ucs2];
                         }
                         else
                         {
+                            // Low 7-bit values; the ASCII characters are always the same.
                             console->output[buffer_index].character = ucs2;
                         }
                         console->cursor_x++;

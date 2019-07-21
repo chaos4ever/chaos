@@ -81,7 +81,7 @@ typedef struct
     // The actual output to this console should go here. When the console is activated, this and the previous one will differ.
     character_type *output;
 
-    // FIXME: This isn't neccessary.
+    // FIXME: This isn't necessary.
     uint8_t modified_attribute;
 
     int character_width;
