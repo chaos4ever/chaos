@@ -3,9 +3,7 @@
 
 // I think much of this is ripped from "somewhere" though... so this is probably more GPL than BSD.
 
-// © Copyright 2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2017 chaos development
+// © Copyright 1999 chaos development
 
 #pragma once
 

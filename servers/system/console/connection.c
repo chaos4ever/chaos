@@ -8,6 +8,9 @@
 
 #include "console.h"
 #include "console_output.h"
+#include "console_output_all.h"
+
+static void lock_console(console_type *console);
 
 static void connection_client(message_parameter_type *message_parameter, console_type **our_console,
     console_application_type **our_application, uint32_t *data, ipc_structure_type *ipc_structure)
@@ -19,15 +22,25 @@ static void connection_client(message_parameter_type *message_parameter, console
         {
             if (*our_console != NULL && has_video)
             {
-                // This is not purely correct, but it's better than nothing...
-                // FIXME: library_semaphore.
-                while ((*our_console)->lock == TRUE)
-                {
-                    system_call_dispatch_next();
-                }
+                lock_console(*our_console);
 
                 (*our_console)->lock = TRUE;
                 console_output(*our_console, message_parameter->data);
+                (*our_console)->lock = FALSE;
+            }
+
+            break;
+        }
+
+        // Output a full "frame" of text provided by the caller.
+        case IPC_CONSOLE_OUTPUT_ALL:
+        {
+            if (*our_console != NULL && has_video)
+            {
+                lock_console(*our_console);
+
+                (*our_console)->lock = TRUE;
+                console_output_all(*our_console, message_parameter->data, message_parameter->length);
                 (*our_console)->lock = FALSE;
             }
 
@@ -451,3 +464,12 @@ void handle_connection(mailbox_id_type *reply_mailbox_id)
     system_exit();
 }
 
+static void lock_console(console_type *console)
+{
+    // This is not purely correct, but it's better than nothing...
+    // FIXME: library_semaphore.
+    while (console->lock == TRUE)
+    {
+        system_call_dispatch_next();
+    }
+}

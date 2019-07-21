@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <console/console.h>
 #include <ipc/ipc.h>
+#include <memory/memory.h>
 #include <string/string.h>
 
 #define CONSOLE_MAILBOX_SIZE    32768
@@ -18,6 +19,8 @@ return_type console_init(console_structure_type *console_structure, tag_type *ta
     mailbox_id_type mailbox_id[10];
     unsigned int services = 10;
     message_parameter_type message_parameter;
+
+    memory_set_uint8_t((uint8_t *) console_structure, 0, sizeof(console_structure_type));
 
     console_structure->initialised = FALSE;
 
@@ -65,6 +68,33 @@ return_type console_open(console_structure_type *console_structure,
     message_parameter.block = TRUE;
 
     system_call_mailbox_send(console_structure->ipc_structure.output_mailbox_id, &message_parameter);
+
+    if (console_attribute.enable_buffer)
+    {
+        if (console_attribute.mode_type == VIDEO_MODE_TYPE_TEXT)
+        {
+            memory_allocate((void **) &console_structure->buffer,
+                            console_attribute.width *
+                            console_attribute.height *
+                            sizeof(console_character_type));
+
+            // Ensure the newly allocated buffer is cleared. Note: we clear with zeroes instead 0f
+            // 0x0700 here (as is done on regular consoles by the console server), to deliberately
+            // avoid showing the cursor. Double-buffered applications are unlikely to want to
+            // display a text cursor anyway.
+            memory_set_uint16_t((uint16_t *) console_structure->buffer, 0,
+                                console_attribute.width * console_attribute.height);
+        }
+        else
+        {
+            // Double-buffering is currently only supported for text-mode consoles.
+            return CONSOLE_RETURN_INVALID_ARGUMENT;
+        }
+    }
+
+    console_structure->opened = TRUE;
+    console_structure->width = console_attribute.width;
+    console_structure->height = console_attribute.height;
 
     return CONSOLE_RETURN_SUCCESS;
 }
@@ -200,7 +230,6 @@ return_type console_print(console_structure_type *console_structure, const char 
     return CONSOLE_RETURN_SUCCESS;
 }
 
-// Prints the given data to the console, a la printf and friends.
 return_type console_print_formatted(console_structure_type *console_structure, const char *format_string, ...)
 {
     va_list arguments;
@@ -227,7 +256,6 @@ return_type console_clear(console_structure_type *console_structure)
     return console_print(console_structure, "\e[2J\e[1;1H");
 }
 
-// Move the cursor. Zero indexed!!!
 return_type console_cursor_move(console_structure_type *console_structure, unsigned int x, unsigned int y)
 {
     // FIXME: Should store the size of the console somewhere.
@@ -302,6 +330,79 @@ return_type console_event_wait(console_structure_type *console_structure, void *
     {
         return CONSOLE_RETURN_BAD_DATA_RETURNED;
     }
+
+    return CONSOLE_RETURN_SUCCESS;
+}
+
+return_type console_buffer_print(console_structure_type *console_structure,
+                                 int x, int y, uint8_t attribute,
+                                 const char *string)
+{
+    unsigned int position = (y * console_structure->width) + x;
+    unsigned int max_position = console_structure->width * console_structure->height;
+
+    for (unsigned int i = 0; i < string_length(string); i++)
+    {
+        if (position + i > max_position)
+        {
+            // We are past the end of the buffer. Abort and return an error to the caller.
+            return CONSOLE_RETURN_INVALID_ARGUMENT;
+        }
+
+        console_structure->buffer[position + i].character = string[i];
+        console_structure->buffer[position + i].attribute = attribute;
+    }
+
+    return CONSOLE_RETURN_SUCCESS;
+}
+
+return_type console_buffer_print_formatted(
+    console_structure_type *console_structure, int x, int y,
+    uint8_t attribute, const char *format_string, ...)
+{
+    va_list arguments;
+
+    // FIXME: Don't have a hardwired buffer like this!
+    char output[1024];
+
+    if (format_string == NULL)
+    {
+        output[0] = '\0';
+
+        return CONSOLE_RETURN_INVALID_ARGUMENT;
+    }
+
+    va_start(arguments, format_string);
+    string_print_va(output, format_string, arguments);
+    va_end(arguments);
+
+    return console_buffer_print(console_structure, x, y, attribute, output);
+}
+
+return_type console_flip(console_structure_type *console_structure)
+{
+    message_parameter_type message_parameter;
+
+    if (!console_structure->initialised)
+    {
+        return CONSOLE_RETURN_SERVICE_UNAVAILABLE;
+    }
+
+    if (console_structure->width <= 0 ||
+        console_structure->height <= 0)
+    {
+        return CONSOLE_RETURN_INVALID_ARGUMENT;
+    }
+
+    message_parameter.protocol = IPC_PROTOCOL_CONSOLE;
+    message_parameter.length = console_structure->width *
+                               console_structure->height *
+                               sizeof(console_character_type);
+    message_parameter.message_class = IPC_CONSOLE_OUTPUT_ALL;
+    message_parameter.data = (void *) console_structure->buffer;
+    message_parameter.block = TRUE;
+
+    system_call_mailbox_send(console_structure->ipc_structure.output_mailbox_id, &message_parameter);
 
     return CONSOLE_RETURN_SUCCESS;
 }

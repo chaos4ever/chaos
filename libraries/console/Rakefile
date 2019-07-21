@@ -11,4 +11,6 @@ OBJECTS = %w[
 
 OUTPUT = 'libconsole.a'.freeze
 
+ENV['EXTRA_CFLAGS'] = '-Wno-error=unused-parameter'
+
 load '../libraries.rake'
