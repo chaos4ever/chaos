@@ -7,8 +7,8 @@
 
 // The number of samples per buffer.
 #define NUMBER_OF_SAMPLES   2000
-#define NUM_CHANNELS        1      // 1 = mono, 2 = stereo
-#define BYTES_PER_SAMPLE    1  // 1 = 8-bit, 2 = 16-bit
+#define NUM_CHANNELS        1       // 1 = mono, 2 = stereo
+#define BYTES_PER_SAMPLE    1       // 1 = 8-bit, 2 = 16-bit
 #define BUFFER_SIZE         (NUMBER_OF_SAMPLES * NUM_CHANNELS * BYTES_PER_SAMPLE)
 
 // Note: hxcmod_setcfg must be called if you wish to use something different than this.

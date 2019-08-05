@@ -15,7 +15,8 @@
 #define DSP_RESET                       (base_port + 0x06)
 #define DSP_DATA_READ                   (base_port + 0x0A)
 #define DSP_DATA_WRITE                  (base_port + 0x0C)
-#define DSP_DATA_AVAILABLE              (base_port + 0x0E)
+#define DSP_DATA_AVAILABLE_8BIT         (base_port + 0x0E)
+#define DSP_DATA_AVAILABLE_16BIT        (base_port + 0x0F)
 
 // Commands (sent to DSP_DATA_WRITE).
 #define DSP_VERSION                     (0xE1)
@@ -28,6 +29,10 @@
 #define DSP_MODE_DMA_8BIT_ADC           (0x24)
 #define DSP_SET_TIME_CONSTANT           (0x40)
 #define DSP_SET_DMA_BLOCK_SIZE          (0x48)
+
+#define DSP_GENERIC_DMA_8BIT_AUTOINIT_DAC   (0xC6)
+#define DSP_GENERIC_DMA_16BIT_DAC           (0xB0)
+#define DSP_GENERIC_DMA_16BIT_AUTOINIT_DAC  (0xB6)
 
 typedef struct
 {
