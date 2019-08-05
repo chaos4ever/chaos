@@ -54,20 +54,20 @@ static tag_type empty_tag =
 
 static void dsp_write(uint8_t data)
 {
-    while ((system_port_in_uint8_t (DSP_DATA_WRITE) & 0x80) != 0);
-    system_port_out_uint8_t (DSP_DATA_WRITE, (data));
+    while ((system_port_in_uint8_t(DSP_DATA_WRITE) & 0x80) != 0);
+    system_port_out_uint8_t(DSP_DATA_WRITE, (data));
 }
 
 static uint8_t dsp_read(void)
 {
-    while ((system_port_in_uint8_t (DSP_DATA_AVAILABLE) & 0x80) == 0);
-    return system_port_in_uint8_t (DSP_DATA_READ);
+    while ((system_port_in_uint8_t(DSP_DATA_AVAILABLE_8BIT) & 0x80) == 0);
+    return system_port_in_uint8_t(DSP_DATA_READ);
 }
 
 static void dsp_mixer_write(uint8_t which_register, uint8_t data)
 {
-    system_port_out_uint8_t (DSP_MIXER_REGISTER, which_register);
-    system_port_out_uint8_t (DSP_MIXER_DATA, data);
+    system_port_out_uint8_t(DSP_MIXER_REGISTER, which_register);
+    system_port_out_uint8_t(DSP_MIXER_DATA, data);
 }
 
 // Detect if there is some kind of sound blaster card in this machine.
@@ -77,15 +77,15 @@ static bool detect_sb(void)
     system_call_port_range_register(base_port, 16, "Sound Blaster");
 
     // Reset the DSP.
-    system_port_out_uint8_t (DSP_RESET, 0x01);
+    system_port_out_uint8_t(DSP_RESET, 0x01);
     system_sleep(4);
-    system_port_out_uint8_t (DSP_RESET, 0x00);
+    system_port_out_uint8_t(DSP_RESET, 0x00);
 
     // FIXME: Should only wait for a maximum of 100 us.
-    while ((system_port_in_uint8_t (DSP_DATA_AVAILABLE) & (1 << 7)) == 0);
+    while ((system_port_in_uint8_t(DSP_DATA_AVAILABLE_8BIT) & (1 << 7)) == 0);
 
     // Check if the DSP was reset successfully.
-    if (system_port_in_uint8_t (DSP_DATA_READ) == 0xAA)
+    if (system_port_in_uint8_t(DSP_DATA_READ) == 0xAA)
     {
         // Let's check which kind of SB this is.
         dsp_write(DSP_VERSION);
@@ -177,17 +177,16 @@ int main(void)
         }
     }
 
-
-    // Because we only support soundblaster 2.0-functionality, treat every card as a sb2.0 whatever
-    // card is installed
+    // TODO: Consider supporting other cards than SB16, or at least log
+    // an error when they are being used.
     soundblaster_device.irq = irq;
     soundblaster_device.base_port = base_port;
     soundblaster_device.dma_channel = dma_channel;
-    soundblaster_device.max_frequency_output = 22050;
+    soundblaster_device.max_frequency_output = 44100;
     soundblaster_device.supports_8bit_output = TRUE;
-    soundblaster_device.supports_16bit_output = FALSE;
+    soundblaster_device.supports_16bit_output = TRUE;
     soundblaster_device.supports_autoinit_dma = TRUE;
-    soundblaster_device.device_name = "Sound Blaster 2.0";
+    soundblaster_device.device_name = "Sound Blaster 16";
 
     // Register the DMA channel.
     if (system_call_dma_register(soundblaster_device.dma_channel,
@@ -254,7 +253,7 @@ void irq_handler(irq_handler_data_type *irq_handler_data)
         log_print(&log_structure, LOG_URGENCY_DEBUG, "Received hardware interrupt");
 
         // Acknowledge the SB interrupt.
-        system_port_in_uint8_t(DSP_DATA_AVAILABLE);
+        system_port_in_uint8_t(DSP_DATA_AVAILABLE_8BIT);
 
         // Send an acknowledgement message to the client program.
         message_parameter.protocol = IPC_PROTOCOL_NONE;
@@ -441,13 +440,13 @@ void handle_connection(mailbox_id_type reply_mailbox_id)
                         // Program Sound Blaster buffer length (triggers an interrupt after 'length'
                         // bytes transferred).
                         length = sound_message->length - 1;
-                        dsp_write(DSP_SET_DMA_BLOCK_SIZE);
-                        dsp_write((uint8_t) length);
-                        dsp_write((uint8_t)(length >> 8));
 
                         // Enable 8-bit auto-initializing DMA-based playing. See sblaster.doc for
-                        // more details (the 01Ch command)
-                        dsp_write(DSP_MODE_DMA_8BIT_AUTOINIT_DAC);
+                        // more details (0Bxh/0Cxh  Generic DAC/ADC DMA)
+                        dsp_write(DSP_GENERIC_DMA_8BIT_AUTOINIT_DAC);
+                        dsp_write(0); // Bit 5 = stereo, bit 4 = signed. 0 means "mono, unsigned"
+                        dsp_write((uint8_t) length);
+                        dsp_write((uint8_t)(length >> 8));
 
                         // Now the sample is hopefully being played, so set some variables.
                         soundblaster_event.is_playing = TRUE;

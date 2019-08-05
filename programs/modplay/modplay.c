@@ -139,7 +139,8 @@ int main(void)
         //   The optional trkbuf parameter can be used to get detailed status of the player. Put NULL/0 is unused.
 
         trackbuf_state.nb_of_state = 0;
-        hxcmod_fillbuffer(&modctx, sound_message->data, NUMBER_OF_SAMPLES, &trackbuf_state);
+        hxcmod_fillbuffer(&modctx, (uint8_t *) sound_message->data,
+                          NUMBER_OF_SAMPLES, &trackbuf_state);
 
         if (sound_play_stream(&ipc_structure, sound_message) !=
                 SOUND_RETURN_SUCCESS)
