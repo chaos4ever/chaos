@@ -12,8 +12,8 @@ FROM debian AS build
 RUN apt-get update && \
     apt-get install -y \
         dosfstools \
-        gcc-6 \
-        gcc-6-multilib \
+        gcc-7 \
+        gcc-7-multilib \
         genisoimage \
         git \
         grub \
