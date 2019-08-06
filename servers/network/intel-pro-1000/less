@@ -1,0 +1,723 @@
+In file included from e1000.h:21:0,
+                 from e1000.c:8:
+e1000_hw.h:33:5: error: unknown type name ‘u32_t’
+     u32_t buffer; /**< Address of the receive data buffer (64-bit). */
+     ^~~~~
+e1000_hw.h:34:5: error: unknown type name ‘u32_t’
+     u32_t buffer_h;     /**< High 32-bits of the receive data buffer (unused). */
+     ^~~~~
+e1000_hw.h:35:5: error: unknown type name ‘u16_t’
+     u16_t length; /**< Size of the receive buffer. */
+     ^~~~~
+e1000_hw.h:36:5: error: unknown type name ‘u16_t’
+     u16_t checksum; /**< Packet checksum. */
+     ^~~~~
+e1000_hw.h:39:5: error: unknown type name ‘u16_t’
+     u16_t special; /**< VLAN information. */
+     ^~~~~
+e1000_hw.h:48:5: error: unknown type name ‘u32_t’
+     u32_t buffer; /**< Address of the transmit buffer (64-bit). */
+     ^~~~~
+e1000_hw.h:49:5: error: unknown type name ‘u32_t’
+     u32_t buffer_h; /**< High 32-bits of the transmit buffer (unused). */
+     ^~~~~
+e1000_hw.h:50:5: error: unknown type name ‘u16_t’
+     u16_t length; /**< Size of the transmit buffer contents. */
+     ^~~~~
+e1000_hw.h:55:5: error: unknown type name ‘u16_t’
+     u16_t special; /**< Optional special bits. */
+     ^~~~~
+e1000_hw.h:77:5: error: unknown type name ‘u16_t’
+     u16_t regval;
+     ^~~~~
+e1000_hw.h:94:5: error: unknown type name ‘u16_t’
+     u16_t regval;
+     ^~~~~
+e1000_hw.h:110:5: error: unknown type name ‘u16_t’
+     u16_t regval;
+     ^~~~~
+In file included from e1000.c:8:0:
+e1000.h:119:5: error: unknown type name ‘u32_t’
+     u32_t flash_base_addr;   /**< Flash base address. */
+     ^~~~~
+e1000.h:120:5: error: expected specifier-qualifier-list before ‘u16_t’
+     u16_t (*eeprom_read)(struct e1000 *, int reg);
+     ^~~~~
+e1000.c:13:46: error: unknown type name ‘netdriver_addr_t’
+ static int e1000_init(unsigned int instance, netdriver_addr_t *addr,
+                                              ^~~~~~~~~~~~~~~~
+e1000.c:16:48: error: unknown type name ‘netdriver_addr_t’
+ static void e1000_set_mode(unsigned int, const netdriver_addr_t *,
+                                                ^~~~~~~~~~~~~~~~
+e1000.c:18:36: error: unknown type name ‘netdriver_addr_t’
+ static void e1000_set_hwaddr(const netdriver_addr_t *);
+                                    ^~~~~~~~~~~~~~~~
+e1000.c:19:30: error: ‘struct netdriver_data’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ static int e1000_send(struct netdriver_data *data, size_t size);
+                              ^~~~~~~~~~~~~~
+e1000.c:20:8: error: unknown type name ‘ssize_t’
+ static ssize_t e1000_recv(struct netdriver_data *data, size_t max);
+        ^~~~~~~
+e1000.c:20:34: error: ‘struct netdriver_data’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ static ssize_t e1000_recv(struct netdriver_data *data, size_t max);
+                                  ^~~~~~~~~~~~~~
+e1000.c:25:39: error: unknown type name ‘netdriver_addr_t’
+ static void e1000_init_hw(e1000_t *e, netdriver_addr_t *addr);
+                                       ^~~~~~~~~~~~~~~~
+e1000.c:30:8: error: unknown type name ‘u16_t’
+ static u16_t eeprom_eerd(e1000_t *e, int reg);
+        ^~~~~
+e1000.c:31:8: error: unknown type name ‘u16_t’
+ static u16_t eeprom_ich(e1000_t *e, int reg);
+        ^~~~~
+e1000.c:33:41: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+ static int eeprom_ich_cycle(e1000_t *e, u32_t timeout);
+                                         ^~~~~
+                                         u8_t
+e1000.c:38:21: error: variable ‘e1000_table’ has initializer but incomplete type
+ static const struct netdriver e1000_table = {
+                     ^~~~~~~~~
+e1000.c:39:3: error: ‘const struct netdriver’ has no member named ‘ndr_name’
+  .ndr_name = "em",
+   ^~~~~~~~
+e1000.c:39:14: error: excess elements in struct initializer [-Werror]
+  .ndr_name = "em",
+              ^~~~
+e1000.c:39:14: note: (near initialization for ‘e1000_table’)
+e1000.c:40:3: error: ‘const struct netdriver’ has no member named ‘ndr_init’
+  .ndr_init = e1000_init,
+   ^~~~~~~~
+e1000.c:40:14: error: ‘e1000_init’ undeclared here (not in a function); did you mean ‘e1000_intr’?
+  .ndr_init = e1000_init,
+              ^~~~~~~~~~
+              e1000_intr
+e1000.c:40:14: error: excess elements in struct initializer [-Werror]
+e1000.c:40:14: note: (near initialization for ‘e1000_table’)
+e1000.c:41:3: error: ‘const struct netdriver’ has no member named ‘ndr_stop’
+  .ndr_stop = e1000_stop,
+   ^~~~~~~~
+e1000.c:41:14: error: excess elements in struct initializer [-Werror]
+  .ndr_stop = e1000_stop,
+              ^~~~~~~~~~
+e1000.c:41:14: note: (near initialization for ‘e1000_table’)
+e1000.c:42:3: error: ‘const struct netdriver’ has no member named ‘ndr_set_mode’
+  .ndr_set_mode = e1000_set_mode,
+   ^~~~~~~~~~~~
+e1000.c:42:18: error: excess elements in struct initializer [-Werror]
+  .ndr_set_mode = e1000_set_mode,
+                  ^~~~~~~~~~~~~~
+e1000.c:42:18: note: (near initialization for ‘e1000_table’)
+e1000.c:43:3: error: ‘const struct netdriver’ has no member named ‘ndr_set_hwaddr’
+  .ndr_set_hwaddr = e1000_set_hwaddr,
+   ^~~~~~~~~~~~~~
+e1000.c:43:20: error: excess elements in struct initializer [-Werror]
+  .ndr_set_hwaddr = e1000_set_hwaddr,
+                    ^~~~~~~~~~~~~~~~
+e1000.c:43:20: note: (near initialization for ‘e1000_table’)
+e1000.c:44:3: error: ‘const struct netdriver’ has no member named ‘ndr_recv’
+  .ndr_recv = e1000_recv,
+   ^~~~~~~~
+e1000.c:44:14: error: excess elements in struct initializer [-Werror]
+  .ndr_recv = e1000_recv,
+              ^~~~~~~~~~
+e1000.c:44:14: note: (near initialization for ‘e1000_table’)
+e1000.c:45:3: error: ‘const struct netdriver’ has no member named ‘ndr_send’
+  .ndr_send = e1000_send,
+   ^~~~~~~~
+e1000.c:45:14: error: excess elements in struct initializer [-Werror]
+  .ndr_send = e1000_send,
+              ^~~~~~~~~~
+e1000.c:45:14: note: (near initialization for ‘e1000_table’)
+e1000.c:46:3: error: ‘const struct netdriver’ has no member named ‘ndr_get_link’
+  .ndr_get_link = e1000_get_link,
+   ^~~~~~~~~~~~
+e1000.c:46:18: error: excess elements in struct initializer [-Werror]
+  .ndr_get_link = e1000_get_link,
+                  ^~~~~~~~~~~~~~
+e1000.c:46:18: note: (near initialization for ‘e1000_table’)
+e1000.c:47:3: error: ‘const struct netdriver’ has no member named ‘ndr_intr’
+  .ndr_intr = e1000_intr,
+   ^~~~~~~~
+e1000.c:47:14: error: excess elements in struct initializer [-Werror]
+  .ndr_intr = e1000_intr,
+              ^~~~~~~~~~
+e1000.c:47:14: note: (near initialization for ‘e1000_table’)
+e1000.c:48:3: error: ‘const struct netdriver’ has no member named ‘ndr_tick’
+  .ndr_tick = e1000_tick
+   ^~~~~~~~
+e1000.c:48:14: error: excess elements in struct initializer [-Werror]
+  .ndr_tick = e1000_tick
+              ^~~~~~~~~~
+e1000.c:48:14: note: (near initialization for ‘e1000_table’)
+e1000.c: In function ‘main’:
+e1000.c:58:2: error: implicit declaration of function ‘env_setargs’ [-Werror=implicit-function-declaration]
+  env_setargs(argc, argv);
+  ^~~~~~~~~~~
+e1000.c:58:2: error: nested extern declaration of ‘env_setargs’ [-Werror=nested-externs]
+e1000.c:61:2: error: implicit declaration of function ‘netdriver_task’ [-Werror=implicit-function-declaration]
+  netdriver_task(&e1000_table);
+  ^~~~~~~~~~~~~~
+e1000.c:61:2: error: nested extern declaration of ‘netdriver_task’ [-Werror=nested-externs]
+e1000.c: At top level:
+e1000.c:70:35: error: unknown type name ‘netdriver_addr_t’
+ e1000_init(unsigned int instance, netdriver_addr_t * addr, uint32_t * caps,
+                                   ^~~~~~~~~~~~~~~~
+e1000.c: In function ‘e1000_map_flash’:
+e1000.c:105:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t flash_addr, gfpreg, sector_base_addr;
+  ^~~~~
+  u8_t
+e1000.c:109:20: error: implicit declaration of function ‘pci_attr_r32’ [-Werror=implicit-function-declaration]
+  if ((flash_addr = pci_attr_r32(devind, PCI_BAR_2)) == 0)
+                    ^~~~~~~~~~~~
+e1000.c:109:20: error: nested extern declaration of ‘pci_attr_r32’ [-Werror=nested-externs]
+e1000.c:109:41: error: ‘PCI_BAR_2’ undeclared (first use in this function)
+  if ((flash_addr = pci_attr_r32(devind, PCI_BAR_2)) == 0)
+                                         ^~~~~~~~~
+e1000.c:109:41: note: each undeclared identifier is reported only once for each function it appears in
+e1000.c:129:13: error: implicit declaration of function ‘vm_map_phys’ [-Werror=implicit-function-declaration]
+  e->flash = vm_map_phys(SELF, (void *)flash_addr, flash_size);
+             ^~~~~~~~~~~
+e1000.c:129:13: error: nested extern declaration of ‘vm_map_phys’ [-Werror=nested-externs]
+e1000.c:129:25: error: ‘SELF’ undeclared (first use in this function)
+  e->flash = vm_map_phys(SELF, (void *)flash_addr, flash_size);
+                         ^~~~
+e1000.c:131:3: error: implicit declaration of function ‘panic’ [-Werror=implicit-function-declaration]
+   panic("e1000: couldn't map in flash");
+   ^~~~~
+e1000.c:131:3: error: nested extern declaration of ‘panic’ [-Werror=nested-externs]
+In file included from e1000.c:8:0:
+e1000.h:78:7: error: ‘u32_t’ undeclared (first use in this function); did you mean ‘u8_t’?
+     *(u32_t *) (((e)->flash) + (reg))
+       ^
+e1000.c:134:11: note: in expansion of macro ‘E1000_READ_FLASH_REG’
+  gfpreg = E1000_READ_FLASH_REG(e, ICH_FLASH_GFPREG);
+           ^~~~~~~~~~~~~~~~~~~~
+e1000.h:78:14: error: expected expression before ‘)’ token
+     *(u32_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:134:11: note: in expansion of macro ‘E1000_READ_FLASH_REG’
+  gfpreg = E1000_READ_FLASH_REG(e, ICH_FLASH_GFPREG);
+           ^~~~~~~~~~~~~~~~~~~~
+e1000.c: In function ‘e1000_probe’:
+e1000.c:148:2: error: unknown type name ‘u16_t’; did you mean ‘u8_t’?
+  u16_t vid, did, cr;
+  ^~~~~
+  u8_t
+e1000.c:149:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t status;
+  ^~~~~
+  u8_t
+e1000.c:150:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t base, size;
+  ^~~~~
+  u8_t
+In file included from e1000.c:8:0:
+e1000.h:69:6: error: implicit declaration of function ‘printf’ [-Werror=implicit-function-declaration]
+      printf args; \
+      ^
+e1000.c:153:2: note: in expansion of macro ‘E1000_DEBUG’
+  E1000_DEBUG(3, ("%s: probe()\n", netdriver_name()));
+  ^~~~~~~~~~~
+e1000.h:69:6: error: nested extern declaration of ‘printf’ [-Werror=nested-externs]
+      printf args; \
+      ^
+e1000.c:153:2: note: in expansion of macro ‘E1000_DEBUG’
+  E1000_DEBUG(3, ("%s: probe()\n", netdriver_name()));
+  ^~~~~~~~~~~
+e1000.c:153:35: error: implicit declaration of function ‘netdriver_name’ [-Werror=implicit-function-declaration]
+  E1000_DEBUG(3, ("%s: probe()\n", netdriver_name()));
+                                   ^
+e1000.h:69:13: note: in definition of macro ‘E1000_DEBUG’
+      printf args; \
+             ^~~~
+e1000.c:153:35: error: nested extern declaration of ‘netdriver_name’ [-Werror=nested-externs]
+  E1000_DEBUG(3, ("%s: probe()\n", netdriver_name()));
+                                   ^
+e1000.h:69:13: note: in definition of macro ‘E1000_DEBUG’
+      printf args; \
+             ^~~~
+e1000.c:156:2: error: implicit declaration of function ‘pci_init’ [-Werror=implicit-function-declaration]
+  pci_init();
+  ^~~~~~~~
+e1000.c:156:2: error: nested extern declaration of ‘pci_init’ [-Werror=nested-externs]
+e1000.c:159:11: error: implicit declaration of function ‘pci_first_dev’ [-Werror=implicit-function-declaration]
+  if ((r = pci_first_dev(&devind, &vid, &did)) == 0)
+           ^~~~~~~~~~~~~
+e1000.c:159:11: error: nested extern declaration of ‘pci_first_dev’ [-Werror=nested-externs]
+e1000.c:167:13: error: implicit declaration of function ‘pci_next_dev’ [-Werror=implicit-function-declaration]
+   if (!(r = pci_next_dev(&devind, &vid, &did)))
+             ^~~~~~~~~~~~
+e1000.c:167:13: error: nested extern declaration of ‘pci_next_dev’ [-Werror=nested-externs]
+e1000.c:172:3: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_read’
+  e->eeprom_read = eeprom_eerd;
+   ^~
+e1000.c:177:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_read’
+   e->eeprom_read = eeprom_ich;
+    ^~
+e1000.c:183:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_done_bit’
+   e->eeprom_done_bit = (1 << 4);
+    ^~
+e1000.c:184:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_addr_off’
+   e->eeprom_addr_off = 8;
+    ^~
+e1000.c:188:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_done_bit’
+   e->eeprom_done_bit = (1 << 1);
+    ^~
+e1000.c:189:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_addr_off’
+   e->eeprom_addr_off = 2;
+    ^~
+e1000.c:194:16: error: implicit declaration of function ‘pci_dev_name’ [-Werror=implicit-function-declaration]
+  if (!(dname = pci_dev_name(vid, did)))
+                ^~~~~~~~~~~~
+e1000.c:194:16: error: nested extern declaration of ‘pci_dev_name’ [-Werror=nested-externs]
+e1000.c:194:14: error: assignment makes pointer from integer without a cast [-Werror=int-conversion]
+  if (!(dname = pci_dev_name(vid, did)))
+              ^
+In file included from e1000.c:8:0:
+e1000.c:197:41: error: implicit declaration of function ‘pci_slot_name’ [-Werror=implicit-function-declaration]
+      netdriver_name(), dname, vid, did, pci_slot_name(devind)));
+                                         ^
+e1000.h:69:13: note: in definition of macro ‘E1000_DEBUG’
+      printf args; \
+             ^~~~
+e1000.c:197:41: error: nested extern declaration of ‘pci_slot_name’ [-Werror=nested-externs]
+      netdriver_name(), dname, vid, did, pci_slot_name(devind)));
+                                         ^
+e1000.h:69:13: note: in definition of macro ‘E1000_DEBUG’
+      printf args; \
+             ^~~~
+e1000.c:200:2: error: implicit declaration of function ‘pci_reserve’ [-Werror=implicit-function-declaration]
+  pci_reserve(devind);
+  ^~~~~~~~~~~
+e1000.c:200:2: error: nested extern declaration of ‘pci_reserve’ [-Werror=nested-externs]
+e1000.c:203:11: error: implicit declaration of function ‘pci_attr_r8’ [-Werror=implicit-function-declaration]
+  e->irq = pci_attr_r8(devind, PCI_ILR);
+           ^~~~~~~~~~~
+e1000.c:203:11: error: nested extern declaration of ‘pci_attr_r8’ [-Werror=nested-externs]
+e1000.c:203:31: error: ‘PCI_ILR’ undeclared (first use in this function)
+  e->irq = pci_attr_r8(devind, PCI_ILR);
+                               ^~~~~~~
+e1000.c:205:11: error: implicit declaration of function ‘pci_get_bar’ [-Werror=implicit-function-declaration]
+  if ((r = pci_get_bar(devind, PCI_BAR, &base, &size, &ioflag)) != OK)
+           ^~~~~~~~~~~
+e1000.c:205:11: error: nested extern declaration of ‘pci_get_bar’ [-Werror=nested-externs]
+e1000.c:205:31: error: ‘PCI_BAR’ undeclared (first use in this function); did you mean ‘PCI_ILR’?
+  if ((r = pci_get_bar(devind, PCI_BAR, &base, &size, &ioflag)) != OK)
+                               ^~~~~~~
+                               PCI_ILR
+e1000.c:205:67: error: ‘OK’ undeclared (first use in this function)
+  if ((r = pci_get_bar(devind, PCI_BAR, &base, &size, &ioflag)) != OK)
+                                                                   ^~
+e1000.c:210:29: error: ‘SELF’ undeclared (first use in this function)
+  if ((e->regs = vm_map_phys(SELF, (void *)base, size)) == MAP_FAILED)
+                             ^~~~
+e1000.c:214:7: error: implicit declaration of function ‘pci_attr_r16’ [-Werror=implicit-function-declaration]
+  cr = pci_attr_r16(devind, PCI_CR);
+       ^~~~~~~~~~~~
+e1000.c:214:7: error: nested extern declaration of ‘pci_attr_r16’ [-Werror=nested-externs]
+e1000.c:214:28: error: ‘PCI_CR’ undeclared (first use in this function); did you mean ‘PCI_BAR’?
+  cr = pci_attr_r16(devind, PCI_CR);
+                            ^~~~~~
+                            PCI_BAR
+e1000.c:215:13: error: ‘PCI_CR_MAST_EN’ undeclared (first use in this function)
+  if (!(cr & PCI_CR_MAST_EN))
+             ^~~~~~~~~~~~~~
+e1000.c:216:3: error: implicit declaration of function ‘pci_attr_w16’ [-Werror=implicit-function-declaration]
+   pci_attr_w16(devind, PCI_CR, cr | PCI_CR_MAST_EN);
+   ^~~~~~~~~~~~
+e1000.c:216:3: error: nested extern declaration of ‘pci_attr_w16’ [-Werror=nested-externs]
+e1000.c: In function ‘e1000_reset_hw’:
+e1000.c:242:2: error: implicit declaration of function ‘micro_delay’ [-Werror=implicit-function-declaration]
+  micro_delay(16000);
+  ^~~~~~~~~~~
+e1000.c:242:2: error: nested extern declaration of ‘micro_delay’ [-Werror=nested-externs]
+e1000.c: At top level:
+e1000.c:249:30: error: unknown type name ‘netdriver_addr_t’
+ e1000_init_addr(e1000_t * e, netdriver_addr_t * addr)
+                              ^~~~~~~~~~~~~~~~
+e1000.c: In function ‘e1000_init_buf’:
+e1000.c:291:2: error: unknown type name ‘phys_bytes’
+  phys_bytes rx_desc_p, rx_buff_p;
+  ^~~~~~~~~~
+e1000.c:292:2: error: unknown type name ‘phys_bytes’
+  phys_bytes tx_desc_p, tx_buff_p;
+  ^~~~~~~~~~
+e1000.c:296:3: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+  e->rx_desc_count = E1000_RXDESC_NR;
+   ^~
+e1000.c:297:3: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc_count’
+  e->tx_desc_count = E1000_TXDESC_NR;
+   ^~
+e1000.c:300:8: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc’
+  if ((e->rx_desc = alloc_contig(sizeof(e1000_rx_desc_t) *
+        ^~
+e1000.c:300:20: error: implicit declaration of function ‘alloc_contig’ [-Werror=implicit-function-declaration]
+  if ((e->rx_desc = alloc_contig(sizeof(e1000_rx_desc_t) *
+                    ^~~~~~~~~~~~
+e1000.c:300:20: error: nested extern declaration of ‘alloc_contig’ [-Werror=nested-externs]
+e1000.c:301:7: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+      e->rx_desc_count, AC_ALIGN4K, &rx_desc_p)) == NULL)
+       ^~
+e1000.c:301:24: error: ‘AC_ALIGN4K’ undeclared (first use in this function); did you mean ‘ALIGN’?
+      e->rx_desc_count, AC_ALIGN4K, &rx_desc_p)) == NULL)
+                        ^~~~~~~~~~
+                        ALIGN
+e1000.c:304:2: error: implicit declaration of function ‘memset’ [-Werror=implicit-function-declaration]
+  memset(e->rx_desc, 0, sizeof(e1000_rx_desc_t) * e->rx_desc_count);
+  ^~~~~~
+e1000.c:304:2: error: nested extern declaration of ‘memset’ [-Werror=nested-externs]
+e1000.c:304:10: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc’
+  memset(e->rx_desc, 0, sizeof(e1000_rx_desc_t) * e->rx_desc_count);
+          ^~
+e1000.c:304:51: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+  memset(e->rx_desc, 0, sizeof(e1000_rx_desc_t) * e->rx_desc_count);
+                                                   ^~
+e1000.c:307:3: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_buffer_size’
+  e->rx_buffer_size = E1000_RXDESC_NR * E1000_IOBUF_SIZE;
+   ^~
+e1000.c:309:8: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_buffer’
+  if ((e->rx_buffer = alloc_contig(e->rx_buffer_size, AC_ALIGN4K,
+        ^~
+e1000.c:309:36: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_buffer_size’
+  if ((e->rx_buffer = alloc_contig(e->rx_buffer_size, AC_ALIGN4K,
+                                    ^~
+e1000.c:315:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc’
+   e->rx_desc[i].buffer = rx_buff_p + i * E1000_IOBUF_SIZE;
+    ^~
+e1000.c:318:8: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc’
+  if ((e->tx_desc = alloc_contig(sizeof(e1000_tx_desc_t) *
+        ^~
+e1000.c:319:7: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc_count’
+      e->tx_desc_count, AC_ALIGN4K, &tx_desc_p)) == NULL)
+       ^~
+e1000.c:322:10: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc’
+  memset(e->tx_desc, 0, sizeof(e1000_tx_desc_t) * e->tx_desc_count);
+          ^~
+e1000.c:322:51: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc_count’
+  memset(e->tx_desc, 0, sizeof(e1000_tx_desc_t) * e->tx_desc_count);
+                                                   ^~
+e1000.c:325:3: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_buffer_size’
+  e->tx_buffer_size = E1000_TXDESC_NR * E1000_IOBUF_SIZE;
+   ^~
+e1000.c:327:8: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_buffer’
+  if ((e->tx_buffer = alloc_contig(e->tx_buffer_size, AC_ALIGN4K,
+        ^~
+e1000.c:327:36: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_buffer_size’
+  if ((e->tx_buffer = alloc_contig(e->tx_buffer_size, AC_ALIGN4K,
+                                    ^~
+e1000.c:333:4: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc’
+   e->tx_desc[i].buffer = tx_buff_p + i * E1000_IOBUF_SIZE;
+    ^~
+e1000.c:339:7: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+      e->rx_desc_count * sizeof(e1000_rx_desc_t));
+       ^~
+e1000.c:341:37: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+  e1000_reg_write(e, E1000_REG_RDT, e->rx_desc_count - 1);
+                                     ^~
+e1000.c:349:7: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc_count’
+      e->tx_desc_count * sizeof(e1000_tx_desc_t));
+       ^~
+e1000.c: At top level:
+e1000.c:360:28: error: unknown type name ‘netdriver_addr_t’
+ e1000_init_hw(e1000_t * e, netdriver_addr_t * addr)
+                            ^~~~~~~~~~~~~~~~
+e1000.c:415:41: error: unknown type name ‘netdriver_addr_t’
+ e1000_set_mode(unsigned int mode, const netdriver_addr_t * mcast_list __unused,
+                                         ^~~~~~~~~~~~~~~~
+e1000.c:415:71: error: expected ‘;’, ‘,’ or ‘)’ before ‘__unused’
+ e1000_set_mode(unsigned int mode, const netdriver_addr_t * mcast_list __unused,
+                                                                       ^~~~~~~~
+e1000.c:444:24: error: unknown type name ‘netdriver_addr_t’
+ e1000_set_hwaddr(const netdriver_addr_t * hwaddr)
+                        ^~~~~~~~~~~~~~~~
+e1000.c: In function ‘e1000_set_hwaddr’:
+e1000.c:451:14: error: unknown type name ‘u32_t’
+      *(const u32_t *)(&hwaddr->na_addr[0]));
+              ^~~~~
+e1000.c:451:30: error: request for member ‘na_addr’ in something not a structure or union
+      *(const u32_t *)(&hwaddr->na_addr[0]));
+                              ^~
+e1000.c:453:14: error: unknown type name ‘u16_t’
+      *(const u16_t *)(&hwaddr->na_addr[4]));
+              ^~~~~
+e1000.c:453:30: error: request for member ‘na_addr’ in something not a structure or union
+      *(const u16_t *)(&hwaddr->na_addr[4]));
+                              ^~
+e1000.c: At top level:
+e1000.c:461:19: error: ‘struct netdriver_data’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ e1000_send(struct netdriver_data * data, size_t size)
+                   ^~~~~~~~~~~~~~
+e1000.c:461:1: error: conflicting types for ‘e1000_send’
+ e1000_send(struct netdriver_data * data, size_t size)
+ ^~~~~~~~~~
+e1000.c:19:12: note: previous declaration of ‘e1000_send’ was here
+ static int e1000_send(struct netdriver_data *data, size_t size);
+            ^~~~~~~~~~
+e1000.c: In function ‘e1000_send’:
+e1000.c:479:23: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc_count’
+  next = (tail + 1) % e->tx_desc_count;
+                       ^~
+e1000.c:482:10: error: ‘SUSPEND’ undeclared (first use in this function)
+   return SUSPEND;
+          ^~~~~~~
+e1000.c:485:11: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_desc’
+  desc = &e->tx_desc[tail];
+           ^~
+e1000.c:488:9: error: ‘e1000_t {aka struct e1000}’ has no member named ‘tx_buffer’
+  ptr = e->tx_buffer + tail * E1000_IOBUF_SIZE;
+         ^~
+e1000.c:490:2: error: implicit declaration of function ‘netdriver_copyin’ [-Werror=implicit-function-declaration]
+  netdriver_copyin(data, 0, ptr, size);
+  ^~~~~~~~~~~~~~~~
+e1000.c:490:2: error: nested extern declaration of ‘netdriver_copyin’ [-Werror=nested-externs]
+e1000.c:500:9: error: ‘OK’ undeclared (first use in this function)
+  return OK;
+         ^~
+e1000.c: At top level:
+e1000.c:506:8: error: unknown type name ‘ssize_t’
+ static ssize_t
+        ^~~~~~~
+e1000.c:507:19: error: ‘struct netdriver_data’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+ e1000_recv(struct netdriver_data * data, size_t max)
+                   ^~~~~~~~~~~~~~
+e1000.c:507:1: error: conflicting types for ‘e1000_recv’
+ e1000_recv(struct netdriver_data * data, size_t max)
+ ^~~~~~~~~~
+e1000.c:20:16: note: previous declaration of ‘e1000_recv’ was here
+ static ssize_t e1000_recv(struct netdriver_data *data, size_t max);
+                ^~~~~~~~~~
+e1000.c: In function ‘e1000_recv’:
+e1000.c:525:10: error: ‘SUSPEND’ undeclared (first use in this function)
+   return SUSPEND;
+          ^~~~~~~
+e1000.c:528:22: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc_count’
+  cur = (tail + 1) % e->rx_desc_count;
+                      ^~
+e1000.c:529:11: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_desc’
+  desc = &e->rx_desc[cur];
+           ^~
+e1000.c:547:9: error: ‘e1000_t {aka struct e1000}’ has no member named ‘rx_buffer’
+  ptr = e->rx_buffer + cur * E1000_IOBUF_SIZE;
+         ^~
+e1000.c:552:2: error: implicit declaration of function ‘netdriver_copyout’ [-Werror=implicit-function-declaration]
+  netdriver_copyout(data, 0, ptr, size);
+  ^~~~~~~~~~~~~~~~~
+e1000.c:552:2: error: nested extern declaration of ‘netdriver_copyout’ [-Werror=nested-externs]
+e1000.c: In function ‘e1000_get_link’:
+e1000.c:575:10: error: ‘NDEV_LINK_DOWN’ undeclared (first use in this function)
+   return NDEV_LINK_DOWN;
+          ^~~~~~~~~~~~~~
+e1000.c:578:10: error: ‘IFM_ETHER’ undeclared (first use in this function)
+   type = IFM_ETHER | IFM_FDX;
+          ^~~~~~~~~
+e1000.c:578:22: error: ‘IFM_FDX’ undeclared (first use in this function)
+   type = IFM_ETHER | IFM_FDX;
+                      ^~~~~~~
+e1000.c:580:22: error: ‘IFM_HDX’ undeclared (first use in this function); did you mean ‘IFM_FDX’?
+   type = IFM_ETHER | IFM_HDX;
+                      ^~~~~~~
+                      IFM_FDX
+e1000.c:584:11: error: ‘IFM_10_T’ undeclared (first use in this function); did you mean ‘IFM_HDX’?
+   type |= IFM_10_T;
+           ^~~~~~~~
+           IFM_HDX
+e1000.c:587:11: error: ‘IFM_100_TX’ undeclared (first use in this function); did you mean ‘IFM_10_T’?
+   type |= IFM_100_TX;
+           ^~~~~~~~~~
+           IFM_10_T
+e1000.c:591:11: error: ‘IFM_1000_T’ undeclared (first use in this function); did you mean ‘IFM_100_TX’?
+   type |= IFM_1000_T;
+           ^~~~~~~~~~
+           IFM_100_TX
+e1000.c:596:9: error: ‘NDEV_LINK_UP’ undeclared (first use in this function); did you mean ‘NDEV_LINK_DOWN’?
+  return NDEV_LINK_UP;
+         ^~~~~~~~~~~~
+         NDEV_LINK_DOWN
+e1000.c: At top level:
+e1000.c:603:34: error: expected ‘;’, ‘,’ or ‘)’ before ‘mask’
+ e1000_intr(unsigned int __unused mask)
+                                  ^~~~
+e1000.c: In function ‘e1000_tick’:
+e1000.c:640:2: error: implicit declaration of function ‘netdriver_stat_ierror’ [-Werror=implicit-function-declaration]
+  netdriver_stat_ierror(e1000_reg_read(e, E1000_REG_RXERRC));
+  ^~~~~~~~~~~~~~~~~~~~~
+e1000.c:640:2: error: nested extern declaration of ‘netdriver_stat_ierror’ [-Werror=nested-externs]
+e1000.c:643:2: error: implicit declaration of function ‘netdriver_stat_coll’ [-Werror=implicit-function-declaration]
+  netdriver_stat_coll(e1000_reg_read(e, E1000_REG_COLC));
+  ^~~~~~~~~~~~~~~~~~~
+e1000.c:643:2: error: nested extern declaration of ‘netdriver_stat_coll’ [-Werror=nested-externs]
+e1000.c: In function ‘e1000_reg_write’:
+e1000.c:690:13: error: unknown type name ‘u32_t’
+  *(volatile u32_t *)(e->regs + reg) = value;
+             ^~~~~
+e1000.c: At top level:
+e1000.c:726:8: error: unknown type name ‘u16_t’
+ static u16_t
+        ^~~~~
+e1000.c: In function ‘eeprom_eerd’:
+e1000.c:729:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t data;
+  ^~~~~
+  u8_t
+e1000.c:733:15: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_addr_off’
+      (reg << e->eeprom_addr_off) | (E1000_REG_EERD_START));
+               ^~
+e1000.c:737:7: error: ‘e1000_t {aka struct e1000}’ has no member named ‘eeprom_done_bit’
+      e->eeprom_done_bit));
+       ^~
+In file included from e1000.c:8:0:
+e1000.c: In function ‘eeprom_ich_init’:
+e1000.h:86:7: error: ‘u16_t’ undeclared (first use in this function); did you mean ‘u8_t’?
+     *(u16_t *) (((e)->flash) + (reg))
+       ^
+e1000.c:752:18: note: in expansion of macro ‘E1000_READ_FLASH_REG16’
+  hsfsts.regval = E1000_READ_FLASH_REG16(e, ICH_FLASH_HSFSTS);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+e1000.h:86:14: error: expected expression before ‘)’ token
+     *(u16_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:752:18: note: in expansion of macro ‘E1000_READ_FLASH_REG16’
+  hsfsts.regval = E1000_READ_FLASH_REG16(e, ICH_FLASH_HSFSTS);
+                  ^~~~~~~~~~~~~~~~~~~~~~
+e1000.h:104:15: error: expected expression before ‘)’ token
+     *((u16_t *) (((e)->flash) + (reg))) = (value)
+               ^
+e1000.c:765:2: note: in expansion of macro ‘E1000_WRITE_FLASH_REG16’
+  E1000_WRITE_FLASH_REG16(e, ICH_FLASH_HSFSTS, hsfsts.regval);
+  ^~~~~~~~~~~~~~~~~~~~~~~
+e1000.h:104:15: error: expected expression before ‘)’ token
+     *((u16_t *) (((e)->flash) + (reg))) = (value)
+               ^
+e1000.c:780:3: note: in expansion of macro ‘E1000_WRITE_FLASH_REG16’
+   E1000_WRITE_FLASH_REG16(e, ICH_FLASH_HSFSTS, hsfsts.regval);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+e1000.h:86:14: error: expected expression before ‘)’ token
+     *(u16_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:788:20: note: in expansion of macro ‘E1000_READ_FLASH_REG16’
+    hsfsts.regval = E1000_READ_FLASH_REG16(e,
+                    ^~~~~~~~~~~~~~~~~~~~~~
+e1000.h:104:15: error: expected expression before ‘)’ token
+     *((u16_t *) (((e)->flash) + (reg))) = (value)
+               ^
+e1000.c:803:4: note: in expansion of macro ‘E1000_WRITE_FLASH_REG16’
+    E1000_WRITE_FLASH_REG16(e, ICH_FLASH_HSFSTS,
+    ^~~~~~~~~~~~~~~~~~~~~~~
+e1000.c: At top level:
+e1000.c:818:31: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+ eeprom_ich_cycle(e1000_t * e, u32_t timeout)
+                               ^~~~~
+                               u8_t
+e1000.c:849:8: error: unknown type name ‘u16_t’
+ static u16_t
+        ^~~~~
+e1000.c: In function ‘eeprom_ich’:
+e1000.c:854:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t flash_linear_addr;
+  ^~~~~
+  u8_t
+e1000.c:855:2: error: unknown type name ‘u32_t’; did you mean ‘u8_t’?
+  u32_t flash_data = 0;
+  ^~~~~
+  u8_t
+e1000.c:858:2: error: unknown type name ‘u16_t’; did you mean ‘u8_t’?
+  u16_t data = 0;
+  ^~~~~
+  u8_t
+e1000.c:865:16: error: ‘u16_t’ undeclared (first use in this function); did you mean ‘u8_t’?
+  reg *= sizeof(u16_t);
+                ^~~~~
+                u8_t
+In file included from e1000.c:8:0:
+e1000.h:86:14: error: expected expression before ‘)’ token
+     *(u16_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:877:20: note: in expansion of macro ‘E1000_READ_FLASH_REG16’
+   hsflctl.regval = E1000_READ_FLASH_REG16(e, ICH_FLASH_HSFCTL);
+                    ^~~~~~~~~~~~~~~~~~~~~~
+e1000.h:104:15: error: expected expression before ‘)’ token
+     *((u16_t *) (((e)->flash) + (reg))) = (value)
+               ^
+e1000.c:881:3: note: in expansion of macro ‘E1000_WRITE_FLASH_REG16’
+   E1000_WRITE_FLASH_REG16(e, ICH_FLASH_HSFCTL, hsflctl.regval);
+   ^~~~~~~~~~~~~~~~~~~~~~~
+e1000.h:95:8: error: ‘u32_t’ undeclared (first use in this function); did you mean ‘u16_t’?
+     *((u32_t *) (((e)->flash) + (reg))) = (value)
+        ^
+e1000.c:882:3: note: in expansion of macro ‘E1000_WRITE_FLASH_REG’
+   E1000_WRITE_FLASH_REG(e, ICH_FLASH_FADDR, flash_linear_addr);
+   ^~~~~~~~~~~~~~~~~~~~~
+e1000.h:95:15: error: expected expression before ‘)’ token
+     *((u32_t *) (((e)->flash) + (reg))) = (value)
+               ^
+e1000.c:882:3: note: in expansion of macro ‘E1000_WRITE_FLASH_REG’
+   E1000_WRITE_FLASH_REG(e, ICH_FLASH_FADDR, flash_linear_addr);
+   ^~~~~~~~~~~~~~~~~~~~~
+e1000.c:884:13: error: implicit declaration of function ‘eeprom_ich_cycle’; did you mean ‘eeprom_ich_init’? [-Werror=implicit-function-declaration]
+   ret_val = eeprom_ich_cycle(e, ICH_FLASH_READ_COMMAND_TIMEOUT);
+             ^~~~~~~~~~~~~~~~
+             eeprom_ich_init
+e1000.c:884:13: error: nested extern declaration of ‘eeprom_ich_cycle’ [-Werror=nested-externs]
+In file included from e1000.c:8:0:
+e1000.h:78:14: error: expected expression before ‘)’ token
+     *(u32_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:893:17: note: in expansion of macro ‘E1000_READ_FLASH_REG’
+    flash_data = E1000_READ_FLASH_REG(e, ICH_FLASH_FDATA0);
+                 ^~~~~~~~~~~~~~~~~~~~
+e1000.h:86:14: error: expected expression before ‘)’ token
+     *(u16_t *) (((e)->flash) + (reg))
+              ^
+e1000.c:903:20: note: in expansion of macro ‘E1000_READ_FLASH_REG16’
+    hsfsts.regval = E1000_READ_FLASH_REG16(e,
+                    ^~~~~~~~~~~~~~~~~~~~~~
+e1000.c: At top level:
+e1000.c:38:31: error: storage size of ‘e1000_table’ isn’t known
+ static const struct netdriver e1000_table = {
+                               ^~~~~~~~~~~
+e1000.c:16:13: error: ‘e1000_set_mode’ used but never defined [-Werror]
+ static void e1000_set_mode(unsigned int, const netdriver_addr_t *,
+             ^~~~~~~~~~~~~~
+e1000.c:19:12: error: ‘e1000_send’ used but never defined [-Werror]
+ static int e1000_send(struct netdriver_data *data, size_t size);
+            ^~~~~~~~~~
+e1000.c:20:16: error: ‘e1000_recv’ used but never defined [-Werror]
+ static ssize_t e1000_recv(struct netdriver_data *data, size_t max);
+                ^~~~~~~~~~
+e1000.c:22:13: error: ‘e1000_intr’ used but never defined [-Werror]
+ static void e1000_intr(unsigned int mask);
+             ^~~~~~~~~~
+e1000.c: In function ‘e1000_send’:
+e1000.c:501:1: error: control reaches end of non-void function [-Werror=return-type]
+ }
+ ^
+e1000.c: In function ‘e1000_get_link’:
+e1000.c:597:1: error: control reaches end of non-void function [-Werror=return-type]
+ }
+ ^
+At top level:
+e1000.c:507:1: error: ‘e1000_recv’ defined but not used [-Werror=unused-function]
+ e1000_recv(struct netdriver_data * data, size_t max)
+ ^~~~~~~~~~
+e1000.c:461:1: error: ‘e1000_send’ defined but not used [-Werror=unused-function]
+ e1000_send(struct netdriver_data * data, size_t size)
+ ^~~~~~~~~~
+e1000.c:289:1: error: ‘e1000_init_buf’ defined but not used [-Werror=unused-function]
+ e1000_init_buf(e1000_t * e)
+ ^~~~~~~~~~~~~~
+e1000.c:145:1: error: ‘e1000_probe’ defined but not used [-Werror=unused-function]
+ e1000_probe(e1000_t * e, int skip)
+ ^~~~~~~~~~~
+e1000.c:35:12: error: ‘e1000_instance’ defined but not used [-Werror=unused-variable]
+ static int e1000_instance;
+            ^~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+rake aborted!
+Command failed with status (1): [gcc-7 -o e1000.o -Wall -Wextra -Wshadow -W...]
+/home/per/git/chaos/rakelib/common_rules.rake:7:in `block in <top (required)>'
+/home/per/.rvm/gems/ruby-2.5.1@global/gems/rake-12.3.0/exe/rake:27:in `<top (required)>'
+/home/per/.rvm/gems/ruby-2.5.1/bin/ruby_executable_hooks:24:in `eval'
+/home/per/.rvm/gems/ruby-2.5.1/bin/ruby_executable_hooks:24:in `<main>'
+Tasks: TOP => default => intel-pro-1000 => e1000.o
+(See full trace by running task with --trace)

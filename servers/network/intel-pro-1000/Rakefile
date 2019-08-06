@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+OBJECTS = %w[
+  e1000.o
+].freeze
+
+EXTRA_CFLAGS = %w[
+  -Iinclude
+  -fmax-errors=5
+]
+
+LIBRARIES = %w[
+].freeze
+
+OUTPUT = 'intel-pro-1000'.freeze
+
+load '../../servers.rake'

@@ -35,13 +35,14 @@ COMMON_CFLAGS = %W[
 
 # TODO: Consider changing the rules in common_rules to presume that these are actually arrays. That requires us to modify all
 # Rakefiles though.
+EXTRA_CFLAGS ||= ''.freeze
 CFLAGS = (COMMON_CFLAGS + %w[
   --std=gnu99
   -Wbad-function-cast
   -Wmissing-prototypes
   -Wnested-externs
   -Wstrict-prototypes
-]).join(' ')
+] + EXTRA_CFLAGS).join(' ')
 
 EXTRA_LDFLAGS_PRE ||= ''.freeze
 EXTRA_LIBS ||= ''.freeze
