@@ -1,9 +1,7 @@
 // Abstract: A server for handling the Internet Protocol. (v4)
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2007 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #include <memory/memory.h>
 #include <random/random.h>
