@@ -29,6 +29,7 @@ COPY . /build/
 WORKDIR /build
 
 ENV ARCH=x86
+ENV CC=gcc-7
 RUN rake && rake install
 
 #
