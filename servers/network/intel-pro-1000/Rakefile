@@ -1,0 +1,19 @@
+# frozen_string_literal: true
+
+OBJECTS = %w[
+  intel-pro-1000.o
+].freeze
+
+LIBRARIES = %w[
+  ipc
+  log
+  memory
+  pci
+  string
+  system
+].freeze
+
+OUTPUT = 'intel-pro-1000'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x4A000000'.freeze
+
+load '../../servers.rake'

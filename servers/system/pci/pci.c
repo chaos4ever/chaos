@@ -223,7 +223,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 
                 while (device != NULL)
                 {
-                    if (probe->vendor_id == device->vendor_id && probe->device_id == device->device_id)
+                    if (probe->vendor_id == device->vendor_id &&
+                        probe->device_id == device->device_id)
                     {
                         devices++;
                     }
@@ -238,7 +239,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 
                 while (device != NULL && counter < devices)
                 {
-                    if (probe->vendor_id == device->vendor_id && probe->device_id == device->device_id)
+                    if (probe->vendor_id == device->vendor_id &&
+                        probe->device_id == device->device_id)
                     {
                         memory_copy(&device_info[counter].resource, device->resource,
                                     sizeof(pci_resource_type) * PCI_NUMBER_OF_RESOURCES);
@@ -246,6 +248,8 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
                     }
 
                     device_info->irq = device->irq;
+                    device_info->vendor_id = device->vendor_id;
+                    device_info->device_id = device->device_id;
 
                     device = (pci_device_type *) device->next;
                 }

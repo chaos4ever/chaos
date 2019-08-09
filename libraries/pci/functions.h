@@ -1,8 +1,7 @@
 // Abstract: PCI library function prototypes.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 2000 chaos development
-// © Copyright 2015-2016 chaos development
+// © Copyright 1999 chaos development
 
 #pragma once
 
