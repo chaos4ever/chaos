@@ -42,6 +42,8 @@ return_type system_sleep_microseconds(unsigned int time)
     kernelfs_self.kernelfs_class = KERNELFS_CLASS_SELF_INFO;
     system_call_kernelfs_entry_read(&kernelfs_self);
 
+    // FIXME: The accuracy here is very low; because of the lack of microsecond sleep support
+    // in the kernel, all requests for 0-999 microseconds will still sleep at least 1 millisecond.
     system_call_thread_control(kernelfs_self.thread_id, THREAD_SLEEP, (time / 1000) + 1);
 
     return SYSTEM_RETURN_SUCCESS;

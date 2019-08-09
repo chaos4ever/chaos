@@ -3,6 +3,7 @@
 Rake.application.options.rakelib = [pwd + '/../../rakelib'] if Rake.application.options.rakelib.first == 'rakelib'
 
 subfolders = %w[
+  intel-pro-1000
   ipv4
   loopback
 ]

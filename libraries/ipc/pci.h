@@ -1,8 +1,7 @@
 // Abstract: Protocol for communicating with the PCI server.
 // Author: Per Lundberg <per@chaosdev.io>
 //
-// © Copyright 1999-2000 chaos development
-// © Copyright 2013-2017 chaos development
+// © Copyright 1999 chaos development
 
 #pragma once
 

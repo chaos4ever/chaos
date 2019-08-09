@@ -12,6 +12,10 @@
 // The difficult part is the asm constraints though, can be a bit tricky...
 
 // Inlines through New York can be dangerous -- so please use a helmet!
+
+// This system call should be the first system call the process
+// executes. It performs such initialisation that can only (easily)
+// be performed from within the process' own addressing space.
 static inline return_type system_call_init(void)
 {
     return_type return_value;
@@ -179,7 +183,14 @@ static inline return_type system_call_memory_get_physical_address(void *virtual_
     return return_value;
 }
 
-// Reserve a memory region.
+// Reserves a physical memory region. This is used with hardware drivers
+// for e.g. ISA and PCI devices, where communication with the hardware
+// takes place by using a particular physical address range.
+//
+// The physical memory is mapped into the calling thread's address space,
+// using a newly allocated block of virtual memory. The address of the
+// block is returned to the caller by updating the *virtual_address
+// pointer.
 static inline return_type system_call_memory_reserve(address_type start, unsigned int size, void **virtual_address)
 {
     return_type return_value;
