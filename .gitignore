@@ -34,3 +34,5 @@ servers/video/vga/vga
 
 rust/rlibc-master
 rust/rust-*
+
+.vscode/settings.json
