@@ -59,3 +59,7 @@ before_script:
 script:
  - bundle exec rubocop
  - bundle exec rake default test
+
+notifications:
+  slack:
+    secure: kAxuZ9jFAXdpQSr44TxPmarPyCRrr1KXqBbjlMkfriYohOyg8Ed/HUVONbRMAqT60kKkk8NxpZOyCIwKdbZoyt/Vuwx95HhtAMaisUyO18bXEmBnjFp4uFPHsq8qVfsf1YDQ1DUjYsL3L6/g234t0RiSqKgqqD5fSqeECFu9ec0=
