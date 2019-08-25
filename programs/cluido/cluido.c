@@ -707,11 +707,20 @@ void run(char *command_string)
             }
         }
 
-        // If this command does not exist, tell the user politely so.
+        // If this is not a valid internal command, try running it as an external command instead.
+        // TODO: Take the rest of the parsed arguments and pass it to command_execute as well.
+        // That method does not support argument-passing to the program being started at the moment
+        // anyway, but if/when that is fixed, we need to revisit this as well.
         if (counter == number_of_commands)
         {
+            char *command_arguments[2] =
+            {
+                "execute",
+                first_word
+            };
+
             prompt_print(environment_get("prefix"));
-            console_print(&console_structure, "Unknown command. Try '?' or 'help' for help.\n");
+            command_execute(2, command_arguments);
             prompt_print(environment_get("postfix"));
         }
     }

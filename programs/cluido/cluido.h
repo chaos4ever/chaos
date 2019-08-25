@@ -12,6 +12,7 @@ extern void main_loop(void) __attribute__((noreturn));
 extern void prompt_print(char *input);
 extern char *environment_get(char *key);
 extern void run(char *command_string);
+extern void command_execute(int number_of_arguments, char **argument);
 
 // Type definitions.
 typedef struct

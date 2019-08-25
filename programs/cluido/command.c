@@ -1,4 +1,4 @@
-// Abstract: Cludio internal commands.
+// Abstract: Cluido internal commands.
 // Authors: Per Lundberg <per@chaosdev.io>
 //          Henrik Hallin <hal@chaosdev.org>
 //
@@ -9,7 +9,9 @@
 #include "config.h"
 #include "cluido.h"
 
-#define VFS_BUFFER_SIZE         4096
+#define VFS_BUFFER_SIZE     4096
+
+#define DEFAULT_PATH        "//ramdisk/programs"
 
 const char *file_type[] =
 {
@@ -33,7 +35,6 @@ void command_cpu(int number_of_arguments, char **argument);
 void command_crash(int number_of_arguments, char **argument);
 void command_directory_change_working(int number_of_arguments, char **argument);
 void command_directory_list(int number_of_arguments, char **argument);
-void command_execute(int number_of_arguments, char **argument);
 void command_font_set(int number_of_arguments, char **argument);
 void command_help(int number_of_arguments, char **argument);
 void command_ip(int number_of_arguments, char **argument);
@@ -73,7 +74,7 @@ command_type command[] =
     { "cd", "DIRECTORY", "Change the current working directory.", command_directory_change_working },
     { "dir", "", "Alias for list", command_directory_list },
     { "list", "", "List the contents of the current directory.", command_directory_list },
-    { "execute", "FILE", "Executes the given file.", command_execute },
+    { "execute", "FILE", "Executes the given program.", command_execute },
     { "font_set", "FILE", "Set the font to the one in FILE", command_font_set },
     { "free",  "", "Alias for memory", command_memory },
     { "help", "[COMMAND]", "Display help about available commands.", command_help },
@@ -349,12 +350,6 @@ void command_execute(int number_of_arguments, char **argument)
         return;
     }
 
-    uint8_t *buffer;
-    file_handle_type handle;
-    file_verbose_directory_entry_type directory_entry;
-    process_id_type process_id;
-    unsigned int bytes_read = 0;
-
     if (number_of_arguments != 2)
     {
         console_print_formatted(&console_structure,
@@ -363,21 +358,39 @@ void command_execute(int number_of_arguments, char **argument)
         return;
     }
 
-    string_copy(directory_entry.path_name, argument[1]);
+    file_verbose_directory_entry_type directory_entry;
+
+    // Try first with absolute path. Local variable is needed as a workaround
+    // for this bug: https://github.com/chaos4ever/chaos/issues/163
+    char path_name[MAX_PATH_NAME_LENGTH];
+    string_copy(path_name, argument[1]);
+    string_copy(directory_entry.path_name, path_name);
     if (file_get_info(&vfs_structure, &directory_entry) != FILE_RETURN_SUCCESS)
     {
-        console_print_formatted(&console_structure,
-                                "Could not get information about file %s.\n",
-                                argument[1]);
-        return;
+        // Try resolving it as a path relative to our default path instead.
+        // TODO: use a maximum length of the string to avoid overflowing buffer on long paths
+        string_print(path_name, "%s/%s", DEFAULT_PATH, argument[1]);
+        string_copy(directory_entry.path_name, path_name);
+
+        if (file_get_info(&vfs_structure, &directory_entry) != FILE_RETURN_SUCCESS)
+        {
+            console_print_formatted(&console_structure,
+                                    "Could not get information about file %s - file missing?\n",
+                                    argument[1]);
+            return;
+        }
     }
 
     // Allocate a buffer, so we can read the entire file.
+    uint8_t *buffer;
     memory_allocate((void **) &buffer, directory_entry.size);
 
-    file_open(&vfs_structure, argument[1], FILE_MODE_READ, &handle);
+    file_handle_type handle;
+    file_open(&vfs_structure, path_name, FILE_MODE_READ, &handle);
 
     // Read the file.
+    unsigned int bytes_read = 0;
+
     while (bytes_read < directory_entry.size)
     {
         unsigned int bytes;
@@ -390,6 +403,8 @@ void command_execute(int number_of_arguments, char **argument)
         file_read(&vfs_structure, handle, bytes, &buffer[bytes_read]);
         bytes_read += bytes;
     }
+
+    process_id_type process_id;
 
     switch (execute_elf((elf_header_type *) buffer, "", &process_id))
     {
