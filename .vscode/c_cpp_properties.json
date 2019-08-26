@@ -1,0 +1,26 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "${workspaceRoot}",
+                "${workspaceRoot}/libraries",
+                "${workspaceRoot}/storm/include",
+                "/usr/local/include",
+                "."
+            ],
+            "defines": [
+                "__i386__"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 4
+}

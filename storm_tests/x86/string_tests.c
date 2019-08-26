@@ -6,6 +6,7 @@
 #include "../test_helper.h"
 
 #include <storm/generic/string.h>
+#include <storm/current-arch/debug.h>
 
 void string_to_number_decimal(void **state)
 {
@@ -45,4 +46,13 @@ void string_to_number_binary(void **state)
     string_to_number("0b00101010", &i);
 
     assert_int_equal(i, 42);
+}
+
+void decimal_string_high_value(void **state)
+{
+    unsigned int i = 4294967272;
+    char s[11];
+
+    decimal_string(s, i);
+    assert_string_equal(s, "4294967272");
 }
