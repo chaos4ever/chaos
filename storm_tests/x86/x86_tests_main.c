@@ -12,6 +12,7 @@ extern void string_to_number_negative_decimal(void **state);
 extern void string_to_number_invalid_value(void **state);
 extern void string_to_number_hexadecimal(void **state);
 extern void string_to_number_binary(void **state);
+extern void decimal_string_high_value(void **state);
 
 int main(void)
 {
@@ -27,7 +28,8 @@ int main(void)
         cmocka_unit_test(string_to_number_negative_decimal),
         cmocka_unit_test(string_to_number_invalid_value),
         cmocka_unit_test(string_to_number_hexadecimal),
-        cmocka_unit_test(string_to_number_binary)
+        cmocka_unit_test(string_to_number_binary),
+        cmocka_unit_test(decimal_string_high_value)
     };
 
     cmocka_run_group_tests_name("memory_global", memory_global_tests, NULL, NULL);

@@ -343,8 +343,8 @@ void debug_print_simple(const char *string)
     //  cpu_interrupts_enable ();
 }
 
-// Convert a decimal number to a string.
-static void decimal_string(char *string, int number)
+// Converts a number to a string (decimal representation)
+void decimal_string(char *string, unsigned int number)
 {
     int index = 0;
     const char decimal[] = "0123456789";

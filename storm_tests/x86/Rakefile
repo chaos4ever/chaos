@@ -15,10 +15,12 @@ LDFLAGS = %w[
   -L../../storm/x86
 ].freeze
 
-# Need to provide the same name twice for linking to succeed. (circular dependency?)
+# Need to provide the same name multiple times for linking to succeed. (circular dependencies?)
 LIBRARIES = %w[
   cmocka
 
+  storm_x86
+  storm_generic
   storm_x86
   storm_generic
   storm_x86
