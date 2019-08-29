@@ -45,6 +45,19 @@
             ],
             "preLaunchTask": "build_tests",
             "miDebuggerPath": "/usr/bin/gdb"
+        },
+        {
+            "name": "Remote debug in qemu (storm)",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceRoot}/storm/x86/storm",
+            "miDebuggerServerAddress": "localhost:1234",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceRoot}",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb"
         }
     ]
 }
