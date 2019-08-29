@@ -5,17 +5,32 @@
 
 #include <system/system.h>
 
-extern uint8_t modfile_axelf[];
-extern int modfile_axelf_size;
+extern uint8_t modfile_1[];
+extern int modfile_1_size;
 
-extern uint8_t modfile_breath[];
-extern int modfile_breath_size;
+extern uint8_t modfile_2[];
+extern int modfile_2_size;
 
-extern uint8_t modfile_chipmunk[];
-extern int modfile_chipmunk_size;
+extern uint8_t modfile_3[];
+extern int modfile_3_size;
 
-extern uint8_t modfile_enigma[];
-extern int modfile_enigma_size;
+extern uint8_t modfile_4[];
+extern int modfile_4_size;
 
-extern uint8_t modfile_skogen10[];
-extern int modfile_skogen10_size;
+extern uint8_t modfile_5[];
+extern int modfile_5_size;
+
+extern uint8_t modfile_6[];
+extern int modfile_6_size;
+
+extern uint8_t modfile_7[];
+extern int modfile_7_size;
+
+extern uint8_t modfile_8[];
+extern int modfile_8_size;
+
+extern uint8_t modfile_9[];
+extern int modfile_9_size;
+
+extern uint8_t modfile_0[];
+extern int modfile_0_size;

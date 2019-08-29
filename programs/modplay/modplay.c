@@ -27,14 +27,19 @@ tag_type empty_tag =
 
 modcontext modctx;
 
-#define NUM_MODFILES 5
+#define NUM_MODFILES 10
 
 uint8_t *modfiles[] = {
-    modfile_axelf,
-    modfile_breath,
-    modfile_chipmunk,
-    modfile_enigma,
-    modfile_skogen10
+    modfile_0,
+    modfile_1,
+    modfile_2,
+    modfile_3,
+    modfile_4,
+    modfile_5,
+    modfile_6,
+    modfile_7,
+    modfile_8,
+    modfile_9
 };
 
 int modfile_sizes[NUM_MODFILES];
@@ -48,11 +53,16 @@ static uint16_t abs(int16_t value);
 int main(void)
 {
     // Can't be statically initialized since these are not compile-time constants.
-    modfile_sizes[0] = modfile_axelf_size;
-    modfile_sizes[1] = modfile_breath_size;
-    modfile_sizes[2] = modfile_chipmunk_size;
-    modfile_sizes[3] = modfile_enigma_size;
-    modfile_sizes[4] = modfile_skogen10_size;
+    modfile_sizes[0] = modfile_0_size;
+    modfile_sizes[1] = modfile_1_size;
+    modfile_sizes[2] = modfile_2_size;
+    modfile_sizes[3] = modfile_3_size;
+    modfile_sizes[4] = modfile_4_size;
+    modfile_sizes[5] = modfile_5_size;
+    modfile_sizes[6] = modfile_6_size;
+    modfile_sizes[7] = modfile_7_size;
+    modfile_sizes[8] = modfile_8_size;
+    modfile_sizes[9] = modfile_9_size;
 
     sound_message_type *sound_message;
     const char *program_name = "modplay";
@@ -253,13 +263,18 @@ int main(void)
             {
                 switch (keyboard_packet.character_code[0])
                 {
+                    case '0':
                     case '1':
                     case '2':
                     case '3':
                     case '4':
                     case '5':
+                    case '6':
+                    case '7':
+                    case '8':
+                    case '9':
                     {
-                        current_mod_file = keyboard_packet.character_code[0] - '1';
+                        current_mod_file = keyboard_packet.character_code[0] - '0';
                         current_mod_file_selecting = current_mod_file;
 
                         if (!select_modfile(current_mod_file))
@@ -330,7 +345,7 @@ int main(void)
 
             // Abuse the fact that the .mod file begins with the name, hopefully NUL-terminated. :)
             console_buffer_print_formatted(&console_structure, 0, 37 + i,
-                                           color, " [%d] %-20s", i + 1, modfiles[i]);
+                                           color, " [%d] %-20s", i, modfiles[i]);
         }
 
         console_flip(&console_structure);
