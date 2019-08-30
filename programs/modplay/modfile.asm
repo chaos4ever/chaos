@@ -38,5 +38,5 @@ modfile_7_size:         dd $-modfile_7
 modfile_8:              incbin      "mods/stardstm.mod"
 modfile_8_size:         dd $-modfile_8
 
-modfile_9:              incbin      "mods/ASM94.MOD"
+modfile_9:              incbin      "mods/95raver.mod"
 modfile_9_size:         dd $-modfile_9

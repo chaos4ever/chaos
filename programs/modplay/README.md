@@ -15,4 +15,4 @@ The following modules (in the [mods](mods) folder) are available under various C
 - guitar slinger: https://modarchive.org/index.php?request=view_by_moduleid&query=42560 (Mod Archive Distribution license)
 - Elysium: https://modarchive.org/index.php?request=view_by_moduleid&query=40475 (CC BY-NC-SA 3.0)
 - stardust memories: https://modarchive.org/index.php?request=view_by_moduleid&query=59344 (CC BY-NC-SA 3.0)
-- assembly'94 (unsure of where this comes from originally)
+- '95-raver's-megamix: https://modarchive.org/index.php?request=view_by_moduleid&query=62019 (Mod Archive Distribution license)
