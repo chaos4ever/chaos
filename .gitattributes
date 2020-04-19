@@ -4,6 +4,8 @@
 # Force the following filetypes to have unix EOLs, so Windows does not break them
 *.* text eol=lf
 
+# Avoid line ending-related conversions for binary files
 *.png binary
+*.mod binary
 *.MOD binary
 *.rlib binary
