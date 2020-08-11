@@ -25,3 +25,9 @@ Style/FrozenStringLiteralComment:
   EnforcedStyle: always
 # Style/GuardClause:
 #   Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/SpecialGlobalVars:
+  Enabled: false

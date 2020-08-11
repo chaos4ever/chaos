@@ -14,6 +14,11 @@ else
   []
 end
 
+def command?(name)
+  `which #{name}`
+  $?.success?
+end
+
 verbose false
 
 root = pwd
@@ -54,6 +59,19 @@ task :iso_image do
   system "cp grub.cfg #{INSTALL_ROOT}/boot/grub"
 
   print 'Creating ISO image...'.cyan.bold
+
+  # grub-mkrescue will fail silently if this is not present.
+  if !command?('xorriso')
+    printf "\n\n"
+    raise 'Fatal error: xorriso missing (try something like this: apt-get install xorriso)'
+  end
+
+  # Even worse: grub-mkrescue will create a malfunctioning .iso which
+  # cannot be booted if this is not present.
+  if !File.exist?('/usr/lib/grub/i386-pc/boot_hybrid.img')
+    printf "\n\n"
+    raise 'Fatal error: grub-pc-bin missing (try something like this: apt-get install grub-pc-bin)'
+  end
 
   sh "grub-mkrescue -o chaos.iso #{INSTALL_ROOT}"
   puts ' done.'
