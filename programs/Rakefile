@@ -5,6 +5,7 @@ Rake.application.options.rakelib = [pwd + '/../rakelib'] if Rake.application.opt
 SUBFOLDERS = %w[
   cluido
   modplay
+  tetris
 ].freeze
 
 # Not yet converted to rake:

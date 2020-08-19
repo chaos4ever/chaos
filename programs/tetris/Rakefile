@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+OBJECTS = %w[
+  main.o
+  tetris.o
+].freeze
+
+LIBRARIES = %w[
+  console
+  ipc
+  memory
+  random
+  string
+  system
+].freeze
+
+OUTPUT = 'tetris'.freeze
+EXTRA_LDFLAGS_PRE = '-Wl,--defsym=PROCESS_VM_BASE=0x57000000'.freeze
+
+load '../programs.rake'
