@@ -440,7 +440,7 @@ static void handle_connection(mailbox_id_type *reply_mailbox_id)
 }
 
 // Handle the connection to the ethernet service.
-static bool handle_ethernet(mailbox_id_type *mailbox_id)
+static void handle_ethernet(mailbox_id_type *mailbox_id)
 {
     ipc_structure_type *ethernet_structure;
     ipc_structure_type **ethernet_structure_pointer = &ethernet_structure;
@@ -466,7 +466,7 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
     if (ipc_service_connection_request(ethernet_structure) != IPC_RETURN_SUCCESS)
     {
         log_print(&log_structure, LOG_URGENCY_EMERGENCY, "Couldn't connect to ethernet service.");
-        return FALSE;
+        return;
     }
 
     // Read the ethernet hardware address.
@@ -567,8 +567,6 @@ static bool handle_ethernet(mailbox_id_type *mailbox_id)
             }
         }
     }
-
-    return TRUE;
 }
 
 // Main function
