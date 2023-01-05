@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/chaos4ever/chaos.svg?branch=master)](https://travis-ci.org/chaos4ever/chaos)
 
-An operating system for x86, written mostly in C with minor parts in assembly language. For more details on the background to the project and the full history etc, please see [our web site](http://chaosdev.io).
+An operating system for x86, written mostly in C with minor parts in assembly language. For more details on the background to the project and the full history etc, please see [our web site](https://chaos4ever.github.io).
 
 ## Quick start
 
@@ -20,7 +20,7 @@ $ rake
 $ rake install
 ```
 
-If all goes well, this should give you an `.iso` file as output. For more details, consult [our web site](http://chaosdev.io).
+If all goes well, this should give you an `.iso` file as output. For more details, consult [our web site](https://chaos4ever.github.io).
 
 ## License
 
