@@ -9,7 +9,7 @@ OPTIMIZATION_FLAG = ENV['RELEASE'] ? '-O3' : '-O0'
 
 COMMON_CFLAGS =
   "-Wall -Wextra -Wshadow -Wpointer-arith -Waggregate-return -Wredundant-decls \
-  -Winline -Werror -Wcast-align -Wsign-compare -Wmissing-declarations \
+  -Winline -Werror -Wno-error=address-of-packed-member -Wcast-align -Wsign-compare -Wmissing-declarations \
   -Wmissing-noreturn -pipe #{OPTIMIZATION_FLAG} -fno-builtin -fno-asynchronous-unwind-tables -funsigned-char \
   -g -fomit-frame-pointer -ffreestanding #{ENV['EXTRA_CFLAGS']} #{DEFINES} ".freeze
 
