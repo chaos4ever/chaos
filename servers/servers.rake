@@ -18,6 +18,7 @@ COMMON_CFLAGS = %W[
   -Wredundant-decls
   -Winline
   -Werror
+  -Wno-error=address-of-packed-member
   -Wcast-align
   -Wno-cast-function-type
   -Wno-pointer-sign
