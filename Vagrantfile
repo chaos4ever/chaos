@@ -32,6 +32,7 @@ Vagrant.configure("2") do |config|
       psmisc \
       qemu \
       gcc-arm-none-eabi \
+      xorriso \
       rake
 
     # The gcc-arm-none-eabi package is not yet available in stretch:
