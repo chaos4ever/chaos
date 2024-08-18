@@ -14,7 +14,7 @@ To build the system from source, use the following approach. (Requires Vagrant a
 
 ```shell
 $ git clone ... && cd chaos
-$ vagrant up
+$ vagrant up ... (or with libvirt: $ vagrant up --provider libvirt)
 $ vagrant ssh
 $ rake
 $ rake install
