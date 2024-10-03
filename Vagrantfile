@@ -14,8 +14,8 @@ Vagrant.configure("2") do |config|
     # Override sources.list for faster downloads (for people outside of the US).
     echo deb http://httpredir.debian.org/debian/ bullseye main > /etc/apt/sources.list
     echo deb-src http://httpredir.debian.org/debian/ bullseye main >> /etc/apt/sources.list
-    # echo deb http://security.debian.org/debian-security bullseye/updates main >> /etc/apt/sources.list
-    # echo deb-src http://security.debian.org/debian-security bullseye/updates main >> /etc/apt/sources.list
+    echo deb http://security.debian.org/debian-security bullseye-security main >> /etc/apt/sources.list
+    echo deb-src http://security.debian.org/debian-security bullseye-security main >> /etc/apt/sources.list
 
     sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -34,12 +34,6 @@ Vagrant.configure("2") do |config|
       gcc-arm-none-eabi \
       xorriso \
       rake
-
-    # The gcc-arm-none-eabi package is not yet available in stretch:
-    # https://packages.debian.org/jessie/devel/gcc-arm-none-eabi
-    #echo deb http://httpredir.debian.org/debian/ unstable main >> /etc/apt/sources.list
-    #sudo apt-get update
-    #sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-arm-none-eabi
 
     # Disabled for now since we don't have any Rust dependencies, and it slows things down when setting the VM up.
     ## We need the beta channel for the #![feature] functionality.
