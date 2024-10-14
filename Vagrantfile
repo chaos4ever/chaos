@@ -1,19 +1,21 @@
 # frozen_string_literal: true
 
-Vagrant.configure(2) do |config|
-  config.vm.box = 'remram/debian-9-i386'
+Vagrant.configure("2") do |config|
+  config.vm.box = "roboxes-x32/debian11"
 
   # Sometimes, the default seems to be too little for this one.
   config.vm.boot_timeout = 600
-
+  # When using libvirt it's usefull to explicitly tell Vagrant what method
+  # of folder syncing to use.
+  config.vm.synced_folder "./", "/vagrant", type: "rsync"
   config.vm.provision 'shell', inline: <<-SHELL
     set -e
 
     # Override sources.list for faster downloads (for people outside of the US).
-    echo deb http://httpredir.debian.org/debian/ stretch main > /etc/apt/sources.list
-    echo deb-src http://httpredir.debian.org/debian/ stretch main >> /etc/apt/sources.list
-    echo deb http://security.debian.org/debian-security stretch/updates main >> /etc/apt/sources.list
-    echo deb-src http://security.debian.org/debian-security stretch/updates main >> /etc/apt/sources.list
+    echo deb http://httpredir.debian.org/debian/ bullseye main > /etc/apt/sources.list
+    echo deb-src http://httpredir.debian.org/debian/ bullseye main >> /etc/apt/sources.list
+    echo deb http://security.debian.org/debian-security bullseye-security main >> /etc/apt/sources.list
+    echo deb-src http://security.debian.org/debian-security bullseye-security main >> /etc/apt/sources.list
 
     sudo apt-get update
     sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
@@ -29,13 +31,9 @@ Vagrant.configure(2) do |config|
       nasm \
       psmisc \
       qemu \
+      gcc-arm-none-eabi \
+      xorriso \
       rake
-
-    # The gcc-arm-none-eabi package is not yet available in stretch:
-    # https://packages.debian.org/jessie/devel/gcc-arm-none-eabi
-    echo deb http://httpredir.debian.org/debian/ unstable main >> /etc/apt/sources.list
-    sudo apt-get update
-    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y gcc-arm-none-eabi
 
     # Disabled for now since we don't have any Rust dependencies, and it slows things down when setting the VM up.
     ## We need the beta channel for the #![feature] functionality.

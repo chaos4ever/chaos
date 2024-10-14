@@ -14,13 +14,20 @@ To build the system from source, use the following approach. (Requires Vagrant a
 
 ```shell
 $ git clone ... && cd chaos
-$ vagrant up
+$ vagrant up ... (or with libvirt: $ vagrant up --provider libvirt)
 $ vagrant ssh
 $ rake
 $ rake install
 ```
 
 If all goes well, this should give you an `.iso` file as output. For more details, consult [our web site](https://chaos4ever.github.io).
+
+If you use qemu/rsync with Vagrant, do this in the directory you ran ``vagrant up`` from:
+```
+$ vagrant ssh-config > ssh_config
+$ rsync -avH -e "ssh -F ./ssh_config" default:/vagrant/ ./
+```
+Source: [https://serverfault.com/questions/699160/copy-files-from-guest-to-host-the-first-time-with-rsync-using-vagrant#699498](https://serverfault.com/questions/699160/copy-files-from-guest-to-host-the-first-time-with-rsync-using-vagrant#699498)
 
 ## License
 
