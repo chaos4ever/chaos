@@ -253,7 +253,7 @@ void irq_handler(irq_handler_data_type *irq_handler_data)
         log_print(&log_structure, LOG_URGENCY_DEBUG, "Received hardware interrupt");
 
         // Acknowledge the SB interrupt.
-        system_port_in_uint8_t(DSP_DATA_AVAILABLE_8BIT);
+        system_port_in_uint8_t(DSP_DATA_AVAILABLE_16BIT);
 
         // Send an acknowledgement message to the client program.
         message_parameter.protocol = IPC_PROTOCOL_NONE;
@@ -443,8 +443,8 @@ void handle_connection(mailbox_id_type reply_mailbox_id)
 
                         // Enable 8-bit auto-initializing DMA-based playing. See sblaster.doc for
                         // more details (0Bxh/0Cxh  Generic DAC/ADC DMA)
-                        dsp_write(DSP_GENERIC_DMA_8BIT_AUTOINIT_DAC);
-                        dsp_write(0); // Bit 5 = stereo, bit 4 = signed. 0 means "mono, unsigned"
+                        dsp_write(DSP_GENERIC_DMA_16BIT_AUTOINIT_DAC);
+                        dsp_write(1 << 5); // Bit 5 = stereo, bit 4 = signed. 0 means "mono, unsigned"
                         dsp_write((uint8_t) length);
                         dsp_write((uint8_t)(length >> 8));
 
